@@ -1,0 +1,57 @@
+.palm-page-header .icon.jlt {
+	background-image: url(header-icon.png);
+}
+
+.palm-page-header .title {
+	/*min-width: 160px !important;*/
+    font-size: 16px;
+}
+
+.palm-row .title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.explanation.topsplain {
+    margin-left: 1em; margin-right: 1em;
+    color: black;
+}
+
+.explanation {
+    color: gray;
+    font-size: 13px;
+    font-weight: lighter;
+}
+
+.explanation .url {
+    margin: 0;
+    text-align: center;
+}
+
+.explanation p {
+    padding: 0; margin: 0;
+    margin-bottom: 0.5em;
+}
+
+.extra {
+    color: gray;
+    font-size: 10px;
+    font-weight: lighter;
+}
+
+.rightInfo {
+    float: right;
+    margin: 0.1em;
+    margin-right: 0;
+    color: gray;
+    font-size: 10px;
+    font-weight: lighter;
+}
+
+#desc1, #desc2 { 
+    font-size: 10pt;
+    font-weight: lighter;
+}
+
+#desc1 { float: left; }
+#desc2 { float: right; }
