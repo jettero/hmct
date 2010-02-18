@@ -1,5 +1,9 @@
+var AMO;
+
 function StageAssistant() {
 	Mojo.Log.info("StageAssistant()")
+
+    AMO = new AccountManager();
 }
 
 StageAssistant.prototype.setup = function() {

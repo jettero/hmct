@@ -1,7 +1,10 @@
 [
+    { "source": "js/AccountManager.js" },
+
     { "source": "app/assistants/About.js" },
     { "source": "app/assistants/Help.js" },
     { "source": "app/assistants/Preferences.js" },
     { "source": "app/assistants/CreateAccount.js" },
+
     { "source": "stage-assistant.js" }
 ]

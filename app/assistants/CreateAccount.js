@@ -25,5 +25,7 @@ CreateAccountAssistant.prototype.setup = function() {
 
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listTap, this.listClickHandler);
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listAdd, this.createAccountHandler);
+
+    AMO.test();
 }
 // }}}
