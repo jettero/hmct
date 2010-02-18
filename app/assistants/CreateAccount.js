@@ -1,10 +1,10 @@
-function AccountsAssistant() {
-    Mojo.Log.info("Accounts()");
+function CreateAccountAssistant() {
+    Mojo.Log.info("CreateAccount()");
 }
 
-// AccountsAssistant.prototype.setup = function() {{{
-AccountsAssistant.prototype.setup = function() {
-    Mojo.Log.info("Accounts::setup()");
+// CreateAccountAssistant.prototype.setup = function() {{{
+CreateAccountAssistant.prototype.setup = function() {
+    Mojo.Log.info("CreateAccount::setup()");
 
     this.SC = Mojo.Controller.stageController.assistant;
     this.menuSetup = this.SC.menuSetup.bind(this);
