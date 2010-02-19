@@ -9,8 +9,7 @@ function PreferencesAssistant() {
     this.addAccountTap = function(event){ this.SC.showScene("CreateAccount"); }.bind(this);
 }
 
-// PreferencesAssistant.prototype.setup = function() {{{
-PreferencesAssistant.prototype.setup = function() {
+/* {{{ /**/ PreferencesAssistant.prototype.setup = function() {
     Mojo.Log.info("Preferences::setup() ");
 
     this.menuSetup();
@@ -27,5 +26,4 @@ PreferencesAssistant.prototype.setup = function() {
 
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listTap, this.loginListTap);
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listAdd, this.addAccountTap);
-}
-// }}}
+}; /*}}}*/
