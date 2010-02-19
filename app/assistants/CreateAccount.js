@@ -24,8 +24,8 @@ function CreateAccountAssistant() {
         textFieldName: "passtf"
     };
 
-    this.eModel = { original: '' };
-    this.pModel = { original: '' };
+    this.eModel = { value: '' };
+    this.pModel = { value: '' };
 
     this.controller.setupWidget('emailtf', eAttributes, this.eModel );
     this.controller.setupWidget('passtf',  pAttributes, this.pModel );
@@ -57,10 +57,13 @@ function CreateAccountAssistant() {
 
 /*}}}*/
 /* {{{ /**/ CreateAccountAssistant.prototype.createAccount = function() {
-    Mojo.Log.info("CreateAccount::createAccount()");
+    Mojo.Log.info("CreateAccount::createAccount() eModel=%s; pModel=%s",
+        Object.toJSON(this.eModel),
+        Object.toJSON(this.pModel)
+    );
 
-    var email = this.eModel.original.strip().toLowerCase();
-    var pass  = this.pModel.original.strip();
+    var email = this.eModel.value.strip().toLowerCase();
+    var pass  = this.pModel.value.strip();
 
     if( this.spinning ) return;
         this.spinning = true;
