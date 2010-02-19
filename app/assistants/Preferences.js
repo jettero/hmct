@@ -3,6 +3,8 @@ function PreferencesAssistant() {
     Mojo.Log.info("Preferences()");
 
     this.SC = Mojo.Controller.stageController.assistant;
+    this.menuSetup = this.SC.menuSetup.bind(this);
+
     this.loginListTap  = function(event){ this.SC.showScene("EditAccount");   }.bind(this);
     this.addAccountTap = function(event){ this.SC.showScene("CreateAccount"); }.bind(this);
 }
@@ -11,7 +13,6 @@ function PreferencesAssistant() {
 PreferencesAssistant.prototype.setup = function() {
     Mojo.Log.info("Preferences::setup() ");
 
-    this.menuSetup = this.SC.menuSetup.bind(this);
     this.menuSetup();
 
     this.loginListAttrs = {
