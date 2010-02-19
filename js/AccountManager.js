@@ -129,7 +129,7 @@ function AccountManager() {
     if( accts === null )
         return;
 
-    this.accts = accts;
+    // this.accts = accts;
 
     for( var k in accts )
         Mojo.Log.info("restored acct: %s", k);

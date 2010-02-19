@@ -1,11 +1,13 @@
 function CreateAccountAssistant() {
     Mojo.Log.info("CreateAccount()");
 
-    this.SC = Mojo.Controller.stageController.assistant;
-    this.menuSetup = this.SC.menuSetup.bind(this);
-    this.createAccount = this.createAccount.bind(this);
-    this.checkedUserPass = this.checkedUserPass.bind(this);
-    this.failedUserPass = this.failedUserPass.bind(this);
+    this.SC  = Mojo.Controller.stageController;
+    this.SCa = this.SC.assistant;
+
+    this.menuSetup       = this.SCa.menuSetup   .bind(this);
+    this.createAccount   = this.createAccount   .bind(this);
+    this.checkedUserPass = this.checkedUserPass .bind(this);
+    this.failedUserPass  = this.failedUserPass  .bind(this);
 }
 
 /* {{{ /**/ CreateAccountAssistant.prototype.setup = function() {
@@ -41,10 +43,30 @@ function CreateAccountAssistant() {
 };
 
 /*}}}*/
+/* {{{ /**/ CreateAccountAssistant.prototype.noticedCreation = function(value) {
+    Mojo.Log.info("CreateAccount::noticedCreation(value=%s)", value);
+    this.SC.popScene();
+};
+
+/*}}}*/
+
 /* {{{ /**/ CreateAccountAssistant.prototype.checkedUserPass = function(email, pass, r) {
     Mojo.Log.info("CreateAccount::checkedUserPass(email=%s)", email);
+
     this.nospin();
     AMO.addReplaceAccount(email,pass);
+
+    // 18:00:00: org.voltar.hiveminder: Info: AccountManager::login() r.success
+    // r={"success": 1, "content": {}, "action_class": "BTDT::Action::Login",
+    // "field_errors": {}, "message": "Welcome back, Paul Miller (work).",
+    // "failure": 0, "error": null, "field_warnings": {}}
+
+    this.controller.showAlertDialog({
+        onChoose: this.noticedCreation,
+        title:    'Account Created',
+        message:  r.message,
+        choices:  [ {label: 'OK', value: 'OK', type: 'color'} ]
+    });
 };
 
 /*}}}*/
