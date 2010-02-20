@@ -203,8 +203,8 @@
 /* {{{ /**/ AccountManager.prototype.notifyAcctsChange = function() {
     Mojo.Log.info("AccountManager::notifyAcctsChange()");
 
-    for( var a in this.listControllers )
-        this.notifyAcctsChangeStep(a);
+    for( var i=0; i<this.listControllers.length; i++ )
+        this.notifyAcctsChangeStep(this.listControllers[i]);
 };
 
 /*}}}*/
