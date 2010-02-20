@@ -30,7 +30,8 @@
 
     Mojo.Log.info("AccountManager() restoring=true (1)");
 
-    setTimeout(this.restoreAccounts, 1500);
+    // setTimeout(this.restoreAccounts, 1500); // sometimes it's handy to wait for testing purposes
+    this.restoreAccounts();
 }
 
 /*}}}*/
