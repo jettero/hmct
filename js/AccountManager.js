@@ -1,11 +1,12 @@
 
-function AccountManager() {
+/* {{{ /**/ function AccountManager() {
     Mojo.Log.info("AccountManager()");
 
     this.accts = {};
 
     this.login                 = this.login.bind(this);
     this.hasAccount            = this.hasAccount.bind(this);
+    this.fetchLoginList        = this.fetchLoginList.bind(this);
     this.restoreAccounts       = this.restoreAccounts.bind(this);
     this.dbRecvAccts           = this.dbRecvAccts.bind(this);
     this.dbRecvAcctsFail       = this.dbRecvAcctsFail.bind(this);
@@ -30,6 +31,8 @@ function AccountManager() {
     Mojo.Log.info("AccountManager() restoring=true (1)");
     this.restoreAccounts();
 }
+
+/*}}}*/
 
 /* {{{ /**/ AccountManager.prototype.dbSentAccts = function() {
     Mojo.Log.info("AccountManager::dbSentAccts()");
@@ -59,6 +62,18 @@ function AccountManager() {
     Mojo.Log.info("AccountManager::hasAccount(email=%s)", email);
 
     return this.accts[email] ? true : false;
+
+};
+
+/*}}}*/
+/* {{{ /**/ AccountManager.prototype.fetchLoginList = function() {
+    Mojo.Log.info("AccountManager::fetchLoginList()");
+
+    var ret = [];
+    for( var k in this.accts )
+        ret.push({email: k});
+
+    return ret;
 
 };
 
@@ -168,7 +183,7 @@ function AccountManager() {
     var a = { model: list, controller: controller };
 
     this.listControllers.push(a);
-    this.notifyAcctsChangeStep(a);
+    // this.notifyAcctsChangeStep(a);
 };
 
 /*}}}*/
