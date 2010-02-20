@@ -29,7 +29,8 @@
     });
 
     Mojo.Log.info("AccountManager() restoring=true (1)");
-    this.restoreAccounts();
+
+    setTimeout(this.restoreAccounts, 1500);
 }
 
 /*}}}*/
