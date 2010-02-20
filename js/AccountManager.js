@@ -15,6 +15,8 @@
     this.registerLoginList     = this.registerLoginList.bind(this);
     this.notifyAcctsChange     = this.notifyAcctsChange.bind(this);
     this.notifyAcctsChangeStep = this.notifyAcctsChangeStep.bind(this);
+    this.addReplaceAccount     = this.addReplaceAccount.bind(this);
+    this.rmAccount             = this.rmAccount.bind(this);
 
     this.listControllers = [];
 
@@ -55,6 +57,14 @@
     Mojo.Log.info("AccountManager::addReplaceAccount(email=%s)", email);
 
     this.accts[email] = pass;
+    this.dbo.simpleAdd("accts", this.accts, this.dbSendAccts, this.dbSendAcctsFail);
+};
+
+/*}}}*/
+/* {{{ /**/ AccountManager.prototype.rmAccount = function(email) {
+    Mojo.Log.info("AccountManager::rmAccount(email=%s)", email);
+
+    delete this.accts[email];
     this.dbo.simpleAdd("accts", this.accts, this.dbSendAccts, this.dbSendAcctsFail);
 };
 
