@@ -4,13 +4,18 @@ function AccountManager() {
 
     this.accts = {};
 
-    this.login           = this.login.bind(this);
-    this.hasAccount      = this.hasAccount.bind(this);
-    this.restoreAccounts = this.restoreAccounts.bind(this);
-    this.dbRecvAccts     = this.dbRecvAccts.bind(this);
-    this.dbRecvAcctsFail = this.dbRecvAcctsFail.bind(this);
-    this.dbSentAccts     = this.dbSentAccts.bind(this);
-    this.dbSentAcctsFail = this.dbSentAcctsFail.bind(this);
+    this.login                 = this.login.bind(this);
+    this.hasAccount            = this.hasAccount.bind(this);
+    this.restoreAccounts       = this.restoreAccounts.bind(this);
+    this.dbRecvAccts           = this.dbRecvAccts.bind(this);
+    this.dbRecvAcctsFail       = this.dbRecvAcctsFail.bind(this);
+    this.dbSentAccts           = this.dbSentAccts.bind(this);
+    this.dbSentAcctsFail       = this.dbSentAcctsFail.bind(this);
+    this.registerLoginList     = this.registerLoginList.bind(this);
+    this.notifyAcctsChange     = this.notifyAcctsChange.bind(this);
+    this.notifyAcctsChangeStep = this.notifyAcctsChangeStep.bind(this);
+
+    this.listControllers = [];
 
     var options = {
         name:    "HMCTAccounts",
@@ -26,16 +31,10 @@ function AccountManager() {
     this.restoreAccounts();
 }
 
-/* {{{ /**/ AccountManager.prototype.hasAccount = function(email) {
-    Mojo.Log.info("AccountManager::hasAccount(email=%s)", email);
-
-    return this.accts[email] ? true : false;
-
-};
-
-/*}}}*/
 /* {{{ /**/ AccountManager.prototype.dbSentAccts = function() {
     Mojo.Log.info("AccountManager::dbSentAccts()");
+
+    this.notifyAcctsChange();
 
 };
 
@@ -51,8 +50,16 @@ function AccountManager() {
     Mojo.Log.info("AccountManager::addReplaceAccount(email=%s)", email);
 
     this.accts[email] = pass;
-
     this.dbo.simpleAdd("accts", this.accts, this.dbSendAccts, this.dbSendAcctsFail);
+};
+
+/*}}}*/
+
+/* {{{ /**/ AccountManager.prototype.hasAccount = function(email) {
+    Mojo.Log.info("AccountManager::hasAccount(email=%s)", email);
+
+    return this.accts[email] ? true : false;
+
 };
 
 /*}}}*/
@@ -123,16 +130,19 @@ function AccountManager() {
 };
 
 /*}}}*/
+
 /* {{{ /**/ AccountManager.prototype.dbRecvAccts = function(accts) {
     Mojo.Log.info("AccountManager::dbRecvAccts()");
 
     if( accts === null )
         return;
 
-    // this.accts = accts;
+    this.accts = accts;
 
     for( var k in accts )
         Mojo.Log.info("restored acct: %s", k);
+
+    this.notifyAcctsChange();
 
 };
 
@@ -148,6 +158,37 @@ function AccountManager() {
     Mojo.Log.info("AccountManager::restoreAccounts()");
     this.dbo.simpleGet("accts", this.dbRecvAccts, this.dbRecvAcctsFail);
 
+};
+
+/*}}}*/
+
+/* {{{ /**/ AccountManager.prototype.registerLoginList = function(list, controller) {
+    Mojo.Log.info("AccountManager::registerLoginList(list=%s)", list.listTitle);
+
+    var a = { model: list, controller: controller };
+
+    this.listControllers.push(a);
+    this.notifyAcctsChangeStep(a);
+};
+
+/*}}}*/
+/* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(a) {
+    Mojo.Log.info("AccountManager::notifyAcctsChangeStep(a=%s)", a.model.listTitle);
+
+    a.model.items = [];
+
+    for( var e in this.accts )
+        a.model.items.push({email: e});
+
+    a.controller.modelChanged( a.model );
+};
+
+/*}}}*/
+/* {{{ /**/ AccountManager.prototype.notifyAcctsChange = function() {
+    Mojo.Log.info("AccountManager::notifyAcctsChange()");
+
+    for( var a in this.listControllers )
+        this.notifyAcctsChangeStep(a);
 };
 
 /*}}}*/

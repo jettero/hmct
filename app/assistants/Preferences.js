@@ -10,20 +10,35 @@ function PreferencesAssistant() {
 }
 
 /* {{{ /**/ PreferencesAssistant.prototype.setup = function() {
-    Mojo.Log.info("Preferences::setup() ");
+    Mojo.Log.info("Preferences::setup()");
 
     this.menuSetup();
 
     this.loginListAttrs = {
         listTemplate:  'misc/lc1',
-        itemTemplate:  'misc/li1',
         emptyTemplate: 'misc/le1',
+        itemTemplate:  'misc/li-email',
         addItemLabel:  $L("Add...")
     };
 
-    this.loginList = {listTitle: $L('Hiveminder Logins'), items: []};
-    this.controller.setupWidget('hm_login_list', this.loginListAttrs, this.loginList);
+    this.loginListModel = {listTitle: $L('Hiveminder Logins'), items: []};
+    this.controller.setupWidget('hm_login_list', this.loginListAttrs, this.loginListModel);
+
+    this.controller.modelChanged(this.loginListModel);
+    AMO.registerLoginList(this.loginListModel, this.controller);
 
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listTap, this.loginListTap);
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listAdd, this.addAccountTap);
-}; /*}}}*/
+
+};
+
+/*}}}*/
+
+PreferencesAssistant.prototype.activate = function() {
+    Mojo.Log.info("Preferences::activate()");
+
+    if( !this.registeredListModel ) {
+        AMO.registerLoginList(this.loginListModel, this.controller);
+        this.registeredListModel = true;
+    }
+};
