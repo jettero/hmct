@@ -40,7 +40,7 @@ PreferencesAssistant.prototype.activate = function() {
 
 PreferencesAssistant.prototype.deactivate = function() {
     Mojo.Log.info("Preferences::deactivate()");
-    AMO.unregisterLoginList(this.loginListModel, this.controller);
+    AMO.unregisterLoginList(this.loginListModel);
 };
 
 Mojo.Log.info('loaded(Preferences.js)');

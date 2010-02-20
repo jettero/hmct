@@ -199,6 +199,13 @@
 };
 
 /*}}}*/
+/* {{{ /**/ AccountManager.prototype.unregisterLoginList = function(list) {
+    Mojo.Log.info("AccountManager::unregisterLoginList(list=%s)", list.listTitle);
+
+    this.listControllers = this.listControllers.reject(function(a){ return a.model === list; });
+};
+
+/*}}}*/
 /* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(a) {
     Mojo.Log.info("AccountManager::notifyAcctsChangeStep(a=%s)", a.model.listTitle);
 
