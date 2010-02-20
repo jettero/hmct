@@ -100,3 +100,5 @@ function CreateAccountAssistant() {
 };
 
 /*}}}*/
+
+Mojo.Log.info('loaded(CreateAccount.js)');

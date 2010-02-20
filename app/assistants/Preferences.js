@@ -31,3 +31,15 @@ function PreferencesAssistant() {
 };
 
 /*}}}*/
+
+PreferencesAssistant.prototype.activate = function() {
+    Mojo.Log.info("Preferences::activate()");
+    AMO.registerLoginList(this.loginListModel, this.controller);
+};
+
+PreferencesAssistant.prototype.deactivate = function() {
+    Mojo.Log.info("Preferences::deactivate()");
+    AMO.unregisterLoginList(this.loginListModel, this.controller);
+};
+
+Mojo.Log.info('loaded(Preferences.js)');
