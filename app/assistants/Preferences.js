@@ -21,9 +21,8 @@ function PreferencesAssistant() {
         addItemLabel:  $L("Add...")
     };
 
-    this.loginListModel = {listTitle: $L('Hiveminder Logins'), items: AMO.fetchLoginList() };
+    this.loginListModel = {listTitle: $L('Hiveminder Logins'), items: [] };
     this.controller.setupWidget('hm_login_list', this.loginListAttrs, this.loginListModel);
-    AMO.registerLoginList(this.loginListModel, this.controller);
 
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listTap, this.loginListTap);
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listAdd, this.addAccountTap);

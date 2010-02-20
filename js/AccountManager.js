@@ -183,7 +183,7 @@
     var a = { model: list, controller: controller };
 
     this.listControllers.push(a);
-    // this.notifyAcctsChangeStep(a);
+    this.notifyAcctsChangeStep(a);
 };
 
 /*}}}*/
