@@ -4,7 +4,7 @@ function EditAccountAssistant(args) {
     this.SC  = Mojo.Controller.stageController;
     this.SCa = this.SC.assistant;
 
-    this.emailArg = args.email;
+    this.originalEmail = args.email;
 
     this.menuSetup = this.SCa.menuSetup.bind(this);
 
@@ -29,8 +29,10 @@ function EditAccountAssistant(args) {
         textFieldName: "passtf"
     };
 
-    this.eModel = { value: this.emailArg };
-    this.pModel = { value: AMO.getPasswdForEmail(this.emailArg) };
+    this.originalPasswd = AMO.getPasswdForEmail(this.originalEmail);
+
+    this.eModel = { value: this.originalEmail  };
+    this.pModel = { value: this.originalPasswd };
 
     this.controller.setupWidget('emailtf', eAttributes, this.eModel );
     this.controller.setupWidget('passtf',  pAttributes, this.pModel );
@@ -59,12 +61,17 @@ function EditAccountAssistant(args) {
     this.nospin();
 
     AMO.rmAccount(this.emailArg);
-    AMO.addReplaceAccount(email,pass);
+    AMO.addReplaceAccount(email,pass,{meta: "data"});
 
     // 18:00:00: org.voltar.hiveminder: Info: AccountManager::login() r.success
     // r={"success": 1, "content": {}, "action_class": "BTDT::Action::Login",
     // "field_errors": {}, "message": "Welcome back, Paul Miller (work).",
     // "failure": 0, "error": null, "field_warnings": {}}
+
+    if( r.skip_note ) {
+        this.noticedUpdate();
+        return;
+    }
 
     this.controller.showAlertDialog({
         onChoose: this.noticedUpdate,
@@ -92,7 +99,13 @@ function EditAccountAssistant(args) {
     if( this.spinning ) return;
         this.spinning = true;
 
-    AMO.login(email, pass, this.checkedUserPass, this.failedUserPass);
+    if( email != this.originalEmail || pass != this.originalPasswd ) {
+        // we need to check the login to make sure it's still good
+        AMO.login(email, pass, this.checkedUserPass, this.failedUserPass);
+
+    } else {
+        this.checkedUserPass(email, pass, {skip_note: true, message: "Login credentials unchanged"});
+    }
 };
 
 /*}}}*/
