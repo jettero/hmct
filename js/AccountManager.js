@@ -2,17 +2,17 @@
 /* {{{ /**/ function AccountManager() {
     Mojo.Log.info("AccountManager()");
 
-    this.accts = {};
+    this.data = { version: 2, meta: {}, accts: {} };
 
     this.login                 = this.login.bind(this);
     this.hasAccount            = this.hasAccount.bind(this);
     this.fetchLoginList        = this.fetchLoginList.bind(this);
     this.getPasswdForEmail     = this.getPasswdForEmail.bind(this);
     this.restoreAccounts       = this.restoreAccounts.bind(this);
-    this.dbRecvAccts           = this.dbRecvAccts.bind(this);
-    this.dbRecvAcctsFail       = this.dbRecvAcctsFail.bind(this);
-    this.dbSentAccts           = this.dbSentAccts.bind(this);
-    this.dbSentAcctsFail       = this.dbSentAcctsFail.bind(this);
+    this.dbRecv                = this.dbRecv.bind(this);
+    this.dbRecvFail            = this.dbRecvFail.bind(this);
+    this.dbSent                = this.dbSent.bind(this);
+    this.dbSentFail            = this.dbSentFail.bind(this);
     this.registerLoginList     = this.registerLoginList.bind(this);
     this.notifyAcctsChange     = this.notifyAcctsChange.bind(this);
     this.notifyAcctsChangeStep = this.notifyAcctsChangeStep.bind(this);
@@ -39,16 +39,16 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.dbSentAccts = function() {
-    Mojo.Log.info("AccountManager::dbSentAccts()");
+/* {{{ /**/ AccountManager.prototype.dbSent = function() {
+    Mojo.Log.info("AccountManager::dbSent()");
 
     this.notifyAcctsChange();
 
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.dbSentAcctsFail = function(transaction, error) {
-    Mojo.Log.info("AccountManager::dbSentAcctsFail()");
+/* {{{ /**/ AccountManager.prototype.dbSentFail = function(transaction, error) {
+    Mojo.Log.info("AccountManager::dbSentFail()");
     Mojo.Controller.errorDialog("ERROR storing information (#" + error.message + ").");
 
 };
@@ -57,16 +57,16 @@
 /* {{{ /**/ AccountManager.prototype.addReplaceAccount = function(email,pass) {
     Mojo.Log.info("AccountManager::addReplaceAccount(email=%s)", email);
 
-    this.accts[email] = pass;
-    this.dbo.simpleAdd("accts", this.accts, this.dbSendAccts, this.dbSendAcctsFail);
+    this.data.accts[email] = pass;
+    this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
 };
 
 /*}}}*/
 /* {{{ /**/ AccountManager.prototype.rmAccount = function(email) {
     Mojo.Log.info("AccountManager::rmAccount(email=%s)", email);
 
-    delete this.accts[email];
-    this.dbo.simpleAdd("accts", this.accts, this.dbSendAccts, this.dbSendAcctsFail);
+    delete this.data.accts[email];
+    this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
 };
 
 /*}}}*/
@@ -74,7 +74,7 @@
 /* {{{ /**/ AccountManager.prototype.hasAccount = function(email) {
     Mojo.Log.info("AccountManager::hasAccount(email=%s)", email);
 
-    return this.accts[email] ? true : false;
+    return this.data.accts[email] ? true : false;
 
 };
 
@@ -83,7 +83,7 @@
     Mojo.Log.info("AccountManager::fetchLoginList()");
 
     var ret = [];
-    for( var k in this.accts )
+    for( var k in this.data.accts )
         ret.push({email: k});
 
     return ret;
@@ -94,7 +94,7 @@
 /* {{{ /**/ AccountManager.prototype.getPasswdForEmail = function(email) {
     Mojo.Log.info("AccountManager::getPasswdForEmail(email:%s)", email);
 
-    return this.accts[email];
+    return this.data.accts[email];
 
 };
 
@@ -115,6 +115,7 @@
                     if( r.success ) {
                         Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
                         s(email, pass, r);
+                        this.data.meta.currentLogin = email;
 
                     } else {
                         Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
@@ -167,15 +168,19 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.dbRecvAccts = function(accts) {
-    Mojo.Log.info("AccountManager::dbRecvAccts()");
+/* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
+    Mojo.Log.info("AccountManager::dbRecv()");
 
-    if( accts === null )
+    if( data === null )
         return;
 
-    this.accts = accts;
+    switch( data.version ) {
+        default:
+            this.data = data;
+            break;
+    }
 
-    for( var k in accts )
+    for( var k in this.data.accts )
         Mojo.Log.info("restored acct: %s", k);
 
     this.notifyAcctsChange();
@@ -183,8 +188,8 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.dbRecvAcctsFail = function(transaction, error) {
-    Mojo.Log.info("AccountManager::dbRecvAcctsFail()");
+/* {{{ /**/ AccountManager.prototype.dbRecvFail = function(transaction, error) {
+    Mojo.Log.info("AccountManager::dbRecvFail()");
     Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
 
 };
@@ -192,7 +197,7 @@
 /*}}}*/
 /* {{{ /**/ AccountManager.prototype.restoreAccounts = function() {
     Mojo.Log.info("AccountManager::restoreAccounts()");
-    this.dbo.simpleGet("accts", this.dbRecvAccts, this.dbRecvAcctsFail);
+    this.dbo.simpleGet("am_data", this.dbRecv, this.dbRecvFail);
 
 };
 
@@ -220,7 +225,7 @@
 
     a.model.items = [];
 
-    for( var e in this.accts )
+    for( var e in this.data.accts )
         a.model.items.push({email: e});
 
     a.controller.modelChanged( a.model );
