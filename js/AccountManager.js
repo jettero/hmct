@@ -7,6 +7,7 @@
     this.login                 = this.login.bind(this);
     this.hasAccount            = this.hasAccount.bind(this);
     this.fetchLoginList        = this.fetchLoginList.bind(this);
+    this.getPasswdForEmail     = this.getPasswdForEmail.bind(this);
     this.restoreAccounts       = this.restoreAccounts.bind(this);
     this.dbRecvAccts           = this.dbRecvAccts.bind(this);
     this.dbRecvAcctsFail       = this.dbRecvAcctsFail.bind(this);
@@ -86,6 +87,14 @@
         ret.push({email: k});
 
     return ret;
+
+};
+
+/*}}}*/
+/* {{{ /**/ AccountManager.prototype.getPasswdForEmail = function(email) {
+    Mojo.Log.info("AccountManager::getPasswdForEmail(email:%s)", email);
+
+    return this.accts[email];
 
 };
 
