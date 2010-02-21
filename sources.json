@@ -5,6 +5,7 @@
     { "source": "app/assistants/Help.js" },
     { "source": "app/assistants/Preferences.js" },
     { "source": "app/assistants/CreateAccount.js" },
+    { "source": "app/assistants/EditAccount.js" },
 
     { "source": "stage-assistant.js" }
 ]

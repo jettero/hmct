@@ -5,9 +5,9 @@ function PreferencesAssistant() {
     this.SC = Mojo.Controller.stageController.assistant;
     this.menuSetup = this.SC.menuSetup.bind(this);
 
-    this.loginListTap   = function(event){ this.SC.showScene("EditAccount");   }.bind(this);
+    this.loginListTap   = function(event){ this.SC.showScene("EditAccount", {email: event.item.email}); }.bind(this);
     this.addAccountTap  = function(event){ this.SC.showScene("CreateAccount"); }.bind(this);
-    this.rmAccountSlide = function(event){ AMO.rmAccount(event.item.email);    }.bind(this);
+    this.rmAccountSlide = function(event){ AMO.rmAccount(event.item.email); }.bind(this);
 }
 
 /* {{{ /**/ PreferencesAssistant.prototype.setup = function() {
