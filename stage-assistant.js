@@ -1,15 +1,16 @@
-var AMO;
+var AMO, TMO;
 
 function StageAssistant() {
 	Mojo.Log.info("StageAssistant()")
 
     AMO = new AccountManager();
+    TMO = new TaskManager();
 }
 
 StageAssistant.prototype.setup = function() {
 	Mojo.Log.info("StageAssistant()::setup()")
 
-    this.controller.assistant.showScene('Preferences');
+    this.controller.assistant.showScene('Tasks');
 }
 
 StageAssistant.prototype.showScene = function (sceneName, args) {
@@ -39,8 +40,9 @@ StageAssistant.prototype.menuSetup = function() {
     this.appMenuModel = {
         visible: true,
         items: [
-            { label: "Help",  command: 'myshow-Help' },
-            { label: "About", command: 'myshow-About' }
+            { label: "Help",                   command: 'myshow-Help'        },
+            { label: "About",                  command: 'myshow-About'       },
+            { label: "Preferences / Accounts", command: 'myshow-Preferences' }
         ]
     };
 

@@ -1,4 +1,6 @@
 [
+    { "source": "js/md5.js" },
+
     { "source": "js/AccountManager.js" },
     { "source": "js/TaskManager.js" },
 
@@ -7,6 +9,7 @@
     { "source": "app/assistants/Preferences.js" },
     { "source": "app/assistants/CreateAccount.js" },
     { "source": "app/assistants/EditAccount.js" },
+    { "source": "app/assistants/Tasks.js" },
 
     { "source": "stage-assistant.js" }
 ]

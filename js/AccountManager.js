@@ -240,3 +240,5 @@
 };
 
 /*}}}*/
+
+Mojo.Log.info('loaded(AccountManager.js)');
