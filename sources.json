@@ -1,5 +1,6 @@
 [
     { "source": "js/AccountManager.js" },
+    { "source": "js/TaskManager.js" },
 
     { "source": "app/assistants/About.js" },
     { "source": "app/assistants/Help.js" },
