@@ -5,9 +5,13 @@ function PreferencesAssistant() {
     this.SC = Mojo.Controller.stageController.assistant;
     this.menuSetup = this.SC.menuSetup.bind(this);
 
-    this.loginListTap   = function(event){ this.SC.showScene("EditAccount", {email: event.item.email}); }.bind(this);
-    this.addAccountTap  = function(event){ this.SC.showScene("CreateAccount"); }.bind(this);
-    this.rmAccountSlide = function(event){ AMO.rmAccount(event.item.email); }.bind(this);
+    this.loginListTap          = function(event){ this.SC.showScene("EditAccount", {email: event.item.email}); }.bind(this);
+    this.addAccountTap         = function(event){ this.SC.showScene("CreateAccount"); }.bind(this);
+    this.rmAccountSlide        = function(event){ AMO.rmAccount(event.item.email); }.bind(this);
+    this.handleLoginListChange = function(e){
+        this.loginListModel.items = e;
+        this.controller.modelChanged(this.loginListModel);
+        }.bind(this);
 }
 
 /* {{{ /**/ PreferencesAssistant.prototype.setup = function() {
@@ -33,14 +37,17 @@ function PreferencesAssistant() {
 
 /*}}}*/
 
-PreferencesAssistant.prototype.activate = function() {
+/* {{{ /**/ PreferencesAssistant.prototype.activate = function() {
     Mojo.Log.info("Preferences::activate()");
-    AMO.registerLoginList(this.loginListModel, this.controller);
+    AMO.registerLoginChange(this.handleLoginListChange);
 };
 
-PreferencesAssistant.prototype.deactivate = function() {
+/*}}}*/
+/* {{{ /**/ PreferencesAssistant.prototype.deactivate = function() {
     Mojo.Log.info("Preferences::deactivate()");
-    AMO.unregisterLoginList(this.loginListModel);
+    AMO.unregisterLoginChange(this.handleLoginListChange);
 };
+
+/*}}}*/
 
 Mojo.Log.info('loaded(Preferences.js)');

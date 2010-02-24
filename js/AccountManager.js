@@ -13,13 +13,14 @@
     this.dbRecvFail            = this.dbRecvFail.bind(this);
     this.dbSent                = this.dbSent.bind(this);
     this.dbSentFail            = this.dbSentFail.bind(this);
-    this.registerLoginList     = this.registerLoginList.bind(this);
+    this.registerLoginChange   = this.registerLoginChange.bind(this);
+    this.unregisterLoginChange = this.unregisterLoginChange.bind(this);
     this.notifyAcctsChange     = this.notifyAcctsChange.bind(this);
     this.notifyAcctsChangeStep = this.notifyAcctsChangeStep.bind(this);
     this.addReplaceAccount     = this.addReplaceAccount.bind(this);
     this.rmAccount             = this.rmAccount.bind(this);
 
-    this.listControllers = [];
+    this.loginChangeCallbacks = [];
 
     var options = {
         name:    "HMCTAccounts",
@@ -203,40 +204,44 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.registerLoginList = function(list, controller) {
-    Mojo.Log.info("AccountManager::registerLoginList(list=%s)", list.listTitle);
+/* {{{ /**/ AccountManager.prototype.registerLoginChange = function(callback) {
+    Mojo.Log.info("AccountManager::registerLoginChange()");
 
-    var a = { model: list, controller: controller };
-
-    this.listControllers.push(a);
-    this.notifyAcctsChangeStep(a);
+    this.loginChangeCallbacks.push(callback);
+    this.notifyAcctsChangeStep(callback);
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.unregisterLoginList = function(list) {
-    Mojo.Log.info("AccountManager::unregisterLoginList(list=%s)", list.listTitle);
+/* {{{ /**/ AccountManager.prototype.unregisterLoginChange = function(callback) {
+    Mojo.Log.info("AccountManager::unregisterLoginChange()");
 
-    this.listControllers = this.listControllers.reject(function(a){ return a.model === list; });
+    this.loginChangeCallbacks = this.loginChangeCallbacks.reject(function(_c){ return _c === callback; });
 };
 
 /*}}}*/
 /* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(a) {
-    Mojo.Log.info("AccountManager::notifyAcctsChangeStep(a=%s)", a.model.listTitle);
+    Mojo.Log.info("AccountManager::notifyAcctsChangeStep()");
 
-    a.model.items = [];
+    var emails  = [];
+    var current = this.data.meta.currentLogin;
 
-    for( var e in this.data.accts )
-        a.model.items.push({email: e});
+    for( var e in this.data.accts ) {
+        var i = {email: e};
+        if( e === current )
+            i.current = true;
 
-    a.controller.modelChanged( a.model );
+        emails.push(i);
+    }
+
+    a(emails, current);
 };
 
 /*}}}*/
 /* {{{ /**/ AccountManager.prototype.notifyAcctsChange = function() {
     Mojo.Log.info("AccountManager::notifyAcctsChange()");
 
-    for( var i=0; i<this.listControllers.length; i++ )
-        this.notifyAcctsChangeStep(this.listControllers[i]);
+    for( var i=0; i<this.loginChangeCallbacks.length; i++ )
+        this.notifyAcctsChangeStep(this.loginChangeCallbacks[i]);
 };
 
 /*}}}*/
