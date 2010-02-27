@@ -36,8 +36,8 @@ function TasksAssistant() {
         this.loginSubmenu.items = [];
     }
 
-    this.controler.modelChanged(this.loginSubmenu);
-    this.controler.modelChanged(this.commandMenuModel);
+    this.controller.modelChanged(this.loginSubmenu);
+    this.controller.modelChanged(this.commandMenuModel);
 };
 
 /*}}}*/
