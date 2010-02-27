@@ -4,21 +4,10 @@
 
     this.data = { version: 2, meta: {}, accts: {} };
 
-    this.login                 = this.login.bind(this);
-    this.hasAccount            = this.hasAccount.bind(this);
-    this.fetchLoginList        = this.fetchLoginList.bind(this);
-    this.getPasswdForEmail     = this.getPasswdForEmail.bind(this);
-    this.restoreAccounts       = this.restoreAccounts.bind(this);
-    this.dbRecv                = this.dbRecv.bind(this);
-    this.dbRecvFail            = this.dbRecvFail.bind(this);
-    this.dbSent                = this.dbSent.bind(this);
-    this.dbSentFail            = this.dbSentFail.bind(this);
-    this.registerLoginChange   = this.registerLoginChange.bind(this);
-    this.unregisterLoginChange = this.unregisterLoginChange.bind(this);
-    this.notifyAcctsChange     = this.notifyAcctsChange.bind(this);
-    this.notifyAcctsChangeStep = this.notifyAcctsChangeStep.bind(this);
-    this.addReplaceAccount     = this.addReplaceAccount.bind(this);
-    this.rmAccount             = this.rmAccount.bind(this);
+    this.dbRecv     = this.dbRecv.bind(this);
+    this.dbRecvFail = this.dbRecvFail.bind(this);
+    this.dbSent     = this.dbSent.bind(this);
+    this.dbSentFail = this.dbSentFail.bind(this);
 
     this.loginChangeCallbacks = [];
 
