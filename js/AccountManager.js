@@ -223,8 +223,8 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(a,i) {
-    Mojo.Log.info("AccountManager::notifyAcctsChangeStep(i=%d)", i);
+/* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(callback) {
+    Mojo.Log.info("AccountManager::notifyAcctsChangeStep()");
 
     var emails  = [];
     var current = this.data.meta.currentLogin;
@@ -237,7 +237,7 @@
         emails.push(i);
     }
 
-    a(emails, current);
+    callback(emails, current);
 };
 
 /*}}}*/
@@ -245,7 +245,7 @@
     Mojo.Log.info("AccountManager::notifyAcctsChange()");
 
     for( var i=0; i<this.loginChangeCallbacks.length; i++ )
-        this.notifyAcctsChangeStep(this.loginChangeCallbacks[i], i);
+        this.notifyAcctsChangeStep(this.loginChangeCallbacks[i]);
 };
 
 /*}}}*/
