@@ -2,8 +2,8 @@
 function TasksAssistant() {
     Mojo.Log.info("Tasks()");
 
-    this.SC = Mojo.Controller.stageController.assistant;
-    this.menuSetup = this.SC.menuSetup.bind(this);
+    this.SCa = Mojo.Controller.stageController.assistant;
+    this.menuSetup = this.SCa.menuSetup.bind(this);
     this.handleLoginChange = this.handleLoginChange.bind(this);
 }
 
@@ -32,15 +32,26 @@ function TasksAssistant() {
     } else {
         this.commandMenuModel.items[2] = {};
         this.loginSubmenu.items = [];
+
+        if( emails.length>0 )
+            AMO.switchTo( emails[0].email );
     }
 
     this.controller.modelChanged(this.commandMenuModel);
+
+    if( !this.firstHC ) {
+        this.firstHC = true;
+
+        if( emails.length < 1 )
+            this.SCa.showScene("Preferences");
+    }
 };
 
 /*}}}*/
 
 /* {{{ /**/ TasksAssistant.prototype.activate = function() {
     Mojo.Log.info("Tasks::activate()");
+
     AMO.registerLoginChange(this.handleLoginChange);
 };
 
