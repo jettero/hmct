@@ -17,8 +17,6 @@ function TasksAssistant() {
     this.loginSubmenu = { label: $L('Login Submenu'), items: [] };
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
-
-    AMO.registerLoginChange(this.handleLoginChange);
 };
 
 /*}}}*/
@@ -36,8 +34,20 @@ function TasksAssistant() {
         this.loginSubmenu.items = [];
     }
 
-    this.controller.modelChanged(this.loginSubmenu);
     this.controller.modelChanged(this.commandMenuModel);
+};
+
+/*}}}*/
+
+/* {{{ /**/ TasksAssistant.prototype.activate = function() {
+    Mojo.Log.info("Tasks::activate()");
+    AMO.registerLoginChange(this.handleLoginChange);
+};
+
+/*}}}*/
+/* {{{ /**/ TasksAssistant.prototype.deactivate = function() {
+    Mojo.Log.info("Tasks::deactivate()");
+    AMO.unregisterLoginChange(this.handleLoginListChange);
 };
 
 /*}}}*/
