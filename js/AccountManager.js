@@ -211,6 +211,8 @@
 
     this.loginChangeCallbacks.push(callback);
     this.notifyAcctsChangeStep(callback);
+
+    Mojo.Log.info("AccountManager::registerLoginChange() len: %d", this.loginChangeCallbacks.length);
 };
 
 /*}}}*/
@@ -221,8 +223,8 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(a) {
-    Mojo.Log.info("AccountManager::notifyAcctsChangeStep()");
+/* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(a,i) {
+    Mojo.Log.info("AccountManager::notifyAcctsChangeStep(i=%d)", i);
 
     var emails  = [];
     var current = this.data.meta.currentLogin;
@@ -243,7 +245,7 @@
     Mojo.Log.info("AccountManager::notifyAcctsChange()");
 
     for( var i=0; i<this.loginChangeCallbacks.length; i++ )
-        this.notifyAcctsChangeStep(this.loginChangeCallbacks[i]);
+        this.notifyAcctsChangeStep(this.loginChangeCallbacks[i], i);
 };
 
 /*}}}*/

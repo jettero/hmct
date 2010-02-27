@@ -4,6 +4,7 @@ function TasksAssistant() {
 
     this.SC = Mojo.Controller.stageController.assistant;
     this.menuSetup = this.SC.menuSetup.bind(this);
+    this.handleLoginChange = this.handleLoginChange.bind(this);
 }
 
 /* {{{ /**/ TasksAssistant.prototype.setup = function() {
@@ -11,20 +12,32 @@ function TasksAssistant() {
 
     this.menuSetup();
 
-    this.commandMenuModel = { label: $L('Tasks Command Menu'), 
-        items: [{},{},{label: "cool", hidden: true, submenu:'login-submenu'}]
-    };		
-	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);		
+    this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
+    this.commandMenuModel = { label: $L('Tasks Command Menu'), items: [{},{},{}] };
+    this.loginSubmenu = { label: $L('Login Submenu'), items: [] };
+	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
 
-    this.loginSubmenu = { label: $L('Login Submenu'),
-        items: [
-            {label: "test1", command: "test1"},
-            {label: "test2", command: "test2"},
-            {label: "test3", command: "test3"},
-            {label: "test4", command: "test4"}
-        ]
-    };
-	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);	
+    AMO.registerLoginChange(this.handleLoginChange);
+};
+
+/*}}}*/
+/* {{{ /**/ TasksAssistant.prototype.handleLoginChange = function(emails,current) {
+    Mojo.Log.info("Tasks::handleLoginChange(current=%s)", current);
+
+    if( current ) {
+        this.commandMenuModel.items[2] = emails.length>1 ? this.commandMenuModelCurrentLoginTemplate(current) : { label: current };
+        var items = this.loginSubmenu.items = [];
+        for(var i=0; i<emails.length; i++)
+            items.push({ label: emails[i].email, command: "loginas@@" + emails[i].email });
+
+    } else {
+        this.commandMenuModel.items[2] = {};
+        this.loginSubmenu.items = [];
+    }
+
+    this.controler.modelChanged(this.loginSubmenu);
+    this.controler.modelChanged(this.commandMenuModel);
 };
 
 /*}}}*/
