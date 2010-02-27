@@ -231,6 +231,7 @@
 
     for( var e in this.data.accts ) {
         var i = {email: e};
+
         if( e === current )
             i.current = true;
 
