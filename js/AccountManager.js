@@ -29,11 +29,17 @@
 
 /*}}}*/
 
+/* {{{ /**/ AccountManager.prototype.dbChanged = function() {
+    Mojo.Log.info("AccountManager::dbChanged() data=%s", Object.toJSON(this.data));
+
+    this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
+};
+
+/*}}}*/
 /* {{{ /**/ AccountManager.prototype.dbSent = function() {
     Mojo.Log.info("AccountManager::dbSent()");
 
     this.notifyAcctsChange();
-
 };
 
 /*}}}*/
@@ -48,7 +54,7 @@
     Mojo.Log.info("AccountManager::addReplaceAccount(email=%s)", email);
 
     this.data.accts[email] = pass;
-    this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
+    this.dbChanged();
 };
 
 /*}}}*/
@@ -56,7 +62,7 @@
     Mojo.Log.info("AccountManager::rmAccount(email=%s)", email);
 
     delete this.data.accts[email];
-    this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
+    this.dbChanged();
 };
 
 /*}}}*/
@@ -106,6 +112,7 @@
                         Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
                         s(email, pass, r);
                         this.data.meta.currentLogin = email;
+                        this.dbChanged();
 
                     } else {
                         Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
@@ -159,7 +166,7 @@
 /*}}}*/
 
 /* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
-    Mojo.Log.info("AccountManager::dbRecv()");
+    Mojo.Log.info("AccountManager::dbRecv() data=%s", Object.toJSON(data));
 
     if( data === null )
         return;
