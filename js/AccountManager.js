@@ -168,6 +168,16 @@
 };
 
 /*}}}*/
+/* {{{ /**/ AccountManager.prototype.switchTo = function(email) {
+    Mojo.Log.info("AccountManager::switchTo(email=%s)", email);
+
+    var passwd = this.getPasswdForEmail(email);
+
+    if( passwd )
+        this.login( email, passwd );
+};
+
+/*}}}*/
 
 /* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
