@@ -23,14 +23,14 @@
 
     Mojo.Log.info("AccountManager() restoring=true (1)");
 
-    // setTimeout(this.restoreAccounts, 1500); // sometimes it's handy to wait for testing purposes
-    this.restoreAccounts();
+    // setTimeout(this.dbRestore.bind(this), 1500); // sometimes it's handy to wait for testing purposes
+    this.dbRestore();
 }
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.dbChanged = function() {
-    Mojo.Log.info("AccountManager::dbChanged() data=%s", Object.toJSON(this.data));
+/* {{{ /**/ AccountManager.prototype.dbChanged = function(desc) {
+    Mojo.Log.info("AccountManager::dbChanged(desc=%s)", desc);
 
     this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
 };
@@ -54,7 +54,7 @@
     Mojo.Log.info("AccountManager::addReplaceAccount(email=%s)", email);
 
     this.data.accts[email] = pass;
-    this.dbChanged();
+    this.dbChanged("added login");
 };
 
 /*}}}*/
@@ -62,7 +62,11 @@
     Mojo.Log.info("AccountManager::rmAccount(email=%s)", email);
 
     delete this.data.accts[email];
-    this.dbChanged();
+
+    if( this.data.meta.currentLogin === email )
+        delete this.data.meta.currentLogin;
+
+    this.dbChanged("removed login");
 };
 
 /*}}}*/
@@ -112,7 +116,7 @@
                         Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
                         s(email, pass, r);
                         this.data.meta.currentLogin = email;
-                        this.dbChanged();
+                        this.dbChanged("new current login");
 
                     } else {
                         Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
@@ -166,7 +170,7 @@
 /*}}}*/
 
 /* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
-    Mojo.Log.info("AccountManager::dbRecv() data=%s", Object.toJSON(data));
+    Mojo.Log.info("AccountManager::dbRecv()");
 
     if( data === null )
         return;
@@ -180,6 +184,8 @@
     for( var k in this.data.accts )
         Mojo.Log.info("restored acct: %s", k);
 
+    Mojo.Log.info("currently logged in: %s", data.meta.currentLogin);
+
     this.notifyAcctsChange();
 
 };
@@ -192,8 +198,8 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.restoreAccounts = function() {
-    Mojo.Log.info("AccountManager::restoreAccounts()");
+/* {{{ /**/ AccountManager.prototype.dbRestore = function() {
+    Mojo.Log.info("AccountManager::dbRestore()");
     this.dbo.simpleGet("am_data", this.dbRecv, this.dbRecvFail);
 
 };
