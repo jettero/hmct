@@ -114,9 +114,9 @@
                 if( r ) {
                     if( r.success ) {
                         Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
-                        s(email, pass, r);
                         this.data.meta.currentLogin = email;
                         this.dbChanged("new current login");
+                        s(email, pass, r);
 
                     } else {
                         Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
