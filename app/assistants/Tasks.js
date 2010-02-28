@@ -63,4 +63,22 @@ function TasksAssistant() {
 
 /*}}}*/
 
+/* {{{ /**/ TasksAssistant.prototype.handleCommand = function(event) {
+    Mojo.Log.info("Tasks::handleCommand(command)");
+
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/)
+
+        switch (s_a[0]) {
+            case "login-as":
+                Mojo.Log.info("Tasks::handleCommand(login-as: %s)", s_a[1]);
+                AMO.switchTo(s_a[1]);
+                break;
+        }
+    }
+
+}
+
+/*}}}*/
+
 Mojo.Log.info('loaded(Tasks.js)');
