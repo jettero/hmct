@@ -27,7 +27,7 @@ function TasksAssistant() {
         this.commandMenuModel.items[2] = emails.length>1 ? this.commandMenuModelCurrentLoginTemplate(current) : { label: current };
         var items = this.loginSubmenu.items = [];
         for(var i=0; i<emails.length; i++)
-            items.push({ label: emails[i].email, command: "loginas@@" + emails[i].email });
+            items.push({ label: emails[i].email, command: "login-as @@ " + emails[i].email });
 
     } else {
         this.commandMenuModel.items[2] = {};
