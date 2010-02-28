@@ -102,8 +102,8 @@
 /* {{{ /**/ AccountManager.prototype.login = function(email,pass,s,f) {
     Mojo.Log.info("AccountManager::login(email=%s)", email);
 
-    if( !s ) s = function() { return true; }.bind(this);
-    if( !f ) f = function() { return true; }.bind(this);
+    if( !s ) s = function() { return true; };
+    if( !f ) f = function() { return true; };
 
     var request = new Ajax.Request('https://hiveminder.com/=/action/BTDT.Action.Login.json', {
         method: 'post', parameters: { address: email, password: pass }, evalJSON: true,
