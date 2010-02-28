@@ -32,7 +32,7 @@
 /* {{{ /**/ AccountManager.prototype.dbChanged = function(desc) {
     Mojo.Log.info("AccountManager::dbChanged(desc=%s)", desc);
 
-    this.dbo.simpleAdd("am_data", this.data, this.dbSend, this.dbSendFail);
+    this.dbo.simpleAdd("am_data", this.data, this.dbSent, this.dbSentFail);
 };
 
 /*}}}*/
