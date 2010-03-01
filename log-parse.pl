@@ -10,7 +10,7 @@ select $old; $| = 1;
 my @start = ( map { strftime('%H:%M:%S', gmtime(time() + $_)) } (0,-1,+1) );
 my $start = do { local $" = "|"; qr(@start) };
 
-my $on = 0;
+my $on = $ENV{ALWAYS_ON};
 
 while(<STDIN>) {
     $on = 1 if m/$start.*?Info.*?loaded\(\w+\.js\)/;
