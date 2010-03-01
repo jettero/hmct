@@ -1,0 +1,2 @@
+curl -sF post=please -b $HM http://hiveminder.com/=/action/BTDT.Action.SearchList.yml
+    ... lists my lists and the tokens
