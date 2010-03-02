@@ -26,7 +26,8 @@
     // setTimeout(this.dbRestore.bind(this), 3500); // sometimes it's handy to wait for testing purposes
     this.dbRestore();
 
-    this.loaded = false;
+    this.db_loaded = false; // got the db picked upt
+    this.loaded = false; // fully loaded
 }
 
 /*}}}*/
@@ -184,7 +185,7 @@
 /* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
 
-    this.loaded = true;
+    this.db_loaded = true;
 
     if( data === null )
         return;
@@ -261,6 +262,9 @@
 
     for( var i=0; i<this.loginChangeCallbacks.length; i++ )
         this.notifyAcctsChangeStep(this.loginChangeCallbacks[i]);
+
+    if( this.db_loaded )
+        this.loaded = true; // got the db picked up and told everything about it
 };
 
 /*}}}*/
