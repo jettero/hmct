@@ -32,7 +32,7 @@
 /* {{{ /**/ AccountManager.prototype.dbChanged = function(desc) {
     Mojo.Log.info("AccountManager::dbChanged(desc=%s)", desc);
 
-    this.dbo.simpleAdd("am_data", this.data, this.dbSent, this.dbSentFail);
+    this.dbo.add("am_data", this.data, this.dbSent, this.dbSentFail);
 };
 
 /*}}}*/
@@ -210,7 +210,7 @@
 /*}}}*/
 /* {{{ /**/ AccountManager.prototype.dbRestore = function() {
     Mojo.Log.info("AccountManager::dbRestore()");
-    this.dbo.simpleGet("am_data", this.dbRecv, this.dbRecvFail);
+    this.dbo.get("am_data", this.dbRecv, this.dbRecvFail);
 
 };
 
