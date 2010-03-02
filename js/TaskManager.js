@@ -5,7 +5,7 @@ function TaskManager() {
     Mojo.Log.info("test-md5: %s, %s", hex_md5(""), hex_md5("abc"));
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
-    this.currentSearch = {};
+    this.currentSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
 
     AMO.registerLoginChange(this.handleLoginChange);
 }
