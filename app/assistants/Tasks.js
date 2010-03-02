@@ -31,7 +31,7 @@ function TasksAssistant() {
         return;
     }
 
-    if( this.loginSubmenu.items < 1 )
+    if( this.loginSubmenu.items.length < 1 )
         this.SCa.showScene("Preferences");
 }
 
