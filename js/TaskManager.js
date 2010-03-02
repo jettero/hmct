@@ -13,14 +13,28 @@ function TaskManager() {
 TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
+    if( current )
+        this.searchTasks(); // cool, there's a login set, search now!!
+
+};
+
+TaskManager.prototype.activate = function() {
+    // TODO: load/reload tasks here if there's a current login set
+    // this.searchTasks();
 };
 
 TaskManager.prototype.dbChanged = function(desc) {
     Mojo.Log.info("TaskManager::dbChanged(desc=%s)", desc);
 };
 
-TaskManager.prototype.searchTasks = function() {
+TaskManager.prototype.searchTasks = function(force) {
     Mojo.Log.info("TaskManager::searchTasks()");
+
+    if( !force ) {
+        Mojo.Log.info("TaskManager::searchTasks() checking cache");
+
+        // TODO: check cache here
+    }
 
     var request = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
         method:     'post',
