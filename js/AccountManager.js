@@ -23,8 +23,10 @@
 
     Mojo.Log.info("AccountManager() restoring=true (1)");
 
-    // setTimeout(this.dbRestore.bind(this), 1500); // sometimes it's handy to wait for testing purposes
+    // setTimeout(this.dbRestore.bind(this), 3500); // sometimes it's handy to wait for testing purposes
     this.dbRestore();
+
+    this.loaded = false;
 }
 
 /*}}}*/
@@ -181,6 +183,8 @@
 
 /* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
+
+    this.loaded = true;
 
     if( data === null )
         return;

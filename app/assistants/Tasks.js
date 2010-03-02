@@ -5,6 +5,7 @@ function TasksAssistant() {
     this.SCa = Mojo.Controller.stageController.assistant;
     this.menuSetup = this.SCa.menuSetup.bind(this);
     this.handleLoginChange = this.handleLoginChange.bind(this);
+    this.checkForLogins = this.checkForLogins.bind(this);
 }
 
 /* {{{ /**/ TasksAssistant.prototype.setup = function() {
@@ -17,7 +18,22 @@ function TasksAssistant() {
     this.loginSubmenu = { label: $L('Login Submenu'), items: [] };
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
+
+    this.checkForLogins();
 };
+
+/*}}}*/
+/* {{{ /**/ TasksAssistant.prototype.checkForLogins = function() {
+    Mojo.Log.info("Tasks::checkForLogins()");
+
+    if( !AMO.loaded ) {
+        setTimeout(this.checkForLogins, 500);
+        return;
+    }
+
+    if( this.loginSubmenu.items < 1 )
+        this.SCa.showScene("Preferences");
+}
 
 /*}}}*/
 /* {{{ /**/ TasksAssistant.prototype.handleLoginChange = function(emails,current) {
@@ -38,13 +54,6 @@ function TasksAssistant() {
     }
 
     this.controller.modelChanged(this.commandMenuModel);
-
-    if( !this.firstHC ) {
-        this.firstHC = true;
-
-        if( emails.length < 1 )
-            this.SCa.showScene("Preferences");
-    }
 };
 
 /*}}}*/
