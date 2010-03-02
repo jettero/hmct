@@ -15,11 +15,17 @@ TaskManager.prototype.handleLoginChange = function(emails,current) {
 
 };
 
+TaskManager.prototype.dbChanged = function(desc) {
+    Mojo.Log.info("TaskManager::dbChanged(desc=%s)", desc);
+};
+
 TaskManager.prototype.searchTasks = function() {
     Mojo.Log.info("TaskManager::searchTasks()");
 
-    var request = new Ajax.Request('http://hiveminder.com/=/action/BTDT.Action.TaskSearch.json', {
-        method: 'post', parameters: this.currentSearch, evalJSON: true,
+    var request = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
+        method:     'post',
+        parameters: {format: "json", query: this.currentSearch.replace(/\s+/g, "/")},
+        evalJSON:   true,
 
         onSuccess: function(transport) {
             if( transport.status == 200 ) {
