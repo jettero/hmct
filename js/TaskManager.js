@@ -1,6 +1,20 @@
+/*jslint white: false, onevar: false
+*/
+/*global Mojo $L hex_md5 AMO Ajax Template
+*/
 
-/* {{{ /**/ function TaskManager() {
+/* {{{ */ function TaskManager() {
     Mojo.Log.info("TaskManager()");
+
+    var options = {
+        name:    "HMCTTasks",
+        version: 1,
+        replace: false // opening existing if possible
+    };
+
+    this.dbo = new Mojo.Depot(options, function(){}, function(t,r){
+        Mojo.Controller.errorDialog("Can't open location database (#" + r.message + ").");
+    });
 
     Mojo.Log.info("test-md5: %s, %s", hex_md5(""), hex_md5("abc"));
 
@@ -16,7 +30,7 @@
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.handleLoginChange = function(emails,current) {
+/* {{{ */ TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
     // if( current )
@@ -25,14 +39,14 @@
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.activate = function() {
+/* {{{ */ TaskManager.prototype.activate = function() {
     // TODO: load/reload tasks here if there's a current login set
     // this.searchTasks();
 };
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.searchTasks = function(force) {
+/* {{{ */ TaskManager.prototype.searchTasks = function(force) {
     Mojo.Log.info("TaskManager::searchTasks()");
 
     if( !force ) {
@@ -47,7 +61,9 @@
         evalJSON:   true,
 
         onSuccess: function(transport) {
-            if( transport.status == 200 ) {
+            var e = [];
+
+            if( transport.status === 200 ) {
                 var r = transport.responseJSON;
                 if( r ) {
                     if( r.success ) {
@@ -56,7 +72,6 @@
 
                     } else {
                         Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
-                        var e = [];
 
                         if( r.error )
                             e.push($L(r.error));
@@ -67,24 +82,21 @@
                         if( !e.length )
                             e.push($L("Something went wrong with the task search ..."));
 
-                        if( f(e) )
-                            Mojo.Controller.errorDialog(e.join("... "));
+                        Mojo.Controller.errorDialog(e.join("... "));
                     }
 
                 } else {
                     Mojo.Log.info("TaskManager::searchTasks() sent [kinda bad]: r=%s", Object.toJSON(r));
-                    var e = ["Unknown error searching hiveminder tasks, huh"];
+                    e = ["Unknown error searching hiveminder tasks, huh"];
 
-                    if( f(e) )
-                        Mojo.Controller.errorDialog(e.join("... "));
+                    Mojo.Controller.errorDialog(e.join("... "));
                 }
 
             } else {
                 Mojo.Log.info("TaskManager::searchTasks() sent [kinda bad]: transport=%s", Object.toJSON(transport));
-                var e = ["Unknown error searching hiveminder tasks -- host not found?"];
+                e = ["Unknown error searching hiveminder tasks -- host not found?"];
 
-                if( f(e) )
-                    Mojo.Controller.errorDialog(e.join("... "));
+                Mojo.Controller.errorDialog(e.join("... "));
             }
 
         }.bind(this),
@@ -94,8 +106,7 @@
             var m = t.evaluate(transport);
             var e = [m];
 
-            if( f(e) )
-                Mojo.Controller.errorDialog(e.join("... "));
+            Mojo.Controller.errorDialog(e.join("... "));
 
         }.bind(this)
 
@@ -105,12 +116,12 @@
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.dbSent = function() {
+/* {{{ */ TaskManager.prototype.dbSent = function() {
     Mojo.Log.info("TaskManager::dbSent()");
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.dbSentFail = function(transaction, error) {
+/* {{{ */ TaskManager.prototype.dbSentFail = function(transaction, error) {
     Mojo.Log.info("TaskManager::dbSentFail()");
     Mojo.Controller.errorDialog("ERROR storing cache information (#" + error.message + ").");
 
@@ -120,7 +131,7 @@
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.dbRecv = function(data) {
+/* {{{ */ TaskManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("TaskManager::dbRecv()");
 
     this.db_loaded = true;
@@ -142,14 +153,14 @@
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.dbRecvFail = function(transaction, error) {
+/* {{{ */ TaskManager.prototype.dbRecvFail = function(transaction, error) {
     Mojo.Log.info("TaskManager::dbRecvFail()");
     Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
 
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.dbRestore = function() {
+/* {{{ */ TaskManager.prototype.dbRestore = function() {
     Mojo.Log.info("TaskManager::dbRestore()");
     this.dbo.get("tm_data", this.dbRecv, this.dbRecvFail);
 
@@ -157,14 +168,14 @@
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.cacheInit() {
+/* {{{ */ TaskManager.prototype.cacheInit = function() {
     Mojo.Log.info("TaskManager::cacheInit()");
 
     this.data = { version: 1, cache: {} };
-}
+};
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.setCache = function(key,data) {
+/* {{{ */ TaskManager.prototype.setCache = function(key,data) {
     Mojo.Log.info("TaskManager::setCache(key=%s)", key);
 
     var now = Math.round(new Date().getTime()/1000.0);
@@ -178,7 +189,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.checkCache = function() {
+/* {{{ */ TaskManager.prototype.checkCache = function() {
     Mojo.Log.info("TaskManager::checkCache()");
 
     var now = Math.round(new Date().getTime()/1000.0);
@@ -187,10 +198,10 @@
         if( now >= this.data.cache[k].expire ) {
             Mojo.Log.info("%s expired", k);
 
-            this.dbo.remove(k, this.dbSent, this.dbSentFail)
+            this.dbo.remove(k, this.dbSent, this.dbSentFail);
         }
     }
 
-}
+};
 
 Mojo.Log.info('loaded(TaskManager.js)');
