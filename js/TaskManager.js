@@ -38,8 +38,10 @@
 /* {{{ */ TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
-    if( current )
-        this.searchTasks(); // cool, there's a login set, search now!!
+    if( current ) {
+        this.searchTasks();
+        this.searchTasks();
+    }
 
 };
 
@@ -60,7 +62,19 @@
         // TODO: check cache here
     }
 
-    var request = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
+    if( this.req ) {
+        Mojo.Log.info("TaskManager::searchTasks() [canceling previous request]");
+
+        try {
+            this.req.transport.abort();
+        }
+
+        catch(e) {
+            Mojo.Log.info("TaskManager::searchTasks() [problem canceling previous request: %s]", e);
+        }
+    }
+
+    this.req = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
         method:     'post',
         parameters: {format: "json", query: this.currentSearch.replace(/\s+/g, "/")},
         evalJSON:   true,
@@ -70,6 +84,9 @@
 
             if( transport.status === 200 ) {
                 var r = transport.responseJSON;
+
+                delete this.req;
+
                 if( r ) {
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
@@ -141,7 +158,7 @@
 /* {{{ */ TaskManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("TaskManager::dbRecv()");
 
-    this.db_loaded = true;
+    this.loaded = true;
     Mojo.Log.info("TMO.loaded=true");
 
     if( data === null )
