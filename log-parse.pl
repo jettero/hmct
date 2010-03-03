@@ -22,6 +22,7 @@ while(<STDIN>) {
         my $time = strftime('%H:%M:%S', localtime($esec));
 
         s(, file://.*)();
+        s(, palmInitFramework\d+:\d+)();
 
         print "$time: $_" if $on;
     }
