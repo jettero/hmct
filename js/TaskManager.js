@@ -170,8 +170,10 @@
             break;
     }
 
+    var now = Math.round(new Date().getTime()/1000.0);
+
     for( var k in this.data.cache )
-        Mojo.Log.info("restored cache: %s [%d]", k, this.data.cache[k].expire);
+        Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
 
     this.checkCache();
 };
@@ -204,7 +206,7 @@
 
     var now = Math.round(new Date().getTime()/1000.0);
 
-    this.data.cache[key] = { expire: now + 4000 };
+    this.data.cache[key] = { entered: now };
 
     this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
     this.dbo.add(key,            data, this.dbSent, this.dbSentFail);
@@ -219,7 +221,7 @@
     var now = Math.round(new Date().getTime()/1000.0);
 
     for( var k in this.data.cache ) {
-        if( now >= this.data.cache[k].expire ) {
+        if( (now - this.data.cache[k].entered) >= 4000 ) {
             Mojo.Log.info("%s expired", k);
 
             this.dbo.remove(k, this.dbSent, this.dbSentFail);
