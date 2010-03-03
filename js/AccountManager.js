@@ -181,11 +181,23 @@
 };
 
 /*}}}*/
+/* {{{ /**/ AccountManager.prototype.getLoginCount = function() {
+    Mojo.Log.info("AccountManager::getLoginCount()");
+
+    if( !this.loaded )
+        return -1;
+
+    return this.data.accts.length;
+
+};
+
+/*}}}*/
 
 /* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
 
     this.db_loaded = true;
+    Mojo.Log.info("AMO.db_loaded=true");
 
     if( data === null ) {
         this.loaded = true; // there's nothing to tell anyone about it though...
@@ -228,8 +240,6 @@
 
     this.loginChangeCallbacks.push(callback);
     this.notifyAcctsChangeStep(callback);
-
-    Mojo.Log.info("AccountManager::registerLoginChange() len: %d", this.loginChangeCallbacks.length);
 };
 
 /*}}}*/
@@ -265,8 +275,10 @@
     for( var i=0; i<this.loginChangeCallbacks.length; i++ )
         this.notifyAcctsChangeStep(this.loginChangeCallbacks[i]);
 
-    if( this.db_loaded )
+    if( this.db_loaded ) {
         this.loaded = true; // got the db picked up and told everything about it
+        Mojo.Log.info("AMO.loaded=true");
+    }
 };
 
 /*}}}*/

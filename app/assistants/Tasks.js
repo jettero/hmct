@@ -26,12 +26,14 @@ function TasksAssistant() {
 /* {{{ /**/ TasksAssistant.prototype.checkForLogins = function() {
     Mojo.Log.info("Tasks::checkForLogins()");
 
-    if( !AMO.loaded ) {
+    var lc = AMO.getLoginCount();
+
+    if( lc < 0 ) {
         setTimeout(this.checkForLogins, 500);
         return;
     }
 
-    if( this.loginSubmenu.items.length < 1 )
+    if( lc < 1 )
         this.SCa.showScene("Preferences");
 }
 
