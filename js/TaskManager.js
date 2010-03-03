@@ -16,6 +16,11 @@
         Mojo.Controller.errorDialog("Can't open location database (#" + r.message + ").");
     });
 
+    this.dbRecv     = this.dbRecv.bind(this);
+    this.dbRecvFail = this.dbRecvFail.bind(this);
+    this.dbSent     = this.dbSent.bind(this);
+    this.dbSentFail = this.dbSentFail.bind(this);
+
     Mojo.Log.info("test-md5: %s, %s", hex_md5(""), hex_md5("abc"));
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
@@ -33,8 +38,8 @@
 /* {{{ */ TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
-    // if( current )
-    //     this.searchTasks(); // cool, there's a login set, search now!!
+    if( current )
+        this.searchTasks(); // cool, there's a login set, search now!!
 
 };
 
@@ -67,11 +72,11 @@
                 var r = transport.responseJSON;
                 if( r ) {
                     if( r.success ) {
-                        Mojo.Log.info("TaskManager::searchTasks() r.success r=%s", Object.toJSON(r));
+                        Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
                         this.data.tasks = r;
 
                     } else {
-                        Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
+                        Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
 
                         if( r.error )
                             e.push($L(r.error));
@@ -86,14 +91,14 @@
                     }
 
                 } else {
-                    Mojo.Log.info("TaskManager::searchTasks() sent [kinda bad]: r=%s", Object.toJSON(r));
+                    Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [kinda bad]: r=%s", Object.toJSON(r));
                     e = ["Unknown error searching hiveminder tasks, huh"];
 
                     Mojo.Controller.errorDialog(e.join("... "));
                 }
 
             } else {
-                Mojo.Log.info("TaskManager::searchTasks() sent [kinda bad]: transport=%s", Object.toJSON(transport));
+                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [kinda bad]: transport=%s", Object.toJSON(transport));
                 e = ["Unknown error searching hiveminder tasks -- host not found?"];
 
                 Mojo.Controller.errorDialog(e.join("... "));
@@ -102,6 +107,8 @@
         }.bind(this),
 
         onFailure: function(transport) {
+            Mojo.Log.info("TaskManager::searchTasks()::onFailure() transport=%s", Object.toJSON(transport));
+
             var t = new Template($L("Ajax Error: #{status}"));
             var m = t.evaluate(transport);
             var e = [m];
@@ -203,5 +210,7 @@
     }
 
 };
+
+/*}}}*/
 
 Mojo.Log.info('loaded(TaskManager.js)');
