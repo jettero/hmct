@@ -187,8 +187,10 @@
 
     this.db_loaded = true;
 
-    if( data === null )
+    if( data === null ) {
+        this.loaded = true; // there's nothing to tell anyone about it though...
         return;
+    }
 
     switch( data.version ) {
         default:
