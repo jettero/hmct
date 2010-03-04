@@ -204,14 +204,33 @@
 /* {{{ */ TaskManager.prototype.setCache = function(key,data) {
     Mojo.Log.info("TaskManager::setCache(key=%s)", key);
 
-    var now = Math.round(new Date().getTime()/1000.0);
+    if( this.db_busy ) {
+        Mojo.Log.info("TaskManager::setCache() [busy]");
+        var me = this;
+        // NOTE: this forms a closure (ie, dynamic lexical binding) over the lambda
+        setTimeout(function() { me.setCache(key,data) }, 500);
+        return;
+    }
 
-    this.data.cache[key] = { entered: now };
+    this.db_busy = true;
 
-    this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
-    this.dbo.add(key,            data, this.dbSent, this.dbSentFail);
+    var me = this;
+    var f1 = function() { me.db_busy = false; me.dbSentFail(); /* failed to add key, life goes on */ };
+    var s1 = function() {
+        var s2 = function() { me.db_busy = false; me.dbSent(); /* added the key, hooray!! */ };
+        var f2 = function() {
+            me.db_busy = false;
+            me.dbo.remove(key, me.dbSent, me.dbSentFail);
+            /* failed to store meta, remove key */
+        };
 
-    this.checkCache();
+        var now = Math.round(new Date().getTime()/1000.0);
+        me.data.cache[key] = { entered: now };
+        me.dbo.add("tm_data", this.data, s2, f2);
+    };
+
+    this.dbo.add(key, data, s1, f1); // try to add the key
+    this.checkCache(); // won't actually run until db_busy = false
 };
 
 /*}}}*/
@@ -220,6 +239,14 @@
 
     var now = Math.round(new Date().getTime()/1000.0);
 
+    if( this.db_busy ) {
+        Mojo.Log.info("TaskManager::checkCache() [busy]");
+        setTimeout(this.checkCache, 500);
+        return;
+    }
+
+    this.db_busy = true;
+
     for( var k in this.data.cache ) {
         if( (now - this.data.cache[k].entered) >= 4000 ) {
             Mojo.Log.info("%s expired", k);
@@ -227,6 +254,8 @@
             this.dbo.remove(k, this.dbSent, this.dbSentFail);
         }
     }
+
+    this.db_busy = false;
 
 };
 
