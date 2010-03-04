@@ -21,6 +21,8 @@
     this.dbSent     = this.dbSent.bind(this);
     this.dbSentFail = this.dbSentFail.bind(this);
 
+    this.checkCache = this.checkCache.bind(this); // called from setTimeout
+
     Mojo.Log.info("test-md5: %s, %s", hex_md5(""), hex_md5("abc"));
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
@@ -142,15 +144,24 @@
 
 /* {{{ */ TaskManager.prototype.dbSent = function() {
     Mojo.Log.info("TaskManager::dbSent()");
+
+    this.db_busy = false;
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.dbSentFail = function(transaction, error) {
     Mojo.Log.info("TaskManager::dbSentFail()");
-    Mojo.Controller.errorDialog("ERROR storing cache information (#" + error.message + ").");
+    Mojo.Controller.errorDialog("ERROR storing cache information (#" + error.message + ").  Clearing cache if possible.");
 
-    this.cacheInit();
-    this.dbo.removeAll(this.dbSent, this.dbSentFail);
+    // Is this an overreaction or downright prudent?  Personally, I hate the
+    // idea of the cache db getting corrupted and losing track of huge keys in
+    // the Depot...
+
+    var me = this;
+    this.dbo.removeAll(function(){ me.cacheInit(); me.db_busy = false; },
+        this.dbSentFail); // is it crazy to go around again?  Personally I hope
+                          // this comes up infrequently.  in a worst case,
+                          // they'll just close the card anyway.
 };
 
 /*}}}*/
@@ -175,6 +186,7 @@
     for( var k in this.data.cache )
         Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
 
+    this.db_busy = false;
     this.checkCache();
 };
 
@@ -183,13 +195,26 @@
     Mojo.Log.info("TaskManager::dbRecvFail()");
     Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
 
+    // weird... I hope this doesn't come up much.  I don't understand the implications of a db load fail
+    // should we clear the cache here? [see dbSentFail for full discussion]
+
+    var me = this;
+    this.dbo.removeAll(function(){ me.cacheInit(); me.db_busy = false; },
+        this.dbRecvFail); // is it crazy to go around again? [see dbSentFail for full discussion]
+
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.dbRestore = function() {
     Mojo.Log.info("TaskManager::dbRestore()");
-    this.dbo.get("tm_data", this.dbRecv, this.dbRecvFail);
 
+    if( this.db_busy ) {
+        setTimeout(function() { me.setCache(key,data) }, 500);
+        return;
+    }
+
+    this.db_busy = true;
+    this.dbo.get("tm_data", this.dbRecv, this.dbRecvFail);
 };
 
 /*}}}*/
@@ -215,18 +240,16 @@
     this.db_busy = true;
 
     var me = this;
-    var f1 = function() { me.db_busy = false; me.dbSentFail(); /* failed to add key, life goes on */ };
+    var f1 = function() { me.db_busy = false; /* failed to add key, life goes on */ };
     var s1 = function() {
-        var s2 = function() { me.db_busy = false; me.dbSent(); /* added the key, hooray!! */ };
         var f2 = function() {
-            me.db_busy = false;
-            me.dbo.remove(key, me.dbSent, me.dbSentFail);
-            /* failed to store meta, remove key */
+            me.dbo.remove(key); /* failed to store meta, remove key */
+            me.dbSentFail();
         };
 
         var now = Math.round(new Date().getTime()/1000.0);
         me.data.cache[key] = { entered: now };
-        me.dbo.add("tm_data", this.data, s2, f2);
+        me.dbo.add("tm_data", this.data, this.dbSent, f2);
     };
 
     this.dbo.add(key, data, s1, f1); // try to add the key
