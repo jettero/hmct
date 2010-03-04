@@ -30,7 +30,9 @@
 
     AMO.registerLoginChange(this.handleLoginChange);
 
-    this.loaded = 0;
+    this.loaded  = false;
+    this.db_busy = false;
+
     this.cacheInit();
     this.dbRestore();
 }
@@ -172,22 +174,28 @@
     this.loaded = true;
     Mojo.Log.info("TMO.loaded=true");
 
-    if( data === null )
-        data = {};
+    if( !(data === null) ) {
 
-    switch( data.version ) {
-        default:
-            this.data = data;
-            break;
+        switch( data.version ) {
+            default:
+                this.data = data;
+                break;
+        }
+
+        var now = Math.round(new Date().getTime()/1000.0);
+
+        for( var k in this.data.cache )
+            Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
+
+        this.db_busy = false;
+        this.checkCache();
+
+    } else {
+
+        this.db_busy = false;
     }
 
-    var now = Math.round(new Date().getTime()/1000.0);
 
-    for( var k in this.data.cache )
-        Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
-
-    this.db_busy = false;
-    this.checkCache();
 };
 
 /*}}}*/
@@ -240,27 +248,22 @@
     this.db_busy = true;
 
     var me = this;
-    var f1 = function() { me.db_busy = false; /* failed to add key, life goes on */ };
-    var s1 = function() {
-        var f2 = function() {
-            me.dbo.remove(key); /* failed to store meta, remove key */
-            me.dbSentFail();
-        };
 
+    var fail = function() { me.db_busy = false; /* failed to add key, life goes on */ };
+    var sent = function() {
         var now = Math.round(new Date().getTime()/1000.0);
+
         me.data.cache[key] = { entered: now };
-        me.dbo.add("tm_data", this.data, this.dbSent, f2);
+        me.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
     };
 
-    this.dbo.add(key, data, s1, f1); // try to add the key
+    this.dbo.add(key, data, sent, fail); // try to add the key
     this.checkCache(); // won't actually run until db_busy = false
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.checkCache = function() {
     Mojo.Log.info("TaskManager::checkCache()");
-
-    var now = Math.round(new Date().getTime()/1000.0);
 
     if( this.db_busy ) {
         Mojo.Log.info("TaskManager::checkCache() [busy]");
@@ -270,15 +273,27 @@
 
     this.db_busy = true;
 
+    var now = Math.round(new Date().getTime()/1000.0);
+
+    var did_stuff = false;
+
     for( var k in this.data.cache ) {
         if( (now - this.data.cache[k].entered) >= 4000 ) {
             Mojo.Log.info("%s expired", k);
 
-            this.dbo.remove(k, this.dbSent, this.dbSentFail);
+            var err  = function() { Mojo.Log.info("%s expired, but apparently couldn't be removed... :(", k); };
+            var sent = function() {
+                Mojo.Log.info("%s expired and removed", k);
+                delete this.data.cache[k];
+                did_stuff = true;
+            };
+
+            this.dbo.remove(k, sent, err);
         }
     }
 
-    this.db_busy = false;
+    if( did_stuff )
+        this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
 
 };
 
