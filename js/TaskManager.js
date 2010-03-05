@@ -252,17 +252,16 @@
 /* {{{ */ TaskManager.prototype.setCache = function(key,data) {
     Mojo.Log.info("TaskManager::setCache(key=%s)", key);
 
+    var me = this;
+
     if( this.dbBusy() ) {
         Mojo.Log.info("TaskManager::setCache() [busy]");
-        var me = this;
         // NOTE: this forms a closure (ie, dynamic lexical binding) over the lambda
-        setTimeout(function() { me.setCache(key,data) }, 500);
+        setTimeout(function() { me.setCache(key,data); }, 500);
         return;
     }
 
     this.dbBusy(true);
-
-    var me = this;
 
     var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
     var sent = function() {
