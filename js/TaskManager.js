@@ -64,12 +64,24 @@
     var search_key     = hex_md5(current_login + "@@" + current_search);
     var me             = this;
 
+    if( !this.cardLoaded() ) {
+        setTimeout(function(){ me.searchTasks(force); }, 500);
+        return;
+    }
+
+    if( !this.dbBusy() ) {
+        setTimeout(function(){ me.searchTasks(force); }, 500);
+        return;
+    }
+
     if( !force ) {
         Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
 
         var entry = this.data.cache[search_key];
         if( entry ) {
             var now = Math.round(new Date().getTime()/1000.0);
+
+            Mojo.Log.info("TaskManager::searchTasks() [%s: found entry, checking timestamp]", search_key);
 
             if( (now - entry.entered) < 4000 ) {
                 Mojo.Log.info("TaskManager::searchTasks() cache hit [%s]", search_key);
@@ -263,9 +275,14 @@
 
     this.dbBusy(true);
 
+
+    Mojo.Log.info("TaskManager::setCache(key=%s) [adding]", key);
+
     var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
     var sent = function() {
         var now = Math.round(new Date().getTime()/1000.0);
+
+        Mojo.Log.info("TaskManager::setCache(key=%s) [added, informing tm_data]", key);
 
         me.data.cache[key] = { entered: now };
         me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
