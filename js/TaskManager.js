@@ -253,7 +253,7 @@
         var now = Math.round(new Date().getTime()/1000.0);
 
         me.data.cache[key] = { entered: now };
-        me.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
+        me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
     };
 
     this.dbo.add(key, data, sent, fail); // try to add the key
