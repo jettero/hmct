@@ -30,8 +30,8 @@
 
     AMO.registerLoginChange(this.handleLoginChange);
 
-    this.loaded  = false;
-    this.db_busy = false;
+    this.cardLoaded(false);
+    this.dbBusy(false);
 
     this.cacheInit();
     this.dbRestore();
@@ -147,7 +147,7 @@
 /* {{{ */ TaskManager.prototype.dbSent = function() {
     Mojo.Log.info("TaskManager::dbSent()");
 
-    this.db_busy = false;
+    this.dbBusy(false);
 };
 
 /*}}}*/
@@ -160,7 +160,7 @@
     // the Depot...
 
     var me = this;
-    this.dbo.removeAll(function(){ me.cacheInit(); me.db_busy = false; },
+    this.dbo.removeAll(function(){ me.cacheInit(); me.dbBusy(false); },
         this.dbSentFail); // is it crazy to go around again?  Personally I hope
                           // this comes up infrequently.  in a worst case,
                           // they'll just close the card anyway.
@@ -171,8 +171,7 @@
 /* {{{ */ TaskManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("TaskManager::dbRecv()");
 
-    this.loaded = true;
-    Mojo.Log.info("TMO.loaded=true");
+    this.cardLoaded(true);
 
     if( !(data === null) ) {
 
@@ -187,12 +186,12 @@
         for( var k in this.data.cache )
             Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
 
-        this.db_busy = false;
+        this.dbBusy(false);
         this.checkCache();
 
     } else {
 
-        this.db_busy = false;
+        this.dbBusy(false);
     }
 
 
@@ -207,7 +206,7 @@
     // should we clear the cache here? [see dbSentFail for full discussion]
 
     var me = this;
-    this.dbo.removeAll(function(){ me.cacheInit(); me.db_busy = false; },
+    this.dbo.removeAll(function(){ me.cacheInit(); me.dbBusy(false); },
         this.dbRecvFail); // is it crazy to go around again? [see dbSentFail for full discussion]
 
 };
@@ -216,12 +215,12 @@
 /* {{{ */ TaskManager.prototype.dbRestore = function() {
     Mojo.Log.info("TaskManager::dbRestore()");
 
-    if( this.db_busy ) {
+    if( this.dbBusy() ) {
         setTimeout(function() { me.setCache(key,data) }, 500);
         return;
     }
 
-    this.db_busy = true;
+    this.dbBusy(true);
     this.dbo.get("tm_data", this.dbRecv, this.dbRecvFail);
 };
 
@@ -237,7 +236,7 @@
 /* {{{ */ TaskManager.prototype.setCache = function(key,data) {
     Mojo.Log.info("TaskManager::setCache(key=%s)", key);
 
-    if( this.db_busy ) {
+    if( this.dbBusy() ) {
         Mojo.Log.info("TaskManager::setCache() [busy]");
         var me = this;
         // NOTE: this forms a closure (ie, dynamic lexical binding) over the lambda
@@ -245,11 +244,11 @@
         return;
     }
 
-    this.db_busy = true;
+    this.dbBusy(true);
 
     var me = this;
 
-    var fail = function() { me.db_busy = false; /* failed to add key, life goes on */ };
+    var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
     var sent = function() {
         var now = Math.round(new Date().getTime()/1000.0);
 
@@ -265,13 +264,13 @@
 /* {{{ */ TaskManager.prototype.checkCache = function() {
     Mojo.Log.info("TaskManager::checkCache()");
 
-    if( this.db_busy ) {
+    if( this.dbBusy() ) {
         Mojo.Log.info("TaskManager::checkCache() [busy]");
         setTimeout(this.checkCache, 500);
         return;
     }
 
-    this.db_busy = true;
+    this.dbBusy(true);
 
     var now = Math.round(new Date().getTime()/1000.0);
 
@@ -295,6 +294,32 @@
     if( did_stuff )
         this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
 
+    else
+        this.dbBusy(false);
+
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.dbBusy = function(arg) {
+
+    if( !(arg === undefined) )
+        this._dbBusy = arg;
+
+    Mojo.Log.info("TaskManager::dbBusy(%s) [%s]", arg, this._dbBusy);
+
+    return this._dbBusy;
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.cardLoaded = function(arg) {
+
+    if( !(arg === undefined) )
+        this._cardLoaded = arg;
+
+    Mojo.Log.info("TaskManager::cardLoaded(%s) [%s]", arg, this._cardLoaded);
+
+    return this._cardLoaded;
 };
 
 /*}}}*/
