@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo $L hex_md5 AMO Ajax Template
+/*global Mojo $L hex_md5 AMO Ajax Template setTimeout
 */
 
 /* {{{ */ function TaskManager() {
@@ -22,8 +22,7 @@
     this.dbSentFail = this.dbSentFail.bind(this);
 
     this.checkCache = this.checkCache.bind(this); // called from setTimeout
-
-    Mojo.Log.info("test-md5: %s, %s", hex_md5(""), hex_md5("abc"));
+    this.dbRestore  = this.dbRestore.bind(this);  // called from setTimeout
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.currentSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
@@ -42,10 +41,10 @@
 /* {{{ */ TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
-    if( current ) {
+    this.currentLogin = current;
+
+    if( current )
         this.searchTasks();
-        this.searchTasks();
-    }
 
 };
 
@@ -60,10 +59,26 @@
 /* {{{ */ TaskManager.prototype.searchTasks = function(force) {
     Mojo.Log.info("TaskManager::searchTasks()");
 
-    if( !force ) {
-        Mojo.Log.info("TaskManager::searchTasks() checking cache");
+    var current_login  = this.currentLogin;
+    var current_search = this.currentSearch;
+    var search_key     = hex_md5(current_login + "@@" + current_search);
+    var me             = this;
 
-        // TODO: check cache here
+    if( !force ) {
+        Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
+
+        var entry = this.data.cache[search_key];
+        if( entry ) {
+            var now = Math.round(new Date().getTime()/1000.0);
+
+            if( (now - entry.entered) < 4000 ) {
+                Mojo.Log.info("TaskManager::searchTasks() cache hit [%s]", search_key);
+
+                // TODO: young enough, load it
+
+                return;
+            }
+        }
     }
 
     if( this.req ) {
@@ -80,7 +95,7 @@
 
     this.req = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
         method:     'post',
-        parameters: {format: "json", query: this.currentSearch.replace(/\s+/g, "/")},
+        parameters: {format: "json", query: current_search.replace(/\s+/g, "/")},
         evalJSON:   true,
 
         onSuccess: function(transport) {
@@ -89,12 +104,13 @@
             if( transport.status === 200 ) {
                 var r = transport.responseJSON;
 
-                delete this.req;
+                delete me.req;
 
                 if( r ) {
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
-                        this.data.tasks = r;
+
+                        me.setCache(search_key, (me.tasks = r) );
 
                     } else {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
@@ -125,7 +141,7 @@
                 Mojo.Controller.errorDialog(e.join("... "));
             }
 
-        }.bind(this),
+        },
 
         onFailure: function(transport) {
             Mojo.Log.info("TaskManager::searchTasks()::onFailure() transport=%s", Object.toJSON(transport));
@@ -136,7 +152,7 @@
 
             Mojo.Controller.errorDialog(e.join("... "));
 
-        }.bind(this)
+        }
 
     });
 
@@ -216,7 +232,7 @@
     Mojo.Log.info("TaskManager::dbRestore()");
 
     if( this.dbBusy() ) {
-        setTimeout(function() { me.setCache(key,data) }, 500);
+        setTimeout(this.dbRestore, 500);
         return;
     }
 
