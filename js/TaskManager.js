@@ -189,7 +189,7 @@
 
     this.cardLoaded(true);
 
-    if( !(data === null) ) {
+    if( data != null ) { // neither null nor undefined
 
         switch( data.version ) {
             default:
@@ -319,7 +319,7 @@
 
 /* {{{ */ TaskManager.prototype.dbBusy = function(arg) {
 
-    if( !(arg === undefined) )
+    if( arg != null ) // neither null nor undefined
         this._dbBusy = arg;
 
     Mojo.Log.info("TaskManager::dbBusy(%s) [%s]", arg, this._dbBusy);
@@ -330,7 +330,7 @@
 /*}}}*/
 /* {{{ */ TaskManager.prototype.cardLoaded = function(arg) {
 
-    if( !(arg === undefined) )
+    if( arg != null ) // neither null nor undefined
         this._cardLoaded = arg;
 
     Mojo.Log.info("TaskManager::cardLoaded(%s) [%s]", arg, this._cardLoaded);
