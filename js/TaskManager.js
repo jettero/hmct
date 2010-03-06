@@ -126,7 +126,7 @@
 
         Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], fetching and checking timestamp (ds=%d)", search_key, ds);
 
-        if( ds < 4000 ) {
+        if( ds >= 4000 ) {
             Mojo.Log.info("TaskManager::searchTasks() young enough, no fresh download needed (force=%s)", force ? "true" : "false");
 
             if( !force )
@@ -156,7 +156,7 @@
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
 
-                        me.setCache(search_key, (me.tasks = r.content.result) );
+                        me.setCache(search_key, (me.tasks = r.content.result.evalJSON) );
                         me.processTasks();
 
                     } else {
@@ -409,7 +409,7 @@
 
 /*}}}*/
 /* {{{ /**/ TaskManager.prototype.notifyTasksChangeStep = function(callback) {
-    Mojo.Log.info("TaskManager::notifyTasksChangeStep()");
+    Mojo.Log.info("TaskManager::notifyTasksChangeStep() this.tasks=%s", Object.toJSON(this.tasks));
 
     var tasks = [];
 
@@ -418,8 +418,9 @@
     // \"once\",\"group\":null,\"summary\":\"test task 2 (due
     // today)\",\"time_left\":null,\"id\":xxxxx,\"repeat_every\":1,\"owner\":\"Paul
 
-    for(var i; i<this.tasks.length; i++)
-        tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
+    if( this.tasks )
+        for(var i=0; i<this.tasks.length; i++)
+            tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
     callback(tasks);
 };
