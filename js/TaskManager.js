@@ -3,6 +3,8 @@
 /*global Mojo $L hex_md5 AMO Ajax Template setTimeout
 */
 
+var cacheMaxAge = 4000;
+
 /* {{{ */ function TaskManager() {
     Mojo.Log.info("TaskManager()");
 
@@ -126,7 +128,7 @@
 
         Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], fetching and checking timestamp (ds=%d)", search_key, ds);
 
-        if( ds >= 4000 ) {
+        if( ds < cacheMaxAge ) {
             Mojo.Log.info("TaskManager::searchTasks() young enough, no fresh download needed (force=%s)", force ? "true" : "false");
 
             if( !force )
@@ -154,9 +156,9 @@
 
                 if( r ) {
                     if( r.success ) {
-                        Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
+                        Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
 
-                        me.setCache(search_key, (me.tasks = r.content.result.evalJSON) );
+                        me.setCache(search_key, (me.tasks = r.content.result.evalJSON()) );
                         me.processTasks();
 
                     } else {
@@ -346,7 +348,7 @@
     var did_stuff = false;
 
     for( var k in this.data.cache ) {
-        if( (now - this.data.cache[k].entered) >= 4000 ) {
+        if( (now - this.data.cache[k].entered) >= cacheMaxAge ) {
             Mojo.Log.info("%s expired", k);
 
             var err  = function() { Mojo.Log.info("%s expired, but apparently couldn't be removed... :(", k); };
