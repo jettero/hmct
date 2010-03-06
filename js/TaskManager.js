@@ -25,7 +25,6 @@
     this.dbRestore  = this.dbRestore.bind(this);  // called from setTimeout
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
-    this.currentSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
 
     AMO.registerLoginChange(this.handleLoginChange);
 
@@ -44,7 +43,7 @@
     this.currentLogin = current;
 
     if( current )
-        this.searchTasks();
+        this.searchTasks("accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever");
 
 };
 
@@ -56,12 +55,11 @@
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.searchTasks = function(force) {
-    Mojo.Log.info("TaskManager::searchTasks()");
+/* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
+    Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
     var current_login  = this.currentLogin;
-    var current_search = this.currentSearch;
-    var search_key     = hex_md5(current_login + "@@" + current_search);
+    var search_key     = hex_md5(current_login + "@@" + search);
     var me             = this;
 
     if( !this.cardLoaded() ) {
@@ -72,25 +70,6 @@
     if( !this.dbBusy() ) {
         setTimeout(function(){ me.searchTasks(force); }, 500);
         return;
-    }
-
-    if( !force ) {
-        Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
-
-        var entry = this.data.cache[search_key];
-        if( entry ) {
-            var now = Math.round(new Date().getTime()/1000.0);
-
-            Mojo.Log.info("TaskManager::searchTasks() [%s: found entry, checking timestamp]", search_key);
-
-            if( (now - entry.entered) < 4000 ) {
-                Mojo.Log.info("TaskManager::searchTasks() cache hit [%s]", search_key);
-
-                // TODO: young enough, load it
-
-                return;
-            }
-        }
     }
 
     if( this.req ) {
@@ -105,9 +84,28 @@
         }
     }
 
+    Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
+
+    var entry = this.data.cache[search_key];
+    if( entry ) {
+        var now = Math.round(new Date().getTime()/1000.0);
+
+        Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], checking timestamp", search_key);
+
+        this.dbBusy(true);
+        this.dbo.get(search_key, this.recvCache, this.recvCacheFail);
+
+        if( (now - entry.entered) < 4000 ) {
+            Mojo.Log.info("TaskManager::searchTasks() young enough, /action/DownloadTasks");
+
+            if( !force )
+                return; // young enough that we don't do the request below
+        }
+    }
+
     this.req = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
         method:     'post',
-        parameters: {format: "json", query: current_search.replace(/\s+/g, "/")},
+        parameters: {format: "json", query: search.replace(/\s+/g, "/")},
         evalJSON:   true,
 
         onSuccess: function(transport) {
@@ -122,6 +120,7 @@
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
 
+                        me.recvTasks(search_key, (me.tasks = r) );
                         me.setCache(search_key, (me.tasks = r) );
 
                     } else {
@@ -161,6 +160,8 @@
             var t = new Template($L("Ajax Error: #{status}"));
             var m = t.evaluate(transport);
             var e = [m];
+
+            delete me.req;
 
             Mojo.Controller.errorDialog(e.join("... "));
 
