@@ -5,6 +5,7 @@ function TasksAssistant() {
     this.SCa = Mojo.Controller.stageController.assistant;
     this.menuSetup = this.SCa.menuSetup.bind(this);
     this.handleLoginChange = this.handleLoginChange.bind(this);
+    this.handleTasksChange = this.handleTasksChange.bind(this);
     this.checkForLogins = this.checkForLogins.bind(this);
 }
 
@@ -74,17 +75,27 @@ function TasksAssistant() {
 };
 
 /*}}}*/
+/* {{{ /**/ TasksAssistant.prototype.handleTasksChange = function(tasks) {
+    Mojo.Log.info("Tasks::handleTasksChange(tasks=%s)", tasks);
+
+    this.controller.modelChanged(this.tasksListModel);
+};
+
+/*}}}*/
 
 /* {{{ /**/ TasksAssistant.prototype.activate = function() {
     Mojo.Log.info("Tasks::activate()");
 
     AMO.registerLoginChange(this.handleLoginChange);
+    TMO.registerTasksChange(this.handleTasksChange);
 };
 
 /*}}}*/
 /* {{{ /**/ TasksAssistant.prototype.deactivate = function() {
     Mojo.Log.info("Tasks::deactivate()");
-    AMO.unregisterLoginChange(this.handleLoginListChange);
+
+    AMO.unregisterLoginChange(this.handleLoginChange);
+    TMO.unregisterTasksChange(this.handleTasksChange);
 };
 
 /*}}}*/
