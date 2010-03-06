@@ -4,6 +4,8 @@ use strict;
 use Time::Local qw(timegm_nocheck);
 use POSIX qw(strftime);
 
+$SIG{INT} = sub { print "\nbye\n"; exit 0 };
+
 my $old = select STDIN; $| = 1;
 select $old; $| = 1;
 
