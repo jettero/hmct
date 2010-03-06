@@ -12,6 +12,8 @@ my $start = do { local $" = "|"; qr(@start) };
 
 my $on = $ENV{ALWAYS_ON};
 
+open my $dump, ">", "last_run.log" or die $!;
+
 while(<STDIN>) {
     $on = 1 if m/$start.*?Info.*?loaded\(\w+\.js\)/;
 
@@ -24,7 +26,11 @@ while(<STDIN>) {
         s(, file://.*)();
         s(, palmInitFramework\d+:\d+)();
 
-        print "$time: $_" if $on;
+        if( $on ) {
+            print       "$time: $_";
+            print $dump "$time: $_";
+        }
+
     }
 }
 
