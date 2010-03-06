@@ -69,6 +69,8 @@
 /*}}}*/
 /* {{{ */ TaskManager.prototype.processTasks = function() {
     Mojo.Log.info("TaskManager::processTasks()");
+
+    this.notifyTasksChange();
 };
 
 /*}}}*/
@@ -144,11 +146,16 @@
 
                 delete me.req;
 
+                // r={"success": 1, "content": {"result":
+                // "[{\"priority\":3,\"record_locator\":\"xxxx\",\"time_worked\":null,\"attachment_count\":0,\"repeat_period\":
+                // \"once\",\"group\":null,\"summary\":\"test task 2 (due
+                // today)\",\"time_left\":null,\"id\":xxxxx,\"repeat_every\":1,\"owner\":\"Paul
+
                 if( r ) {
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
 
-                        me.setCache(search_key, (me.tasks = r) );
+                        me.setCache(search_key, (me.tasks = r.content.result) );
                         me.processTasks();
 
                     } else {
@@ -404,6 +411,14 @@
     Mojo.Log.info("TaskManager::notifyTasksChangeStep()");
 
     var tasks = [];
+
+    // r={"success": 1, "content": {"result":
+    // "[{\"priority\":3,\"record_locator\":\"xxxx\",\"time_worked\":null,\"attachment_count\":0,\"repeat_period\":
+    // \"once\",\"group\":null,\"summary\":\"test task 2 (due
+    // today)\",\"time_left\":null,\"id\":xxxxx,\"repeat_every\":1,\"owner\":\"Paul
+
+    for(var i; i<this.tasks.length; i++)
+        tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
     callback(tasks);
 };
