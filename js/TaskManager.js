@@ -20,6 +20,7 @@
     this.dbRecvFail = this.dbRecvFail.bind(this);
     this.dbSent     = this.dbSent.bind(this);
     this.dbSentFail = this.dbSentFail.bind(this);
+    this.recvCache  = this.recvCache.bind(this);
 
     this.checkCache = this.checkCache.bind(this); // called from setTimeout
     this.dbRestore  = this.dbRestore.bind(this);  // called from setTimeout
@@ -55,6 +56,20 @@
 
 /*}}}*/
 
+/* {{{ */ TaskManager.prototype.recvCache = function(data) {
+    Mojo.Log.info("TaskManager::recvCache()");
+
+    this.dbBusy(false);
+    this.tasks = data;
+    this.processTasks();
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.processTasks = function() {
+    Mojo.Log.info("TaskManager::processTasks()");
+};
+
+/*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
@@ -93,7 +108,7 @@
         Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], checking timestamp", search_key);
 
         this.dbBusy(true);
-        this.dbo.get(search_key, this.recvCache, this.recvCacheFail);
+        this.dbo.get(search_key, this.recvCache, this.dbRecvFail);
 
         if( (now - entry.entered) < 4000 ) {
             Mojo.Log.info("TaskManager::searchTasks() young enough, /action/DownloadTasks");
