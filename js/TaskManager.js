@@ -385,16 +385,16 @@
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.registerTasksChangeCallback = function(callback) {
-    Mojo.Log.info("TaskManager::registerTasksChangeCallback()");
+/* {{{ /**/ TaskManager.prototype.registerTasksChange = function(callback) {
+    Mojo.Log.info("TaskManager::registerTasksChange()");
 
     this.tasksChangeCallback.push(callback);
     this.notifyTasksChangeStep(callback);
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.unregisterTasksChangeCallback = function(callback) {
-    Mojo.Log.info("AccountManager::unregisterTasksChangeCallback()");
+/* {{{ /**/ TaskManager.prototype.unregisterTasksChange = function(callback) {
+    Mojo.Log.info("AccountManager::unregisterTasksChange()");
 
     this.tasksChangeCallback = this.tasksChangeCallback.reject(function(_c){ return _c === callback; });
 };
