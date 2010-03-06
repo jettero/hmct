@@ -119,14 +119,15 @@
     var entry = this.data.cache[search_key];
     if( entry ) {
         var now = Math.round(new Date().getTime()/1000.0);
-
-        Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], checking timestamp", search_key);
+        var ds = now - entry.entered;
 
         this.dbBusy(true);
         this.dbo.get(search_key, this.recvCache, this.dbRecvFail);
 
-        if( (now - entry.entered) < 4000 ) {
-            Mojo.Log.info("TaskManager::searchTasks() young enough, /action/DownloadTasks");
+        Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], fetching and checking timestamp (ds=%d)", search_key, ds);
+
+        if( ds < 4000 ) {
+            Mojo.Log.info("TaskManager::searchTasks() young enough, no fresh download needed (force=%s)", force ? "true" : "false");
 
             if( !force )
                 return; // young enough that we don't do the request below
