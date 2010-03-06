@@ -76,7 +76,9 @@ function TasksAssistant() {
 
 /*}}}*/
 /* {{{ /**/ TasksAssistant.prototype.handleTasksChange = function(tasks) {
-    Mojo.Log.info("Tasks::handleTasksChange(tasks=%s)", tasks);
+    Mojo.Log.info("Tasks::handleTasksChange(tasks=%s)", Object.toJSON(tasks));
+
+    this.tasksListModel.items = tasks;
 
     this.controller.modelChanged(this.tasksListModel);
 };
