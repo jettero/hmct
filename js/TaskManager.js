@@ -80,12 +80,12 @@
     var me             = this;
 
     if( !this.cardLoaded() ) {
-        setTimeout(function(){ me.searchTasks(force); }, 500);
+        setTimeout(function(){ me.searchTasks(search,force); }, 500);
         return;
     }
 
-    if( !this.dbBusy() ) {
-        setTimeout(function(){ me.searchTasks(force); }, 500);
+    if( this.dbBusy() ) {
+        setTimeout(function(){ me.searchTasks(search,force); }, 500);
         return;
     }
 
