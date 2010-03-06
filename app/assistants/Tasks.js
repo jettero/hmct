@@ -19,6 +19,21 @@ function TasksAssistant() {
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
 
+    var test = [
+        {record_locator: 'test1', summary: "supz, test1"},
+        {record_locator: 'test2', summary: "supz, test2"},
+        {record_locator: 'test3', summary: "supz, test3"},
+    ];
+
+    this.tasksListAttrs = {
+        listTemplate:  'misc/lc1',
+        emptyTemplate: 'misc/le1',
+        itemTemplate:  'misc/li-task',
+        swipeToDelete: true
+    };
+    this.tasksListModel = {listTitle: $L('Hiveminder Tasks'), items: test};
+    this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
+
     this.checkForLogins();
 };
 
