@@ -182,12 +182,19 @@
 
 /*}}}*/
 /* {{{ /**/ AccountManager.prototype.getLoginCount = function() {
-    Mojo.Log.info("AccountManager::getLoginCount()");
+    var ret = 0;
 
-    if( !this.loaded )
-        return -1;
+    if( this.loaded ) {
+        for( var e in this.data.accts )
+            ret ++;
 
-    return this.data.accts.length;
+    } else {
+        ret = -1;
+    }
+
+    Mojo.Log.info("AccountManager::getLoginCount() [%d]", ret);
+
+    return ret;
 
 };
 
