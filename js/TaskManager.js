@@ -120,8 +120,8 @@
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.success r=%s", Object.toJSON(r));
 
-                        me.recvTasks(search_key, (me.tasks = r) );
                         me.setCache(search_key, (me.tasks = r) );
+                        me.processTasks();
 
                     } else {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
