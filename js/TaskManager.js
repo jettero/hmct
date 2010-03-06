@@ -30,6 +30,7 @@
     AMO.registerLoginChange(this.handleLoginChange);
 
     this.tasksChangeCallback = [];
+    this.defaultSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
 
     this.cardLoaded(false);
     this.dbBusy(false);
@@ -46,14 +47,13 @@
     this.currentLogin = current;
 
     if( current )
-        this.searchTasks("accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever");
+        this.searchTasks();
 
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.activate = function() {
-    // TODO: load/reload tasks here if there's a current login set
-    // this.searchTasks();
+    this.searchTasks();
 };
 
 /*}}}*/
@@ -73,6 +73,15 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
+    if( !search ) {
+        if( !this.lastSearch ) {
+            search = this.defaultSearch;
+
+        } else {
+            search = this.lastSearch;
+        }
+    }
+
     Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
     var current_login  = this.currentLogin;
@@ -102,6 +111,8 @@
     }
 
     Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
+
+    this.lastSearch = search;
 
     var entry = this.data.cache[search_key];
     if( entry ) {
