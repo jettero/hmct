@@ -29,6 +29,8 @@
 
     AMO.registerLoginChange(this.handleLoginChange);
 
+    this.tasksChangeCallback = [];
+
     this.cardLoaded(false);
     this.dbBusy(false);
 
@@ -368,6 +370,39 @@
     Mojo.Log.info("TaskManager::cardLoaded(%s) [%s]", arg, this._cardLoaded);
 
     return this._cardLoaded;
+};
+
+/*}}}*/
+
+/* {{{ /**/ TaskManager.prototype.registerTasksChangeCallback = function(callback) {
+    Mojo.Log.info("TaskManager::registerTasksChangeCallback()");
+
+    this.tasksChangeCallback.push(callback);
+    this.notifyTasksChangeStep(callback);
+};
+
+/*}}}*/
+/* {{{ /**/ TaskManager.prototype.unregisterTasksChangeCallback = function(callback) {
+    Mojo.Log.info("AccountManager::unregisterTasksChangeCallback()");
+
+    this.tasksChangeCallback = this.tasksChangeCallback.reject(function(_c){ return _c === callback; });
+};
+
+/*}}}*/
+/* {{{ /**/ TaskManager.prototype.notifyTasksChangeStep = function(callback) {
+    Mojo.Log.info("TaskManager::notifyTasksChangeStep()");
+
+    var tasks = [];
+
+    callback(tasks);
+};
+
+/*}}}*/
+/* {{{ /**/ TaskManager.prototype.notifyTasksChange = function() {
+    Mojo.Log.info("AccountManager::notifyTasksChange()");
+
+    for( var i=0; i<this.tasksChangeCallback.length; i++ )
+        this.notifyTasksChangeStep(this.tasksChangeCallback[i]);
 };
 
 /*}}}*/
