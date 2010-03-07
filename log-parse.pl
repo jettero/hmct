@@ -12,14 +12,20 @@ select $old; $| = 1;
 my @start = ( map { strftime('%H:%M:%S', gmtime(time() + $_)) } (0,-1,+1) );
 my $start = do { local $" = "|"; qr(@start) };
 
-my $on = $ENV{ALWAYS_ON};
+my $on = $ENV{ALWAYS_ON} | $ENV{ALL};
 
 open my $dump, ">", "last_run.log" or die $!;
+
+{ my $old = select STDIN; $| = 1; select $old }
+
+# 2010-03-07T20:12:11.629669Z [7101] palm-webos-device user.info powerd: {powerd}:
+my $reg = qr|^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+?LunaSysMgr.*?{LunaSysMgrJS}:\s+|;
+   $reg = qr|^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+?\[\d+\] \S+ \S+ |;
 
 while(<STDIN>) {
     $on = 1 if m/$start.*?Info.*?loaded\(\w+\.js\)/;
 
-    if( s/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).+?LunaSysMgr.*?{LunaSysMgrJS}:\s+// ) {
+    if( s/$reg// ) {
         my ($year, $month, $day, $hour, $min, $sec) = ($1, $2, $3, $4, $5, $6);
         $month =~ s/^0//; $month --;
         my $esec = timegm_nocheck($sec,$min,$hour,$day,$month,$year);
