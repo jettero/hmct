@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo $L hex_md5 AMO Ajax Template setTimeout
+/*global Mojo hex_md5 AMO Ajax Template setTimeout
 */
 
 var cacheMaxAge = 4000;
@@ -165,13 +165,13 @@ var cacheMaxAge = 4000;
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
 
                         if( r.error )
-                            e.push($L(r.error));
+                            e.push(r.error);
 
                         for(var k in r.field_errors )
-                            e.push($L(k + "-error: " + r.field_errors[k]));
+                            e.push(k + "-error: " + r.field_errors[k]);
 
                         if( !e.length )
-                            e.push($L("Something went wrong with the task search ..."));
+                            e.push("Something went wrong with the task search ...");
 
                         Mojo.Controller.errorDialog(e.join("... "));
                     }
@@ -195,7 +195,7 @@ var cacheMaxAge = 4000;
         onFailure: function(transport) {
             Mojo.Log.info("TaskManager::searchTasks()::onFailure() transport=%s", Object.toJSON(transport));
 
-            var t = new Template($L("Ajax Error: #{status}"));
+            var t = new Template("Ajax Error: #{status}");
             var m = t.evaluate(transport);
             var e = [m];
 

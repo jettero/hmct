@@ -131,13 +131,13 @@
                         var e = [];
 
                         if( r.error )
-                            e.push($L(r.error));
+                            e.push(r.error);
 
                         for(var k in r.field_errors )
-                            e.push($L(k + "-error: " + r.field_errors[k]));
+                            e.push(k + "-error: " + r.field_errors[k]);
 
                         if( !e.length )
-                            e.push($L("Something went wrong with the login ..."));
+                            e.push("Something went wrong with the login ...");
 
                         if( f(e) )
                             Mojo.Controller.errorDialog(e.join("... "));
@@ -162,7 +162,7 @@
         },
 
         onFailure: function(transport) {
-            var t = new Template($L("Ajax Error: #{status}"));
+            var t = new Template("Ajax Error: #{status}");
             var m = t.evaluate(transport);
             var e = [m];
 
