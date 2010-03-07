@@ -144,7 +144,7 @@ var cacheMaxAge = 4000;
         onSuccess: function(transport) {
             var e = [];
 
-            if( transport.status === 200 ) {
+            if( transport.status >= 200 && transport.status < 300 ) {
                 var r = transport.responseJSON;
 
                 delete me.req;
