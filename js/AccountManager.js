@@ -108,6 +108,8 @@
     if( !s ) s = function() { return true; };
     if( !f ) f = function() { return true; };
 
+    var me = this;
+
     var request = new Ajax.Request('https://hiveminder.com/=/action/BTDT.Action.Login.json', {
         method: 'post', parameters: { address: email, password: pass }, evalJSON: true,
 
@@ -119,8 +121,8 @@
                     if( r.success ) {
                         Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
-                        this.data.meta.currentLogin = email;
-                        this.dbChanged("new current login");
+                        me.data.meta.currentLogin = email;
+                        me.dbChanged("new current login");
 
                         s(email, pass, r);
 
@@ -157,7 +159,7 @@
                     Mojo.Controller.errorDialog(e.join("... "));
             }
 
-        }.bind(this),
+        },
 
         onFailure: function(transport) {
             var t = new Template($L("Ajax Error: #{status}"));
@@ -167,7 +169,7 @@
             if( f(e) )
                 Mojo.Controller.errorDialog(e.join("... "));
 
-        }.bind(this)
+        }
 
     });
 
