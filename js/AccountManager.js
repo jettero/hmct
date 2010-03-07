@@ -110,12 +110,26 @@
 
     var me = this;
 
-    var request = new Ajax.Request('https://hiveminder.com/=/action/BTDT.Action.Login.json', {
+    if( this.req ) {
+        Mojo.Log.info("AccountManager::login() [canceling previous request]");
+
+        try {
+            this.req.transport.abort();
+        }
+
+        catch(e) {
+            Mojo.Log.info("AccountManager::login() [problem canceling previous request: %s]", e);
+        }
+    }
+
+    this.req = new Ajax.Request('https://hiveminder.com/=/action/BTDT.Action.Login.json', {
         method: 'post', parameters: { address: email, password: pass }, evalJSON: true,
 
         onSuccess: function(transport) {
             if( transport.status >= 200 && transport.status < 300 ) {
                 var r = transport.responseJSON;
+
+                delete me.req;
 
                 if( r ) {
                     if( r.success ) {
