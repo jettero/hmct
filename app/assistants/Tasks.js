@@ -27,8 +27,8 @@ function TasksAssistant() {
     ];
 
     this.tasksListAttrs = {
-        listTemplate:  'misc/lc1',
-        emptyTemplate: 'misc/le1',
+        listTemplate:  'misc/naked-list-container',
+        emptyTemplate: 'misc/empty-list',
         itemTemplate:  'misc/li-task',
         swipeToDelete: true
     };

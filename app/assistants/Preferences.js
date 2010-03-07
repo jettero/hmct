@@ -20,14 +20,14 @@ function PreferencesAssistant() {
     this.menuSetup();
 
     this.loginListAttrs = {
-        listTemplate:  'misc/lc1',
-        emptyTemplate: 'misc/le1',
+        listTemplate:  'misc/regular-list-container',
+        emptyTemplate: 'misc/empty-list',
         itemTemplate:  'misc/li-email',
         swipeToDelete: true,
-        addItemLabel:  $L("Add...")
+        addItemLabel:  "Add..."
     };
 
-    this.loginListModel = {listTitle: $L('Hiveminder Logins'), items: [] };
+    this.loginListModel = {listTitle: 'Hiveminder Logins', items: [] };
     this.controller.setupWidget('hm_login_list', this.loginListAttrs, this.loginListModel);
 
     Mojo.Event.listen(this.controller.get('hm_login_list'), Mojo.Event.listTap,    this.loginListTap);
