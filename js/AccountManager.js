@@ -112,13 +112,16 @@
         method: 'post', parameters: { address: email, password: pass }, evalJSON: true,
 
         onSuccess: function(transport) {
-            if( transport.status == 200 ) {
+            if( transport.status >= 200 && transport.status < 300 ) {
                 var r = transport.responseJSON;
+
                 if( r ) {
                     if( r.success ) {
                         Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
+
                         this.data.meta.currentLogin = email;
                         this.dbChanged("new current login");
+
                         s(email, pass, r);
 
                     } else {
