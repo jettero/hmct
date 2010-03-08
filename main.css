@@ -1,3 +1,21 @@
+.naked-list {
+    background: white;
+}
+
+.todo-item .extra-data {
+    font-size: 0.7em;
+    font-weight: normal;
+}
+
+.todo-item .extra-data .due-- {
+    /* usually has a date on the end, when it doesn't ... */
+    display: hidden;
+}
+
+.todo-item .summary.priority-5 {
+    background-image: url(img/highest.png);
+}
+
 .palm-page-header .icon.hmct {
 	background-image: url(header-icon.png);
 }

@@ -1,8 +1,13 @@
-<div class="palm-row no-highlight" x-mojo-tap-highlight='momentary'>
-    <div class="palm-row-wrapper">
-        <div class="title todoitem">
+<div class="todo-row palm-row no-highlight" x-mojo-tap-highlight='momentary'>
+    <div class="palm-row-wrapper todo-row-wrapper">
+        <div class="title todo-item">
             <div class="label">#{-record_locator}</div>
-            <span class="#{-summaryClass}-summary">#{-summary}</span>
+
+            <div class="priority-#{-priority} summary">#{-summary}</div>
+            <div class="extra-data">
+                <span class="due due--#{-due}">due: #{-due}</span>
+                <span class="prionum">[#{-priority}]</span>
+            </div>
         </div>
     </div>
 </div>
