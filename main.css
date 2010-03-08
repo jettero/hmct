@@ -12,9 +12,12 @@
     display: hidden;
 }
 
-.todo-item .summary.priority-5 {
-    background-image: url(img/highest.png);
-}
+.todo-item .prio    { float: left; margin: 0; padding: 0; margin-right: 5px; height: 16px; width: 16px; }
+.todo-item .prio.p5 { background-image: url(img/highest.png); }
+.todo-item .prio.p4 { background-image: url(img/high.png); }
+.todo-item .prio.p3 { background-image: url(img/normal.png);  }
+.todo-item .prio.p2 { background-image: url(img/low.png);     }
+.todo-item .prio.p1 { background-image: url(img/lowest.png);  }
 
 .palm-page-header .icon.hmct {
 	background-image: url(header-icon.png);
