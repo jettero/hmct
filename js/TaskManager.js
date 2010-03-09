@@ -149,11 +149,6 @@ var cacheMaxAge = 4000;
 
                 delete me.req;
 
-                // r={"success": 1, "content": {"result":
-                // "[{\"priority\":3,\"record_locator\":\"xxxx\",\"time_worked\":null,\"attachment_count\":0,\"repeat_period\":
-                // \"once\",\"group\":null,\"summary\":\"test task 2 (due
-                // today)\",\"time_left\":null,\"id\":xxxxx,\"repeat_every\":1,\"owner\":\"Paul
-
                 if( r ) {
                     if( r.success ) {
                         Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
@@ -182,6 +177,11 @@ var cacheMaxAge = 4000;
 
                     Mojo.Controller.errorDialog(e.join("... "));
                 }
+
+            } else if( !transport.status ) {
+                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [abort?]: transport=%s", Object.toJSON(transport));
+
+                // this seems to be what happens on an abort
 
             } else {
                 Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [kinda bad]: transport=%s", Object.toJSON(transport));

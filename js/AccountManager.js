@@ -157,6 +157,11 @@
                             Mojo.Controller.errorDialog(e.join("... "));
                     }
 
+                } else if( !transport.status ) {
+                    Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [abort?]: transport=%s", Object.toJSON(transport));
+
+                    // this seems to be what happens on an abort
+
                 } else {
                     Mojo.Log.info("AccountManager::login() sent [kinda bad]: r=%s", Object.toJSON(r));
                     var e = ["Unknown error issuing hiveminder login, huh"];
