@@ -29,7 +29,7 @@ StageAssistant.prototype.handleCommand = function(event) {
     // I have this bound to the current scene, so ... this isn't necessary
 
     if(event.type == Mojo.Event.command) {
-        Mojo.Log.info("executing mehu command: %s", event.command);
+        Mojo.Log.info("executing menu command: %s", event.command);
         var a;
         if( a = event.command.match(/^myshow-(.+)/) )
             Mojo.Controller.stageController.assistant.showScene(a[1]);
