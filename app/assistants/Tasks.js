@@ -15,16 +15,10 @@ function TasksAssistant() {
     this.menuSetup();
 
     this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
-    this.commandMenuModel = { label: $L('Tasks Command Menu'), items: [{},{},{}] };
-    this.loginSubmenu = { label: $L('Login Submenu'), items: [] };
+    this.commandMenuModel = { label: 'Tasks Command Menu', items: [{},{},{}] };
+    this.loginSubmenu = { label: 'Login Submenu', items: [] };
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
-
-    var test = [
-        {record_locator: 'test1', summary: "supz, test1"},
-        {record_locator: 'test2', summary: "supz, test2"},
-        {record_locator: 'test3', summary: "supz, test3"},
-    ];
 
     this.tasksListAttrs = {
         listTemplate:  'misc/naked-list-container',
@@ -32,7 +26,7 @@ function TasksAssistant() {
         itemTemplate:  'misc/li-task',
         swipeToDelete: true
     };
-    this.tasksListModel = {listTitle: $L('Hiveminder Tasks'), items: test};
+    this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: []};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
 
     this.checkForLogins();
