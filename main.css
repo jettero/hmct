@@ -12,6 +12,11 @@
     display: hidden;
 }
 
+.todo-item .tags {
+    font-style: italic;
+    color: #339955;
+}
+
 .todo-item .prio    { float: left; margin: 0; padding: 0; margin-right: 5px; height: 16px; width: 16px; }
 .todo-item .prio.p5 { background-image: url(img/highest.png); }
 .todo-item .prio.p4 { background-image: url(img/high.png); }
