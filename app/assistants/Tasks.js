@@ -14,9 +14,14 @@ function TasksAssistant() {
 
     this.menuSetup();
 
+    this.refreshModel = { label: "Reload", icon: 'refresh', command: 'refresh' };
+
     this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
-    this.commandMenuModel = { label: 'Tasks Command Menu', items: [{},{},{}] };
+    this.commandMenuModel = { label: 'Tasks Command Menu', items: [
+       this.refreshModel, {}, {/* populated by handleLoginChange */} ] };
+
     this.loginSubmenu = { label: 'Login Submenu', items: [] };
+
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
 
