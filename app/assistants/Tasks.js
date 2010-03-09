@@ -108,6 +108,11 @@ function TasksAssistant() {
         var s_a = event.command.split(/\s*(?:@@)\s*/)
 
         switch (s_a[0]) {
+            case 'refresh':
+                Mojo.Log.info("Tasks::handleCommand(refresh)");
+                TMO.searchTasks(false,true); // use last search and force the reload
+                break;
+
             case "login-as":
                 Mojo.Log.info("Tasks::handleCommand(login-as: %s)", s_a[1]);
                 AMO.switchTo(s_a[1]);
