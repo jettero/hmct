@@ -122,7 +122,7 @@
         }
     }
 
-    this.req = new Ajax.Request('https://hiveminder.com/=/action/BTDT.Action.Login.json', {
+    this.req = new Ajax.Request('https://hiveminder.com/=/action/Login.json', {
         method: 'post', parameters: { address: email, password: pass }, evalJSON: true,
 
         onSuccess: function(transport) {
