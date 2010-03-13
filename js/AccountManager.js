@@ -133,34 +133,32 @@
         function(r) {
             delete me.req;
 
-            if( r ) {
-                if( r.success ) {
-                    Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
+            if( r.success ) {
+                Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
-                    me.data.meta.currentLogin = email;
-                    me.dbChanged("new current login");
+                me.data.meta.currentLogin = email;
+                me.dbChanged("new current login");
 
-                    s(email, pass, r);
+                s(email, pass, r);
 
-                } else {
-                    Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
-                    if( f() ) {
-                        var e = [];
+            } else {
+                Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
 
-                        if( r.error )
-                            e.push(r.error);
+                if( f() ) {
+                    var e = [];
 
-                        for(var k in r.field_errors )
-                            e.push(k + "-error: " + r.field_errors[k]);
+                    if( r.error )
+                        e.push(r.error);
 
-                        if( !e.length )
-                            e.push("Something went wrong with the login ...");
+                    for(var k in r.field_errors )
+                        e.push(k + "-error: " + r.field_errors[k]);
 
-                        Mojo.Controller.errorDialog(e.join("... "));
-                    }
+                    if( !e.length )
+                        e.push("Something went wrong with the login ...");
+
+                    Mojo.Controller.errorDialog(e.join("... "));
                 }
             }
-
         },
 
         function() { delete me.req; }

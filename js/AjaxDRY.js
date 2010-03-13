@@ -4,6 +4,7 @@
 */
 
 function AjaxDRY(desc,url,method,params,success,failure) {
+    var e;
 
     if( !success ) success = function() { return true; };
     if( !failure ) failure = function() { return true; };
@@ -15,7 +16,16 @@ function AjaxDRY(desc,url,method,params,success,failure) {
             if( transport.status >= 200 && transport.status < 300 ) {
                 Mojo.Log.info("%s ajax success transport=%s", desc, Object.toJSON(transport));
 
-                success(transport.responseJSON);
+                var r = transport.responseJSON;
+
+                if( r ) {
+                    success(r);
+
+                } else if( failure() ) {
+                    e = ["Unknown error issuing " + desc + " request"];
+
+                    Mojo.Controller.errorDialog(e.join("... "));
+                }
 
             } else if( !transport.status ) {
                 Mojo.Log.info("%s ajax abort? transport=%s", desc, Object.toJSON(transport));
@@ -26,7 +36,7 @@ function AjaxDRY(desc,url,method,params,success,failure) {
                 Mojo.Log.info("%s ajax mystery fail r=%s", desc, Object.toJSON(transport));
 
                 if( failure() ) {
-                    var e = ["Unknown error issuing " + desc + " request"];
+                    e = ["Unknown error issuing " + desc + " request"];
 
                     Mojo.Controller.errorDialog(e.join("... "));
                 }
