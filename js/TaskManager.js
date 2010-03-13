@@ -358,7 +358,7 @@ var cacheMaxAge = 4000;
 
 /*}}}*/
 
-/* {{{ /**/ TaskManager.prototype.registerTasksChange = function(callback) {
+/* {{{ */ TaskManager.prototype.registerTasksChange = function(callback) {
     Mojo.Log.info("TaskManager::registerTasksChange()");
 
     this.tasksChangeCallback.push(callback);
@@ -366,14 +366,14 @@ var cacheMaxAge = 4000;
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.unregisterTasksChange = function(callback) {
+/* {{{ */ TaskManager.prototype.unregisterTasksChange = function(callback) {
     Mojo.Log.info("AccountManager::unregisterTasksChange()");
 
     this.tasksChangeCallback = this.tasksChangeCallback.reject(function(_c){ return _c === callback; });
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.notifyTasksChangeStep = function(callback) {
+/* {{{ */ TaskManager.prototype.notifyTasksChangeStep = function(callback) {
     Mojo.Log.info("TaskManager::notifyTasksChangeStep() this.tasks=%s", Object.toJSON(this.tasks));
 
     var tasks = [];
@@ -391,7 +391,7 @@ var cacheMaxAge = 4000;
 };
 
 /*}}}*/
-/* {{{ /**/ TaskManager.prototype.notifyTasksChange = function() {
+/* {{{ */ TaskManager.prototype.notifyTasksChange = function() {
     Mojo.Log.info("AccountManager::notifyTasksChange()");
 
     for( var i=0; i<this.tasksChangeCallback.length; i++ )
