@@ -1,10 +1,11 @@
-var AMO, TMO;
+var AMO, TMO, BBO;
 
 function StageAssistant() {
 	Mojo.Log.info("StageAssistant()")
 
     AMO = new AccountManager();
     TMO = new TaskManager();
+    BBO = new BusyBee();
 }
 
 StageAssistant.prototype.setup = function() {

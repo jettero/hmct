@@ -136,12 +136,16 @@ var cacheMaxAge = 4000;
         }
     }
 
+    BBO.busy("search tasks");
+
     // AjaxDRY(desc,url,method,params,success,failure);
     this.req = new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
         'post', {format: "json", query: search.replace(/\s+/g, "/")},
 
         function(r) {
             delete me.req;
+
+            BBO.done("search tasks");
 
             if( r.success ) {
                 Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
@@ -167,7 +171,11 @@ var cacheMaxAge = 4000;
             }
         },
 
-        function() { delete me.req; }
+        function() {
+            delete me.req;
+
+            BBO.done("search tasks");
+        }
     );
 
 };
