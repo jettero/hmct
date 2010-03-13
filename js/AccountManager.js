@@ -105,8 +105,8 @@
 /* {{{ /**/ AccountManager.prototype.login = function(email,pass,s,f) {
     Mojo.Log.info("AccountManager::login(email=%s)", email);
 
-    if( !s ) s = function() { return true; };
-    if( !f ) f = function() { return true; };
+    if( !s ) s = function() {};
+    if( !f ) f = function() {};
 
     var me = this;
 
@@ -114,7 +114,7 @@
         Mojo.Log.info("AccountManager::login() [canceling previous request]");
 
         try {
-            this.req.transport.abort();
+            this.req.abort();
         }
 
         catch(e) {
@@ -122,26 +122,25 @@
         }
     }
 
-    this.req = new Ajax.Request('https://hiveminder.com/=/action/Login.json', {
-        method: 'post', parameters: { address: email, password: pass }, evalJSON: true,
+    // AjaxDRY(desc,url,method,params,success,failure);
+    this.req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
+        "post", parameters: { address: email, password: pass },
 
-        onSuccess: function(transport) {
-            if( transport.status >= 200 && transport.status < 300 ) {
-                var r = transport.responseJSON;
+        function(r) {
+            delete me.req;
 
-                delete me.req;
+            if( r ) {
+                if( r.success ) {
+                    Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
-                if( r ) {
-                    if( r.success ) {
-                        Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
+                    me.data.meta.currentLogin = email;
+                    me.dbChanged("new current login");
 
-                        me.data.meta.currentLogin = email;
-                        me.dbChanged("new current login");
+                    s(email, pass, r);
 
-                        s(email, pass, r);
-
-                    } else {
-                        Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
+                } else {
+                    Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
+                    if( f() ) {
                         var e = [];
 
                         if( r.error )
@@ -153,44 +152,15 @@
                         if( !e.length )
                             e.push("Something went wrong with the login ...");
 
-                        if( f(e) )
-                            Mojo.Controller.errorDialog(e.join("... "));
-                    }
-
-                } else if( !transport.status ) {
-                    Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [abort?]: transport=%s", Object.toJSON(transport));
-
-                    // this seems to be what happens on an abort
-
-                } else {
-                    Mojo.Log.info("AccountManager::login() sent [kinda bad]: r=%s", Object.toJSON(r));
-                    var e = ["Unknown error issuing hiveminder login, huh"];
-
-                    if( f(e) )
                         Mojo.Controller.errorDialog(e.join("... "));
+                    }
                 }
-
-            } else {
-                Mojo.Log.info("AccountManager::login() sent [kinda bad]: transport=%s", Object.toJSON(transport));
-                var e = ["Unknown error issuing hiveminder login -- host not found?"];
-
-                if( f(e) )
-                    Mojo.Controller.errorDialog(e.join("... "));
             }
 
         },
 
-        onFailure: function(transport) {
-            var t = new Template("Ajax Error: #{status}");
-            var m = t.evaluate(transport);
-            var e = [m];
-
-            if( f(e) )
-                Mojo.Controller.errorDialog(e.join("... "));
-
-        }
-
-    });
+        function() { delete me.req; }
+    );
 
 };
 
