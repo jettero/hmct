@@ -1,3 +1,7 @@
+/*jslint white: false, onevar: false
+*/
+/*global Mojo Ajax Template
+*/
 
 function AjaxDRY(desc,url,method,params,success,failure) {
 
@@ -19,7 +23,7 @@ function AjaxDRY(desc,url,method,params,success,failure) {
                 // this seems to be what happens on an abort
 
             } else {
-                Mojo.Log.info("%s ajax mystery fail r=%s", desc, Object.toJSON(r));
+                Mojo.Log.info("%s ajax mystery fail r=%s", desc, Object.toJSON(transport));
 
                 if( failure() ) {
                     var e = ["Unknown error issuing " + desc + " request"];
