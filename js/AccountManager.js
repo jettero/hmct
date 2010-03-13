@@ -203,7 +203,7 @@
 
 /*}}}*/
 
-AccountManager.prototype.getAccountDetails = function() {
+/* {{{ */ AccountManager.prototype.getAccountDetails = function() {
     Mojo.Log.info("AccountManager::getAccountDetails()");
 
     delete this.data.meta.accountDetails;
@@ -240,6 +240,8 @@ AccountManager.prototype.getAccountDetails = function() {
         }
     );
 };
+
+/*}}}*/
 
 /* {{{ */ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
