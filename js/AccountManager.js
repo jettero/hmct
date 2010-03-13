@@ -231,6 +231,7 @@
             delete me.d_req;
             BBO.done("fetching account details");
             this.data.meta.accountDetails = r;
+            this.dbChanged("account details updated");
         },
 
         function() {
