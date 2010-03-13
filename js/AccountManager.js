@@ -126,6 +126,8 @@
         }
     }
 
+    BBO.busy("login change");
+
     // AjaxDRY(desc,url,method,params,success,failure);
     this.req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
         "post", { address: email, password: pass },
@@ -161,7 +163,11 @@
             }
         },
 
-        function() { delete me.req; }
+        function() {
+            delete me.req;
+
+            BBO.done("login change");
+        }
     );
 
 };
