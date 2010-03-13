@@ -134,6 +134,7 @@
 
         function(r) {
             delete me.l_req;
+            BBO.done("login change");
 
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
@@ -166,7 +167,6 @@
 
         function() {
             delete me.l_req;
-
             BBO.done("login change");
         }
     );
