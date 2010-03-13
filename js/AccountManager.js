@@ -206,10 +206,7 @@
 AccountManager.prototype.getAccountDetails = function() {
     Mojo.Log.info("AccountManager::getAccountDetails()");
 
-    delete this.meta.accountDetails;
-
-    var url = "http://hiveminder.com/=/model/user/email/" + this.meta.currentLogin + ".json";
-    var me = this;
+    delete this.data.meta.accountDetails;
 
     if( this.d_req ) {
         Mojo.Log.info("AccountManager::getAccountDetails() [canceling previous request]");
@@ -224,14 +221,16 @@ AccountManager.prototype.getAccountDetails = function() {
     }
 
     BBO.busy("fetching account details");
+    var url = "http://hiveminder.com/=/model/user/email/" + this.data.meta.currentLogin + ".json";
+    var me = this;
 
     // AjaxDRY(desc,url,method,params,success,failure);
     this.d_req = new AjaxDRY("AccountManager::getAccountDetails()", url, "get", {},
         function(r) {
-            Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", r);
+            Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
             delete me.d_req;
             BBO.done("fetching account details");
-            this.meta.accountDetails = r;
+            this.data.meta.accountDetails = r;
         },
 
         function() {
