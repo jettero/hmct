@@ -46,8 +46,6 @@
 /*}}}*/
 /* {{{ */ AccountManager.prototype.dbSent = function() {
     Mojo.Log.info("AccountManager::dbSent()");
-
-    this.notifyAcctsChange();
 };
 
 /*}}}*/
@@ -145,6 +143,7 @@
                 me.dbChanged("new current login");
 
                 s(email, pass, r);
+                this.notifyAcctsChange();
 
             } else {
                 Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
