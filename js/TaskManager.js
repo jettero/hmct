@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo hex_md5 AMO Ajax Template setTimeout
+/*global Mojo hex_md5 AMO AjaxDRY Template setTimeout
 */
 
 var cacheMaxAge = 4000;

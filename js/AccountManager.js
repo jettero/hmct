@@ -1,3 +1,7 @@
+/*jslint white: false, onevar: false
+*/
+/*global Mojo AjaxDRY Template
+*/
 
 /* {{{ */ function AccountManager() {
     Mojo.Log.info("AccountManager()");
