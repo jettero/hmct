@@ -128,7 +128,7 @@
 
     // AjaxDRY(desc,url,method,params,success,failure);
     this.req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
-        "post", parameters: { address: email, password: pass },
+        "post", { address: email, password: pass },
 
         function(r) {
             delete me.req;
