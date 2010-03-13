@@ -102,18 +102,6 @@ var cacheMaxAge = 4000;
         return;
     }
 
-    if( this.req ) {
-        Mojo.Log.info("TaskManager::searchTasks() [canceling previous request]");
-
-        try {
-            this.req.abort();
-        }
-
-        catch(e) {
-            Mojo.Log.info("TaskManager::searchTasks() [problem canceling previous request: %s]", e);
-        }
-    }
-
     Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
 
     this.lastSearch = search;
@@ -136,16 +124,11 @@ var cacheMaxAge = 4000;
         }
     }
 
-    BBO.busy("search tasks");
-
     // AjaxDRY(desc,url,method,params,success,failure);
-    this.req = new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
+    new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
         'post', {format: "json", query: search.replace(/\s+/g, "/")},
 
         function(r) {
-            delete me.req;
-
-            BBO.done("search tasks");
 
             if( r.success ) {
                 Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
@@ -169,13 +152,8 @@ var cacheMaxAge = 4000;
 
                 Mojo.Controller.errorDialog(e.join("... "));
             }
-        },
-
-        function() {
-            delete me.req;
-
-            BBO.done("search tasks");
         }
+
     );
 
 };

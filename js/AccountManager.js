@@ -113,26 +113,11 @@
 
     var me = this;
 
-    if( this.l_req ) {
-        Mojo.Log.info("AccountManager::login() [canceling previous request]");
-
-        try {
-            this.l_req.abort();
-        }
-
-        catch(e) {
-            Mojo.Log.info("AccountManager::login() [problem canceling previous request: %s]", e);
-        }
-    }
-
     // AjaxDRY(desc,url,method,params,success,failure);
-    this.l_req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
+    new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
         "post", { address: email, password: pass },
 
         function(r) {
-            delete me.l_req;
-            BBO.done("login change");
-
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
@@ -161,12 +146,8 @@
                     Mojo.Controller.errorDialog(e.join("... "));
                 }
             }
-        },
-
-        function() {
-            delete me.l_req;
-            BBO.done("login change");
         }
+
     );
 
 };
@@ -204,40 +185,18 @@
 /* {{{ */ AccountManager.prototype.getAccountDetails = function() {
     Mojo.Log.info("AccountManager::getAccountDetails()");
 
-    delete this.data.meta.accountDetails;
+    delete this.data.meta.acdet;
 
-    if( this.d_req ) {
-        Mojo.Log.info("AccountManager::getAccountDetails() [canceling previous request]");
-
-        try {
-            this.d_req.abort();
-        }
-
-        catch(e) {
-            Mojo.Log.info("AccountManager::getAccountDetails() [problem canceling previous request: %s]", e);
-        }
-    }
-
-    BBO.busy("fetching account details");
     var url = "http://hiveminder.com/=/model/user/email/" + this.data.meta.currentLogin + ".json";
     var me = this;
 
     // AjaxDRY(desc,url,method,params,success,failure);
-    this.d_req = new AjaxDRY("AccountManager::getAccountDetails()", url, "get", {},
-        function(r) {
-            Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
-            delete me.d_req;
-            BBO.done("fetching account details");
-            this.data.meta.acdet = r;
-            this.dbChanged("account details updated");
-        },
+    new AjaxDRY("AccountManager::getAccountDetails()", url, "get", {}, function(r) {
+        Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
 
-        function() {
-            Mojo.Log.info("AccountManager::getAccountDetails() [fail]");
-            delete me.d_req;
-            BBO.done("fetching account details");
-        }
-    );
+        this.data.meta.acdet = r;
+        this.dbChanged("account details updated");
+    });
 };
 
 /*}}}*/
