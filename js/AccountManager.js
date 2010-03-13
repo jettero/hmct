@@ -230,7 +230,7 @@
             Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
             delete me.d_req;
             BBO.done("fetching account details");
-            this.data.meta.accountDetails = r;
+            this.data.meta.acdet = r;
             this.dbChanged("account details updated");
         },
 
@@ -330,6 +330,37 @@
         this.loaded = true; // got the db picked up and told everything about it
         Mojo.Log.info("AMO.loaded=true");
     }
+};
+
+/*}}}*/
+
+/* {{{ */ AccountManager.prototype.registerAcdetChange = function(callback) {
+    Mojo.Log.info("AccountManager::registerAcdetChange()");
+
+    this.acdetChangeCallbacks.push(callback);
+    this.notifyAcdetChangeStep(callback);
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.unregisterAcdetChange = function(callback) {
+    Mojo.Log.info("AccountManager::unregisterAcdetChange()");
+
+    this.acdetChangeCallbacks = this.acdetChangeCallbacks.reject(function(_c){ return _c === callback; });
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.notifyAcdetChangeStep = function(callback) {
+    Mojo.Log.info("AccountManager::notifyAcdetChangeStep()");
+
+    callback(Object.clone(this.data.meta.acdet));
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.notifyAcdetChange = function() {
+    Mojo.Log.info("AccountManager::notifyAcdetChange()");
+
+    for( var i=0; i<this.acdetChangeCallbacks.length; i++ )
+        this.notifyAcdetChangeStep(this.acdetChangeCallbacks[i]);
 };
 
 /*}}}*/
