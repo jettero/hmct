@@ -10,3 +10,8 @@ export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow
 
 # download tasks given my query
 curl -F query=$Q -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml
+
+
+# get account options and pro status and things
+export E=jettero@gmail.com
+curl -sb $HM http://hiveminder.com/=/model/user/email/$E.yml
