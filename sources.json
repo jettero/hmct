@@ -1,5 +1,6 @@
 [
     { "source": "js/md5.js" },
+    { "source": "js/AjaxDRY.js" },
 
     { "source": "js/AccountManager.js" },
     { "source": "js/TaskManager.js" },
