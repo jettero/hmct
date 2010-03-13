@@ -106,7 +106,7 @@ var cacheMaxAge = 4000;
         Mojo.Log.info("TaskManager::searchTasks() [canceling previous request]");
 
         try {
-            this.req.transport.abort();
+            this.req.abort();
         }
 
         catch(e) {
@@ -136,76 +136,39 @@ var cacheMaxAge = 4000;
         }
     }
 
-    this.req = new Ajax.Request('http://hiveminder.com/=/action/DownloadTasks.json', {
-        method:     'post',
-        parameters: {format: "json", query: search.replace(/\s+/g, "/")},
-        evalJSON:   true,
+    // AjaxDRY(desc,url,method,params,success,failure);
+    this.req = new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
+        'post', {format: "json", query: search.replace(/\s+/g, "/")},
 
-        onSuccess: function(transport) {
-            var e = [];
+        function(r) {
+            delete me.req;
 
-            if( transport.status >= 200 && transport.status < 300 ) {
-                var r = transport.responseJSON;
+            if( r.success ) {
+                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
 
-                delete me.req;
-
-                if( r ) {
-                    if( r.success ) {
-                        Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
-
-                        me.setCache(search_key, (me.tasks = me.fixutf8( r.content.result ).evalJSON()) );
-                        me.processTasks();
-
-                    } else {
-                        Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
-
-                        if( r.error )
-                            e.push(r.error);
-
-                        for(var k in r.field_errors )
-                            e.push(k + "-error: " + r.field_errors[k]);
-
-                        if( !e.length )
-                            e.push("Something went wrong with the task search ...");
-
-                        Mojo.Controller.errorDialog(e.join("... "));
-                    }
-
-                } else {
-                    Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [kinda bad]: r=%s", Object.toJSON(r));
-                    e = ["Unknown error searching hiveminder tasks, huh"];
-
-                    Mojo.Controller.errorDialog(e.join("... "));
-                }
-
-            } else if( !transport.status ) {
-                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [abort?]: transport=%s", Object.toJSON(transport));
-
-                // this seems to be what happens on an abort
+                me.setCache(search_key, (me.tasks = me.fixutf8( r.content.result ).evalJSON()) );
+                me.processTasks();
 
             } else {
-                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() sent [kinda bad]: transport=%s", Object.toJSON(transport));
-                e = ["Unknown error searching hiveminder tasks -- host not found?"];
+                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
+
+                var e = [];
+
+                if( r.error )
+                    e.push(r.error);
+
+                for(var k in r.field_errors )
+                    e.push(k + "-error: " + r.field_errors[k]);
+
+                if( !e.length )
+                    e.push("Something went wrong with the task search ...");
 
                 Mojo.Controller.errorDialog(e.join("... "));
             }
-
         },
 
-        onFailure: function(transport) {
-            Mojo.Log.info("TaskManager::searchTasks()::onFailure() transport=%s", Object.toJSON(transport));
-
-            var t = new Template("Ajax Error: #{status}");
-            var m = t.evaluate(transport);
-            var e = [m];
-
-            delete me.req;
-
-            Mojo.Controller.errorDialog(e.join("... "));
-
-        }
-
-    });
+        function() { delete me.req; }
+    );
 
 };
 
