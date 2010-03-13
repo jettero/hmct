@@ -1,5 +1,5 @@
 
-/* {{{ /**/ function AccountManager() {
+/* {{{ */ function AccountManager() {
     Mojo.Log.info("AccountManager()");
 
     this.data = { version: 2, meta: {}, accts: {} };
@@ -32,28 +32,28 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.dbChanged = function(desc) {
+/* {{{ */ AccountManager.prototype.dbChanged = function(desc) {
     Mojo.Log.info("AccountManager::dbChanged(desc=%s)", desc);
 
     this.dbo.add("am_data", this.data, this.dbSent, this.dbSentFail);
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.dbSent = function() {
+/* {{{ */ AccountManager.prototype.dbSent = function() {
     Mojo.Log.info("AccountManager::dbSent()");
 
     this.notifyAcctsChange();
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.dbSentFail = function(transaction, error) {
+/* {{{ */ AccountManager.prototype.dbSentFail = function(transaction, error) {
     Mojo.Log.info("AccountManager::dbSentFail()");
     Mojo.Controller.errorDialog("ERROR storing information (#" + error.message + ").");
 
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.addReplaceAccount = function(email,pass) {
+/* {{{ */ AccountManager.prototype.addReplaceAccount = function(email,pass) {
     Mojo.Log.info("AccountManager::addReplaceAccount(email=%s)", email);
 
     this.data.accts[email] = pass;
@@ -61,7 +61,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.rmAccount = function(email) {
+/* {{{ */ AccountManager.prototype.rmAccount = function(email) {
     Mojo.Log.info("AccountManager::rmAccount(email=%s)", email);
 
     delete this.data.accts[email];
@@ -74,7 +74,7 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.hasAccount = function(email) {
+/* {{{ */ AccountManager.prototype.hasAccount = function(email) {
     Mojo.Log.info("AccountManager::hasAccount(email=%s)", email);
 
     return this.data.accts[email] ? true : false;
@@ -82,7 +82,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.fetchLoginList = function() {
+/* {{{ */ AccountManager.prototype.fetchLoginList = function() {
     Mojo.Log.info("AccountManager::fetchLoginList()");
 
     var ret = [];
@@ -94,7 +94,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.getPasswdForEmail = function(email) {
+/* {{{ */ AccountManager.prototype.getPasswdForEmail = function(email) {
     Mojo.Log.info("AccountManager::getPasswdForEmail(email:%s)", email);
 
     return this.data.accts[email];
@@ -102,7 +102,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.login = function(email,pass,s,f) {
+/* {{{ */ AccountManager.prototype.login = function(email,pass,s,f) {
     Mojo.Log.info("AccountManager::login(email=%s)", email);
 
     if( !s ) s = function() {};
@@ -165,7 +165,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.switchTo = function(email) {
+/* {{{ */ AccountManager.prototype.switchTo = function(email) {
     Mojo.Log.info("AccountManager::switchTo(email=%s)", email);
 
     var passwd = this.getPasswdForEmail(email);
@@ -175,7 +175,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.getLoginCount = function() {
+/* {{{ */ AccountManager.prototype.getLoginCount = function() {
     var ret = 0;
 
     if( this.loaded ) {
@@ -194,7 +194,7 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.dbRecv = function(data) {
+/* {{{ */ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
 
     this.db_loaded = true;
@@ -221,14 +221,14 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.dbRecvFail = function(transaction, error) {
+/* {{{ */ AccountManager.prototype.dbRecvFail = function(transaction, error) {
     Mojo.Log.info("AccountManager::dbRecvFail()");
     Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
 
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.dbRestore = function() {
+/* {{{ */ AccountManager.prototype.dbRestore = function() {
     Mojo.Log.info("AccountManager::dbRestore()");
     this.dbo.get("am_data", this.dbRecv, this.dbRecvFail);
 
@@ -236,7 +236,7 @@
 
 /*}}}*/
 
-/* {{{ /**/ AccountManager.prototype.registerLoginChange = function(callback) {
+/* {{{ */ AccountManager.prototype.registerLoginChange = function(callback) {
     Mojo.Log.info("AccountManager::registerLoginChange()");
 
     this.loginChangeCallbacks.push(callback);
@@ -244,14 +244,14 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.unregisterLoginChange = function(callback) {
+/* {{{ */ AccountManager.prototype.unregisterLoginChange = function(callback) {
     Mojo.Log.info("AccountManager::unregisterLoginChange()");
 
     this.loginChangeCallbacks = this.loginChangeCallbacks.reject(function(_c){ return _c === callback; });
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.notifyAcctsChangeStep = function(callback) {
+/* {{{ */ AccountManager.prototype.notifyAcctsChangeStep = function(callback) {
     Mojo.Log.info("AccountManager::notifyAcctsChangeStep()");
 
     var emails  = [];
@@ -270,7 +270,7 @@
 };
 
 /*}}}*/
-/* {{{ /**/ AccountManager.prototype.notifyAcctsChange = function() {
+/* {{{ */ AccountManager.prototype.notifyAcctsChange = function() {
     Mojo.Log.info("AccountManager::notifyAcctsChange()");
 
     for( var i=0; i<this.loginChangeCallbacks.length; i++ )
