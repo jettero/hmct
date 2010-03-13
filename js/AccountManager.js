@@ -125,8 +125,6 @@
         }
     }
 
-    BBO.busy("login change");
-
     // AjaxDRY(desc,url,method,params,success,failure);
     this.l_req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
         "post", { address: email, password: pass },

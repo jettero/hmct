@@ -3,16 +3,35 @@
 /*global Mojo Ajax Template
 */
 
+var _AjaxDRY_reqdb = {};
+
 function AjaxDRY(desc,url,method,params,success,failure) {
     var e;
 
     if( !success ) success = function() { return true; };
     if( !failure ) failure = function() { return true; };
 
-    this.req = new Ajax.Request(url, {
+    BBO.busy(desc);
+
+    if( _AjaxDRY_reqdb[desc] ) {
+        Mojo.Log.info("AjaxDRY [canceling previous %s request]", desc);
+
+        try {
+            _AjaxDRY_reqdb[desc].transport.abort();
+        }
+
+        catch(e) {
+            Mojo.Log.info("AjaxDRY [problem canceling previous %s request: %s]", desc, e);
+        }
+    }
+
+    _AjaxDRY_reqdb[desc] = new Ajax.Request(url, {
         method: method, parameters: params, evalJSON: true,
 
         onSuccess: function(transport) {
+            BBO.done(desc);
+            delete _AjaxDRY_reqdb[desc];
+
             if( transport.status >= 200 && transport.status < 300 ) {
                 Mojo.Log.info("%s ajax success transport=%s", desc, Object.toJSON(transport));
 
@@ -45,6 +64,9 @@ function AjaxDRY(desc,url,method,params,success,failure) {
         },
 
         onFailure: function(transport) {
+            BBO.done(desc);
+            delete _AjaxDRY_reqdb[desc];
+
             if( failure() ) {
                 var t = new Template("Ajax Error: #{status}");
                 var m = t.evaluate(transport);
@@ -57,9 +79,3 @@ function AjaxDRY(desc,url,method,params,success,failure) {
     });
 
 }
-
-AjaxDRY.prototype.abort = function() {
-
-    this.req.transport.abort();
-
-};
