@@ -114,11 +114,11 @@
 
     var me = this;
 
-    if( this.req ) {
+    if( this.l_req ) {
         Mojo.Log.info("AccountManager::login() [canceling previous request]");
 
         try {
-            this.req.abort();
+            this.l_req.abort();
         }
 
         catch(e) {
@@ -129,11 +129,11 @@
     BBO.busy("login change");
 
     // AjaxDRY(desc,url,method,params,success,failure);
-    this.req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
+    this.l_req = new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',, succ, fail);
         "post", { address: email, password: pass },
 
         function(r) {
-            delete me.req;
+            delete me.l_req;
 
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
@@ -164,7 +164,7 @@
         },
 
         function() {
-            delete me.req;
+            delete me.l_req;
 
             BBO.done("login change");
         }
