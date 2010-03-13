@@ -14,6 +14,7 @@
     this.dbSentFail = this.dbSentFail.bind(this);
 
     this.loginChangeCallbacks = [];
+    this.acdetChangeCallbacks = [];
 
     var options = {
         name:    "HMCTAccounts",
