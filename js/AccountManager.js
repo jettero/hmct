@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo AjaxDRY Template
+/*global Mojo AjaxDRY Template BBO
 */
 
 /* {{{ */ function AccountManager() {
