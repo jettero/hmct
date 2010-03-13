@@ -138,12 +138,12 @@
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
-                me.getAccountDetails();
                 me.data.meta.currentLogin = email;
                 me.dbChanged("new current login");
+                me.notifyAcctsChange();
+                me.getAccountDetails();
 
                 s(email, pass, r);
-                this.notifyAcctsChange();
 
             } else {
                 Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
