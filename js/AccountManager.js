@@ -138,6 +138,7 @@
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
+                me.getAccountDetails();
                 me.data.meta.currentLogin = email;
                 me.dbChanged("new current login");
 
@@ -201,6 +202,45 @@
 };
 
 /*}}}*/
+
+AccountManager.prototype.getAccountDetails = function() {
+    Mojo.Log.info("AccountManager::getAccountDetails()");
+
+    delete this.meta.accountDetails;
+
+    var url = "http://hiveminder.com/=/model/user/email/" + this.meta.currentLogin + ".json";
+    var me = this;
+
+    if( this.d_req ) {
+        Mojo.Log.info("AccountManager::getAccountDetails() [canceling previous request]");
+
+        try {
+            this.d_req.abort();
+        }
+
+        catch(e) {
+            Mojo.Log.info("AccountManager::getAccountDetails() [problem canceling previous request: %s]", e);
+        }
+    }
+
+    BBO.busy("fetching account details");
+
+    // AjaxDRY(desc,url,method,params,success,failure);
+    this.d_req = new AjaxDRY("AccountManager::getAccountDetails()", url, "get", {},
+        function(r) {
+            Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", r);
+            delete me.d_req;
+            BBO.done("fetching account details");
+            this.meta.accountDetails = r;
+        },
+
+        function() {
+            Mojo.Log.info("AccountManager::getAccountDetails() [fail]");
+            delete me.d_req;
+            BBO.done("fetching account details");
+        }
+    );
+};
 
 /* {{{ */ AccountManager.prototype.dbRecv = function(data) {
     Mojo.Log.info("AccountManager::dbRecv()");
