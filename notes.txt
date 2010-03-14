@@ -11,7 +11,15 @@ export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow
 # download tasks given my query
 curl -F query=$Q -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml
 
-
 # get account options and pro status and things
 export E=jettero@gmail.com
 curl -sb $HM http://hiveminder.com/=/model/user/email/$E.yml
+
+# get lists for Pro users:
+curl -F all=true -sb $HM http://hiveminder.com/=/action/SearchList.yml
+
+# get details for a task:
+curl -sb $HM http://hiveminder.com/=/model/Task/id/1006255.yml
+
+# task history:
+curl -F task_id=1006255 -sb $HM http://hiveminder.com/=/action/SearchTaskHistory.yml
