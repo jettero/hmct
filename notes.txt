@@ -18,8 +18,15 @@ curl -sb $HM http://hiveminder.com/=/model/user/email/$E.yml
 # get lists for Pro users:
 curl -F all=true -sb $HM http://hiveminder.com/=/action/SearchList.yml
 
+export ID=1006255
+
 # get details for a task:
-curl -sb $HM http://hiveminder.com/=/model/Task/id/1006255.yml
+curl -sb $HM http://hiveminder.com/=/model/Task/id/$ID.yml
 
 # task history:
-curl -F task_id=1006255 -sb $HM http://hiveminder.com/=/action/SearchTaskHistory.yml
+curl -F task_id=$ID -sb $HM http://hiveminder.com/=/action/SearchTaskHistory.yml
+curl -sb $HM http://hiveminder.com/=/model/TaskHistory/task_id/$ID.yml
+
+# comments
+curl -sb $HM http://hiveminder.com/=/model/TaskEmail/task_id/$ID.yml
+
