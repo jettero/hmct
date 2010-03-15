@@ -7,6 +7,7 @@ function TasksAssistant() {
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.handleTasksChange = this.handleTasksChange.bind(this);
     this.checkForLogins = this.checkForLogins.bind(this);
+    this.taskListTap    = this.taskListTap.bind(this);
 }
 
 /* {{{ /**/ TasksAssistant.prototype.setup = function() {
@@ -34,10 +35,22 @@ function TasksAssistant() {
     this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: []};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
 
+	Mojo.Event.listen(this.controller.get("hm_task_list"), Mojo.Event.listTap, this.taskListTap);
+
     this.checkForLogins();
 };
 
 /*}}}*/
+
+/* {{{ */ TasksAssistant.prototype.taskListTap = function(event) {
+    Mojo.Log.info("Tasks::taskListTap(%s)", event.item.record_locator);
+
+    this.SCa.showScene("Task", event.item);
+
+};
+
+/*}}}*/
+
 /* {{{ /**/ TasksAssistant.prototype.checkForLogins = function() {
     Mojo.Log.info("Tasks::checkForLogins()");
 

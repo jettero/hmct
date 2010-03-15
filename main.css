@@ -8,6 +8,12 @@
     display: none;
 }
 
+.task-id {
+    font-family: monospace;
+    font-weight: bold;
+    color: blue;
+}
+
 .naked-list {
     background: white;
 }
