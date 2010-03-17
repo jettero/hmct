@@ -9,16 +9,27 @@ TaskAssistant.prototype.setup = function() {
     $("id").update(this.item.record_locator);
 
     this.tasksListAttrs = {
-        listTemplate:  'misc/naked-list-container',
-        emptyTemplate: 'misc/empty-list',
-        itemTemplate:  'misc/li-task-row',
-        swipeToDelete: false
+        dividerFunction: function(mi) { return mi.category },
+        dividerTemplate: 'misc/li-task-div',
+        listTemplate:    'misc/naked-list-container',
+        emptyTemplate:   'misc/empty-list',
+        itemTemplate:    'misc/li-task-row',
+        swipeToDelete:   false
     };
+
     this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: [
-        {row_name: "test", row_data: "test test test test"},
-        {row_name: "test", row_data: "test test test test"},
-        {row_name: "test", row_data: "test test test test"},
-        {row_name: "test", row_data: "test test test test"}
+
+        {row_name: "test", category: "blarg", row_data: "test test test test"},
+        {row_name: "test", category: "blarg", row_data: "test test test test"},
+        {row_name: "test", category: "blarg", row_data: "test test test test"},
+        {row_name: "test", category: "blarg", row_data: "test test test test"},
+
+        {row_name: "test", category: "gralb", row_data: "test test test test"},
+        {row_name: "test", category: "gralb", row_data: "test test test test"},
+        {row_name: "test", category: "gralb", row_data: "test test test test"},
+        {row_name: "test", category: "gralb", row_data: "test test test test"}
+
     ]};
+
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
 };
