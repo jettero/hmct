@@ -93,6 +93,10 @@ function TasksAssistant() {
     this.tasksListModel.items = tasks;
 
     this.controller.modelChanged(this.tasksListModel);
+
+    // XXX: this is just while we're working on the Task view
+    if( tasks.length > 0 )
+        this.SCa.showScene("Task", tasks[0]);
 };
 
 /*}}}*/
