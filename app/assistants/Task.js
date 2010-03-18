@@ -55,7 +55,7 @@ TaskAssistant.prototype.activate = function() {
         compress.compressorID = k;
 
         this.controller.listen(compress, Mojo.Event.tap, this.clickCollapsibleList);
-        this.getElementsOfCategory(k).each(this.moveElementsIntoDividers);
+        this.getElementsOfCategory(k).each(this.moveElementIntoDividers);
     }
 };
 
@@ -66,7 +66,7 @@ TaskAssistant.prototype.getElementsOfCategory = function(category) {
 };
 
 TaskAssistant.prototype.moveElementIntoDividers = function(item) {
-    Mojo.Log.info("Task()::moveElementsIntoDividers()");
+    Mojo.Log.info("Task()::moveElementIntoDividers()");
 
     var compressable = this.controller.get('compressable' + item.category);
         compressable.insert(this.controller.get('element' + item.id));
@@ -75,7 +75,7 @@ TaskAssistant.prototype.moveElementIntoDividers = function(item) {
 };
 
 TaskAssistant.prototype.moveElementOutOfDividers = function(item) {
-    Mojo.Log.info("Task()::moveElementsOutOfDividers()");
+    Mojo.Log.info("Task()::moveElementOutOfDividers()");
 
     this.controller.get('element_holder' + item.id).insert(this.controller.get('element' + item.id));
 };
@@ -129,7 +129,7 @@ TaskAssistant.prototype.clickCollapsibleList = function(drawer, category, event)
             folderContainer.setStyle({ height: maxHeight + 'px' });
             toggleButton.addClassName('palm-arrow-closed');
             toggleButton.removeClassName('palm-arrow-expanded');
-            categoryItems.each(this.moveElementsIntoDividers);
+            categoryItems.each(this.moveElementIntoDividers);
         }
 
         var me   = this;
@@ -155,7 +155,7 @@ TaskAssistant.prototype.animationComplete = function(drawer, category, event, sh
         folderContainer.hide();
 
     } else {
-        categoryItems.each(this.moveElementsOutOfDividers);
+        categoryItems.each(this.moveElementOutOfDividers);
     }
 
     folderContainer.setStyle({height:'auto'});
