@@ -1,6 +1,9 @@
 
 function TaskAssistant(_i) {
     Mojo.Log.info("Task(%s)", (this.item = _i).record_locator);
+
+    this.moveElementIntoDividers  = this.moveElementIntoDividers.bind(this);
+    this.moveElementOutOfDividers = this.moveElementOutOfDividers.bind(this);
 }
 
 TaskAssistant.prototype.setup = function() {
@@ -38,7 +41,7 @@ TaskAssistant.prototype.activate = function() {
     Mojo.Log.info("Task()::activate()");
     var hrm = {blarg: true, gralb: true};
     var me  = this;
-
+    
     for(var k in hrm) {
         var compress     = this.controller.get('compress'     + k);
         var compressable = this.controller.get('compressable' + k).hide();
@@ -47,25 +50,39 @@ TaskAssistant.prototype.activate = function() {
         compress.compressorID = k;
 
         this.controller.listen(compress, Mojo.Event.tap, this.clickCollapsibleList.bind(this, compressable, k));
-		this.tasksListModel.items.findAll(function(i){ return i.category === k }).each(function(i){
-
-            var compressable = me.controller.get('compressable' + i.category);
-                compressable.insert( me.controller.get('element' + i.id) );
-
-            me.controller.get('element' + i.id).show();
-
-        });
+        this.getElementsOfCategory(k).each(this.moveElementsIntoDividers);
     }
+};
+
+TaskAssistant.prototype.getElementsOfCategory = function(category) {
+    Mojo.Log.info("Task()::getElementsOfCategory(%s)", category);
+
+    return this.tasksListModel.items.findAll(function(i){ return i.category === category })
+}
+
+TaskAssistant.prototype.moveElementIntoDividers = function(item) {
+    Mojo.Log.info("Task()::moveElementsIntoDividers()");
+
+    var compressable = this.controller.get('compressable' + item.category);
+        compressable.insert(this.controller.get('element' + item.id));
+
+    this.controller.get('element' + item.id).show();
+};
+
+TaskAssistant.prototype.moveElementOutOfDividers = function(item) {
+    Mojo.Log.info("Task()::moveElementsOutOfDividers()");
+
+    this.controller.get('element_holder' + item.id).insert(this.controller.get('element' + item.id));
 };
 
 TaskAssistant.prototype.clickCollapsibleList = function(drawer, category, event) {
     Mojo.Log.info("Task()::clickCollapsibleList()");
 
-	var targetRow = this.controller.get(event.target);
+    var targetRow = this.controller.get(event.target);
     if (!targetRow.hasClassName("selection_target")) {
         Mojo.Log.info("Task()::clickCollapsibleList() !selection_target" );
         targetRow = targetRow.up('.selection_target');
-    }		
+    }        
 
     if (targetRow) {
         var toggleButton = targetRow.down("div.arrow_button");
@@ -74,7 +91,64 @@ TaskAssistant.prototype.clickCollapsibleList = function(drawer, category, event)
             return;
 
         var show = toggleButton.className;
-        Mojo.Log.info("Task()::clickCollapsibleList() open/close " + show );
-        this._toggleShowHideFolders(targetRow, this.controller.window.innerHeight, null, category);
+        Mojo.Log.info("Task()::clickCollapsibleList() open/close [className: %s]", show);
+
+        if (!targetRow.hasClassName("details"))
+            return;
+
+        var toggleButton = targetRow.down("div.arrow_button");
+        if (!toggleButton.hasClassName('palm-arrow-expanded') && !toggleButton.hasClassName('palm-arrow-closed'))
+            return;
+
+        var categoryItems   = this.tasksListModel.items.findAll(function(i){ return i.category === category });
+        var showFavorites   = toggleButton.hasClassName('palm-arrow-closed');
+        var folderContainer = targetRow.down('.collapsor');
+
+        if (showFavorites) {
+            var maxHeight = folderContainer.getHeight();
+            toggleButton.addClassName('palm-arrow-expanded');
+            toggleButton.removeClassName('palm-arrow-closed');
+            folderContainer.setStyle({ height:'1px' });
+            folderContainer.show();
+
+            // See if the div should scroll up a little to show the contents
+            var elementTop = folderContainer.viewportOffset().top;
+            var scroller = Mojo.View.getScrollerForElement(folderContainer);
+            if (elementTop > viewPortMidway && scroller && !noScroll) {
+                //Using setTimeout to give the animation time enough to give the div enough height to scroll to
+                var scrollToPos = scroller.mojo.getScrollPosition().top - (elementTop - viewPortMidway);
+                setTimeout(function() {scroller.mojo.scrollTo(undefined, scrollToPos, true);}, 200);
+            }
+        } else {
+            folderContainer.setStyle({ height: maxHeight + 'px' });
+            toggleButton.addClassName('palm-arrow-closed');
+            toggleButton.removeClassName('palm-arrow-expanded');
+            categoryItems.each(this.moveElementsIntoDividers);
+            var maxHeight = folderContainer.getHeight();
+        }
+
+        var options = {
+            reverse:    !showFavorites,
+            onComplete: this.animationComplete.bind(this, showFavorites, categoryItems, folderContainer),
+            curve:      'over-easy',
+            from:       1,
+            to:         maxHeight,
+            duration:   0.4
+        };
+
+        Mojo.Animation.animateStyle(folderContainer, 'height', 'bezier', options);
     }
+};
+
+TaskAssistant.prototype._animationComplete = function(drawer, category, event) {
+    Mojo.Log.info("Task()::animationComplete()");
+
+    if (!showFavorites) {
+        folderContainer.hide();
+
+    } else {
+        categoryItems.each(this.moveElementsOutOfDividers);
+    }
+
+    folderContainer.setStyle({height:'auto'});
 };
