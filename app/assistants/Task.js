@@ -49,12 +49,14 @@ TaskAssistant.prototype.activate = function() {
     
     for(var k in hrm) {
         var compress     = this.controller.get('compress'     + k);
-        var compressable = this.controller.get('compressable' + k).hide();
+        var compressible = this.controller.get('compressible' + k).hide();
 
         compress.addClassName('compressor');
         compress.compressorID = k;
 
-        this.controller.listen(compress, Mojo.Event.tap, this.clickCollapsibleList);
+        var cb = function(e) { me.clickCollapsibleList(compressible, k, e); };
+
+        this.controller.listen(compress, Mojo.Event.tap, cb);
         this.getElementsOfCategory(k).each(this.moveElementIntoDividers);
     }
 };
@@ -68,8 +70,8 @@ TaskAssistant.prototype.getElementsOfCategory = function(category) {
 TaskAssistant.prototype.moveElementIntoDividers = function(item) {
     Mojo.Log.info("Task()::moveElementIntoDividers()");
 
-    var compressable = this.controller.get('compressable' + item.category);
-        compressable.insert(this.controller.get('element' + item.id));
+    var compressible = this.controller.get('compressible' + item.category);
+        compressible.insert(this.controller.get('element' + item.id));
 
     this.controller.get('element' + item.id).show();
 };
