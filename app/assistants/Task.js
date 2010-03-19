@@ -68,7 +68,7 @@ TaskAssistant.prototype.getElementsOfCategory = function(category) {
 };
 
 TaskAssistant.prototype.moveElementIntoDividers = function(item) {
-    Mojo.Log.info("Task()::moveElementIntoDividers()");
+    Mojo.Log.info("Task()::moveElementIntoDividers(item.category: %s)", item.category);
 
     var compressible = this.controller.get('compressible' + item.category);
         compressible.insert(this.controller.get('element' + item.id));
@@ -77,7 +77,7 @@ TaskAssistant.prototype.moveElementIntoDividers = function(item) {
 };
 
 TaskAssistant.prototype.moveElementOutOfDividers = function(item) {
-    Mojo.Log.info("Task()::moveElementOutOfDividers()");
+    Mojo.Log.info("Task()::moveElementOutOfDividers(item.category: %s)", item.category);
 
     this.controller.get('element_holder' + item.id).insert(this.controller.get('element' + item.id));
 };
@@ -109,8 +109,6 @@ TaskAssistant.prototype.clickCollapsibleList = function(drawer, category, event)
         var showFavorites   = toggleButton.hasClassName('palm-arrow-closed');
         var folderContainer = targetRow.down('.collapsor');
         var maxHeight       = folderContainer.getHeight();
-
-        Mojo.Log.info("here1");
 
         if (showFavorites) {
             toggleButton.addClassName('palm-arrow-expanded');
