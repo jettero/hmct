@@ -49,14 +49,13 @@ TaskAssistant.prototype.startCompressor = function(category) {
     compress.addClassName('compressor');
     compress.compressorID = category;
 
-    compressible.hide();
-
     var me = this;
     this.controller.listen(compress, Mojo.Event.tap, function(e) {
         Mojo.Log.info("Task()::startCompressor() lambda:[tap event for: %s]", category);
         me.clickCollapsibleList(compressible, category, e); });
 
     this.moveElementIntoDividers(category);
+    compressible.hide();
 };
 
 TaskAssistant.prototype.activate = function() {
@@ -85,42 +84,41 @@ TaskAssistant.prototype.clickCollapsibleList = function(compressible, category, 
         targetRow = targetRow.up('.selection_target');
 
     if (targetRow) {
+        compressible.show(); // show immediately or getHeight() is mysteriously off by 76px ...
+
         var toggleButton    = targetRow.down("div.arrow_button");
         var showContents    = toggleButton.hasClassName('palm-arrow-closed');
-        var folderContainer = targetRow.down('.collapsor');
-        var maxHeight       = folderContainer.getHeight();
+        var maxHeight       = compressible.getHeight();
 
         var options = {
             curve:      'over-easy',
             from:       1,
             to:         maxHeight,
-            duration:   3.0
+            duration:   0.4
         };
 
         if (showContents) {
             toggleButton.addClassName('palm-arrow-expanded');
             toggleButton.removeClassName('palm-arrow-closed');
-
-            folderContainer.setStyle({ height: '1px' });
-            folderContainer.show();
+            compressible.setStyle({ height: '1px' });
 
             options.onComplete = function(e) {
-                folderContainer.setStyle({height: 'auto'});
+                compressible.setStyle({height: 'auto'});
             };
 
         } else {
             toggleButton.addClassName('palm-arrow-closed');
             toggleButton.removeClassName('palm-arrow-expanded');
 
-            folderContainer.setStyle({ height: maxHeight + 'px' });
+            compressible.setStyle({ height: maxHeight + 'px' });
 
             options.reverse    = true;
             options.onComplete = function(e) {
-                folderContainer.setStyle({height: 'auto'});
-                folderContainer.hide();
+                compressible.setStyle({height: 'auto'});
+                compressible.hide();
             };
         }
 
-        Mojo.Animation.animateStyle(folderContainer, 'height', 'bezier', options);
+        Mojo.Animation.animateStyle(compressible, 'height', 'bezier', options);
     }
 };
