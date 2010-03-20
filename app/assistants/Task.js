@@ -100,18 +100,25 @@ TaskAssistant.prototype.clickCollapsibleList = function(compressible, category, 
         if (showContents) {
             toggleButton.addClassName('palm-arrow-expanded');
             toggleButton.removeClassName('palm-arrow-closed');
+
             folderContainer.setStyle({ height: '1px' });
+            folderContainer.show();
+
             options.onComplete = function(e) {
                 folderContainer.setStyle({height: 'auto'});
-                folderContainer.hide();
             };
 
         } else {
             toggleButton.addClassName('palm-arrow-closed');
             toggleButton.removeClassName('palm-arrow-expanded');
+
             folderContainer.setStyle({ height: maxHeight + 'px' });
-            options.onComplete = function(e) { folderContainer.setStyle({height: 'auto'}); };
+
             options.reverse    = true;
+            options.onComplete = function(e) {
+                folderContainer.setStyle({height: 'auto'});
+                folderContainer.hide();
+            };
         }
 
         Mojo.Animation.animateStyle(folderContainer, 'height', 'bezier', options);
