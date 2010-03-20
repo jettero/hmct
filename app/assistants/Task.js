@@ -21,21 +21,60 @@ TaskAssistant.prototype.setup = function() {
         swipeToDelete:   false
     };
 
-    this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: [
+    // {"priority": 3, "record_locator": "YU68", "time_worked": "54m41s",
+    // "attachment_count": 0, "repeat_period": "once", "group": null,
+    // "summary": "address checker", "time_left": null, "id": 1009798,
+    // "repeat_every": 1, "owner": "Paul Miller <paul@xxxxxxxxxx>", "due":
+    // "2010-03-16", "time_estimate": null, "last_modified": "2010-03-19
+    // 17:28:23", "repeat_stacking": 0, "repeat_days_before_due": 1,
+    // "description": "On Mon, Mar 15, 2010 at 9:10 AM, David Stoll
+    // <dstoll@xxxxxxx> wrote:\n> finalize the address checker and get it
+    // posted to the...", "tags": "work", "starts": "2010-03-16", "created":
+    // "2010-03-15 10:29:00", "will_complete": 1, "accepted": 1, "type":
+    // "task", "requestor": "Paul Miller (work) <paul@xxxxx>",
+    // "completed_at": null, "repeat_next_create": null, "complete": 0,
+    // "next_action_by": "Paul Miller (work) <paul@xxxxxxx>"}
 
-        {id: 1, row_name: "test", category: "blarg", row_data: "test test test test"},
-        {id: 2, row_name: "test", category: "blarg", row_data: "test test test test"},
-        {id: 3, row_name: "test", category: "blarg", row_data: "test test test test"},
-        {id: 4, row_name: "test", category: "blarg", row_data: "test test test test"},
-             
-        {id: 5, row_name: "test", category: "gralb", row_data: "test test test test"},
-        {id: 6, row_name: "test", category: "gralb", row_data: "test test test test"},
-        {id: 7, row_name: "test", category: "gralb", row_data: "test test test test"},
-        {id: 8, row_name: "test", category: "gralb", row_data: "test test test test"}
+    var items = [];
+    var _set = function(cat, key, title) {
+        if( !title )
+            title = key.replace(/_/, " ");
 
-    ]};
+        var x = { id: key, row_name: title, category: cat, row_data: this.item[key] };
 
+        if( x.row_data )
+            items.push(x);
+
+    }.bind(this);
+
+    var set_ti = function(key, title) { _set("basic", key, title); };
+    var set_ei = function(key, title) { _set("extra", key, title); };
+
+    set_ti("summary");
+    set_ti("description");
+    set_ti("due");
+    set_ti("time_worked");
+    set_ti("time_left");
+
+    if( this.item.requestor !== this.item.owner )
+        set_ti("requestor");
+
+    set_ei("created");
+    set_ei("last_modified");
+    set_ti("time_estimate");
+
+    this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: items};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
+};
+
+TaskAssistant.prototype.activate = function() {
+    Mojo.Log.info("Task()::activate()");
+
+    this.startCompressor("basic");
+    this.startCompressor("extra");
+
+    // force a click on task info
+    this.clickCollapsibleList( this.controller.get('compressible' + "basic"), "basic" );
 };
 
 TaskAssistant.prototype.startCompressor = function(category) {
@@ -54,13 +93,6 @@ TaskAssistant.prototype.startCompressor = function(category) {
 
     this.moveElementIntoDividers(category);
     compressible.hide();
-};
-
-TaskAssistant.prototype.activate = function() {
-    Mojo.Log.info("Task()::activate()");
-
-    this.startCompressor("blarg");
-    this.startCompressor("gralb");
 };
 
 TaskAssistant.prototype.moveElementIntoDividers = function(category) {
