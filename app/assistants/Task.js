@@ -5,8 +5,6 @@
 
 function TaskAssistant(_i) {
     Mojo.Log.info("Task(%s)", (this.item = _i).record_locator);
-
-    this.clickCollapsibleList = this.clickCollapsibleList.bind(this);
 }
 
 TaskAssistant.prototype.setup = function() {
@@ -52,7 +50,7 @@ TaskAssistant.prototype.startCompressor = function(category) {
     var me = this;
     this.controller.listen(compress, Mojo.Event.tap, function(e) {
         Mojo.Log.info("Task()::startCompressor() lambda:[tap event for: %s]", category);
-        me.clickCollapsibleList(compressible, category, e); });
+        me.clickCollapsibleList(compressible, category); });
 
     this.moveElementIntoDividers(category);
     compressible.hide();
@@ -76,12 +74,10 @@ TaskAssistant.prototype.moveElementIntoDividers = function(category) {
     });
 };
 
-TaskAssistant.prototype.clickCollapsibleList = function(compressible, category, event) {
+TaskAssistant.prototype.clickCollapsibleList = function(compressible, category) {
     Mojo.Log.info("Task()::clickCollapsibleList()");
 
-    var targetRow = this.controller.get(event.target);
-    if (!targetRow.hasClassName("selection_target"))
-        targetRow = targetRow.up('.selection_target');
+    var targetRow = this.controller.get(category + "-sit");
 
     if (targetRow) {
         compressible.show(); // show immediately or getHeight() is mysteriously off by 76px ...
