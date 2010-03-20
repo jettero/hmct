@@ -1,5 +1,5 @@
 # get this from your browser
-export HM=export HM=JIFTY_SID_HIVEMINDER=42042042042042042042042042042042
+export HM=JIFTY_SID_HIVEMINDER=42042042042042042042042042042042
 
 # lists my lists and the tokens
 curl -F post=please -sb $HM http://hiveminder.com/=/action/SearchList.yml
