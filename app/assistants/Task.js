@@ -10,7 +10,7 @@ function TaskAssistant(_i) {
 TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task()::setup()");
 
-    $("id").update(this.item.record_locator);
+    this.controller.get("id").update(this.item.record_locator);
 
     this.tasksListAttrs = {
         dividerFunction: function(mi) { return mi.category; },
