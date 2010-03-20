@@ -1,3 +1,4 @@
+.collapsor { border: 1px solid green; background: cornflowerblue; }
 
 #wait {
     background: white url(img/loading.indicator.bee.gif) no-repeat;

@@ -6,9 +6,7 @@
 function TaskAssistant(_i) {
     Mojo.Log.info("Task(%s)", (this.item = _i).record_locator);
 
-    this.moveElementIntoDividers  = this.moveElementIntoDividers.bind(this);
-    this.moveElementOutOfDividers = this.moveElementOutOfDividers.bind(this);
-    this.clickCollapsibleList     = this.clickCollapsibleList.bind(this);
+    this.clickCollapsibleList = this.clickCollapsibleList.bind(this);
 }
 
 TaskAssistant.prototype.setup = function() {
@@ -45,118 +43,77 @@ TaskAssistant.prototype.setup = function() {
 TaskAssistant.prototype.startCompressor = function(category) {
     Mojo.Log.info("Task()::startCompressor(%s)", category);
 
-    var compressible = this.controller.get('compressible' + category).hide();
+    var compressible = this.controller.get('compressible' + category);
     var compress     = this.controller.get('compress'     + category);
-        compress.addClassName('compressor');
-        compress.compressorID = category;
+
+    compress.addClassName('compressor');
+    compress.compressorID = category;
+
+    compressible.hide();
 
     var me = this;
     this.controller.listen(compress, Mojo.Event.tap, function(e) {
         Mojo.Log.info("Task()::startCompressor() lambda:[tap event for: %s]", category);
         me.clickCollapsibleList(compressible, category, e); });
 
-    this.getElementsOfCategory(category).each(this.moveElementIntoDividers);
+    this.moveElementIntoDividers(category);
 };
 
 TaskAssistant.prototype.activate = function() {
     Mojo.Log.info("Task()::activate()");
 
     this.startCompressor("blarg");
+    this.startCompressor("gralb");
 };
 
-TaskAssistant.prototype.getElementsOfCategory = function(category) {
-    Mojo.Log.info("Task()::getElementsOfCategory(%s)", category);
+TaskAssistant.prototype.moveElementIntoDividers = function(category) {
+    Mojo.Log.info("Task()::moveElementIntoDividers(category: %s)", category);
 
-    return this.tasksListModel.items.findAll(function(i){ return i.category === category; });
+    var compressible = this.controller.get('compressible' + category);
+
+    var me = this;
+    this.tasksListModel.items.findAll(function(item){ return item.category === category; }).each(function(item){
+        compressible.insert( me.controller.get('element' + item.id) );
+    });
 };
 
-TaskAssistant.prototype.moveElementIntoDividers = function(item) {
-    Mojo.Log.info("Task()::moveElementIntoDividers(item.category: %s)", item.category);
-
-    var compressible = this.controller.get('compressible' + item.category);
-        compressible.insert(this.controller.get('element' + item.id));
-
-    this.controller.get('element' + item.id).show();
-};
-
-TaskAssistant.prototype.moveElementOutOfDividers = function(item) {
-    Mojo.Log.info("Task()::moveElementOutOfDividers(item.category: %s)", item.category);
-
-    this.controller.get('element_holder' + item.id).insert(this.controller.get('element' + item.id));
-};
-
-TaskAssistant.prototype.clickCollapsibleList = function(drawer, category, event) {
+TaskAssistant.prototype.clickCollapsibleList = function(compressible, category, event) {
     Mojo.Log.info("Task()::clickCollapsibleList()");
 
     var targetRow = this.controller.get(event.target);
-    if (!targetRow.hasClassName("selection_target")) {
-        Mojo.Log.info("Task()::clickCollapsibleList() !selection_target" );
+    if (!targetRow.hasClassName("selection_target"))
         targetRow = targetRow.up('.selection_target');
-    }        
 
     if (targetRow) {
-        var toggleButton   = targetRow.down("div.arrow_button");
-        var viewPortMidway = this.controller.window.innerHeight;
-        var noScroll       = false;
-
-        if (!toggleButton.hasClassName('palm-arrow-expanded') && !toggleButton.hasClassName('palm-arrow-closed'))
-            return;
-
-        var show = toggleButton.className;
-        Mojo.Log.info("Task()::clickCollapsibleList() open/close [className: %s]", show);
-
-        if (!targetRow.hasClassName("details"))
-            return;
-
-        var categoryItems   = this.tasksListModel.items.findAll(function(i){ return i.category === category; });
+        var toggleButton    = targetRow.down("div.arrow_button");
         var showContents    = toggleButton.hasClassName('palm-arrow-closed');
         var folderContainer = targetRow.down('.collapsor');
         var maxHeight       = folderContainer.getHeight();
 
-        if (showContents) {
-            toggleButton.addClassName('palm-arrow-expanded');
-            toggleButton.removeClassName('palm-arrow-closed');
-            folderContainer.setStyle({ height:'1px' });
-            folderContainer.show();
-
-            // See if the div should scroll up a little to show the contents
-            var elementTop = folderContainer.viewportOffset().top;
-            var scroller = Mojo.View.getScrollerForElement(folderContainer);
-            if (elementTop > viewPortMidway && scroller && !noScroll) {
-                //Using setTimeout to give the animation time enough to give the div enough height to scroll to
-                var scrollToPos = scroller.mojo.getScrollPosition().top - (elementTop - viewPortMidway);
-                setTimeout(function() {scroller.mojo.scrollTo(undefined, scrollToPos, true);}, 200);
-            }
-
-        } else {
-            folderContainer.setStyle({ height: maxHeight + 'px' });
-            toggleButton.addClassName('palm-arrow-closed');
-            toggleButton.removeClassName('palm-arrow-expanded');
-            categoryItems.each(this.moveElementIntoDividers);
-        }
-
-        var me = this;
         var options = {
-            reverse:    !showContents,
-            onComplete: function(e) { me.animationComplete(e, drawer, category, showContents, categoryItems, folderContainer); },
             curve:      'over-easy',
             from:       1,
             to:         maxHeight,
-            duration:   0.4
+            duration:   3.0
         };
+
+        if (showContents) {
+            toggleButton.addClassName('palm-arrow-expanded');
+            toggleButton.removeClassName('palm-arrow-closed');
+            folderContainer.setStyle({ height: '1px' });
+            options.onComplete = function(e) {
+                folderContainer.setStyle({height: 'auto'});
+                folderContainer.hide();
+            };
+
+        } else {
+            toggleButton.addClassName('palm-arrow-closed');
+            toggleButton.removeClassName('palm-arrow-expanded');
+            folderContainer.setStyle({ height: maxHeight + 'px' });
+            options.onComplete = function(e) { folderContainer.setStyle({height: 'auto'}); };
+            options.reverse    = true;
+        }
 
         Mojo.Animation.animateStyle(folderContainer, 'height', 'bezier', options);
     }
-};
-
-TaskAssistant.prototype.animationComplete = function(event, drawer, category, showContents, categoryItems, folderContainer) {
-    Mojo.Log.info("Task()::animationComplete(%s)", category);
-
-    if (!showContents)
-        folderContainer.hide();
-
-    else
-        categoryItems.each(this.moveElementOutOfDividers);
-
-    folderContainer.setStyle({height:'auto'});
 };
