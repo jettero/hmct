@@ -3,7 +3,7 @@
 /*global Mojo hex_md5 AMO AjaxDRY Template setTimeout
 */
 
-var cacheMaxAge = 4000;
+var cacheMaxAge = 4; //4000;
 
 /* {{{ */ function TaskManager() {
     Mojo.Log.info("TaskManager()");
@@ -24,6 +24,7 @@ var cacheMaxAge = 4000;
     this.dbSentFail = this.dbSentFail.bind(this);
     this.recvCache  = this.recvCache.bind(this);
 
+    this.newkCache  = this.newkCache.bind(this);  // called from itself et al
     this.checkCache = this.checkCache.bind(this); // called from setTimeout
     this.dbRestore  = this.dbRestore.bind(this);  // called from setTimeout
 
@@ -175,11 +176,9 @@ var cacheMaxAge = 4000;
     // idea of the cache db getting corrupted and losing track of huge keys in
     // the Depot...
 
-    var me = this;
-    this.dbo.removeAll(function(){ me.cacheInit(); me.dbBusy(false); },
-        this.dbSentFail); // is it crazy to go around again?  Personally I hope
-                          // this comes up infrequently.  in a worst case,
-                          // they'll just close the card anyway.
+    this.newkCache(); // is it crazy to maybe cause an infinite loop here?
+                      // Personally I hope this comes up infrequently.  in a
+                      // worst case, they'll just close the card anyway.
 };
 
 /*}}}*/
@@ -219,12 +218,9 @@ var cacheMaxAge = 4000;
     Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
 
     // weird... I hope this doesn't come up much.  I don't understand the implications of a db load fail
-    // should we clear the cache here? [see dbSentFail for full discussion]
+    // should we clear the cache here? [see dbSentFail for initial discussion]
 
-    var me = this;
-    this.dbo.removeAll(function(){ me.cacheInit(); me.dbBusy(false); },
-        this.dbRecvFail); // is it crazy to go around again? [see dbSentFail for full discussion]
-
+    this.newkCache();
 };
 
 /*}}}*/
@@ -281,46 +277,58 @@ var cacheMaxAge = 4000;
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.checkCache = function() {
-    Mojo.Log.info("TaskManager::checkCache()");
 
+/* {{{ */ TaskManager.prototype.newkCache = function() {
+    Mojo.Log.info("TaskManager::newkCache()");
+
+    var me = this;
+    this.dbBusy(true);
+    this.dbo.removeAll(function(){
+
+        me.cacheInit();
+        me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
+
+    }, this.newkCache); // maybe cause infinite loop? see dbSentFail for initial discussion...
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.checkCache = function() {
     if( this.dbBusy() ) {
         Mojo.Log.info("TaskManager::checkCache() [busy]");
         setTimeout(this.checkCache, 500);
         return;
     }
 
+    Mojo.Log.info("TaskManager::checkCache() [start]");
+
     this.dbBusy(true);
 
     var now = Math.round(new Date().getTime()/1000.0);
 
-    var did_stuff = false;
     var me = this;
+    var did_stuff = false;
     var problems = false;
     var done = 0;
 
     var end = function() {
-        Mojo.Log.info("TaskManager::checkCache() [end lambda]");
+        Mojo.Log.info("TaskManager::checkCache() [end lambda, did_stuff:%s, problems:%s]", did_stuff, problems);
 
         if( problems ) {
-            var  f = function() {
-                Mojo.Log.info("TaskManager::checkCache() [end lambda problems=true, clearing whole cache]");
-                me.dbo.removeAll(function(){ me.cacheInit(); me.dbBusy(false); }, f);
-            };
-            f();
+            me.newkCache();
             return;
         }
 
         if( did_stuff ) {
             Mojo.Log.info("TaskManager::checkCache() [did_stuff=true, saving tm_data]");
-            this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
+            me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
 
         } else {
             Mojo.Log.info("TaskManager::checkCache() [did_stuff=false, unlocking db]");
-            this.dbBusy(false);
+            me.dbBusy(false);
         }
-    }
+    };
 
+    var nothing_expired = true;
     for( var k in this.data.cache ) {
         if( (now - this.data.cache[k].entered) >= cacheMaxAge ) {
             Mojo.Log.info("TaskManager::chechCache() [%s expired]", k);
@@ -328,6 +336,7 @@ var cacheMaxAge = 4000;
             var err  = function() {
                 Mojo.Log.info("TaskManager::checkCache() [%s expired, but apparently couldn't be removed]", k);
                 problems = true;
+
                 done --;
                 if( done < 1 )
                     end();
@@ -337,6 +346,7 @@ var cacheMaxAge = 4000;
                 Mojo.Log.info("TaskManager::checkCache() [%s expired and removed]", k);
                 delete me.data.cache[k];
                 did_stuff = true;
+
                 done --;
                 if( done < 1 )
                     end();
@@ -344,8 +354,12 @@ var cacheMaxAge = 4000;
 
             done ++;
             this.dbo.remove(k, sent, err);
+            nothing_expired = false;
         }
     }
+
+    if( nothing_expired )
+        this.dbBusy(false);
 
 };
 
