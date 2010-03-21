@@ -1,16 +1,19 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo $ setTimeout
+/*global Mojo $ setTimeout Template palmGetResource
 */
 
 function TaskAssistant(_i) {
-    Mojo.Log.info("Task(%s)", (this.item = _i).record_locator);
+    Mojo.Log.info("Task(%s)", (this.task = _i).record_locator);
+
+    this.shortTemplate = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
+    this.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
 }
 
 TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task()::setup()");
 
-    this.controller.get("id").update(this.item.record_locator);
+    this.controller.get("id").update(this.task.record_locator);
 
     this.tasksListAttrs = {
         dividerFunction: function(mi) { return mi.category; },
@@ -21,47 +24,11 @@ TaskAssistant.prototype.setup = function() {
         swipeToDelete:   false
     };
 
-    // {"priority": 3, "record_locator": "YU68", "time_worked": "54m41s",
-    // "attachment_count": 0, "repeat_period": "once", "group": null,
-    // "summary": "address checker", "time_left": null, "id": 1009798,
-    // "repeat_every": 1, "owner": "Paul Miller <paul@xxxxxxxxxx>", "due":
-    // "2010-03-16", "time_estimate": null, "last_modified": "2010-03-19
-    // 17:28:23", "repeat_stacking": 0, "repeat_days_before_due": 1,
-    // "description": "On Mon, Mar 15, 2010 at 9:10 AM, David Stoll
-    // <dstoll@xxxxxxx> wrote:\n> finalize the address checker and get it
-    // posted to the...", "tags": "work", "starts": "2010-03-16", "created":
-    // "2010-03-15 10:29:00", "will_complete": 1, "accepted": 1, "type":
-    // "task", "requestor": "Paul Miller (work) <paul@xxxxx>",
-    // "completed_at": null, "repeat_next_create": null, "complete": 0,
-    // "next_action_by": "Paul Miller (work) <paul@xxxxxxx>"}
-
-    var items = [];
-    var _set = function(cat, key, title) {
-        if( !title )
-            title = key.replace(/_/, " ");
-
-        var x = { id: key, row_name: title, category: cat, row_data: this.item[key] };
-
-        if( x.row_data )
-            items.push(x);
-
-    }.bind(this);
-
-    var set_ti = function(key, title) { _set("basic", key, title); };
-    var set_ei = function(key, title) { _set("extra", key, title); };
-
-    set_ti("summary");
-    set_ti("description");
-    set_ti("due");
-    set_ti("time_worked");
-    set_ti("time_left");
-
-    if( this.item.requestor !== this.item.owner )
-        set_ti("requestor");
-
-    set_ei("created");
-    set_ei("last_modified");
-    set_ti("time_estimate");
+    var items = [
+        { id: "desc", category: "task",     row_html: "<div id='short'></div><div id='long'></div>" },
+        { id: "talk", category: "comments", row_html: "<div id='talk'></div>"  },
+        { id: "hist", category: "history",  row_html: "<div id='hist'></div>"  },
+    ];
 
     this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: items};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
@@ -70,11 +37,12 @@ TaskAssistant.prototype.setup = function() {
 TaskAssistant.prototype.activate = function() {
     Mojo.Log.info("Task()::activate()");
 
-    this.startCompressor("basic");
-    this.startCompressor("extra");
+    this.startCompressor("task");
+    this.startCompressor("comments");
+    this.startCompressor("history");
 
     // force a click on task info
-    this.clickCollapsibleList( this.controller.get('compressible' + "basic"), "basic" );
+    this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
 };
 
 TaskAssistant.prototype.startCompressor = function(category) {
