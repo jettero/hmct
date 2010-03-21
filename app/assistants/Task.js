@@ -35,6 +35,8 @@ TaskAssistant.prototype.setup = function() {
     // "completed_at": null, "repeat_next_create": null, "complete": 0,
     // "next_action_by": "Paul Miller (work) <paul@xxxxxxx>"}
 
+    Mojo.Log.info("testtest(%s,%s)", Mojo.appPath, palmGetResource(Mojo.appPath + "sources.json", true));
+
     var items = [];
     var _set = function(cat, key, title) {
         if( !title )
