@@ -14,10 +14,10 @@ TaskAssistant.prototype.setup = function() {
 
     this.tasksListAttrs = {
         dividerFunction: function(mi) { return mi.category; },
-        dividerTemplate: 'misc/li-task-div',
+        dividerTemplate: 'misc/li-generic-div',
         listTemplate:    'misc/naked-list-container',
         emptyTemplate:   'misc/empty-list',
-        itemTemplate:    'misc/li-task-row',
+        itemTemplate:    'misc/li-generic-row',
         swipeToDelete:   false
     };
 
