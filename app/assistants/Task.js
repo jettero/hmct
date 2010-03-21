@@ -6,9 +6,11 @@
 function TaskAssistant(_i) {
     Mojo.Log.info("Task(%s)", (this.task = _i).record_locator);
 
-    this.shortTemplate = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
-    this.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
+    this.handleTaskChange = this.handleTaskChange.bind(this);
 }
+
+TaskAssistant.prototype.shortTemplate = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
+TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
 
 TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task()::setup()");
@@ -32,17 +34,33 @@ TaskAssistant.prototype.setup = function() {
 
     this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: items};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
+    this.firstActivation = true;
+};
+
+TaskAssistant.prototype.handleTaskChange = function(task) {
+    Mojo.Log.info("Task()::handleTaskChange(%s)", Object.toJSON(task));
+
+    this.task = task;
+
+    this.controller.get("element-desc").down("div.row-html").update(
+        this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
+    );
 };
 
 TaskAssistant.prototype.activate = function() {
     Mojo.Log.info("Task()::activate()");
 
-    this.startCompressor("task");
-    this.startCompressor("comments");
-    this.startCompressor("history");
+    if( this.firstActivation ) {
+        this.startCompressor("task");
+        this.startCompressor("comments");
+        this.startCompressor("history");
 
-    // force a click on task info
-    this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
+        // force a click on task info
+        this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
+        this.firstActivation = false;
+    }
+
+    this.handleTaskChange(this.task);
 };
 
 TaskAssistant.prototype.startCompressor = function(category) {
@@ -70,7 +88,7 @@ TaskAssistant.prototype.moveElementIntoDividers = function(category) {
 
     var me = this;
     this.tasksListModel.items.findAll(function(item){ return item.category === category; }).each(function(item){
-        compressible.insert( me.controller.get('element' + item.id) );
+        compressible.insert( me.controller.get('element-' + item.id) );
     });
 };
 
