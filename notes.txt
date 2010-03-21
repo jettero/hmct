@@ -1,3 +1,6 @@
+NOTE: I believe that Palm has extended the prototype.js Templates such
+that: if the field name starts with a -, then the contents are not escaped.
+
 # get this from your browser
 export HM=JIFTY_SID_HIVEMINDER=42042042042042042042042042042042
 

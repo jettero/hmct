@@ -3,11 +3,12 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks()");
 
     this.SCa = Mojo.Controller.stageController.assistant;
-    this.menuSetup = this.SCa.menuSetup.bind(this);
+    this.menuSetup         = this.SCa.menuSetup.bind(this);
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.handleTasksChange = this.handleTasksChange.bind(this);
-    this.checkForLogins = this.checkForLogins.bind(this);
-    this.taskListTap    = this.taskListTap.bind(this);
+    this.checkForLogins    = this.checkForLogins.bind(this);
+    this.taskListTap       = this.taskListTap.bind(this);
+    this.taskTemplate      = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
 }
 
 /* {{{ /**/ TasksAssistant.prototype.setup = function() {
@@ -91,12 +92,16 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks::handleTasksChange(tasks=%s)", Object.toJSON(tasks));
 
     this.tasksListModel.items = tasks;
+    tasks.each(function(t) {
+
+        t.short = this.taskTemplate.evaluate(t);
+
+    }.bind(this));
 
     this.controller.modelChanged(this.tasksListModel);
 
     // XXX: this is just while we're working on the Task view
-    if( tasks.length > 0 )
-        this.SCa.showScene("Task", tasks[0]);
+    // if( tasks.length > 0 ) this.SCa.showScene("Task", tasks[0]);
 };
 
 /*}}}*/
