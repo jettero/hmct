@@ -295,27 +295,57 @@ var cacheMaxAge = 4000;
     var now = Math.round(new Date().getTime()/1000.0);
 
     var did_stuff = false;
+    var me = this;
+    var problems = false;
+    var done = 0;
 
-    for( var k in this.data.cache ) {
-        if( (now - this.data.cache[k].entered) >= cacheMaxAge ) {
-            Mojo.Log.info("%s expired", k);
+    var end = function() {
+        Mojo.Log.info("TaskManager::checkCache() [end lambda]");
 
-            var err  = function() { Mojo.Log.info("%s expired, but apparently couldn't be removed... :(", k); };
-            var sent = function() {
-                Mojo.Log.info("%s expired and removed", k);
-                delete this.data.cache[k];
-                did_stuff = true;
+        if( problems ) {
+            var  f = function() {
+                Mojo.Log.info("TaskManager::checkCache() [end lambda problems=true, clearing whole cache]");
+                me.dbo.removeAll(function(){ me.cacheInit(); me.dbBusy(false); }, f);
             };
+            f();
+            return;
+        }
 
-            this.dbo.remove(k, sent, err);
+        if( did_stuff ) {
+            Mojo.Log.info("TaskManager::checkCache() [did_stuff=true, saving tm_data]");
+            this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
+
+        } else {
+            Mojo.Log.info("TaskManager::checkCache() [did_stuff=false, unlocking db]");
+            this.dbBusy(false);
         }
     }
 
-    if( did_stuff )
-        this.dbo.add("tm_data", this.data, this.dbSent, this.dbSentFail);
+    for( var k in this.data.cache ) {
+        if( (now - this.data.cache[k].entered) >= cacheMaxAge ) {
+            Mojo.Log.info("TaskManager::chechCache() [%s expired]", k);
 
-    else
-        this.dbBusy(false);
+            var err  = function() {
+                Mojo.Log.info("TaskManager::checkCache() [%s expired, but apparently couldn't be removed]", k);
+                problems = true;
+                done --;
+                if( done < 1 )
+                    end();
+            };
+
+            var sent = function() {
+                Mojo.Log.info("TaskManager::checkCache() [%s expired and removed]", k);
+                delete me.data.cache[k];
+                did_stuff = true;
+                done --;
+                if( done < 1 )
+                    end();
+            };
+
+            done ++;
+            this.dbo.remove(k, sent, err);
+        }
+    }
 
 };
 
