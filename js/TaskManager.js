@@ -1,9 +1,7 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo hex_md5 AMO AjaxDRY Template setTimeout
+/*global Mojo hex_md5 AMO AjaxDRY Template setTimeout OPT
 */
-
-var cacheMaxAge = 4; //4000;
 
 /* {{{ */ function TaskManager() {
     Mojo.Log.info("TaskManager()");
@@ -117,7 +115,7 @@ var cacheMaxAge = 4; //4000;
 
         Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], fetching and checking timestamp (ds=%d)", search_key, ds);
 
-        if( ds < cacheMaxAge ) {
+        if( ds < OPT.cacheMaxAge ) {
             Mojo.Log.info("TaskManager::searchTasks() young enough, no fresh download needed (force=%s)", force ? "true" : "false");
 
             if( !force )
@@ -330,7 +328,7 @@ var cacheMaxAge = 4; //4000;
 
     var nothing_expired = true;
     for( var k in this.data.cache ) {
-        if( (now - this.data.cache[k].entered) >= cacheMaxAge ) {
+        if( (now - this.data.cache[k].entered) >= OPT.cacheMaxAge ) {
             Mojo.Log.info("TaskManager::chechCache() [%s expired]", k);
 
             var err  = function() {
