@@ -1,4 +1,4 @@
-var AMO, TMO, BBO;
+var AMO, TMO, BBO, OPT;
 
 function StageAssistant() {
 	Mojo.Log.info("StageAssistant()")
@@ -6,6 +6,7 @@ function StageAssistant() {
     AMO = new AccountManager();
     TMO = new TaskManager();
     BBO = new BusyBee();
+    OPT = Mojo.loadJSONFile(Mojo.appPath + "runtime_options.json");
 }
 
 StageAssistant.prototype.setup = function() {
