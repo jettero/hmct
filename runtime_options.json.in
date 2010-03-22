@@ -1,3 +1,4 @@
 {
-    "cacheMaxAge": %MAXAGE,4000%
+    cacheMaxAge: %MAXAGE,4000%,
+    _preTapTask: %PRETAP,false%
 }
