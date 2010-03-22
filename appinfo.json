@@ -1,9 +1,9 @@
 {
-	id:      "org.voltar.hiveminder",
-	version: "0.0.1",
-	vendor:  "voltar.org",
-	type:    "web",
-	main:    "index.html",
-	title:   "Hiveminder Cloud Tasks",
-	icon:    "icon.png"
+	"id":      "org.voltar.hiveminder",
+	"version": "0.0.1",
+	"vendor":  "voltar.org",
+	"type":    "web",
+	"main":    "index.html",
+	"title":   "Hiveminder Cloud Tasks",
+	"icon":    "icon.png"
 }
