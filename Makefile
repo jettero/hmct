@@ -16,11 +16,11 @@ myinstall: clean
 
 %.json: %.json.in
 	@echo build $@
-	@perl -pe 's/\%([\w\d]+),([\w\d]+)\%/$$ENV{ "HM_$$1" }||$$2/eg' $< > $@
+	@./JSON_preparser.pl $< > $@
 
 build: framework_config.json runtime_options.json
 	@echo checking for version mismatch between appinfo.json and app/views/About.html
-	@VV=`perl -ne 'print "$$1\n" if m/"version":\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html
+	@VV=`perl -ne 'print "$$1\n" if m/version:\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html
 	@-rm -vf *.ipk $(name) *.tar.gz ipkgtmp*
 	ln -sf ./ $(name) && \
         palm-package --exclude "*.tar.gz" --exclude .git --exclude cgi --exclude "*.ipk" \
