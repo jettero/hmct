@@ -124,7 +124,8 @@
     }
 
     // AjaxDRY(desc,url,method,params,success,failure);
-    new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
+
+    this._ajax_dry = new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
         'post', {format: "json", query: search.replace(/\s+/g, "/")},
 
         function(r) {
