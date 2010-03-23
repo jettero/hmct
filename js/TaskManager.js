@@ -12,7 +12,27 @@
         replace: false // opening existing if possible
     };
 
-    this.dbo = new Mojo.Depot(options, function(){}, function(t,r){
+    var test = function() {
+        Mojo.Log.info("TESTing");
+
+        var t_r_borked = function() { Mojo.Log.info("TESTrm borked");  };
+        var t_r_worked = function() { Mojo.Log.info("TESTrmed");  };
+
+        var t_g_borked = function() { Mojo.Log.info("TESTget borked");  };
+        var t_g_worked = function() { Mojo.Log.info("TESTgeted");
+            this.dbo.discard("test", t_r_worked, t_r_borked);
+        }.bind(this);
+
+        var t_a_borked = function() { Mojo.Log.info("TESTadd borked");  };
+        var t_a_worked = function() { Mojo.Log.info("TESTadded");
+            this.dbo.get("test", t_g_worked, t_g_borked);
+        }.bind(this);
+
+        this.dbo.add("test", 'testzor', t_a_worked, t_a_borked);
+
+    }.bind(this);
+
+    this.dbo = new Mojo.Depot(options, function(){test();}, function(t,r){
         Mojo.Controller.errorDialog("Can't open location database (#" + r.message + ").");
     });
 
