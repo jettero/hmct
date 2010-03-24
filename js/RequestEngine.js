@@ -1,6 +1,6 @@
-/*jslint white: false, onevar: false
+/*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Mojo Ajax Template
+/*global Mojo Ajax Template hex_md5 OPT BBO
 */
 
 function RequestEngine() {
@@ -8,7 +8,7 @@ function RequestEngine() {
     this.reqdb = {};
 }
 
-RequestEngine.prototype.doRequest = function(_r) {
+/* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
     if( !_r.success ) _r.success = function() { return true; };
@@ -18,11 +18,11 @@ RequestEngine.prototype.doRequest = function(_r) {
         Mojo.Log.info("RequestEngine::doRequest(%s) [", _r.desc);
     }
 
-    var e;
-
     if( _r.cacheable && !_r.force ) {
         if( !_r.cache_key )
-            _r.cache_key = desc;
+            _r.cache_key = _r.keyStrings
+                         ? hex_md5( _r.keyStrings.join("|") )
+                         : _r.desc;
 
         Mojo.Log.info("RequestEngine::doRequest(%s) [request is cachable using key: %s]", _r.desc, _r.cache_key);
 
@@ -72,20 +72,13 @@ RequestEngine.prototype.doRequest = function(_r) {
             Mojo.Log.info("RequestEngine::doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
         }
     }
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype._doRequest = function(_r) {
+    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request]", _r.desc);
 
     BBO.busy(_r.desc);
-
-    if( this.reqdb[_r.desc] ) {
-        Mojo.Log.info("RequestEngine::doRequest(%s) [canceling previous request]", _r.desc);
-
-        try {
-            this.reqdb[_r.desc].transport.abort();
-        }
-
-        catch(e) {
-            Mojo.Log.info("RequestEngine::doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
-        }
-    }
 
     this.reqdb[_r.desc] = new Ajax.Request(_r.url, {
         method: _r.method, parameters: _r.params, evalJSON: true,
@@ -94,15 +87,17 @@ RequestEngine.prototype.doRequest = function(_r) {
             BBO.done(_r.desc);
             delete this.reqdb[_r.desc];
 
+            var e;
+
             if( transport.status >= 200 && transport.status < 300 ) {
                 Mojo.Log.info("%s ajax success transport=%s", _r.desc, Object.toJSON(transport));
 
                 var r = transport.responseJSON;
 
                 if( r ) {
-                    success(r);
+                    _r.success(r);
 
-                } else if( failure() ) {
+                } else if( _r.failure() ) {
                     e = ["Unknown error issuing " + _r.desc + " request"];
 
                     Mojo.Controller.errorDialog(e.join("... "));
@@ -116,7 +111,7 @@ RequestEngine.prototype.doRequest = function(_r) {
             } else {
                 Mojo.Log.info("%s ajax mystery fail r=%s", _r.desc, Object.toJSON(transport));
 
-                if( failure() ) {
+                if( _r.failure() ) {
                     e = ["Unknown error issuing " + _r.desc + " request"];
 
                     Mojo.Controller.errorDialog(e.join("... "));
@@ -129,7 +124,7 @@ RequestEngine.prototype.doRequest = function(_r) {
             BBO.done(_r.desc);
             delete this.reqdb[_r.desc];
 
-            if( failure() ) {
+            if( _r.failure() ) {
                 var t = new Template("Ajax Error: #{status}");
                 var m = t.evaluate(transport);
                 var e = [m];
@@ -140,3 +135,5 @@ RequestEngine.prototype.doRequest = function(_r) {
 
     });
 };
+
+/*}}}*/

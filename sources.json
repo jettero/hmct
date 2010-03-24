@@ -1,6 +1,7 @@
 [
     { "source": "js/md5.js" },
     { "source": "js/AjaxDRY.js" },
+    { "source": "js/RequestEngine.js" },
     { "source": "js/BusyBee.js" },
 
     { "source": "js/AccountManager.js" },
