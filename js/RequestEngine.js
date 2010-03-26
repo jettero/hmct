@@ -203,8 +203,8 @@ function RequestEngine() {
         }
 
         if( did_stuff ) {
-            Mojo.Log.info("RequestEngine::dbCheckAge() [did_stuff=true, saving tm_data]");
-            me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
+            Mojo.Log.info("RequestEngine::dbCheckAge() [did_stuff=true, saving cache_list]");
+            me.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
 
         } else {
             Mojo.Log.info("RequestEngine::dbCheckAge() [did_stuff=false, unlocking db]");
