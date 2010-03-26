@@ -149,6 +149,34 @@ function RequestEngine() {
 
 /*}}}*/
 
+RequestEngine.prototype.dbSetCache = function(key,data) {
+    Mojo.Log.info("RequestEngine::dbSetCache(key=%s)", key);
+
+    var me = this;
+
+    if( this.dbBusy() ) {
+        Mojo.Log.info("RequestEngine::dbSetCache() [busy]");
+        setTimeout(function() { me.dbSetCache(key,data); }, 500);
+        return;
+    }
+
+    this.dbBusy(true);
+
+    Mojo.Log.info("RequestEngine::dbSetCache(key=%s) [adding]", key);
+
+    var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
+    var sent = function() {
+        var now = Math.round(new Date().getTime()/1000.0);
+
+        Mojo.Log.info("RequestEngine::dbSetCache(key=%s) [added, informing cache_list]", key);
+
+        me.data.cache[key] = { entered: now };
+        me.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
+    };
+
+    this.dbo.add(key, data, sent, fail); // try to add the key
+    this.dbCheckAge(); // won't actually run until db_busy = false
+};
 
 /* {{{ */ RequestEngine.prototype.dbBusy = function(arg) {
 
