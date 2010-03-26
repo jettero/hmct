@@ -5,7 +5,18 @@
 
 function RequestEngine() {
     Mojo.Log.info("RequestEngine()");
+
     this.reqdb = {};
+
+    var options = {
+        name:    "HMCTCache",
+        version: 1,
+        replace: false // false, instead open existing if possible
+    };
+
+    this.dbo = new Mojo.Depot(options, function(){}, function(t,r){
+        Mojo.Controller.errorDialog("Failed to open cache Depot (#" + r.message + ").");
+    });
 }
 
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
@@ -134,6 +145,184 @@ function RequestEngine() {
         }
 
     });
+};
+
+/*}}}*/
+
+
+/* {{{ */ RequestEngine.prototype.dbBusy = function(arg) {
+
+    if( arg != null ) // neither null nor undefined
+        this._dbBusy = arg;
+
+    Mojo.Log.info("RequestEngine::dbBusy(%s) [%s]", arg, this._dbBusy);
+
+    return this._dbBusy;
+};
+
+/*}}}*/
+
+/* {{{ */ RequestEngine.prototype.dbNewk = function() {
+    Mojo.Log.info("RequestEngine::dbNewk()");
+
+    var me = this;
+    this.dbBusy(true);
+    this.dbo.removeAll(function(){
+
+        me.dbInit();
+        me.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
+
+    }, this.dbNewk); // maybe cause infinite loop? see dbSentFail for initial discussion...
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.dbCheckAge = function() {
+    if( this.dbBusy() ) {
+        Mojo.Log.info("RequestEngine::dbCheckAge() [busy]");
+        setTimeout(this.dbCheckAge, 500);
+        return;
+    }
+
+    Mojo.Log.info("RequestEngine::dbCheckAge() [start]");
+
+    this.dbBusy(true);
+
+    var now = Math.round(new Date().getTime()/1000.0);
+
+    var me = this;
+    var did_stuff = false;
+    var problems = false;
+    var done = 0;
+
+    var end = function() {
+        Mojo.Log.info("RequestEngine::dbCheckAge() [end lambda, did_stuff:%s, problems:%s]", did_stuff, problems);
+
+        if( problems ) {
+            me.dbNewk();
+            return;
+        }
+
+        if( did_stuff ) {
+            Mojo.Log.info("RequestEngine::dbCheckAge() [did_stuff=true, saving tm_data]");
+            me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
+
+        } else {
+            Mojo.Log.info("RequestEngine::dbCheckAge() [did_stuff=false, unlocking db]");
+            me.dbBusy(false);
+        }
+    };
+
+    var nothing_expired = true;
+    for( var k in this.data.cache ) {
+        if( (now - this.data.cache[k].entered) >= OPT.cacheMaxAge ) {
+            Mojo.Log.info("RequestEngine::chechCache() [%s expired]", k);
+
+            var err  = function() {
+                Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired, but apparently couldn't be removed]", k);
+                problems = true;
+
+                done --;
+                if( done < 1 )
+                    end();
+            };
+
+            var sent = function() {
+                Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired and removed]", k);
+                delete me.data.cache[k];
+                did_stuff = true;
+
+                done --;
+                if( done < 1 )
+                    end();
+            };
+
+            done ++;
+            this.dbo.discard(k, sent, err);
+            nothing_expired = false;
+        }
+    }
+
+    if( nothing_expired )
+        this.dbBusy(false);
+
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.dbInit = function() {
+    Mojo.Log.info("RequestEngine::dbInit()");
+
+    this.data = { version: 1, cache: {} };
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.dbRestore = function() {
+    Mojo.Log.info("RequestEngine::dbRestore()");
+
+    if( this.dbBusy() ) {
+        setTimeout(this.dbRestore, 500);
+        return;
+    }
+
+    this.dbBusy(true);
+    this.dbo.get("cache_list", this.dbRecv, this.dbRecvFail);
+};
+
+/*}}}*/
+
+/* {{{ */ RequestEngine.prototype.dbSent = function() {
+    Mojo.Log.info("RequestEngine::dbSent()");
+
+    this.dbBusy(false);
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.dbSentFail = function(transaction, error) {
+    Mojo.Log.info("RequestEngine::dbSentFail()");
+    Mojo.Controller.errorDialog("ERROR storing cache information (#" + error.message + ").  Clearing cache if possible.");
+
+    // Is this an overreaction or downright prudent?  Personally, I hate the
+    // idea of the cache db getting corrupted and losing track of huge keys in
+    // the Depot...
+
+    this.dbNewk(); // is it crazy to maybe cause an infinite loop here?
+                   // Personally I hope this comes up infrequently.  in a
+                   // worst case, they'll just close the card anyway.
+};
+
+/*}}}*/
+
+/* {{{ */ RequestEngine.prototype.dbRecv = function(data) {
+    Mojo.Log.info("RequestEngine::dbRecv()");
+
+    if( data != null ) { // neither null nor undefined
+
+        switch( data.version ) {
+            default:
+                this.data = data;
+                break;
+        }
+
+        var now = Math.round(new Date().getTime()/1000.0);
+
+        for( var k in this.data.cache )
+            Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
+
+        this.dbCheckAge();
+
+    }
+
+    this.dbBusy(false);
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.dbRecvFail = function(transaction, error) {
+    Mojo.Log.info("RequestEngine::dbRecvFail()");
+    Mojo.Controller.errorDialog("ERROR restoring cache information (#" + error.message + ").");
+
+    // weird... I hope this doesn't come up much.  I don't understand the implications of a db load fail
+    // should we clear the cache here? [see dbSentFail for initial discussion]
+
+    this.dbNewk();
 };
 
 /*}}}*/
