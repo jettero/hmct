@@ -307,7 +307,8 @@ function RequestEngine() {
         for( var k in this.data.cache )
             Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
 
-        this.dbCheckAge();
+        // clear this now? wait until the first dbSetCache?
+        // this.dbCheckAge();
 
     }
 
