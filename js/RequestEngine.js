@@ -22,8 +22,9 @@ function RequestEngine() {
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
-    if( !_r.success ) _r.success = function() { return true; };
-    if( !_r.failure ) _r.failure = function() { return true; };
+    if( !_r.success ) _r.success = function()  { return true; };
+    if( !_r.failure ) _r.failure = function()  { return true; };
+    if( !_r.process ) _r.process = function(r) { return r;    };
 
     if( !_r.method || !_r.params || !_r.url || !_r.desc ) {
         Mojo.Log.info("RequestEngine::doRequest(%s) [", _r.desc);
@@ -53,7 +54,7 @@ function RequestEngine() {
                         Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
 
                         _r.force = true;
-                        this.doRequest(_r);
+                        this._doRequest(_r);
                     }
 
                 }.bind(this),
@@ -63,7 +64,7 @@ function RequestEngine() {
                     this.dbBusy(false);
 
                     _r.force = true;
-                    this.doRequest(_r);
+                    this._doRequest(_r);
 
                 }.bind(this)
             );
@@ -90,6 +91,7 @@ function RequestEngine() {
     Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request]", _r.desc);
 
     BBO.busy(_r.desc);
+    var me = this;
 
     this.reqdb[_r.desc] = new Ajax.Request(_r.url, {
         method: _r.method, parameters: _r.params, evalJSON: true,
@@ -103,9 +105,10 @@ function RequestEngine() {
             if( transport.status >= 200 && transport.status < 300 ) {
                 Mojo.Log.info("%s ajax success transport=%s", _r.desc, Object.toJSON(transport));
 
-                var r = transport.responseJSON;
+                var r = _r.process(transport.responseJSON);
 
                 if( r ) {
+                    me.dbSetCache(key,r);
                     _r.success(r);
 
                 } else if( _r.failure() ) {
@@ -149,7 +152,7 @@ function RequestEngine() {
 
 /*}}}*/
 
-RequestEngine.prototype.dbSetCache = function(key,data) {
+/* {{{ */ RequestEngine.prototype.dbSetCache = function(key,data) {
     Mojo.Log.info("RequestEngine::dbSetCache(key=%s)", key);
 
     var me = this;
@@ -177,6 +180,8 @@ RequestEngine.prototype.dbSetCache = function(key,data) {
     this.dbo.add(key, data, sent, fail); // try to add the key
     this.dbCheckAge(); // won't actually run until db_busy = false
 };
+
+/*}}}*/
 
 /* {{{ */ RequestEngine.prototype.dbBusy = function(arg) {
 
