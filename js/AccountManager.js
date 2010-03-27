@@ -113,11 +113,12 @@
 
     var me = this;
 
-    // AjaxDRY(desc,url,method,params,success,failure);
-    new AjaxDRY("AccountManager::login()", 'https://hiveminder.com/=/action/Login.json',
-        "post", { address: email, password: pass },
-
-        function(r) {
+    REQ.doRequest({
+        desc:    'AccountManager::login()',
+        url:     'https://hiveminder.com/=/action/Login.json',
+        method:  'post',
+        params:  { address: email, password: pass },
+        success: function(r) {
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
@@ -147,8 +148,7 @@
                 }
             }
         }
-
-    );
+    });
 
 };
 
@@ -190,9 +190,9 @@
     var url = "http://hiveminder.com/=/model/user/email/" + this.data.meta.currentLogin + ".json";
     var me = this;
 
-    // AjaxDRY(desc,url,method,params,success,failure);
-    new AjaxDRY("AccountManager::getAccountDetails()", url, "get", {}, function(r) {
-        Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
+    REQ.doRequest({ desc: 'AccountManager::getAccountDetails()', url: url method: 'get',
+        success: function(r) {
+            Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
 
         this.data.meta.acdet = r;
         this.dbChanged("account details updated");
