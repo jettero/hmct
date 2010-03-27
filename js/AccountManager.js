@@ -194,8 +194,9 @@
         success: function(r) {
             Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
 
-        this.data.meta.acdet = r;
-        this.dbChanged("account details updated");
+            me.data.meta.acdet = r;
+            me.dbChanged("account details updated");
+        }
     });
 };
 
