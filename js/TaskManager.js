@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo hex_md5 AMO AjaxDRY Template setTimeout OPT
+/*global Mojo hex_md5 AMO REQ Template setTimeout OPT
 */
 
 /* {{{ */ function TaskManager() {
