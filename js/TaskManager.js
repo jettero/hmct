@@ -12,8 +12,6 @@
 
     this.tasksChangeCallback = [];
     this.defaultSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
-
-    this.cardLoaded(false);
 }
 
 /*}}}*/
