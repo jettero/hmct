@@ -126,6 +126,9 @@
 
             Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
 
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
             if( f() ) {
                 var e = [];
 

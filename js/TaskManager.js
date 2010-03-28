@@ -80,27 +80,26 @@
         },
 
         success: function(r) {
-            if( r.success ) {
-                Mojo.Log.info("TaskManager::searchTasks() r.content.result=%s", r.content.result);
-
+            if( r.success )
                 return true;
 
-            } else {
-                Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
+            Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
 
-                var e = [];
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
 
-                if( r.error )
-                    e.push(r.error);
+            var e = [];
 
-                for(var k in r.field_errors )
-                    e.push(k + "-error: " + r.field_errors[k]);
+            if( r.error )
+                e.push(r.error);
 
-                if( !e.length )
-                    e.push("Something went wrong with the task search ...");
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
 
-                Mojo.Controller.errorDialog(e.join("... "));
-            }
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            Mojo.Controller.errorDialog(e.join("... "));
 
             return false;
         }
