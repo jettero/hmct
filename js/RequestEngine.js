@@ -17,10 +17,34 @@ function RequestEngine() {
     this.dbo = new Mojo.Depot(options, function(){}, function(t, r){
         Mojo.Controller.errorDialog("Failed to open cache Depot (#" + r.message + ").");
     });
+
+    this.engineLoaded(false);
 }
+
+/* {{{ */ RequestEngine.prototype.engineLoaded = function(arg) {
+
+    if( arg != null ) // neither null nor undefined
+        this._engineLoaded = arg;
+
+    Mojo.Log.info("RequestEngine::engineLoaded(%s) [%s]", arg, this._engineLoaded);
+
+    return this._engineLoaded;
+};
+
+/*}}}*/
 
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
+
+    if( !this.engineLoaded() ) {
+        setTimeout(function(){ this.doRequest(_r); }.bind(this), 500);
+        return;
+    }
+
+    if( this.dbBusy() ) {
+        setTimeout(function(){ this.doRequest(_r); }.bind(this), 500);
+        return;
+    }
 
     if( !_r.method || !_r.params || !_r.url || !_r.desc ) {
         Mojo.Log.info("RequestEngine::doRequest(%s) [missing params]", _r.desc);
