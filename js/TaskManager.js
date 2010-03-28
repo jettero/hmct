@@ -57,6 +57,7 @@
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
         params: {format: 'json', query: (this.lastSearch = search).replace(/\s+/g, "/")},
 
+        force: force,
         cacheable: true,
         keyStrings: [this.currentLogin, search],
 
