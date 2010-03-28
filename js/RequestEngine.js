@@ -102,7 +102,7 @@ function RequestEngine() {
 
         onSuccess: function(transport) {
             BBO.done(_r.desc);
-            delete this.reqdb[_r.desc];
+            delete me.reqdb[_r.desc];
 
             var e;
 
@@ -140,7 +140,7 @@ function RequestEngine() {
 
         onFailure: function(transport) {
             BBO.done(_r.desc);
-            delete this.reqdb[_r.desc];
+            delete me.reqdb[_r.desc];
 
             if( _r.failure() ) {
                 var t = new Template("Ajax Error: #{status}");
