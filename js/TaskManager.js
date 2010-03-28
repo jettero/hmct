@@ -52,10 +52,6 @@
 
     Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
-    var current_login  = this.currentLogin;
-    var search_key     = hex_md5(current_login + "@@" + search);
-    var me             = this;
-
     if( !this.cardLoaded() ) {
         setTimeout(function(){ me.searchTasks(search,force); }, 500);
         return;
@@ -68,21 +64,29 @@
 
     // TODO: use the caching!!
 
-    // AjaxDRY(desc,url,method,params,success,failure);
+    // XXX var current_login  = this.currentLogin;
+    // XXX var search_key     = hex_md5(current_login + "@@" + search);
+    // XXX var me             = this;
 
-    this._ajax_dry = new AjaxDRY("TaskManager::searchTasks()", 'http://hiveminder.com/=/action/DownloadTasks.json',
-        'post', {format: "json", query: search.replace(/\s+/g, "/")},
+    var me = this;
+    REQ.doRequest('TaskManager::searchTasks()', { method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
+        params: {format: 'json', query: (this.lastSearch = search).replace(/\s+/g, "/")},
 
-        function(r) {
+        process: function(r) { return me.fixutf8( r.content.result ).evalJSON(); }, // this is a new success result
+        finish:  function(r) {
+            // can be either a fresh request or a cache result
+            me.tasks = r;
+            me.processTasks();
+        },
 
+        success: function(r) {
             if( r.success ) {
-                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.content.result=%s", r.content.result);
+                Mojo.Log.info("TaskManager::searchTasks() r.content.result=%s", r.content.result);
 
-                me.setCache(search_key, (me.tasks = me.fixutf8( r.content.result ).evalJSON()) );
-                me.processTasks();
+                return true;
 
             } else {
-                Mojo.Log.info("TaskManager::searchTasks()::onSuccess() r.fail, r=%s", Object.toJSON(r));
+                Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
 
                 var e = [];
 
