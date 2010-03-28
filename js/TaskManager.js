@@ -52,16 +52,13 @@
 
     var me = this;
 
-    // TODO: use the caching!!
-
-    // XXX var current_login  = this.currentLogin;
-    // XXX var search_key     = hex_md5(current_login + "@@" + search);
-    // XXX var me             = this;
-
     REQ.doRequest({
           desc: 'TaskManager::searchTasks()',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
         params: {format: 'json', query: (this.lastSearch = search).replace(/\s+/g, "/")},
+
+        cacheable: true,
+        keyStrings: [this.currentLogin, search],
 
         process: function(r) { return me.fixutf8( r.content.result ).evalJSON(); }, // this is a new success result
         finish:  function(r) {
