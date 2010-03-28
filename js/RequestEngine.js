@@ -104,7 +104,9 @@ function RequestEngine() {
                         var now = Math.round(new Date().getTime()/1000.0);
                         var ds = now - entry.entered;
 
-                        if( ds >= OPT.cacheMaxAge ) {
+                        var cma = typeof(_r.cacheMaxAgeOverride) === 'number' ? _r.cacheMaxAgeOverride :  OPT.cacheMaxAge;
+
+                        if( ds >= cma ) {
                             Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
 
                             _r.force = true;
