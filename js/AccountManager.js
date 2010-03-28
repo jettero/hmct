@@ -119,7 +119,7 @@
         method:  'post',
         params:  { address: email, password: pass },
 
-        success: function(r) { return r.success ? true : false; }
+        success: function(r) { return r.success ? true : false; },
         finish:  function(r) {
             Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
@@ -129,7 +129,7 @@
             me.getAccountDetails();
 
             s(email, pass, r);
-        },
+        }
     });
 
 };
