@@ -18,7 +18,15 @@ function RequestEngine() {
         Mojo.Controller.errorDialog("Failed to open cache Depot (#" + r.message + ").");
     });
 
+    this.dbCheckAge = this.dbCheckAge.bind(this); // used in setTimeout without need for local bindings
+
+    this.dbSent     = this.dbSent.bind(this);
+    this.dbRecv     = this.dbRecv.bind(this);
+    this.dbSentFail = this.dbSentFail.bind(this);
+    this.dbRecvFail = this.dbRecvFail.bind(this);
+
     this.engineLoaded(false);
+    this.dbRestore();
 }
 
 /* {{{ */ RequestEngine.prototype.engineLoaded = function(arg) {
@@ -324,11 +332,6 @@ function RequestEngine() {
 /*}}}*/
 /* {{{ */ RequestEngine.prototype.dbRestore = function() {
     Mojo.Log.info("RequestEngine::dbRestore()");
-
-    if( this.dbBusy() ) {
-        setTimeout(this.dbRestore, 500);
-        return;
-    }
 
     this.dbBusy(true);
     this.dbo.get("cache_list", this.dbRecv, this.dbRecvFail);
