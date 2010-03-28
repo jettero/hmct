@@ -17,7 +17,6 @@
 }
 
 /*}}}*/
-
 /* {{{ */ TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
@@ -31,16 +30,6 @@
 /*}}}*/
 /* {{{ */ TaskManager.prototype.activate = function() {
     this.searchTasks();
-};
-
-/*}}}*/
-
-/* {{{ */ TaskManager.prototype.recvCache = function(data) {
-    Mojo.Log.info("TaskManager::recvCache()");
-
-    this.dbBusy(false);
-    this.tasks = data;
-    this.processTasks();
 };
 
 /*}}}*/
@@ -77,27 +66,7 @@
         return;
     }
 
-    Mojo.Log.info("TaskManager::searchTasks() checking cache [%s]", search_key);
-
-    this.lastSearch = search;
-
-    var entry = this.data.cache[search_key];
-    if( entry ) {
-        var now = Math.round(new Date().getTime()/1000.0);
-        var ds = now - entry.entered;
-
-        this.dbBusy(true);
-        this.dbo.get(search_key, this.recvCache, this.dbRecvFail);
-
-        Mojo.Log.info("TaskManager::searchTasks() cache hit [%s], fetching and checking timestamp (ds=%d)", search_key, ds);
-
-        if( ds < OPT.cacheMaxAge ) {
-            Mojo.Log.info("TaskManager::searchTasks() young enough, no fresh download needed (force=%s)", force ? "true" : "false");
-
-            if( !force )
-                return; // young enough that we don't do the request below
-        }
-    }
+    // TODO: use the caching!!
 
     // AjaxDRY(desc,url,method,params,success,failure);
 
@@ -128,229 +97,14 @@
 
                 Mojo.Controller.errorDialog(e.join("... "));
             }
+
+            return false;
         }
-
-    );
-
+    });
 };
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.dbSent = function() {
-    Mojo.Log.info("TaskManager::dbSent()");
-
-    this.dbBusy(false);
-};
-
-/*}}}*/
-/* {{{ */ TaskManager.prototype.dbSentFail = function(transaction, error) {
-    Mojo.Log.info("TaskManager::dbSentFail()");
-    Mojo.Controller.errorDialog("ERROR storing cache information (#" + error.message + ").  Clearing cache if possible.");
-
-    // Is this an overreaction or downright prudent?  Personally, I hate the
-    // idea of the cache db getting corrupted and losing track of huge keys in
-    // the Depot...
-
-    this.newkCache(); // is it crazy to maybe cause an infinite loop here?
-                      // Personally I hope this comes up infrequently.  in a
-                      // worst case, they'll just close the card anyway.
-};
-
-/*}}}*/
-
-/* {{{ */ TaskManager.prototype.dbRecv = function(data) {
-    Mojo.Log.info("TaskManager::dbRecv()");
-
-    this.cardLoaded(true);
-
-    if( data != null ) { // neither null nor undefined
-
-        switch( data.version ) {
-            default:
-                this.data = data;
-                break;
-        }
-
-        var now = Math.round(new Date().getTime()/1000.0);
-
-        for( var k in this.data.cache )
-            Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
-
-        this.dbBusy(false);
-        this.checkCache();
-
-    } else {
-
-        this.dbBusy(false);
-    }
-
-
-};
-
-/*}}}*/
-/* {{{ */ TaskManager.prototype.dbRecvFail = function(transaction, error) {
-    Mojo.Log.info("TaskManager::dbRecvFail()");
-    Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
-
-    // weird... I hope this doesn't come up much.  I don't understand the implications of a db load fail
-    // should we clear the cache here? [see dbSentFail for initial discussion]
-
-    this.newkCache();
-};
-
-/*}}}*/
-/* {{{ */ TaskManager.prototype.dbRestore = function() {
-    Mojo.Log.info("TaskManager::dbRestore()");
-
-    if( this.dbBusy() ) {
-        setTimeout(this.dbRestore, 500);
-        return;
-    }
-
-    this.dbBusy(true);
-    this.dbo.get("tm_data", this.dbRecv, this.dbRecvFail);
-};
-
-/*}}}*/
-
-/* {{{ */ TaskManager.prototype.cacheInit = function() {
-    Mojo.Log.info("TaskManager::cacheInit()");
-
-    this.data = { version: 1, cache: {} };
-};
-
-/*}}}*/
-/* {{{ */ TaskManager.prototype.setCache = function(key,data) {
-    Mojo.Log.info("TaskManager::setCache(key=%s)", key);
-
-    var me = this;
-
-    if( this.dbBusy() ) {
-        Mojo.Log.info("TaskManager::setCache() [busy]");
-        // NOTE: this forms a closure (ie, dynamic lexical binding) over the lambda
-        setTimeout(function() { me.setCache(key,data); }, 500);
-        return;
-    }
-
-    this.dbBusy(true);
-
-
-    Mojo.Log.info("TaskManager::setCache(key=%s) [adding]", key);
-
-    var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
-    var sent = function() {
-        var now = Math.round(new Date().getTime()/1000.0);
-
-        Mojo.Log.info("TaskManager::setCache(key=%s) [added, informing tm_data]", key);
-
-        me.data.cache[key] = { entered: now };
-        me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
-    };
-
-    this.dbo.add(key, data, sent, fail); // try to add the key
-    this.checkCache(); // won't actually run until db_busy = false
-};
-
-/*}}}*/
-
-/* {{{ */ TaskManager.prototype.newkCache = function() {
-    Mojo.Log.info("TaskManager::newkCache()");
-
-    var me = this;
-    this.dbBusy(true);
-    this.dbo.removeAll(function(){
-
-        me.cacheInit();
-        me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
-
-    }, this.newkCache); // maybe cause infinite loop? see dbSentFail for initial discussion...
-};
-
-/*}}}*/
-/* {{{ */ TaskManager.prototype.checkCache = function() {
-    if( this.dbBusy() ) {
-        Mojo.Log.info("TaskManager::checkCache() [busy]");
-        setTimeout(this.checkCache, 500);
-        return;
-    }
-
-    Mojo.Log.info("TaskManager::checkCache() [start]");
-
-    this.dbBusy(true);
-
-    var now = Math.round(new Date().getTime()/1000.0);
-
-    var me = this;
-    var did_stuff = false;
-    var problems = false;
-    var done = 0;
-
-    var end = function() {
-        Mojo.Log.info("TaskManager::checkCache() [end lambda, did_stuff:%s, problems:%s]", did_stuff, problems);
-
-        if( problems ) {
-            me.newkCache();
-            return;
-        }
-
-        if( did_stuff ) {
-            Mojo.Log.info("TaskManager::checkCache() [did_stuff=true, saving tm_data]");
-            me.dbo.add("tm_data", me.data, me.dbSent, me.dbSentFail);
-
-        } else {
-            Mojo.Log.info("TaskManager::checkCache() [did_stuff=false, unlocking db]");
-            me.dbBusy(false);
-        }
-    };
-
-    var nothing_expired = true;
-    for( var k in this.data.cache ) {
-        if( (now - this.data.cache[k].entered) >= OPT.cacheMaxAge ) {
-            Mojo.Log.info("TaskManager::chechCache() [%s expired]", k);
-
-            var err  = function() {
-                Mojo.Log.info("TaskManager::checkCache() [%s expired, but apparently couldn't be removed]", k);
-                problems = true;
-
-                done --;
-                if( done < 1 )
-                    end();
-            };
-
-            var sent = function() {
-                Mojo.Log.info("TaskManager::checkCache() [%s expired and removed]", k);
-                delete me.data.cache[k];
-                did_stuff = true;
-
-                done --;
-                if( done < 1 )
-                    end();
-            };
-
-            done ++;
-            this.dbo.discard(k, sent, err);
-            nothing_expired = false;
-        }
-    }
-
-    if( nothing_expired )
-        this.dbBusy(false);
-
-};
-
-/*}}}*/
-
-/* {{{ */ TaskManager.prototype.dbBusy = function(arg) {
-
-    if( arg != null ) // neither null nor undefined
-        this._dbBusy = arg;
-
-    Mojo.Log.info("TaskManager::dbBusy(%s) [%s]", arg, this._dbBusy);
-
-    return this._dbBusy;
-};
-
-/*}}}*/
 /* {{{ */ TaskManager.prototype.cardLoaded = function(arg) {
 
     if( arg != null ) // neither null nor undefined
