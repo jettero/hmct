@@ -74,7 +74,7 @@ function RequestEngine() {
                         ? hex_md5( _r.keyStrings.join("|") )
                         : _r.desc;
 
-        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cachable using key: %s]", _r.desc, _r.cacheKey);
+        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s]", _r.desc, _r.cacheKey);
 
         var entry = this.data.cache[_r.cacheKey];
         if( entry ) {
@@ -151,7 +151,7 @@ function RequestEngine() {
                     if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
                         r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
 
-                        if( _r.cacheable ) // next, if it's cachable,
+                        if( _r.cacheable ) // next, if it's cacheable,
                             me.dbSetCache(_r.cacheKey, r); // do so
 
                         _r.finish(r); // lastly, pass the final result to finish
