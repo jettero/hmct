@@ -118,7 +118,7 @@
         url:     'https://hiveminder.com/=/action/Login.json',
         method:  'post',
         params:  { address: email, password: pass },
-        success: function(r) {
+        finish: function(r) {
             if( r.success ) {
                 Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
@@ -191,7 +191,7 @@
     var me = this;
 
     REQ.doRequest({ desc: 'AccountManager::getAccountDetails()', url: url, method: 'get',
-        success: function(r) {
+        finish: function(r) {
             Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
 
             me.data.meta.acdet = r;

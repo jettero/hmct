@@ -47,7 +47,7 @@ function RequestEngine() {
             this.dbBusy(true);
             this.dbo.get(_r.cache_key, function(data) {
                     this.dbBusy(false);
-                    this.success(data);
+                    this.finish(data);
 
                     var now = Math.round(new Date().getTime()/1000.0);
                     var ds = now - entry.entered;
@@ -112,12 +112,14 @@ function RequestEngine() {
                 var r = transport.responseJSON;
 
                 if( r ) {
-                    r = _r.process(r);
+                    if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
+                        r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
 
-                    if( _r.cacheable )
-                        me.dbSetCache(_r.cache_key, r);
+                        if( _r.cacheable ) // next, if it's cachable,
+                            me.dbSetCache(_r.cache_key, r); // do so
 
-                    _r.success(r);
+                        _r.finish(r); // lastly, pass the final result to finish
+                    }
 
                 } else if( _r.failure() ) {
                     e = ["Unknown error issuing " + _r.desc + " request"];
