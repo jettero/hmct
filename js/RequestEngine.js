@@ -63,7 +63,7 @@ function RequestEngine() {
     var forbidden = ['param'];
 
     for(var i=0; i<forbidden.length; i++) {
-        if( !_r[forbidden[i]] ) {
+        if( _r[forbidden[i]] ) {
             Mojo.Log.info("RequestEngine::doRequest(%s) [forbidden _r.[%s] param]", _r.desc, forbidden[i]);
             interr = true;
         }
