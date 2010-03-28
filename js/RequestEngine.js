@@ -50,65 +50,84 @@ function RequestEngine() {
         return;
     }
 
-    var required = ['method', 'params', 'url', 'desc'];
-    var missing = false;
+    var required = ['method', 'url', 'desc'];
+    var interr = false;
 
     for(var i=0; i<required.length; i++) {
         if( !_r[required[i]] ) {
             Mojo.Log.info("RequestEngine::doRequest(%s) [missing _r.[%s] param]", _r.desc, required[i]);
-            missing = true;
+            interr = true;
         }
     }
 
-    if( missing ) {
+    var forbidden = ['param'];
+
+    for(var i=0; i<forbidden.length; i++) {
+        if( !_r[forbidden[i]] ) {
+            Mojo.Log.info("RequestEngine::doRequest(%s) [forbidden _r.[%s] param]", _r.desc, forbidden[i]);
+            interr = true;
+        }
+    }
+
+    if( interr ) {
         Mojo.Controller.errorDialog("internal error reqeust not sent");
         return;
     }
 
+    if( !_r.params  ) _r.params  = {};
     if( !_r.success ) _r.success = function()  { return true; };
-    if( !_r.failure ) _r.failure = function()  { return true; };
     if( !_r.process ) _r.process = function(r) { return r;    };
+    if( !_r.failure ) _r.failure = function()  { return true; };
+    if( !_r.finish  ) _r.finish  = function(r) { return;      };
 
-    if( _r.cacheable && !_r.force ) {
+    if( _r.cacheable ) {
+
         if( !_r.cacheKey )
             _r.cacheKey = _r.keyStrings
                         ? hex_md5( _r.keyStrings.join("|") )
                         : _r.desc;
 
-        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s]", _r.desc, _r.cacheKey);
+        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s; forced: %s]",
+            _r.desc, _r.cacheKey, _r.force ? "yes" : "no");
 
-        var entry = this.data.cache[_r.cacheKey];
-        if( entry ) {
-            Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching", _r.desc, _r.cacheKey);
+        if( !_r.force ) {
+            var entry = this.data.cache[_r.cacheKey];
+            if( entry ) {
+                Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching", _r.desc, _r.cacheKey);
 
-            this.dbBusy(true);
-            this.dbo.get(_r.cacheKey, function(data) {
-                    this.dbBusy(false);
-                    this.finish(data);
+                this.dbBusy(true);
+                this.dbo.get(_r.cacheKey, function(data) {
+                        this.dbBusy(false);
 
-                    var now = Math.round(new Date().getTime()/1000.0);
-                    var ds = now - entry.entered;
+                        _r.finish(data);
 
-                    if( ds >= OPT.cacheMaxAge ) {
-                        Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
+                        var now = Math.round(new Date().getTime()/1000.0);
+                        var ds = now - entry.entered;
+
+                        if( ds >= OPT.cacheMaxAge ) {
+                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
+
+                            _r.force = true;
+                            this._doRequest(_r);
+                        }
+
+                    }.bind(this),
+
+                    function() {
+                        Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry load failure, forcing request]", _r.desc);
+                        this.dbBusy(false);
 
                         _r.force = true;
                         this._doRequest(_r);
-                    }
 
-                }.bind(this),
+                    }.bind(this)
+                );
 
-                function() {
-                    Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry load failure, forcing request]", _r.desc);
-                    this.dbBusy(false);
+                return;
+            }
 
-                    _r.force = true;
-                    this._doRequest(_r);
+        } else {
 
-                }.bind(this)
-            );
-
-            return;
         }
     }
 
@@ -201,6 +220,11 @@ function RequestEngine() {
 
 /* {{{ */ RequestEngine.prototype.dbSetCache = function(key, data) {
     Mojo.Log.info("RequestEngine::dbSetCache(key=%s)", key);
+
+    if( !key || !data ) {
+        Mojo.Log.info("RequestEngine::dbSetCache(key=%s, data=%s) [refusing to caching bs]", key, data);
+        return;
+    }
 
     var me = this;
 
