@@ -1,30 +1,10 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo hex_md5 AMO REQ Template setTimeout OPT
+/*global Mojo AMO REQ Template OPT setTimeout
 */
 
 /* {{{ */ function TaskManager() {
     Mojo.Log.info("TaskManager()");
-
-    var options = {
-        name:    "HMCTTasks",
-        version: 1,
-        replace: false // opening existing if possible
-    };
-
-    this.dbo = new Mojo.Depot(options, function(){test();}, function(t,r){
-        Mojo.Controller.errorDialog("Can't open location database (#" + r.message + ").");
-    });
-
-    this.dbRecv     = this.dbRecv.bind(this);
-    this.dbRecvFail = this.dbRecvFail.bind(this);
-    this.dbSent     = this.dbSent.bind(this);
-    this.dbSentFail = this.dbSentFail.bind(this);
-    this.recvCache  = this.recvCache.bind(this);
-
-    this.newkCache  = this.newkCache.bind(this);  // called from itself et al
-    this.checkCache = this.checkCache.bind(this); // called from setTimeout
-    this.dbRestore  = this.dbRestore.bind(this);  // called from setTimeout
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
 
@@ -34,10 +14,6 @@
     this.defaultSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
 
     this.cardLoaded(false);
-    this.dbBusy(false);
-
-    this.cacheInit();
-    this.dbRestore();
 }
 
 /*}}}*/
