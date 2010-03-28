@@ -99,12 +99,13 @@ function RequestEngine() {
                 this.dbo.get(_r.cacheKey, function(data) {
                         this.dbBusy(false);
 
-                        _r.finish(data);
-
                         var now = Math.round(new Date().getTime()/1000.0);
-                        var ds = now - entry.entered;
-
+                        var ds  = now - entry.entered;
                         var cma = typeof(_r.cacheMaxAgeOverride) === 'number' ? _r.cacheMaxAgeOverride :  OPT.cacheMaxAge;
+
+                        data._req_cacheAge = ds;
+
+                        _r.finish(data);
 
                         if( ds >= cma ) {
                             Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
@@ -175,6 +176,8 @@ function RequestEngine() {
 
                         if( _r.cacheable ) // next, if it's cacheable,
                             me.dbSetCache(_r.cacheKey, r); // do so
+
+                        r._req_cacheAge = 0;
 
                         _r.finish(r); // lastly, pass the final result to finish
                     }
