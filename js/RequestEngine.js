@@ -112,7 +112,11 @@ function RequestEngine() {
                 var r = transport.responseJSON;
 
                 if( r ) {
-                    me.dbSetCache(key, r = _r.process(r));
+                    r = _r.process(r);
+
+                    if( _r.cacheable )
+                        me.dbSetCache(_r.cache_key, r);
+
                     _r.success(r);
 
                 } else if( _r.failure() ) {
