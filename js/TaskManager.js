@@ -58,7 +58,9 @@
     // XXX var search_key     = hex_md5(current_login + "@@" + search);
     // XXX var me             = this;
 
-    REQ.doRequest('TaskManager::searchTasks()', { method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
+    REQ.doRequest({
+          desc: 'TaskManager::searchTasks()',
+        method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
         params: {format: 'json', query: (this.lastSearch = search).replace(/\s+/g, "/")},
 
         process: function(r) { return me.fixutf8( r.content.result ).evalJSON(); }, // this is a new success result
