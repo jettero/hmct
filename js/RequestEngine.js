@@ -74,11 +74,11 @@ function RequestEngine() {
         return;
     }
 
-    if( !_r.params  ) _r.params  = {};
-    if( !_r.success ) _r.success = function()  { return true; };
-    if( !_r.process ) _r.process = function(r) { return r;    };
-    if( !_r.failure ) _r.failure = function()  { return true; };
-    if( !_r.finish  ) _r.finish  = function(r) { return;      };
+    if( typeof(_r.params)  !== 'object'   ) _r.params  = {};
+    if( typeof(_r.success) !== 'function' ) _r.success = function()  { return true; };
+    if( typeof(_r.process) !== 'function' ) _r.process = function(r) { return r;    };
+    if( typeof(_r.failure) !== 'function' ) _r.failure = function()  { return true; };
+    if( typeof(_r.finish)  !== 'function' ) _r.finish  = function(r) { return;      };
 
     if( _r.cacheable ) {
 
