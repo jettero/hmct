@@ -119,7 +119,31 @@
         method:  'post',
         params:  { address: email, password: pass },
 
-        success: function(r) { return r.success ? true : false; },
+        success: function(r) {
+
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
+
+            if( f() ) {
+                var e = [];
+
+                if( r.error )
+                    e.push(r.error);
+
+                for(var k in r.field_errors )
+                    e.push(k + "-error: " + r.field_errors[k]);
+
+                if( !e.length )
+                    e.push("Something went wrong with the login ...");
+
+                Mojo.Controller.errorDialog(e.join("... "));
+            }
+
+            return false;
+        },
+
         finish:  function(r) {
             Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
