@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo $ setTimeout Template palmGetResource
+/*global Mojo $ Template palmGetResource
 */
 
 function TaskAssistant(_i) {
