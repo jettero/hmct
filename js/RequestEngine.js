@@ -44,11 +44,6 @@ function RequestEngine() {
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
-    if( !this.engineLoaded() ) {
-        setTimeout(function(){ this.doRequest(_r); }.bind(this), 500);
-        return;
-    }
-
     if( this.dbBusy() ) {
         setTimeout(function(){ this.doRequest(_r); }.bind(this), 500);
         return;
@@ -232,7 +227,7 @@ function RequestEngine() {
 
     Mojo.Log.info("RequestEngine::dbBusy(%s) [%s]", arg, this._dbBusy);
 
-    return this._dbBusy;
+    return !this.engineLoaded(); // if the engine isn't loaded, then dbBusy() is true!
 };
 
 /*}}}*/
@@ -383,6 +378,7 @@ function RequestEngine() {
     }
 
     this.dbBusy(false);
+    this.engineLoaded(true);
 };
 
 /*}}}*/
