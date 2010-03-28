@@ -69,19 +69,19 @@ function RequestEngine() {
     if( !_r.process ) _r.process = function(r) { return r;    };
 
     if( _r.cacheable && !_r.force ) {
-        if( !_r.cache_key )
-            _r.cache_key = _r.keyStrings
-                         ? hex_md5( _r.keyStrings.join("|") )
-                         : _r.desc;
+        if( !_r.cacheKey )
+            _r.cacheKey = _r.keyStrings
+                        ? hex_md5( _r.keyStrings.join("|") )
+                        : _r.desc;
 
-        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cachable using key: %s]", _r.desc, _r.cache_key);
+        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cachable using key: %s]", _r.desc, _r.cacheKey);
 
-        var entry = this.data.cache[_r.cache_key];
+        var entry = this.data.cache[_r.cacheKey];
         if( entry ) {
-            Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching", _r.desc, _r.cache_key);
+            Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching", _r.desc, _r.cacheKey);
 
             this.dbBusy(true);
-            this.dbo.get(_r.cache_key, function(data) {
+            this.dbo.get(_r.cacheKey, function(data) {
                     this.dbBusy(false);
                     this.finish(data);
 
@@ -152,7 +152,7 @@ function RequestEngine() {
                         r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
 
                         if( _r.cacheable ) // next, if it's cachable,
-                            me.dbSetCache(_r.cache_key, r); // do so
+                            me.dbSetCache(_r.cacheKey, r); // do so
 
                         _r.finish(r); // lastly, pass the final result to finish
                     }
