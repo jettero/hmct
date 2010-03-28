@@ -119,6 +119,24 @@ function RequestEngine() {
                             me.dbSetCache(_r.cache_key, r); // do so
 
                         _r.finish(r); // lastly, pass the final result to finish
+
+                    } else {
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) r.fail, r=%s", _r.desc, Object.toJSON(r));
+
+                        if( f() ) {
+                            var e = [];
+
+                            if( r.error )
+                                e.push(r.error);
+
+                            for(var k in r.field_errors )
+                                e.push(k + "-error: " + r.field_errors[k]);
+
+                            if( !e.length )
+                                e.push("Something went wrong with the login ...");
+
+                            Mojo.Controller.errorDialog(e.join("... "));
+                        }
                     }
 
                 } else if( _r.failure() ) {

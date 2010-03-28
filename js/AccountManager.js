@@ -118,36 +118,18 @@
         url:     'https://hiveminder.com/=/action/Login.json',
         method:  'post',
         params:  { address: email, password: pass },
-        finish: function(r) {
-            if( r.success ) {
-                Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
-                me.data.meta.currentLogin = email;
-                me.dbChanged("new current login");
-                me.notifyAcctsChange();
-                me.getAccountDetails();
+        success: function(r) { return r.success ? true : false; }
+        finish:  function(r) {
+            Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
 
-                s(email, pass, r);
+            me.data.meta.currentLogin = email;
+            me.dbChanged("new current login");
+            me.notifyAcctsChange();
+            me.getAccountDetails();
 
-            } else {
-                Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
-
-                if( f() ) {
-                    var e = [];
-
-                    if( r.error )
-                        e.push(r.error);
-
-                    for(var k in r.field_errors )
-                        e.push(k + "-error: " + r.field_errors[k]);
-
-                    if( !e.length )
-                        e.push("Something went wrong with the login ...");
-
-                    Mojo.Controller.errorDialog(e.join("... "));
-                }
-            }
-        }
+            s(email, pass, r);
+        },
     });
 
 };
