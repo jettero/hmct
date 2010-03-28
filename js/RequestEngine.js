@@ -26,6 +26,7 @@ function RequestEngine() {
     this.dbRecvFail = this.dbRecvFail.bind(this);
 
     this.engineLoaded(false);
+    this.dbInit();
     this.dbRestore();
 }
 
