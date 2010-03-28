@@ -54,16 +54,6 @@
 
     var me = this;
 
-    if( !this.cardLoaded() ) {
-        setTimeout(function(){ me.searchTasks(search,force); }, 500);
-        return;
-    }
-
-    if( this.dbBusy() ) {
-        setTimeout(function(){ me.searchTasks(search,force); }, 500);
-        return;
-    }
-
     // TODO: use the caching!!
 
     // XXX var current_login  = this.currentLogin;
@@ -105,18 +95,6 @@
             return false;
         }
     });
-};
-
-/*}}}*/
-
-/* {{{ */ TaskManager.prototype.cardLoaded = function(arg) {
-
-    if( arg != null ) // neither null nor undefined
-        this._cardLoaded = arg;
-
-    Mojo.Log.info("TaskManager::cardLoaded(%s) [%s]", arg, this._cardLoaded);
-
-    return this._cardLoaded;
 };
 
 /*}}}*/
