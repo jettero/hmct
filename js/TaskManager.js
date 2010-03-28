@@ -15,6 +15,7 @@
 }
 
 /*}}}*/
+
 /* {{{ */ TaskManager.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
