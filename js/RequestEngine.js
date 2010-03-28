@@ -107,7 +107,7 @@ function RequestEngine() {
             var e;
 
             if( transport.status >= 200 && transport.status < 300 ) {
-                Mojo.Log.info("%s ajax success transport=%s", _r.desc, Object.toJSON(transport));
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success transport=%s", _r.desc, Object.toJSON(transport));
 
                 var r = _r.process(transport.responseJSON);
 
@@ -122,12 +122,12 @@ function RequestEngine() {
                 }
 
             } else if( !transport.status ) {
-                Mojo.Log.info("%s ajax abort? transport=%s", _r.desc, Object.toJSON(transport));
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort? transport=%s", _r.desc, Object.toJSON(transport));
 
                 // this seems to be what happens on an abort
 
             } else {
-                Mojo.Log.info("%s ajax mystery fail r=%s", _r.desc, Object.toJSON(transport));
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail r=%s", _r.desc, Object.toJSON(transport));
 
                 if( _r.failure() ) {
                     e = ["Unknown error issuing " + _r.desc + " request"];
