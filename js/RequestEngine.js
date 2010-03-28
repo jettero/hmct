@@ -49,9 +49,18 @@ function RequestEngine() {
         return;
     }
 
-    if( !_r.method || !_r.params || !_r.url || !_r.desc ) {
-        Mojo.Log.info("RequestEngine::doRequest(%s) [missing params]", _r.desc);
-        Mojo.Controller.errorDialog("internal error sending reqeust");
+    var required = ['method', 'params', 'url', 'desc'];
+    var missing = false;
+
+    for(var i=0; i<required.length; i++) {
+        if( !_r[required[i]] ) {
+            Mojo.Log.info("RequestEngine::doRequest(%s) [missing _r.[%s] param]", _r.desc, required[i]);
+            missing = true;
+        }
+    }
+
+    if( missing ) {
+        Mojo.Controller.errorDialog("internal error reqeust not sent");
         return;
     }
 
