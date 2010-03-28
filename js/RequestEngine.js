@@ -109,10 +109,10 @@ function RequestEngine() {
             if( transport.status >= 200 && transport.status < 300 ) {
                 Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success transport=%s", _r.desc, Object.toJSON(transport));
 
-                var r = _r.process(transport.responseJSON);
+                var r = transport.responseJSON;
 
                 if( r ) {
-                    me.dbSetCache(key,r);
+                    me.dbSetCache(key, r = _r.process(r));
                     _r.success(r);
 
                 } else if( _r.failure() ) {
