@@ -14,7 +14,7 @@ function RequestEngine() {
         replace: false // false, instead open existing if possible
     };
 
-    this.dbo = new Mojo.Depot(options, function(){}, function(t,r){
+    this.dbo = new Mojo.Depot(options, function(){}, function(t, r){
         Mojo.Controller.errorDialog("Failed to open cache Depot (#" + r.message + ").");
     });
 }
@@ -156,14 +156,14 @@ function RequestEngine() {
 
 /*}}}*/
 
-/* {{{ */ RequestEngine.prototype.dbSetCache = function(key,data) {
+/* {{{ */ RequestEngine.prototype.dbSetCache = function(key, data) {
     Mojo.Log.info("RequestEngine::dbSetCache(key=%s)", key);
 
     var me = this;
 
     if( this.dbBusy() ) {
         Mojo.Log.info("RequestEngine::dbSetCache() [busy]");
-        setTimeout(function() { me.dbSetCache(key,data); }, 500);
+        setTimeout(function() { me.dbSetCache(key, data); }, 500);
         return;
     }
 
