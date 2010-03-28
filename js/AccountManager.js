@@ -190,7 +190,7 @@
     var url = "http://hiveminder.com/=/model/user/email/" + this.data.meta.currentLogin + ".json";
     var me = this;
 
-    REQ.doRequest({ desc: 'AccountManager::getAccountDetails()', url: url method: 'get',
+    REQ.doRequest({ desc: 'AccountManager::getAccountDetails()', url: url, method: 'get',
         success: function(r) {
             Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
 
