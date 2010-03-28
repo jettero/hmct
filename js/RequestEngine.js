@@ -22,13 +22,15 @@ function RequestEngine() {
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
+    if( !_r.method || !_r.params || !_r.url || !_r.desc ) {
+        Mojo.Log.info("RequestEngine::doRequest(%s) [missing params]", _r.desc);
+        Mojo.Controller.errorDialog("internal error sending reqeust");
+        return;
+    }
+
     if( !_r.success ) _r.success = function()  { return true; };
     if( !_r.failure ) _r.failure = function()  { return true; };
     if( !_r.process ) _r.process = function(r) { return r;    };
-
-    if( !_r.method || !_r.params || !_r.url || !_r.desc ) {
-        Mojo.Log.info("RequestEngine::doRequest(%s) [", _r.desc);
-    }
 
     if( _r.cacheable && !_r.force ) {
         if( !_r.cache_key )
@@ -73,22 +75,24 @@ function RequestEngine() {
         }
     }
 
+    this._doRequest(_r);
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype._doRequest = function(_r) {
+    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request]", _r.desc);
+
     if( this.reqdb[_r.desc] ) {
-        Mojo.Log.info("RequestEngine::doRequest(%s) [canceling apparently running request]", _r.desc);
+        Mojo.Log.info("RequestEngine::_doRequest(%s) [canceling apparently running request]", _r.desc);
 
         try {
             this.reqdb[_r.desc].transport.abort();
         }
 
         catch(e) {
-            Mojo.Log.info("RequestEngine::doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
+            Mojo.Log.info("RequestEngine::_doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
         }
     }
-};
-
-/*}}}*/
-/* {{{ */ RequestEngine.prototype._doRequest = function(_r) {
-    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request]", _r.desc);
 
     BBO.busy(_r.desc);
     var me = this;
