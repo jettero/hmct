@@ -170,10 +170,8 @@
 
     var tcc = this.taskChangeCallback[rl];
 
-    // TODO if( !task.comments )
-        // TODO go learn comments here, when learned, we loop back through this automatically
-        // NOTE taps should probably trigger this too... the task is passed to the TaskAssistant
-        // should *it* request the comments?  should that be the TMO job?
+    if( !task.comments )
+        this.getComments(task);
 
     if( tcc )
         for( var i=0; i<tcc.length; i++ )
@@ -181,7 +179,6 @@
 };
 
 /*}}}*/
-
 /* {{{ */ TaskManager.prototype.notifyTaskChangeStep = function(callback, task) {
     Mojo.Log.info("TaskManager::notifyTaskChangeStep(record_locator=%s)", task.rl);
 
@@ -189,6 +186,9 @@
 };
 
 /*}}}*/
+
+TaskManager.prototype.getComments = function(task) {
+};
 
 /* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) { // stolen from: http://www.webtoolkit.info/javascript-utf8.html
     var str = "";
