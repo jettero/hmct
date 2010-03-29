@@ -187,8 +187,56 @@
 
 /*}}}*/
 
-TaskManager.prototype.getComments = function(task) {
+/* {{{ */ TaskManager.prototype.getComments = function(task) { var rl;
+    Mojo.Log.info("TaskManager::getComments(record_locator=%s)", rl = task.record_locator);
+
+    var me;
+
+    REQ.doRequest({
+          desc: 'TaskManager::getComments(record_locator=%s' + rl + ')',
+        method: 'post', url: 'http://hiveminder.com/=/action/SearchTaskEmail.json',
+        params: {task_id: task.id},
+
+        cacheable: true,
+        keyStrings: [this.currentLogin, 'getComments', rl],
+        cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
+
+        process: function(r) { return r.content; }, // this is a new success result
+        finish:  function(r) {
+            // can be either a fresh request or a cache result
+            task.comments = r;
+            me.processTask(task);
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::getComments(%s) r.fail, r=%s", rl, Object.toJSON(r));
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            Mojo.Controller.errorDialog(e.join("... "));
+
+            return false;
+        }
+    });
+
 };
+
+/*}}}*/
 
 /* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) { // stolen from: http://www.webtoolkit.info/javascript-utf8.html
     var str = "";
