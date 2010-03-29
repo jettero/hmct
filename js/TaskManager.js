@@ -140,6 +140,25 @@
 
 /*}}}*/
 
+/* {{{ */ TaskManager.prototype.registerTaskChange = function(callback, taskID) {
+    Mojo.Log.info("TaskManager::registerTaskChange(taskID=%s)", taskID);
+
+    if( !this.taskChangeCallback[taskID] )
+        this.taskChangeCallback[taskID] = [];
+
+    this.taskChangeCallback[taskID].push(callback);
+    this.notifyTaskChangeStep(callback, taskID);
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.unregisterTaskChange = function(callback, taskID) {
+    Mojo.Log.info("AccountManager::unregisterTaskChange(taskID=%s)", taskID);
+
+    this.tasksChangeCallback[taskID] = this.taskChangeCallback[taskID].reject(function(_c){ return _c === callback; });
+};
+
+/*}}}*/
+
 /* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) { // stolen from: http://www.webtoolkit.info/javascript-utf8.html
     var str = "";
     var i = 0;
