@@ -107,7 +107,7 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.unregisterTasksChange = function(callback) {
-    Mojo.Log.info("AccountManager::unregisterTasksChange()");
+    Mojo.Log.info("TaskManager::unregisterTasksChange()");
 
     this.tasksChangeCallback = this.tasksChangeCallback.reject(function(_c){ return _c === callback; });
 };
@@ -132,30 +132,60 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.notifyTasksChange = function() {
-    Mojo.Log.info("AccountManager::notifyTasksChange()");
+    Mojo.Log.info("TaskManager::notifyTasksChange()");
 
-    for( var i=0; i<this.tasksChangeCallback.length; i++ )
+    var i;
+
+    for( i=0; i<this.tasksChangeCallback.length; i++ )
         this.notifyTasksChangeStep(this.tasksChangeCallback[i]);
+
+    for( i=0; i<this.tasks.length; i++ )
+        this.notifyTaskChange(this.tasks[i]);
 };
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.registerTaskChange = function(callback, taskID) {
-    Mojo.Log.info("TaskManager::registerTaskChange(taskID=%s)", taskID);
+/* {{{ */ TaskManager.prototype.registerTaskChange = function(callback, rl) {
+    Mojo.Log.info("TaskManager::registerTaskChange(record_locator=%s)", rl);
 
-    if(!this.taskChangeCallback[taskID] )
-        this.taskChangeCallback[taskID] = [];
+    if( !this.taskChangeCallback[rl] )
+        this.taskChangeCallback[rl] = [];
 
-    this.taskChangeCallback[taskID].push(callback);
-    this.notifyTaskChangeStep(callback, taskID);
+    this.taskChangeCallback[rl].push(callback);
+    this.notifyTaskChangeStep(callback, rl);
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.unregisterTaskChange = function(callback, taskID) {
-    Mojo.Log.info("AccountManager::unregisterTaskChange(taskID=%s)", taskID);
+/* {{{ */ TaskManager.prototype.unregisterTaskChange = function(callback, rl) {
+    Mojo.Log.info("TaskManager::unregisterTaskChange(record_locator=%s)", rl);
 
-    this.taskChangeCallback[taskID] =
-        this.taskChangeCallback[taskID].reject(function(_c){ return _c === callback; });
+    this.taskChangeCallback[rl] =
+        this.taskChangeCallback[rl].reject(function(_c){ return _c === callback; });
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.notifyTaskChange = function(task) { var rl; 
+    Mojo.Log.info("TaskManager::notifyTaskChange(record_locator=%s)", rl = task.record_locator);
+
+    var tcc = this.taskChangeCallback[rl];
+
+    // TODO if( !task.comments )
+        // TODO go learn comments here, when learned, we loop back through this automatically
+        // NOTE taps should probably trigger this too... the task is passed to the TaskAssistant
+        // should *it* request the comments?  should that be the TMO job?
+
+    if( tcc )
+        for( j=0; j<tcc.length; j++ )
+            this.notifyTaskChangeStep(tcc[j], rl);
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.notifyTaskChangeStep = function(callback, task) {
+    Mojo.Log.info("TaskManager::notifyTaskChangeStep(record_locator=%s)", task.rl);
+
+    // TODO do things
 };
 
 /*}}}*/
