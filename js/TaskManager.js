@@ -176,8 +176,8 @@
         // should *it* request the comments?  should that be the TMO job?
 
     if( tcc )
-        for( j=0; j<tcc.length; j++ )
-            this.notifyTaskChangeStep(tcc[j], rl);
+        for( var i=0; i<tcc.length; i++ )
+            this.notifyTaskChangeStep(tcc[i], rl);
 };
 
 /*}}}*/
