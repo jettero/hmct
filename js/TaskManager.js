@@ -166,7 +166,6 @@
 };
 
 /*}}}*/
-
 /* {{{ */ TaskManager.prototype.notifyTaskChange = function(task) { var rl; 
     Mojo.Log.info("TaskManager::notifyTaskChange(record_locator=%s)", rl = task.record_locator);
 
