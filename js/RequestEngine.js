@@ -93,7 +93,7 @@ function RequestEngine() {
         if( !_r.force ) {
             var entry = this.data.cache[_r.cacheKey];
             if( entry ) {
-                Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching", _r.desc, _r.cacheKey);
+                Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching]", _r.desc, _r.cacheKey);
 
                 this.dbBusy(true);
                 this.dbo.get(_r.cacheKey, function(data) {
