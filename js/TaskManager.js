@@ -181,9 +181,9 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.notifyTaskChangeStep = function(callback, task) {
-    Mojo.Log.info("TaskManager::notifyTaskChangeStep(record_locator=%s)", task.rl);
+    Mojo.Log.info("TaskManager::notifyTaskChangeStep(record_locator=%s)", task.record_locator);
 
-    // TODO do things
+    callback(task);
 };
 
 /*}}}*/
