@@ -33,13 +33,6 @@
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.processTasks = function() {
-    Mojo.Log.info("TaskManager::processTasks()");
-
-    this.notifyTasksChange();
-};
-
-/*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
         if( !this.lastSearch ) {
@@ -67,7 +60,7 @@
         finish:  function(r) {
             // can be either a fresh request or a cache result
             me.tasks = r;
-            me.processTasks();
+            me.notifyTasksChange();
         },
 
         success: function(r) {
@@ -115,7 +108,7 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.notifyTasksChangeStep = function(callback) {
-    Mojo.Log.info("TaskManager::notifyTasksChangeStep() this.tasks=%s", Object.toJSON(this.tasks));
+    Mojo.Log.info("TaskManager::notifyTasksChangeStep()");
 
     var tasks = [];
 
@@ -170,18 +163,20 @@
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.notifyTaskChange = function(task) { var rl; 
-    Mojo.Log.info("TaskManager::notifyTaskChange(record_locator=%s)", rl = task.record_locator);
-
+/* {{{ */ TaskManager.prototype.notifyTaskChange = function(task) {
+    var rl  = task.record_locator; 
     var tcc = this.taskChangeCallback[rl];
 
     var interestedParties = 0;
 
-    if( tcc )
+    if( tcc ) {
+        Mojo.Log.info("TaskManager::notifyTaskChange(record_locator=%s)", rl);
+
         for( var i=0; i<tcc.length; i++ ) {
             this.notifyTaskChangeStep(tcc[i], task);
             interestedParties ++;
         }
+    }
 
     if( interestedParties && !task.comments )
         this.getComments(task);
@@ -214,7 +209,7 @@
         finish:  function(r) {
             // can be either a fresh request or a cache result
             task.comments = r;
-            me.processTask(task);
+            me.notifyTaskChange(task);
         },
 
         success: function(r) {

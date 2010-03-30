@@ -89,7 +89,7 @@ function TasksAssistant() {
 
 /*}}}*/
 /* {{{ /**/ TasksAssistant.prototype.handleTasksChange = function(tasks) {
-    Mojo.Log.info("Tasks::handleTasksChange(tasks=%s)", Object.toJSON(tasks));
+    Mojo.Log.info("Tasks::handleTasksChange()");
 
     this.tasksListModel.items = tasks;
     tasks.each(function(t) {
