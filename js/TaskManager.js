@@ -155,6 +155,9 @@
 
     this.taskChangeCallback[rl].push(callback);
 
+    if( !task.comments )
+        this.getComments(task);
+
     this.notifyTaskChangeStep(callback, task);
 };
 
@@ -182,7 +185,6 @@
 
     if( interestedParties && !task.comments )
         this.getComments(task);
-
 };
 
 /*}}}*/
