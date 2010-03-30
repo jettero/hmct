@@ -38,9 +38,10 @@ TaskAssistant.prototype.setup = function() {
 };
 
 TaskAssistant.prototype.handleTaskChange = function(task) {
-    Mojo.Log.info("Task()::handleTaskChange(%s)", Object.toJSON(task));
+    Mojo.Log.info("Task()::handleTaskChange(%s)", task.record_locator);
 
-    this.task = task;
+    this.task = task; // This is probably always the same exact task over and over?
+                     // The assignment shouldn't cost much.
 
     this.controller.get("element-desc").down("div.row-html").update(
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
