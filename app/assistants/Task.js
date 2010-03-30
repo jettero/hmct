@@ -60,7 +60,13 @@ TaskAssistant.prototype.activate = function() {
         this.firstActivation = false;
     }
 
-    this.handleTaskChange(this.task);
+    TMO.registerTaskChange(this.handleTaskChange, this.task);
+};
+
+TaskAssistant.prototype.deactivate = function() {
+    Mojo.Log.info("Task()::deactivate()");
+
+    TMO.unregisterTaskChange(this.handleTaskChange, this.task);
 };
 
 TaskAssistant.prototype.startCompressor = function(category) {
