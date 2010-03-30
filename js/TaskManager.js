@@ -193,7 +193,7 @@
     var me;
 
     REQ.doRequest({
-          desc: 'TaskManager::getComments(record_locator=%s' + rl + ')',
+          desc: 'TaskManager::getComments(record_locator=' + rl + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/SearchTaskEmail.json',
         params: {task_id: task.id},
 
