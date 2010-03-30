@@ -145,19 +145,20 @@
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.registerTaskChange = function(callback, rl) {
-    Mojo.Log.info("TaskManager::registerTaskChange(record_locator=%s)", rl);
+/* {{{ */ TaskManager.prototype.registerTaskChange = function(callback, task) { var rl;
+    Mojo.Log.info("TaskManager::registerTaskChange(record_locator=%s)", rl = task.record_locator);
 
     if( !this.taskChangeCallback[rl] )
         this.taskChangeCallback[rl] = [];
 
     this.taskChangeCallback[rl].push(callback);
+
     this.notifyTaskChangeStep(callback, rl);
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.unregisterTaskChange = function(callback, rl) {
-    Mojo.Log.info("TaskManager::unregisterTaskChange(record_locator=%s)", rl);
+/* {{{ */ TaskManager.prototype.unregisterTaskChange = function(callback, task) { var rl;
+    Mojo.Log.info("TaskManager::unregisterTaskChange(record_locator=%s)", rl = task.record_locator);
 
     this.taskChangeCallback[rl] =
         this.taskChangeCallback[rl].reject(function(_c){ return _c === callback; });
