@@ -176,7 +176,7 @@
 
     if( tcc )
         for( var i=0; i<tcc.length; i++ )
-            this.notifyTaskChangeStep(tcc[i], rl);
+            this.notifyTaskChangeStep(tcc[i], task);
 };
 
 /*}}}*/
