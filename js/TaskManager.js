@@ -11,6 +11,7 @@
     AMO.registerLoginChange(this.handleLoginChange);
 
     this.tasksChangeCallback = [];
+    this.taskChangeCallback = {};
     this.defaultSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
 }
 
@@ -154,7 +155,7 @@
 
     this.taskChangeCallback[rl].push(callback);
 
-    this.notifyTaskChangeStep(callback, rl);
+    this.notifyTaskChangeStep(callback, task);
 };
 
 /*}}}*/
