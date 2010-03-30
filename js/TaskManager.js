@@ -194,7 +194,7 @@
 /* {{{ */ TaskManager.prototype.getComments = function(task) { var rl;
     Mojo.Log.info("TaskManager::getComments(record_locator=%s)", rl = task.record_locator);
 
-    var me;
+    var me = this;
 
     REQ.doRequest({
           desc: 'TaskManager::getComments(record_locator=' + rl + ')',
