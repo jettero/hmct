@@ -125,7 +125,8 @@
 
     if( this.tasks )
         for(var i=0; i<this.tasks.length; i++)
-            tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
+            tasks.push( this.tasks[i] );
+         // tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
     callback(tasks);
 };
