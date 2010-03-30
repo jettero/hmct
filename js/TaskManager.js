@@ -172,12 +172,17 @@
 
     var tcc = this.taskChangeCallback[rl];
 
-    if( !task.comments )
-        this.getComments(task);
+    var interestedParties = 0;
 
     if( tcc )
-        for( var i=0; i<tcc.length; i++ )
+        for( var i=0; i<tcc.length; i++ ) {
             this.notifyTaskChangeStep(tcc[i], task);
+            interestedParties ++;
+        }
+
+    if( interestedParties && !task.comments )
+        this.getComments(task);
+
 };
 
 /*}}}*/
