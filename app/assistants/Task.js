@@ -13,7 +13,7 @@ TaskAssistant.prototype.shortTemplate = new Template(palmGetResource(Mojo.appPat
 TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
 
 TaskAssistant.prototype.setup = function() {
-    Mojo.Log.info("Task()::setup()");
+    Mojo.Log.info("Task::setup()");
 
     this.controller.get("id").update(this.task.record_locator);
 
@@ -38,7 +38,7 @@ TaskAssistant.prototype.setup = function() {
 };
 
 TaskAssistant.prototype.handleTaskChange = function(task) {
-    Mojo.Log.info("Task()::handleTaskChange(%s)", task.record_locator);
+    Mojo.Log.info("Task::handleTaskChange(%s)", task.record_locator);
 
     this.task = task; // This is probably always the same exact task over and over?
                      // The assignment shouldn't cost much.
@@ -49,7 +49,7 @@ TaskAssistant.prototype.handleTaskChange = function(task) {
 };
 
 TaskAssistant.prototype.activate = function() {
-    Mojo.Log.info("Task()::activate()");
+    Mojo.Log.info("Task::activate()");
 
     if( this.firstActivation ) {
         this.startCompressor("task");
@@ -65,13 +65,13 @@ TaskAssistant.prototype.activate = function() {
 };
 
 TaskAssistant.prototype.deactivate = function() {
-    Mojo.Log.info("Task()::deactivate()");
+    Mojo.Log.info("Task::deactivate()");
 
     TMO.unregisterTaskChange(this.handleTaskChange, this.task);
 };
 
 TaskAssistant.prototype.startCompressor = function(category) {
-    Mojo.Log.info("Task()::startCompressor(%s)", category);
+    Mojo.Log.info("Task::startCompressor(%s)", category);
 
     var compressible = this.controller.get('compressible' + category);
     var compress     = this.controller.get('compress'     + category);
@@ -81,7 +81,7 @@ TaskAssistant.prototype.startCompressor = function(category) {
 
     var me = this;
     this.controller.listen(compress, Mojo.Event.tap, function(e) {
-        Mojo.Log.info("Task()::startCompressor() lambda:[tap event for: %s]", category);
+        Mojo.Log.info("Task::startCompressor() lambda:[tap event for: %s]", category);
         me.clickCollapsibleList(compressible, category); });
 
     this.moveElementIntoDividers(category);
@@ -89,7 +89,7 @@ TaskAssistant.prototype.startCompressor = function(category) {
 };
 
 TaskAssistant.prototype.moveElementIntoDividers = function(category) {
-    Mojo.Log.info("Task()::moveElementIntoDividers(category: %s)", category);
+    Mojo.Log.info("Task::moveElementIntoDividers(category: %s)", category);
 
     var compressible = this.controller.get('compressible' + category);
 
@@ -100,7 +100,7 @@ TaskAssistant.prototype.moveElementIntoDividers = function(category) {
 };
 
 TaskAssistant.prototype.clickCollapsibleList = function(compressible, category) {
-    Mojo.Log.info("Task()::clickCollapsibleList()");
+    Mojo.Log.info("Task::clickCollapsibleList()");
 
     var targetRow = this.controller.get(category + "-sit");
 
