@@ -8,8 +8,8 @@ export HM=JIFTY_SID_HIVEMINDER=42042042042042042042042042042042
 curl -F post=please -sb $HM http://hiveminder.com/=/action/SearchList.yml
 
 # the tokens field of the lists
-export Q=`echo accepted but first nothing not complete hidden until before tomorrow tag voltar.org | sed -e 's, ,/,g'`
 export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow
+export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow/tag/plate/sort_by/priority
 
 # download tasks given my query
 curl -F query=$Q -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml

@@ -12,7 +12,6 @@
 
     this.tasksChangeCallback = [];
     this.taskChangeCallback = {};
-    this.defaultSearch = "accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever";
 }
 
 /*}}}*/
@@ -36,7 +35,7 @@
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
         if( !this.lastSearch ) {
-            search = this.defaultSearch;
+            search = OPT.defaultSearch;
 
         } else {
             search = this.lastSearch;
