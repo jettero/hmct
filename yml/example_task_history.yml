@@ -1,0 +1,381 @@
+---
+action_class: BTDT::Action::SearchTaskHistory
+content:
+  search:
+    - field: tags
+      id: 4908187
+      new_value: '"Prē" "hiveminder" "mojo" "palmsdk" "vhb"'
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3232510
+    - field: repeat_of
+      id: 4908188
+      new_value: 849559
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3232510
+    - field: last_repeat
+      id: 4908189
+      new_value: 849559
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3232510
+    - field: time_worked
+      id: 4908211
+      new_value: 1h 1500 seconds
+      old_value: 1h
+      task_id: 849559
+      transaction_id: 3232522
+    - field: time_worked
+      id: 4908324
+      new_value: 1h25m 1094 seconds
+      old_value: 1h25m
+      task_id: 849559
+      transaction_id: 3232585
+    - field: summary
+      id: 5621204
+      new_value: build org.voltar.hiveminder
+      old_value: build com.jettero.hiveminder
+      task_id: 849559
+      transaction_id: 3730451
+    - field: description
+      id: 5621205
+      new_value: I have permission from them to use the bee logo.  But I've renamed the app Hiveminder Cloud Tasks for now.
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3730451
+    - field: tags
+      id: 5621210
+      new_value: '"Prē" "hiveminder" "mojo" "palmsdk" "vhb" "voltar.org"'
+      old_value: '"Prē" "hiveminder" "mojo" "palmsdk" "vhb"'
+      task_id: 849559
+      transaction_id: 3730457
+    - field: summary
+      id: 5621986
+      new_value: build org.voltar.hiveminder version 0.5 release
+      old_value: build org.voltar.hiveminder
+      task_id: 849559
+      transaction_id: 3731127
+    - field: due
+      id: 5621987
+      new_value: 2010-03-01
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3731127
+    - field: depends_on_ids
+      id: 5621988
+      new_value: 987696
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3731129
+    - field: depends_on_summaries
+      id: 5621989
+      new_value: get a user account system in place (add remove user/pass)
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3731129
+    - field: depends_on_count
+      id: 5621990
+      new_value: 1
+      old_value: 0
+      task_id: 849559
+      transaction_id: 3731129
+    - field: depends_on_ids
+      id: 5621995
+      new_value: 987696	987697
+      old_value: 987696
+      task_id: 849559
+      transaction_id: 3731133
+    - field: depends_on_summaries
+      id: 5621996
+      new_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically
+      old_value: get a user account system in place (add remove user/pass)
+      task_id: 849559
+      transaction_id: 3731133
+    - field: depends_on_count
+      id: 5621997
+      new_value: 2
+      old_value: 1
+      task_id: 849559
+      transaction_id: 3731133
+    - field: depends_on_ids
+      id: 5622235
+      new_value: 987696	987697	987755
+      old_value: 987696	987697
+      task_id: 849559
+      transaction_id: 3731310
+    - field: depends_on_summaries
+      id: 5622236
+      new_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically	build card for task list
+      old_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically
+      task_id: 849559
+      transaction_id: 3731310
+    - field: depends_on_count
+      id: 5622237
+      new_value: 3
+      old_value: 2
+      task_id: 849559
+      transaction_id: 3731310
+    - field: depends_on_ids
+      id: 5622241
+      new_value: 987696	987697	987755	987757
+      old_value: 987696	987697	987755
+      task_id: 849559
+      transaction_id: 3731314
+    - field: depends_on_summaries
+      id: 5622242
+      new_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically	build card for task list	build card for task edit
+      old_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically	build card for task list
+      task_id: 849559
+      transaction_id: 3731314
+    - field: depends_on_count
+      id: 5622243
+      new_value: 4
+      old_value: 3
+      task_id: 849559
+      transaction_id: 3731314
+    - field: depends_on_ids
+      id: 5622247
+      new_value: 987696	987697	987755	987757	987758
+      old_value: 987696	987697	987755	987757
+      task_id: 849559
+      transaction_id: 3731317
+    - field: depends_on_summaries
+      id: 5622248
+      new_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically	build card for task list	build card for task edit	build card for about
+      old_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically	build card for task list	build card for task edit
+      task_id: 849559
+      transaction_id: 3731317
+    - field: depends_on_count
+      id: 5622249
+      new_value: 5
+      old_value: 4
+      task_id: 849559
+      transaction_id: 3731317
+    - field: depends_on_ids
+      id: 5632894
+      new_value: 987697	987755	987757	987758
+      old_value: 987696	987697	987755	987757	987758
+      task_id: 849559
+      transaction_id: 3741390
+    - field: depends_on_summaries
+      id: 5632895
+      new_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about
+      old_value: get a user account system in place (add remove user/pass)	build a query object that caches automagically	build card for task list	build card for task edit	build card for about
+      task_id: 849559
+      transaction_id: 3741390
+    - field: depends_on_count
+      id: 5632896
+      new_value: 4
+      old_value: 5
+      task_id: 849559
+      transaction_id: 3741390
+    - field: depends_on_ids
+      id: 5632898
+      new_value: 987697	987755	987757	987758	990213
+      old_value: 987697	987755	987757	987758
+      task_id: 849559
+      transaction_id: 3741392
+    - field: depends_on_summaries
+      id: 5632899
+      new_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about	build account edit taps
+      old_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about
+      task_id: 849559
+      transaction_id: 3741392
+    - field: depends_on_count
+      id: 5632900
+      new_value: 5
+      old_value: 4
+      task_id: 849559
+      transaction_id: 3741392
+    - field: depends_on_ids
+      id: 5632904
+      new_value: 987697	987755	987757	987758	990213	990214
+      old_value: 987697	987755	987757	987758	990213
+      task_id: 849559
+      transaction_id: 3741395
+    - field: depends_on_summaries
+      id: 5632905
+      new_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about	build account edit taps	build account delete slider
+      old_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about	build account edit taps
+      task_id: 849559
+      transaction_id: 3741395
+    - field: depends_on_count
+      id: 5632906
+      new_value: 6
+      old_value: 5
+      task_id: 849559
+      transaction_id: 3741395
+    - field: depends_on_ids
+      id: 5632916
+      new_value: 987697	987755	987757	987758	990213
+      old_value: 987697	987755	987757	987758	990213	990214
+      task_id: 849559
+      transaction_id: 3741405
+    - field: depends_on_summaries
+      id: 5632917
+      new_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about	build account edit taps
+      old_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about	build account edit taps	build account delete slider
+      task_id: 849559
+      transaction_id: 3741405
+    - field: depends_on_count
+      id: 5632918
+      new_value: 5
+      old_value: 6
+      task_id: 849559
+      transaction_id: 3741405
+    - field: depends_on_ids
+      id: 5634658
+      new_value: 987697	987755	987757	990213
+      old_value: 987697	987755	987757	987758	990213
+      task_id: 849559
+      transaction_id: 3743193
+    - field: depends_on_summaries
+      id: 5634659
+      new_value: build a query object that caches automagically	build card for task list	build card for task edit	build account edit taps
+      old_value: build a query object that caches automagically	build card for task list	build card for task edit	build card for about	build account edit taps
+      task_id: 849559
+      transaction_id: 3743193
+    - field: depends_on_count
+      id: 5634660
+      new_value: 4
+      old_value: 5
+      task_id: 849559
+      transaction_id: 3743193
+    - field: depends_on_ids
+      id: 5634663
+      new_value: 987697	987755	987757
+      old_value: 987697	987755	987757	990213
+      task_id: 849559
+      transaction_id: 3743195
+    - field: depends_on_summaries
+      id: 5634664
+      new_value: build a query object that caches automagically	build card for task list	build card for task edit
+      old_value: build a query object that caches automagically	build card for task list	build card for task edit	build account edit taps
+      task_id: 849559
+      transaction_id: 3743195
+    - field: depends_on_count
+      id: 5634665
+      new_value: 3
+      old_value: 4
+      task_id: 849559
+      transaction_id: 3743195
+    - field: due
+      id: 5699085
+      new_value: 2010-03-15
+      old_value: 2010-03-01
+      task_id: 849559
+      transaction_id: 3804878
+    - field: depends_on_ids
+      id: 5699103
+      new_value: 987755	987757
+      old_value: 987697	987755	987757
+      task_id: 849559
+      transaction_id: 3804895
+    - field: depends_on_summaries
+      id: 5699104
+      new_value: build card for task list	build card for task edit
+      old_value: build a query object that caches automagically	build card for task list	build card for task edit
+      task_id: 849559
+      transaction_id: 3804895
+    - field: depends_on_count
+      id: 5699105
+      new_value: 2
+      old_value: 3
+      task_id: 849559
+      transaction_id: 3804895
+    - field: depends_on_ids
+      id: 5699108
+      new_value: 987757
+      old_value: 987755	987757
+      task_id: 849559
+      transaction_id: 3804897
+    - field: depends_on_summaries
+      id: 5699109
+      new_value: build card for task edit
+      old_value: build card for task list	build card for task edit
+      task_id: 849559
+      transaction_id: 3804897
+    - field: depends_on_count
+      id: 5699110
+      new_value: 1
+      old_value: 2
+      task_id: 849559
+      transaction_id: 3804897
+    - field: depended_on_by_ids
+      id: 5738070
+      new_value: 1005037
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3842625
+    - field: depended_on_by_summaries
+      id: 5738071
+      new_value: make a naggerd controller and package naggerd with it
+      old_value: ~
+      task_id: 849559
+      transaction_id: 3842625
+    - field: depended_on_by_count
+      id: 5738072
+      new_value: 1
+      old_value: 0
+      task_id: 849559
+      transaction_id: 3842625
+    - field: tags
+      id: 5771448
+      new_value: '"Prē" "hiveminder" "mojo" "palmsdk" "plate" "vhb" "voltar.org"'
+      old_value: '"Prē" "hiveminder" "mojo" "palmsdk" "vhb" "voltar.org"'
+      task_id: 849559
+      transaction_id: 3871096
+    - field: due
+      id: 5771451
+      new_value: ~
+      old_value: 2010-03-15
+      task_id: 849559
+      transaction_id: 3871102
+    - field: time_worked
+      id: 5771452
+      new_value: 20h
+      old_value: 1h43m14s
+      task_id: 849559
+      transaction_id: 3871102
+    - field: tags
+      id: 5771470
+      new_value: '"Prē" "hiveminder" "plate" "vhb" "voltar.org" "webos"'
+      old_value: '"Prē" "hiveminder" "mojo" "palmsdk" "plate" "vhb" "voltar.org"'
+      task_id: 849559
+      transaction_id: 3871118
+    - field: depends_on_ids
+      id: 5771471
+      new_value: ~
+      old_value: 987757
+      task_id: 849559
+      transaction_id: 3871120
+    - field: depends_on_summaries
+      id: 5771472
+      new_value: ~
+      old_value: build card for task edit
+      task_id: 849559
+      transaction_id: 3871120
+    - field: depends_on_count
+      id: 5771473
+      new_value: 0
+      old_value: 1
+      task_id: 849559
+      transaction_id: 3871120
+    - field: description
+      id: 5771509
+      new_value: |-
+        I have permission from them to use the bee logo.  But I've renamed the app Hiveminder Cloud Tasks for now.
+        
+        VERSION 0.5 Mission: See everything, add new tasks.
+        
+        (EDITing tasks is the 0.75 release)
+      old_value: I have permission from them to use the bee logo.  But I've renamed the app Hiveminder Cloud Tasks for now.
+      task_id: 849559
+      transaction_id: 3871143
+error: ~
+failure: 0
+field_errors: {}
+field_warnings: {}
+message: ~
+success: 1

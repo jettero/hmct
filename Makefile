@@ -26,8 +26,8 @@ build: framework_config.json runtime_options.json
         palm-package --exclude "*.tar.gz" --exclude .git --exclude cgi --exclude "*.ipk" \
                      --exclude $(name) --exclude contrib --exclude Makefile \
                      --exclude log-parse.pl --exclude JSON_preparser.pl \
-                     --exclude framework_config.json.in --exclude notes.txt --exclude example_task.yml \
-                     --exclude runtime_options.json.in \
+                     --exclude framework_config.json.in --exclude notes.txt \
+                     --exclude yml \
         $(name) && rm $(name)
 
 clean:

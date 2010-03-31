@@ -1,0 +1,64 @@
+---
+action_class: BTDT::Action::SearchTaskEmail
+content:
+  search:
+    - delivered_to: ~
+      id: 906451
+      message: |+
+        From: Paul Miller <jettero@gmail.com>
+        Date: Sun, 6 Sep 2009 04:43:39 -0700
+        Message-ID: <20090906114339.S1780819274@generated.hiveminder.com>
+        
+
+      message_id: '<20090906114339.S1780819274@generated.hiveminder.com>'
+      sender_id: 42673
+      task_id: 849559
+      transaction_id: 3232510
+    - delivered_to: ~
+      id: 906455
+      message: |
+        From: Paul Miller <jettero@gmail.com>
+        Date: Sun, 6 Sep 2009 05:05:46 -0700
+        Message-ID: <20090906120546.S1581619347@generated.hiveminder.com>
+        In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
+        References: <20090906114339.S1780819274@generated.hiveminder.com>
+        
+        gotta add assistants to make the accounts thingy show up.
+      message_id: '<20090906120546.S1581619347@generated.hiveminder.com>'
+      sender_id: 42673
+      task_id: 849559
+      transaction_id: 3232522
+    - delivered_to: ~
+      id: 906463
+      message: |
+        From: Paul Miller <jettero@gmail.com>
+        Date: Sun, 6 Sep 2009 05:52:05 -0700
+        Message-ID: <20090906125205.S2777819274@generated.hiveminder.com>
+        In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
+        References: <20090906114339.S1780819274@generated.hiveminder.com>
+        
+        k, I gotta stop for now I guess.  Made some progress though.
+      message_id: '<20090906125205.S2777819274@generated.hiveminder.com>'
+      sender_id: 42673
+      task_id: 849559
+      transaction_id: 3232585
+    - delivered_to: ~
+      id: 1099204
+      message: |
+        From: Paul Miller <jettero@gmail.com>
+        Date: Tue, 30 Mar 2010 18:08:38 -0700
+        Message-ID: <20100331010838.S282924543@generated.hiveminder.com>
+        In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
+        References: <20090906114339.S1780819274@generated.hiveminder.com>
+        
+        heh. I've been doing a terrible job recording my hours on this; not that it matters
+      message_id: '<20100331010838.S282924543@generated.hiveminder.com>'
+      sender_id: 42673
+      task_id: 849559
+      transaction_id: 3871102
+error: ~
+failure: 0
+field_errors: {}
+field_warnings: {}
+message: ~
+success: 1
