@@ -21,7 +21,7 @@ curl -sb $HM http://hiveminder.com/=/model/user/email/$E.yml
 # get lists for Pro users:
 curl -F all=true -sb $HM http://hiveminder.com/=/action/SearchList.yml
 
-export ID=1006255
+export ID=849559
 
 # get details for a task:
 curl -sb $HM http://hiveminder.com/=/model/Task/id/$ID.yml
