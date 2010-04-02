@@ -96,13 +96,13 @@ function TasksAssistant() {
 
         t.short = this.taskTemplate.evaluate(t);
 
+        if( OPT._preTapTask )
+            if( t.record_locator === OPT._preTapTask || t.id === OPT._preTapTask )
+                this.SCa.showScene("Task", t);
+
     }.bind(this));
 
     this.controller.modelChanged(this.tasksListModel);
-
-    if( OPT._preTapTask )
-        if( tasks.length > OPT._preTapTask )
-            this.SCa.showScene("Task", tasks[OPT._preTapTask]);
 };
 
 /*}}}*/
