@@ -20,19 +20,6 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
 /* {{{ */ TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task::setup()");
 
-    // comments list // -------------------------------------------------
-
-    this.commentsListAttrs = {
-        listTemplate:    'misc/naked-list-container',
-        emptyTemplate:   'misc/empty-list',
-        itemTemplate:    'tt/task-comment',
-        swipeToDelete:   false
-    };
-
-    this.commentsListModel = {listTitle: 'Task Comments', choices: [], items: [{message: "grrz"}]};
-    this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
-    // this.commentsListWidget = new Mojo.Controller.WidgetController( this.controller.get("hm_task_comments"), this.controller, this.commentsListModel);
-
     // task list // -------------------------------------------------
 
     this.taskListAttrs = {
@@ -52,6 +39,18 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
 
     this.taskListModel = {listTitle: 'Hiveminder Task', items: items };
     this.controller.setupWidget('hm_task_list', this.taskListAttrs, this.taskListModel);
+
+    // comments list // -------------------------------------------------
+
+    this.commentsListAttrs = {
+        listTemplate:    'misc/naked-list-container',
+        emptyTemplate:   'misc/empty-list',
+        itemTemplate:    'tt/task-comment',
+        swipeToDelete:   false
+    };
+
+    this.commentsListModel = {listTitle: 'Task Comments', items: [{message: "grrz"}]};
+    this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
 
     // misc
 
