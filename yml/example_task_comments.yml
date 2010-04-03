@@ -8,7 +8,7 @@ content:
         From: Paul Miller <jettero@gmail.com>
         Date: Sun, 6 Sep 2009 04:43:39 -0700
         Message-ID: <20090906114339.S1780819274@generated.hiveminder.com>
-        
+
 
       message_id: '<20090906114339.S1780819274@generated.hiveminder.com>'
       sender_id: 42673
@@ -22,7 +22,7 @@ content:
         Message-ID: <20090906120546.S1581619347@generated.hiveminder.com>
         In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
         References: <20090906114339.S1780819274@generated.hiveminder.com>
-        
+
         gotta add assistants to make the accounts thingy show up.
       message_id: '<20090906120546.S1581619347@generated.hiveminder.com>'
       sender_id: 42673
@@ -36,7 +36,7 @@ content:
         Message-ID: <20090906125205.S2777819274@generated.hiveminder.com>
         In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
         References: <20090906114339.S1780819274@generated.hiveminder.com>
-        
+
         k, I gotta stop for now I guess.  Made some progress though.
       message_id: '<20090906125205.S2777819274@generated.hiveminder.com>'
       sender_id: 42673
@@ -50,12 +50,59 @@ content:
         Message-ID: <20100331010838.S282924543@generated.hiveminder.com>
         In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
         References: <20090906114339.S1780819274@generated.hiveminder.com>
-        
+
         heh. I've been doing a terrible job recording my hours on this; not that it matters
       message_id: '<20100331010838.S282924543@generated.hiveminder.com>'
       sender_id: 42673
       task_id: 849559
       transaction_id: 3871102
+    - delivered_to: comment-xxxxxxxxxxxxxxxxxxx@tasks.hiveminder.com
+      id: 1102852
+      message: |+
+        Received: (qmail 31324 invoked from network); 3 Apr 2010 15:07:06 -0000
+        Received: from unknown (HELO xxxxxxxxxxxxx) (xxxxxxxxxxxxx) by bp.nmsrv.com
+         with SMTP; 3 Apr 2010 15:07:06 -0000
+        Received: from blargblarg (xxxxxxxxxxxxxxx [xxxxxxxxxxxxx]) by
+         xxxxxxxxxxxxx (8.14.0/8.14.0) with ESMTP id o33F74wh012690 for
+         <comment-xxxxxxxxxxxxxxxxxxx@tasks.hiveminder.com>; Sat, 3 Apr 2010 11:07:04
+         -0400
+        Received: from 75.48.124.170 (SquirrelMail authenticated user testguy) by
+         blargblarg with HTTP; Sat, 3 Apr 2010 11:13:28 -0400
+        Message-ID: <f7e5c560b0caa3493b51c82ac5c83269.squirrel@blargblarg>
+        Date: Sat, 3 Apr 2010 11:13:28 -0400
+        Subject: test
+        From: "Tester Testguy McTestable" <xxxxxxxxxxxxxxx>
+        To: comment-xxxxxxxxxxxxxxxxxxx@tasks.hiveminder.com
+        User-Agent: SquirrelMail/1.4.19
+        MIME-Version: 1.0
+        Content-Type: multipart/alternative;boundary="----=_20100403111328_81454"
+        X-Priority: 3 (Normal)
+        Importance: Normal
+        X-MEI-Customer-Class: true
+        X-Hiveminder-delivered-to: comment-xxxxxxxxxxxxxxxxxxx@tasks.hiveminder.com
+        In-Reply-To: <20090906114339.S1780819274@generated.hiveminder.com>
+        References: <20090906114339.S1780819274@generated.hiveminder.com>
+
+        ------=_20100403111328_81454
+        Content-Type: text/plain; charset="iso-8859-1"
+        Content-Transfer-Encoding: 8bit
+
+
+
+        Tester "Testguy" McTestable, reporting in.
+
+        ------=_20100403111328_81454
+        Content-Type: text/html; charset="iso-8859-1"
+        Content-Transfer-Encoding: 8bit
+
+        Tester &quot;Testguy&quot; McTestable, reporting in.
+        ------=_20100403111328_81454--
+
+
+      message_id: '<f7e5c560b0caa3493b51c82ac5c83269.squirrel@blargblarg>'
+      sender_id: 44253
+      task_id: 849559
+      transaction_id: 3883402
 error: ~
 failure: 0
 field_errors: {}
