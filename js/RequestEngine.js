@@ -30,6 +30,16 @@ function RequestEngine() {
     this.dbRestore();
 }
 
+/* {{{ */ RequestEngine.prototype.now = function() {
+    var d   = new Date();
+    var t   = d.getTime();
+    var now = Math.round( t/1000.0 );
+
+    return now;
+};
+
+/*}}}*/
+
 /* {{{ */ RequestEngine.prototype.engineLoaded = function(arg) {
 
     if( arg != null ) // neither null nor undefined
@@ -99,7 +109,7 @@ function RequestEngine() {
                 this.dbo.get(_r.cacheKey, function(data) {
                         this.dbBusy(false);
 
-                        var now = Math.round(new Date().getTime()/1000.0);
+                        var now = this.now();
                         var ds  = now - entry.entered;
                         var cma = typeof(_r.cacheMaxAgeOverride) === 'number' ? _r.cacheMaxAgeOverride :  OPT.cacheMaxAge;
 
@@ -245,9 +255,9 @@ function RequestEngine() {
 
     var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
     var sent = function() {
-        var now = Math.round(new Date().getTime()/1000.0);
+        var now = me.now();
 
-        Mojo.Log.info("RequestEngine::dbSetCache(key=%s) [added, informing cache_list]", key);
+        Mojo.Log.info("RequestEngine::dbSetCache(key=%s) [added, informing cache_list, now=%d]", key, now);
 
         me.data.cache[key] = { entered: now };
         me.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
@@ -296,7 +306,7 @@ function RequestEngine() {
 
     this.dbBusy(true);
 
-    var now = Math.round(new Date().getTime()/1000.0);
+    var now = this.now();
 
     var me = this;
     var did_stuff = false;
@@ -406,7 +416,7 @@ function RequestEngine() {
                 break;
         }
 
-        var now = Math.round(new Date().getTime()/1000.0);
+        var now = this.now();
 
         for( var k in this.data.cache )
             Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
