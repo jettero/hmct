@@ -26,7 +26,7 @@
 
 .todo-item .extra-data .due-- {
     /* usually has a date on the end, when it doesn't ... */
-    display: hidden;
+    display: none;
 }
 
 .todo-item .tags {
