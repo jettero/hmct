@@ -42,6 +42,7 @@
 .todo-item .prio.p1 { background-image: url(img/lowest.png);  }
 
 .task-description { font-weight: normal; font-size: 0.75em; }
+.task-comment     { font-weight: normal; font-size: 0.75em; }
 
 .palm-page-header .icon.hmct {
 	background-image: url(header-icon.png);

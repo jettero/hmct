@@ -12,33 +12,10 @@ function TaskAssistant(_i) {
 // Templates and Resources {{{
 TaskAssistant.prototype.shortTemplate = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
 TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
-
-TaskAssistant.prototype.commentsHTML = palmGetResource(Mojo.appPath + "app/views/tt/task-comments.html");
-TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views/tt/task-history.html");
 // }}}
 
 /* {{{ */ TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task::setup()");
-
-    // task list // -------------------------------------------------
-
-    this.taskListAttrs = {
-        dividerFunction: function(mi) { return mi.category; },
-        dividerTemplate: 'misc/li-generic-div',
-        listTemplate:    'misc/naked-list-container',
-        emptyTemplate:   'misc/empty-list',
-        itemTemplate:    'misc/li-generic-row',
-        swipeToDelete:   false
-    };
-
-    var items = [
-        { id: "desc", category: "task",     row_html: "<div id='task-snl'></div>" },
-        { id: "talk", category: "comments", row_html: this.commentsHTML },
-        { id: "hist", category: "history",  /* row_html: this.historyHTML*/ }
-    ];
-
-    this.taskListModel = {listTitle: 'Hiveminder Task', items: items };
-    this.controller.setupWidget('hm_task_list', this.taskListAttrs, this.taskListModel);
 
     // comments list // -------------------------------------------------
 
@@ -49,7 +26,7 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
         swipeToDelete:   false
     };
 
-    this.commentsListModel = {listTitle: 'Task Comments', items: [{message: "grrz"}]};
+    this.commentsListModel = {listTitle: 'Task Comments', items: []};
     this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
 
     // misc
@@ -71,15 +48,10 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
 
-    /*
-    this.commentsListModel.items = [
-        {message: "test1"},
-        {message: "test2"},
-        {message: "test3"}
-    ];
+    if( task.comments )
+        this.commentsListModel.items = task.comments;
 
     this.controller.modelChanged(this.commentsListModel);
-    */
 };
 
 /*}}}*/
@@ -93,8 +65,8 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
         this.startCompressor("history");
 
         // force a click on task info
-        // this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
-           this.clickCollapsibleList( this.controller.get('compressible' + "comments"), "comments" );
+           this.clickCollapsibleList( this.controller.get('compressible-' + "task"), "task" );
+        // this.clickCollapsibleList( this.controller.get('compressible-' + "comments"), "comments" );
 
         this.firstActivation = false;
     }
@@ -114,8 +86,10 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
 /* {{{ */ TaskAssistant.prototype.startCompressor = function(category) {
     Mojo.Log.info("Task::startCompressor(%s)", category);
 
-    var compressible = this.controller.get('compressible' + category);
-    var compress     = this.controller.get('compress'     + category);
+    var compressible = this.controller.get('compressible-' + category);
+    var compress     = this.controller.get('compress-'     + category);
+
+    Mojo.Log.info("Task::startCompressor(%s) [%s,%s]", category, compressible, compress);
 
     compress.addClassName('compressor');
     compress.compressorID = category;
@@ -125,20 +99,7 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
         Mojo.Log.info("Task::startCompressor() lambda:[tap event for: %s]", category);
         me.clickCollapsibleList(compressible, category); });
 
-    this.moveElementIntoDividers(category);
     compressible.hide();
-};
-
-/*}}}*/
-/* {{{ */ TaskAssistant.prototype.moveElementIntoDividers = function(category) {
-    Mojo.Log.info("Task::moveElementIntoDividers(category: %s)", category);
-
-    var compressible = this.controller.get('compressible' + category);
-
-    var me = this;
-    this.taskListModel.items.findAll(function(item){ return item.category === category; }).each(function(item){
-        compressible.insert( me.controller.get('element-' + item.id) );
-    });
 };
 
 /*}}}*/
