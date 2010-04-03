@@ -20,7 +20,20 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
 /* {{{ */ TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task::setup()");
 
-    this.controller.get("id").update(this.task.record_locator);
+    // comments list // -------------------------------------------------
+
+    this.commentsListAttrs = {
+        listTemplate:    'misc/naked-list-container',
+        emptyTemplate:   'misc/empty-list',
+        itemTemplate:    'tt/task-comment',
+        swipeToDelete:   false
+    };
+
+    this.commentsListModel = {listTitle: 'Task Comments', choices: [], items: [{message: "grrz"}]};
+    this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
+    // this.commentsListWidget = new Mojo.Controller.WidgetController( this.controller.get("hm_task_comments"), this.controller, this.commentsListModel);
+
+    // task list // -------------------------------------------------
 
     this.taskListAttrs = {
         dividerFunction: function(mi) { return mi.category; },
@@ -32,14 +45,20 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
     };
 
     var items = [
-        { id: "desc", category: "task"     },
-        { id: "talk", category: "comments" },
-        { id: "hist", category: "history"  }
+        { id: "desc", category: "task",     row_html: "<div id='task-snl'></div>" },
+        { id: "talk", category: "comments", row_html: this.commentsHTML },
+        { id: "hist", category: "history",  /* row_html: this.historyHTML*/ }
     ];
 
-    this.taskListModel = {listTitle: 'Hiveminder Task', items: items};
+    this.taskListModel = {listTitle: 'Hiveminder Task', items: items };
     this.controller.setupWidget('hm_task_list', this.taskListAttrs, this.taskListModel);
+
+    // misc
+
+    this.controller.get("id").update(this.task.record_locator);
     this.firstActivation = true;
+
+    Mojo.Log.info("Task::setup() [complete]");
 };
 
 /*}}}*/
@@ -49,10 +68,11 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
     this.task = task; // This is probably always the same exact task over and over?
                      // The assignment shouldn't cost much.
 
-    this.controller.get("element-desc").down("div.row-html").update(
+    this.controller.get("task-snl").update(
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
 
+    /*
     this.commentsListModel.items = [
         {message: "test1"},
         {message: "test2"},
@@ -60,6 +80,7 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
     ];
 
     this.controller.modelChanged(this.commentsListModel);
+    */
 };
 
 /*}}}*/
@@ -73,35 +94,10 @@ TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views
         this.startCompressor("history");
 
         // force a click on task info
-        this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
+        // this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
+           this.clickCollapsibleList( this.controller.get('compressible' + "comments"), "comments" );
+
         this.firstActivation = false;
-
-        this.controller.get("element-talk").down("div.row-html").update( this.commentsHTML );
-
-            this.commentsListAttrs = {
-                listTemplate:    'misc/naked-list-container',
-                emptyTemplate:   'misc/empty-list',
-                itemTemplate:    'tt/task-comment',
-                swipeToDelete:   false
-            };
-
-            this.commentsListModel = {listTitle: 'Task Comments', items: []};
-            this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
-
-        /*
-        this.controller.get("element-hist").down("div.row-html").update( this.historyHTML );
-
-            this.historyListAttrs = {
-                listTemplate:    'misc/naked-list-container',
-                emptyTemplate:   'misc/empty-list',
-                itemTemplate:    'tt/task-delta',
-                swipeToDelete:   false
-            };
-
-            this.historyListModel = {listTitle: 'Task History', items: []};
-            this.controller.setupWidget('hm_task_history', this.historyListAttrs, this.historyListModel);
-            */
-
     }
 
     TMO.registerTaskChange(this.handleTaskChange, this.task);
