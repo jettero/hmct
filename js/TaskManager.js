@@ -204,9 +204,8 @@
         keyStrings: [this.currentLogin, 'getComments', rl],
         cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
 
-        process: function(r) { return r.content; }, // this is a new success result
+        process: function(r) { return r.content.search; }, // this is a new success result
         finish:  function(r) {
-            // can be either a fresh request or a cache result
             task.comments = r;
             me.notifyTaskChange(task);
         },
