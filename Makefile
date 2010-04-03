@@ -10,9 +10,9 @@ test: clean
 	$(ssh) tail -n 1000 -f /var/log/messages | ./log-parse.pl
 
 myinstall: clean
-	@+HM_LOGLEVEL=0 make --no-print-directory build
+	@+HM_LOGLEVEL=0 env -u HM_PRETAP -u HM_MAXAGE make --no-print-directory build
 	scp *.ipk $${INSTHOST:-castle.vhb}:
-	ssh $${INSTHOST:-castle.vhb}
+	ssh $${INSTHOST:-castle.vhb} /usr/bin/ipkg -o /media/cryptofs/apps install *.ipk
 
 %.json: %.json.in
 	@echo build $@
