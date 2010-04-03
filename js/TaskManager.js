@@ -190,6 +190,11 @@
 
 /*}}}*/
 
+TaskManager.prototype.processComment = function(comment) {
+    Mojo.Log.info("TaskManager::processComment(message_id=%s)", comment.message_id);
+
+    return false;
+};
 /* {{{ */ TaskManager.prototype.getComments = function(task) { var rl;
     Mojo.Log.info("TaskManager::getComments(record_locator=%s)", rl = task.record_locator);
 
@@ -204,8 +209,18 @@
         keyStrings: [this.currentLogin, 'getComments', rl],
         cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
 
-        process: function(r) { return r.content.search; }, // this is a new success result
-        finish:  function(r) {
+        process: function(r) { // this is a new success result
+            var ret = [];
+
+            r.content.search.each(function(c){
+                if( me.processComment(c) )
+                    ret.push(c);
+            });
+
+            return ret;
+        },
+
+        finish: function(r) {
             task.comments = r;
             me.notifyTaskChange(task);
         },
