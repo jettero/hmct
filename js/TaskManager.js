@@ -55,7 +55,26 @@
         cacheable: true,
         keyStrings: [this.currentLogin, search],
 
-        process: function(r) { return me.fixutf8( r.content.result ).evalJSON(); }, // this is a new success result
+        process: function(r) {
+            var currentTime = (new Date())
+            var month = currentTime.getMonth() + 1;
+            var day   = currentTime.getDate();
+            var year  = currentTime.getFullYear();
+            var now   = (year + " " + month + " " + day).replace(/ /g, "0");
+
+            return me.fixutf8( r.content.result ).evalJSON().each(function(t){
+                if( t.due ) {
+                    var d = t.due.replace(/\D+/g, "");
+                    t.due_class = now>d ? "overdue" : "regular-due";
+                    Mojo.Log.info("DUE(%d,%d,%s)", now, d, t.due_class);
+
+                } else {
+                    t.due_class = "not-due";
+                }
+
+            });
+        },
+
         finish:  function(r) {
             // can be either a fresh request or a cache result
             me.tasks = r;
@@ -190,11 +209,13 @@
 
 /*}}}*/
 
-TaskManager.prototype.processComment = function(comment) {
+/* {{{ */ TaskManager.prototype.processComment = function(comment) {
     Mojo.Log.info("TaskManager::processComment(message_id=%s)", comment.message_id);
 
     return false;
 };
+
+/*}}}*/
 /* {{{ */ TaskManager.prototype.getComments = function(task) { var rl;
     Mojo.Log.info("TaskManager::getComments(record_locator=%s)", rl = task.record_locator);
 

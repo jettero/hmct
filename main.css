@@ -24,10 +24,8 @@
     font-weight: normal;
 }
 
-.todo-item .extra-data .due-- {
-    /* usually has a date on the end, when it doesn't ... */
-    display: none;
-}
+.todo-item .extra-data .inner-overdue { color: red }
+.todo-item .extra-data .not-due       { display: none; }
 
 .todo-item .tags {
     font-style: italic;
