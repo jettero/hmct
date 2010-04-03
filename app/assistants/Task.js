@@ -9,15 +9,20 @@ function TaskAssistant(_i) {
     this.handleTaskChange = this.handleTaskChange.bind(this);
 }
 
+// Templates and Resources {{{
 TaskAssistant.prototype.shortTemplate = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
 TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
 
-TaskAssistant.prototype.setup = function() {
+TaskAssistant.prototype.commentsHTML = palmGetResource(Mojo.appPath + "app/views/tt/task-comments.html");
+TaskAssistant.prototype.historyHTML  = palmGetResource(Mojo.appPath + "app/views/tt/task-history.html");
+// }}}
+
+/* {{{ */ TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task::setup()");
 
     this.controller.get("id").update(this.task.record_locator);
 
-    this.tasksListAttrs = {
+    this.taskListAttrs = {
         dividerFunction: function(mi) { return mi.category; },
         dividerTemplate: 'misc/li-generic-div',
         listTemplate:    'misc/naked-list-container',
@@ -27,17 +32,18 @@ TaskAssistant.prototype.setup = function() {
     };
 
     var items = [
-        { id: "desc", category: "task",     row_html: "<div id='short'></div><div id='long'></div>" },
-        { id: "talk", category: "comments", row_html: "<div id='talk'></div>"  },
-        { id: "hist", category: "history",  row_html: "<div id='hist'></div>"  },
+        { id: "desc", category: "task"     },
+        { id: "talk", category: "comments" },
+        { id: "hist", category: "history"  }
     ];
 
-    this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: items};
-    this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
+    this.taskListModel = {listTitle: 'Hiveminder Task', items: items};
+    this.controller.setupWidget('hm_task_list', this.taskListAttrs, this.taskListModel);
     this.firstActivation = true;
 };
 
-TaskAssistant.prototype.handleTaskChange = function(task) {
+/*}}}*/
+/* {{{ */ TaskAssistant.prototype.handleTaskChange = function(task) {
     Mojo.Log.info("Task::handleTaskChange(%s)", task.record_locator);
 
     this.task = task; // This is probably always the same exact task over and over?
@@ -46,9 +52,19 @@ TaskAssistant.prototype.handleTaskChange = function(task) {
     this.controller.get("element-desc").down("div.row-html").update(
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
+
+    this.commentsListModel.items = [
+        {message: "test1"},
+        {message: "test2"},
+        {message: "test3"}
+    ];
+
+    this.controller.modelChanged(this.commentsListModel);
 };
 
-TaskAssistant.prototype.activate = function() {
+/*}}}*/
+
+/* {{{ */ TaskAssistant.prototype.activate = function() {
     Mojo.Log.info("Task::activate()");
 
     if( this.firstActivation ) {
@@ -59,18 +75,48 @@ TaskAssistant.prototype.activate = function() {
         // force a click on task info
         this.clickCollapsibleList( this.controller.get('compressible' + "task"), "task" );
         this.firstActivation = false;
+
+        this.controller.get("element-talk").down("div.row-html").update( this.commentsHTML );
+
+            this.commentsListAttrs = {
+                listTemplate:    'misc/naked-list-container',
+                emptyTemplate:   'misc/empty-list',
+                itemTemplate:    'tt/task-comment',
+                swipeToDelete:   false
+            };
+
+            this.commentsListModel = {listTitle: 'Task Comments', items: []};
+            this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
+
+        /*
+        this.controller.get("element-hist").down("div.row-html").update( this.historyHTML );
+
+            this.historyListAttrs = {
+                listTemplate:    'misc/naked-list-container',
+                emptyTemplate:   'misc/empty-list',
+                itemTemplate:    'tt/task-delta',
+                swipeToDelete:   false
+            };
+
+            this.historyListModel = {listTitle: 'Task History', items: []};
+            this.controller.setupWidget('hm_task_history', this.historyListAttrs, this.historyListModel);
+            */
+
     }
 
     TMO.registerTaskChange(this.handleTaskChange, this.task);
 };
 
-TaskAssistant.prototype.deactivate = function() {
+/*}}}*/
+/* {{{ */ TaskAssistant.prototype.deactivate = function() {
     Mojo.Log.info("Task::deactivate()");
 
     TMO.unregisterTaskChange(this.handleTaskChange, this.task);
 };
 
-TaskAssistant.prototype.startCompressor = function(category) {
+/*}}}*/
+
+/* {{{ */ TaskAssistant.prototype.startCompressor = function(category) {
     Mojo.Log.info("Task::startCompressor(%s)", category);
 
     var compressible = this.controller.get('compressible' + category);
@@ -88,18 +134,20 @@ TaskAssistant.prototype.startCompressor = function(category) {
     compressible.hide();
 };
 
-TaskAssistant.prototype.moveElementIntoDividers = function(category) {
+/*}}}*/
+/* {{{ */ TaskAssistant.prototype.moveElementIntoDividers = function(category) {
     Mojo.Log.info("Task::moveElementIntoDividers(category: %s)", category);
 
     var compressible = this.controller.get('compressible' + category);
 
     var me = this;
-    this.tasksListModel.items.findAll(function(item){ return item.category === category; }).each(function(item){
+    this.taskListModel.items.findAll(function(item){ return item.category === category; }).each(function(item){
         compressible.insert( me.controller.get('element-' + item.id) );
     });
 };
 
-TaskAssistant.prototype.clickCollapsibleList = function(compressible, category) {
+/*}}}*/
+/* {{{ */ TaskAssistant.prototype.clickCollapsibleList = function(compressible, category) {
     Mojo.Log.info("Task::clickCollapsibleList()");
 
     var targetRow = this.controller.get(category + "-sit");
@@ -143,3 +191,5 @@ TaskAssistant.prototype.clickCollapsibleList = function(compressible, category) 
         Mojo.Animation.animateStyle(compressible, 'height', 'bezier', options);
     }
 };
+
+/*}}}*/
