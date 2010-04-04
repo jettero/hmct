@@ -91,8 +91,6 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
     var compressible = this.controller.get('compressible-' + category);
     var compress     = this.controller.get('compress-'     + category);
 
-    Mojo.Log.info("Task::startCompressor(%s) [%s,%s]", category, compressible, compress);
-
     compress.addClassName('compressor');
     compress.compressorID = category;
 
