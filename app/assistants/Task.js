@@ -64,9 +64,11 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
         this.startCompressor("comments");
         this.startCompressor("history");
 
-        // force a click on task info
-           this.clickCollapsibleList( this.controller.get('compressible-' + "task"), "task" );
-        // this.clickCollapsibleList( this.controller.get('compressible-' + "comments"), "comments" );
+        // force a click on some of the compressors:
+
+        for(var i=0; i<OPT.unfoldTaskCompressors.length; i++)
+           this.clickCollapsibleList( this.controller.get('compressible-' + OPT.unfoldTaskCompressors[i]),
+               OPT.unfoldTaskCompressors[i] );
 
         this.firstActivation = false;
     }
