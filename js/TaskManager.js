@@ -1,4 +1,4 @@
-/*jslint white: false, onevar: false
+/*jslint white: false, onevar: false, maxerr: 500000
 */
 /*global Mojo AMO REQ Template OPT setTimeout
 */
@@ -56,7 +56,7 @@
         keyStrings: [this.currentLogin, search],
 
         process: function(r) {
-            var currentTime = (new Date())
+            var currentTime = (new Date());
             var month = currentTime.getMonth() + 1;
             var day   = currentTime.getDate();
             var year  = currentTime.getFullYear();
@@ -66,7 +66,6 @@
                 if( t.due ) {
                     var d = t.due.replace(/\D+/g, "");
                     t.due_class = now>d ? "overdue" : "regular-due";
-                    Mojo.Log.info("DUE(%d,%d,%s)", now, d, t.due_class);
 
                 } else {
                     t.due_class = "not-due";
@@ -209,13 +208,6 @@
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.processComment = function(comment) {
-    Mojo.Log.info("TaskManager::processComment(message_id=%s)", comment.message_id);
-
-    return false;
-};
-
-/*}}}*/
 /* {{{ */ TaskManager.prototype.getComments = function(task) { var rl;
     Mojo.Log.info("TaskManager::getComments(record_locator=%s)", rl = task.record_locator);
 
@@ -232,10 +224,29 @@
 
         process: function(r) { // this is a new success result
             var ret = [];
+            var header,matches,newMessage;
 
             r.content.search.each(function(c){
-                if( me.processComment(c) )
-                    ret.push(c);
+                // 0 is the whole match, 1 is the first group, etc
+                if( matches = c.message.match(/^((?:.|\n)+?)\n\n((?:.|\n)+)/) ) {
+                    if( matches[2].match(/\S+/) ) {
+                        newMessage = { message: matches[2] };
+
+                        if( header = matches[1].match(/^Subject:\s+(.+)$/im) )
+                             newMessage.subj = header[1];
+                        else newMessage.subj_class = "no-subject";
+
+                        if( header = matches[1].match(/^From:\s+(.+)$/im) )
+                             newMessage.from = header[1];
+                        else newMessage.from_class = "no-sender";
+
+                        if( header = matches[1].match(/^Date:\s+(.+)$/im) )
+                             newMessage.when = header[1];
+                        else newMessage.when_class = "no-date";
+
+                        ret.push(newMessage);
+                    }
+                }
             });
 
             return ret;

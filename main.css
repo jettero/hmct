@@ -43,7 +43,11 @@
 .todo-item .extra-data .prio.p1 { background-image: url(img/lowest.png);  }
 
 .task-description { font-weight: normal; font-size: 0.75em; }
-.task-comment     { font-weight: normal; font-size: 0.75em; }
+.task-comment div { font-weight: normal; font-size: 0.75em; }
+
+.task-comment .no-subject { display: none }
+.task-comment .no-sender  { display: none }
+.task-comment .no-date    { display: none }
 
 .palm-page-header .icon.hmct {
 	background-image: url(header-icon.png);
