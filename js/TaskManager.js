@@ -244,6 +244,12 @@
                              newMessage.when = header[1];
                         else newMessage.when_class = "no-date";
 
+                        // Content-Type: multipart/alternative;boundary="----=_20100403111328_81454"
+                        if( header = matches[1].match(/^Content-Type:\s+(.+)$/im) ) {
+                            if( header[1].match(/multipart\/alternative/) ) {
+                            }
+                        }
+
                         ret.push(newMessage);
                     }
                 }
