@@ -109,6 +109,12 @@ function RequestEngine() {
                 this.dbo.get(_r.cacheKey, function(data) {
                         this.dbBusy(false);
 
+                        if( data === null ) {
+                            _r.force = true;
+                            this._doRequest(_r);
+                            return;
+                        }
+
                         var now = this.now();
                         var ds  = now - entry.entered;
                         var cma = typeof(_r.cacheMaxAgeOverride) === 'number' ? _r.cacheMaxAgeOverride :  OPT.cacheMaxAge;
