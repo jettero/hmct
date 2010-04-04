@@ -28,6 +28,8 @@ sub process_value {
     return "false" if $val eq "false";
     return "true"  if $val eq "true";
 
+    return $val if $val =~ m/^[\[\{]/; # objects
+
     return $val if looks_like_number($val);
     return "'$val'";
 }
