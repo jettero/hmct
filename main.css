@@ -27,17 +27,20 @@
 .todo-item .extra-data .inner-overdue { color: red }
 .todo-item .extra-data .not-due       { display: none; }
 
-.todo-item .tags {
+.todo-item .extra-data .inner-overdue { color: red }
+.todo-item .extra-data .not-due       { display: none; }
+
+.todo-item .extra-data .tags {
     font-style: italic;
     color: #339955;
 }
 
-.todo-item .prio { float: left;  margin: 0; padding: 0; margin-right: 5px; height: 16px; width: 16px; }
-.todo-item .prio.p5 { background-image: url(img/highest.png); }
-.todo-item .prio.p4 { background-image: url(img/high.png);    }
-.todo-item .prio.p3 { background-image: url(img/normal.png);  }
-.todo-item .prio.p2 { background-image: url(img/low.png);     }
-.todo-item .prio.p1 { background-image: url(img/lowest.png);  }
+.todo-item .extra-data .prio    { float: left;  margin: 0; padding: 0; margin-right: 5px; height: 16px; width: 16px; }
+.todo-item .extra-data .prio.p5 { background-image: url(img/highest.png); }
+.todo-item .extra-data .prio.p4 { background-image: url(img/high.png);    }
+.todo-item .extra-data .prio.p3 { background-image: url(img/normal.png);  }
+.todo-item .extra-data .prio.p2 { background-image: url(img/low.png);     }
+.todo-item .extra-data .prio.p1 { background-image: url(img/lowest.png);  }
 
 .task-description { font-weight: normal; font-size: 0.75em; }
 .task-comment     { font-weight: normal; font-size: 0.75em; }
