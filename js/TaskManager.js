@@ -215,8 +215,8 @@
 
     REQ.doRequest({
           desc: 'TaskManager::getComments(record_locator=' + rl + ')',
-        method: 'post', url: 'http://hiveminder.com/=/action/SearchTaskEmail.json',
-        params: {task_id: task.id},
+        method: 'get', url: 'http://hiveminder.com/mobile/task_history/' + rl,
+        params: {},
 
         cacheable: true,
         keyStrings: [this.currentLogin, 'getComments', rl],
@@ -224,36 +224,8 @@
 
         process: function(r) { // this is a new success result
             var ret = [];
-            var header,matches,newMessage;
 
-            r.content.search.each(function(c){
-                // 0 is the whole match, 1 is the first group, etc
-                if( matches = c.message.match(/^((?:.|\n)+?)\n\n((?:.|\n)+)/) ) {
-                    if( matches[2].match(/\S+/) ) {
-                        newMessage = { message: matches[2] };
-
-                        if( header = matches[1].match(/^Subject:\s+(.+)$/im) )
-                             newMessage.subj = header[1];
-                        else newMessage.subj_class = "no-subject";
-
-                        if( header = matches[1].match(/^From:\s+(.+)$/im) )
-                             newMessage.from = header[1];
-                        else newMessage.from_class = "no-sender";
-
-                        if( header = matches[1].match(/^Date:\s+(.+)$/im) )
-                             newMessage.when = header[1];
-                        else newMessage.when_class = "no-date";
-
-                        // Content-Type: multipart/alternative;boundary="----=_20100403111328_81454"
-                        if( header = matches[1].match(/^Content-Type:\s+(.+)$/im) ) {
-                            if( header[1].match(/multipart\/alternative/) ) {
-                            }
-                        }
-
-                        ret.push(newMessage);
-                    }
-                }
-            });
+            Mojo.Log.info("TaskManager::getComments(record_locator=%s) result: %s", Object.toJSON(r));
 
             return ret;
         },
