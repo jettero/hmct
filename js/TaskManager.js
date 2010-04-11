@@ -234,10 +234,14 @@
                 var container = document.createElement("div");
                     container.innerHTML = r;
 
-                $(container);/*.down("div.transaction").each(function(){
-                    ret.push("supz");
-                });
-                */
+                Mojo.Log.info("wtf-before");
+                try {
+                    $(container).select("div.transaction").each(function(){
+                        Mojo.Log.info("wtf-inside");
+                    });
+
+                } catch(e) { Mojo.Log.error("catch: %s", e); }
+                Mojo.Log.info("wtf-after");
             }
 
             return ret;
