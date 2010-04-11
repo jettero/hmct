@@ -6,7 +6,10 @@
 function TaskAssistant(_i) {
     Mojo.Log.info("Task(%s)", (this.task = _i).record_locator);
 
+    this.SCa = Mojo.Controller.stageController.assistant;
+
     this.handleTaskChange = this.handleTaskChange.bind(this);
+    this.menuSetup        = this.SCa.menuSetup.bind(this);
 }
 
 // Templates and Resources {{{
@@ -16,6 +19,13 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
 
 /* {{{ */ TaskAssistant.prototype.setup = function() {
     Mojo.Log.info("Task::setup()");
+
+    this.menuSetup();
+
+    this.refreshModel     = { label: "Reload", icon: 'refresh', command: 'refresh' };
+    this.commandMenuModel = { label: 'Task Command Menu', items: [ this.refreshModel ] };
+
+	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 
     // comments list // -------------------------------------------------
 
