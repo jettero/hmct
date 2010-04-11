@@ -9,6 +9,8 @@
     display: none;
 }
 
+.task-delta { font-size: small }
+
 .task-id {
     font-family: monospace;
     font-weight: bold;

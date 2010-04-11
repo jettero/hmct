@@ -19,15 +19,15 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
 
     // comments list // -------------------------------------------------
 
-    this.commentsListAttrs = {
-        listTemplate:    'misc/naked-list-container',
-        emptyTemplate:   'misc/empty-list',
-        itemTemplate:    'tt/task-comment',
-        swipeToDelete:   false
+    this.historyListAttrs = {
+        listTemplate:  'misc/naked-list-container',
+        emptyTemplate: 'misc/empty-list',
+        itemTemplate:  'tt/task-delta',
+        swipeToDelete: false
     };
 
-    this.commentsListModel = {listTitle: 'Task Comments', items: []};
-    this.controller.setupWidget('hm_task_comments', this.commentsListAttrs, this.commentsListModel);
+    this.historyListModel = {listTitle: 'Task History', items: []};
+    this.controller.setupWidget('hm_task_history', this.historyListAttrs, this.historyListModel);
 
     // misc
 
@@ -48,10 +48,26 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
 
-    if( task.comments )
-        this.commentsListModel.items = task.comments;
+    if( task.comments ) {
+        var rows = [];
 
-    this.controller.modelChanged(this.commentsListModel);
+        task.comments.each(function(i){
+            try {
+                var h = i.innerHTML;
+                rows.push({ row_html: h });
+
+            } catch(e) {
+                Mojo.Log.info("problem grabbing html from transaction div: %s", e);
+            }
+        });
+
+        this.historyListModel.items = rows;
+
+    } else {
+        this.historyListModel.items = [];
+    }
+
+    this.controller.modelChanged(this.historyListModel);
 };
 
 /*}}}*/
@@ -61,7 +77,6 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
 
     if( this.firstActivation ) {
         this.startCompressor("task");
-        this.startCompressor("comments");
         this.startCompressor("history");
 
         // force a click on some of the compressors:

@@ -226,22 +226,15 @@
 
         process: function(r) { // this is a new success result
             var ret = [];
-            var matches;
 
+            var matches; // this seems fragile, but it works for now
             if( matches = r.match(/<dl[^<>]*transactions[^<>]*>((?:.|\n)*)<\/dl>/) ) {
                 r = matches[1]; matches = [];
 
-                var container = document.createElement("div");
+                var container = new Element("div");
                     container.innerHTML = r;
 
-                Mojo.Log.info("wtf-before");
-                try {
-                    $(container).select("div.transaction").each(function(){
-                        Mojo.Log.info("wtf-inside");
-                    });
-
-                } catch(e) { Mojo.Log.error("catch: %s", e); }
-                Mojo.Log.info("wtf-after");
+                container.select("div.transaction").each(function(t){ ret.push(t); });
             }
 
             return ret;
