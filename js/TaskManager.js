@@ -234,7 +234,12 @@
                 var container = new Element("div");
                     container.innerHTML = r;
 
-                container.select("div.transaction").each(function(t){ ret.push(t); });
+                container.select("div.transaction").each(function(t){
+                    Mojo.Log.info("TaskManager::getComments() [found transaction div]");
+
+                    try      { ret.push({row_html: t.innerHTML}); }
+                    catch(e) { Mojo.Log.info("TaskManager::getComments() [problem finding inner html for transaction: %s]", e); }
+                });
             }
 
             return ret;

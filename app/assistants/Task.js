@@ -48,25 +48,8 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
 
-    if( task.comments ) {
-        var rows = [];
 
-        task.comments.each(function(i){
-            try {
-                var h = i.innerHTML;
-                rows.push({ row_html: h });
-
-            } catch(e) {
-                Mojo.Log.info("problem grabbing html from transaction div: %s", e);
-            }
-        });
-
-        this.historyListModel.items = rows;
-
-    } else {
-        this.historyListModel.items = [];
-    }
-
+    this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
 };
 
