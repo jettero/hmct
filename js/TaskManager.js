@@ -226,22 +226,19 @@
 
         process: function(r) { // this is a new success result
             var ret = [];
+            var matches;
 
-            Mojo.Log.info("wtf1");
+            if( matches = r.match(/<dl[^<>]*transactions[^<>]*>((?:.|\n)*)<\/dl>/) ) {
+                r = matches[1]; matches = [];
 
-            var container = document.createElement("div");
+                var container = document.createElement("div");
+                    container.innerHTML = r;
 
-            Mojo.Log.info("wtf2");
-
-            container.innerHTML = r;
-
-            Mojo.Log.info("wtf3");
-
-            $(container)/*.down("dl.transactions").each(function(){
-                ret.push("supz");
-            }); */
-
-            Mojo.Log.info("wtf4");
+                $(container);/*.down("div.transaction").each(function(){
+                    ret.push("supz");
+                });
+                */
+            }
 
             return ret;
         },
