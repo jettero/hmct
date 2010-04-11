@@ -32,3 +32,6 @@ curl -F task_id=$ID -sb $HM http://hiveminder.com/=/action/SearchTaskHistory.yml
 # comments
 curl -F task_id=$ID -sb $HM http://hiveminder.com/=/action/SearchTaskEmail.yml
 
+
+# comments?
+curl -sb $HM http://hiveminder.com/mobile/task_history/TXNQ
