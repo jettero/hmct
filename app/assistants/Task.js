@@ -157,3 +157,27 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
 };
 
 /*}}}*/
+
+/* {{{ /**/ TaskAssistant.prototype.handleCommand = function(event) { var rl = this.task.record_locator;
+    Mojo.Log.info("Task::handleCommand() [rl=%s]", rl);
+
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/)
+
+        switch (s_a[0]) {
+            case 'refresh':
+                Mojo.Log.info("Task::handleCommand(refresh) [rl=%s]", rl);
+                TMO.refreshTask(this.task);
+                break;
+
+            default:
+                Mojo.Log.info("Task::handleCommand(unknown command: %s) [rl=%s]", Object.toJSON(s_a), rl);
+                break;
+        }
+    }
+
+}
+
+/*}}}*/
+
+Mojo.Log.info('loaded(Task.js)');
