@@ -173,7 +173,7 @@ function RequestEngine() {
     var me = this;
 
     this.reqdb[_r.desc] = new Ajax.Request(_r.url, {
-        method: _r.method, parameters: _r.params, evalJSON: true,
+        method: _r.method, parameters: _r.params, evalJSON: !_r.xml, evalJS: !_r.xml,
 
         onSuccess: function(transport) {
             BBO.done(_r.desc);
@@ -184,7 +184,14 @@ function RequestEngine() {
             if( transport.status >= 200 && transport.status < 300 ) {
                 Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success transport=%s", _r.desc, Object.toJSON(transport));
 
-                var r = transport.responseJSON;
+                var r;
+                if( _r.xml ) {
+                    r = transport.responseText;
+
+                } else {
+                    r = transport.responseJSON;
+                }
+
 
                 if( r ) {
                     if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call

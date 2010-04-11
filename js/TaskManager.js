@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000
 */
-/*global Mojo AMO REQ Template OPT setTimeout
+/*global Mojo AMO REQ Template OPT setTimeout $
 */
 
 /* {{{ */ function TaskManager() {
@@ -222,10 +222,26 @@
         keyStrings: [this.currentLogin, 'getComments', rl],
         cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
 
+        xml: true, // not a JSON request
+
         process: function(r) { // this is a new success result
             var ret = [];
 
-            Mojo.Log.info("TaskManager::getComments(record_locator=%s) result: %s", Object.toJSON(r));
+            Mojo.Log.info("wtf1");
+
+            var container = document.createElement("div");
+
+            Mojo.Log.info("wtf2");
+
+            container.innerHTML = r;
+
+            Mojo.Log.info("wtf3");
+
+            $(container)/*.down("dl.transactions").each(function(){
+                ret.push("supz");
+            }); */
+
+            Mojo.Log.info("wtf4");
 
             return ret;
         },
@@ -236,10 +252,10 @@
         },
 
         success: function(r) {
-            if( r.success )
+            if( r.match(/^<\?xml/) ) 
                 return true;
 
-            Mojo.Log.info("TaskManager::getComments(%s) r.fail, r=%s", rl, Object.toJSON(r));
+            Mojo.Log.info("TaskManager::getComments(%s) r=%s", rl, Object.toJSON(r));
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -253,7 +269,7 @@
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search ...");
+                e.push("Something went wrong while retrieving comments...");
 
             Mojo.Controller.errorDialog(e.join("... "));
 
