@@ -12,10 +12,10 @@
 .task-delta div, .task-delta p, .task-delta dt, .task-delta dd
     { font-weight: normal; font-size: small; margin: 0; padding: 2px 2px; }
 
-.task-delta div.comment    { border-left: 1px solid #aaffaa; }
-.task-delta dt             { border-left: 1px solid #aaaaff; }
-.task-delta dd             { border-left: 1px solid #ddddff; }
-.task-delta div.attachment { border-left: 1px solid #ffaaaa; }
+.task-delta div.comment    { border-left: 2px solid #99bb99; padding-left: 3px; }
+.task-delta dt             { border-left: 2px solid #aaaaff; padding-left: 3px; }
+.task-delta dd             { border-left: 2px solid #bbbbdd; padding-left: 3px; }
+.task-delta div.attachment { border-left: 2px solid #ffaaaa; padding-left: 3px; }
 
 .task-id {
     font-family: monospace;
