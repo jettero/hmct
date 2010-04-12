@@ -205,6 +205,7 @@
 
             me.data.meta.acdet = r;
             me.dbChanged("account details updated");
+            me.notifyAcdetChange();
         }
     });
 };
