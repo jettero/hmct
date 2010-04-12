@@ -92,18 +92,17 @@ function TasksAssistant() {
 };
 
 /*}}}*/
-/* {{{ /**/ TasksAssistant.prototype.handleAcdetChange = function(acdet) {
+/* {{{ /**/ TasksAssistant.prototype.handleAcdetChange = function() {
     Mojo.Log.info("Tasks::handleAcdetChange()");
 
     var i,n;
 
     this.searchSubmenu.items = [];
 
-    // TODO: go through the acdet searches here, then add predef ones:
+    var sn = TMO.getSearchNames();
 
-    for(i=0; i<OPT.predefinedSearches.length; i++) {
-        n = OPT.predefinedSearches[i].name;
-
+    for(i=0; i<sn.length; i++) {
+        var n = sn[i];
         this.searchSubmenu.items.push({ label: n, command: 'search @@ ' + n });
     }
 

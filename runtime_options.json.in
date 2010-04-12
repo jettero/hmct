@@ -4,7 +4,7 @@
         { name: 'overdue', tokens: 'owner/me/not/complete/due/before/today' }
     ],
     unfoldTaskCompressors: %UNFOLD,['task']%,
-    defaultSearch: %DEFSER,accepted but first nothing not complete due before 7 days from now hidden until before tomorrow not hidden forever%,
+    defaultSearch: %DEFSER,todo%,
     cacheMaxAge:   %MAXAGE,4000%,
     _preTapTask:   %PRETAP,false%
 }

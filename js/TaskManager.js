@@ -7,12 +7,63 @@
     Mojo.Log.info("TaskManager()");
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
+    this.handleAcdetChange = this.handleAcdetChange.bind(this);
+
+    var lso = new Mojo.Model.Cookie("last search");
+    // this.lastSearch = lso.get();
+    this.setLastSearch = function(s) { lso.put(s); return s; };
+
+    Mojo.Log.info("TaskManager() [lastSearch: %s]", this.lastSearch);
 
     AMO.registerLoginChange(this.handleLoginChange);
+    AMO.registerAcdetChange(this.handleAcdetChange);
 
     this.tasksChangeCallback = [];
     this.taskChangeCallback = {};
 }
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.handleAcdetChange = function(acdet) {
+    Mojo.Log.info("TaskManager::handleAcdetChange()");
+
+    var i;
+
+    this.namedSearches = OPT.predefinedSearches;
+    Mojo.Log.info("TaskManager::handleAcdetChange() [namedSearches: %s]", Object.toJSON(this.namedSearches));
+
+    // TODO: go through acdet if applicable
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.getSearchByName = function(name) {
+    Mojo.Log.info("TaskManager::getSearchByName(name=%s) [namedSearches: %s]", name, Object.toJSON(this.namedSearches));
+
+    var i;
+
+    if( this.namedSearches ) {
+        for(i=0; i<this.namedSearches.length; i++)
+            if( this.namedSearches.name === name )
+                return this.namedSearches.tokens
+    }
+
+    return "";
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.getSearchNames = function() {
+    Mojo.Log.info("TaskManager::getSearchNames() [namedSearches: %s]", Object.toJSON(this.namedSearches));
+
+    var i;
+    var ret = [];
+
+    if( this.namedSearches ) {
+        for(i=0; i<this.namedSearches.length; i++)
+            ret.push(this.namedSearches[i].name);
+    }
+
+    return ret;
+};
 
 /*}}}*/
 
@@ -32,10 +83,16 @@
 };
 
 /*}}}*/
+/* {{{ */ TaskManager.prototype.namedSearchTasks = function(name,force) {
+    Mojo.Log.info("TaskManager::namedSearchTasks(%s,[%s])", name, force ? "force" : "cache ok");
+    this.searchTasks(this.getSearchByName(name),force);
+};
+
+/*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
         if( !this.lastSearch ) {
-            search = OPT.defaultSearch;
+            search = this.getSearchByName(OPT.defaultSearch);
 
         } else {
             search = this.lastSearch;
@@ -49,7 +106,7 @@
     REQ.doRequest({
           desc: 'TaskManager::searchTasks()',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
-        params: {format: 'json', query: (this.lastSearch = search).replace(/\s+/g, "/")},
+        params: {format: 'json', query: this.setLastSearch(search).replace(/\s+/g, "/")},
 
         force: force,
         cacheable: true,
