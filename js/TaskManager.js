@@ -43,9 +43,12 @@
 
     if( this.namedSearches ) {
         for(i=0; i<this.namedSearches.length; i++)
-            if( this.namedSearches.name === name )
-                return this.namedSearches.tokens
+            if( this.namedSearches[i].name === name )
+                return this.namedSearches[i].tokens
     }
+
+    Mojo.Log.error("TaskManager::getSearchByName(name=%s) [namedSearches: %s] nothing found?",
+        name, Object.toJSON(this.namedSearches));
 
     return "";
 };
