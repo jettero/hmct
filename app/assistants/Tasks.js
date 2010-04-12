@@ -17,15 +17,18 @@ function TasksAssistant() {
     this.menuSetup();
 
     this.refreshModel = { label: "Reload", icon: 'refresh', command: 'refresh' };
+    this.searchModel  = { label: "Search", icon: 'search',  submenu: 'search-submenu' };
 
     this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
     this.commandMenuModel = { label: 'Tasks Command Menu', items: [
-       this.refreshModel, {}, {/* populated by handleLoginChange */} ] };
+       this.refreshModel, this.searchModel, {/* populated by handleLoginChange */} ] };
 
-    this.loginSubmenu = { label: 'Login Submenu', items: [] };
+    this.loginSubmenu  = { label: 'Login Submenu',  items: [] };
+    this.searchSubmenu = { label: 'Search Submenu', items: [{label: '1', command: '1 @@ 2'}] };
 
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
-	this.controller.setupWidget('login-submenu', undefined, this.loginSubmenu);
+	this.controller.setupWidget('login-submenu',  undefined, this.loginSubmenu);
+	this.controller.setupWidget('search-submenu', undefined, this.searchSubmenu);
 
     this.tasksListAttrs = {
         listTemplate:  'misc/naked-list-container',
