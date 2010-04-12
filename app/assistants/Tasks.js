@@ -94,6 +94,20 @@ function TasksAssistant() {
 /*}}}*/
 /* {{{ /**/ TasksAssistant.prototype.handleAcdetChange = function(acdet) {
     Mojo.Log.info("Tasks::handleAcdetChange()");
+
+    var i,n;
+
+    this.searchSubmenu.items = [];
+
+    // TODO: go through the acdet searches here, then add predef ones:
+
+    for(i=0; i<OPT.predefinedSearches.length; i++) {
+        n = OPT.predefinedSearches[i].name;
+
+        this.searchSubmenu.items.push({ label: n, command: 'search @@ ' + n });
+    }
+
+    this.controller.modelChanged(this.commandMenuModel);
 };
 
 /*}}}*/
