@@ -195,6 +195,7 @@
     Mojo.Log.info("AccountManager::getAccountDetails()");
 
     delete this.data.meta.acdet;
+    me.notifyAcdetChange();
 
     var url = "http://hiveminder.com/=/model/user/email/" + this.data.meta.currentLogin + ".json";
     var me = this;
