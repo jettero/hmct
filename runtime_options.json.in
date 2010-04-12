@@ -1,6 +1,6 @@
 {
     predefinedSearches: [
-        { name: 'todo',    tokens: 'not/done' },
+        { name: 'todo',    tokens: 'not/complete' },
         { name: 'overdue', tokens: 'owner/me/not/complete/due/before/today' }
     ],
     unfoldTaskCompressors: %UNFOLD,['task']%,
