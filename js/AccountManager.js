@@ -321,7 +321,7 @@
 /* {{{ */ AccountManager.prototype.notifyAcdetChangeStep = function(callback) {
     Mojo.Log.info("AccountManager::notifyAcdetChangeStep()");
 
-    callback(Object.clone(this.data.meta.acdet));
+    callback(this.data.meta.acdet);
 };
 
 /*}}}*/
