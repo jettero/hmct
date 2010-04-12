@@ -165,6 +165,11 @@ function TasksAssistant() {
                 AMO.switchTo(s_a[1]);
                 break;
 
+            case 'search':
+                Mojo.Log.info("Tasks::handleCommand(search: %s)", s_a[1]);
+                TMO.namedSearchTasks(s_a[1], false); // use named search and allow a cached reload
+                break;
+
             default:
                 Mojo.Log.info("Tasks::handleCommand(unknown command: %s)", Object.toJSON(s_a));
                 break;
