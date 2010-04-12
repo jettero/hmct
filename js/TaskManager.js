@@ -74,7 +74,7 @@
             });
         },
 
-        finish:  function(r) {
+        finish: function(r) {
             // can be either a fresh request or a cache result
             me.tasks = r;
             me.notifyTasksChange();
