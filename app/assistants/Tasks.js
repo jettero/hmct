@@ -117,17 +117,15 @@ function TasksAssistant() {
 
     this.tasksListModel.items = tasks;
 
-    if( OPT._preTapTaask ) {
-        tasks.each(function(t) {
+    tasks.each(function(t) {
 
-            t.short = this.taskTemplate.evaluate(t);
+        t.short = this.taskTemplate.evaluate(t);
 
-            if( OPT._preTapTask )
-                if( t.record_locator === OPT._preTapTask || t.id === OPT._preTapTask )
-                    this.SCa.showScene("Task", t);
+        if( OPT._preTapTask )
+            if( t.record_locator === OPT._preTapTask || t.id === OPT._preTapTask )
+                this.SCa.showScene("Task", t);
 
-        }.bind(this));
-    }
+    }.bind(this));
 
     this.controller.modelChanged(this.tasksListModel);
 };
