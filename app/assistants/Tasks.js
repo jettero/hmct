@@ -127,6 +127,15 @@ function TasksAssistant() {
         }.bind(this));
     }
 
+    if( this.tasksListModel.items.length == 0 ) {
+        // XXX: this is to make the empty-list template show up correctly in
+        // the first load in that sense, it's not as stupid as it looks
+
+        this.tasksListModel.items = ['...'];
+        this.controller.modelChanged(this.tasksListModel);
+        this.tasksListModel.items = [];
+    }
+
     this.controller.modelChanged(this.tasksListModel);
 };
 
