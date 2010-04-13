@@ -36,15 +36,16 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
         swipeToDelete: false
     };
 
-    this.historyListModel = {listTitle: 'Task History', items: []};
+    this.historyListModel = {listTitle: 'Task History', items: ['...']};
     this.controller.setupWidget('hm_task_history', this.historyListAttrs, this.historyListModel);
 
     // misc
 
     this.controller.get("id").update(this.task.record_locator);
-    this.firstActivation = true;
 
     Mojo.Log.info("Task::setup() [complete]");
+
+    this.firstActivation = true;
 };
 
 /*}}}*/
@@ -77,6 +78,9 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
         for(var i=0; i<OPT.unfoldTaskCompressors.length; i++)
            this.clickCollapsibleList( this.controller.get('compressible-' + OPT.unfoldTaskCompressors[i]),
                OPT.unfoldTaskCompressors[i] );
+
+        // make the empty-list template show up on the initial load
+        this.historyListModel.items=[]; this.controller.modelChanged(this.historyListModel);
 
         this.firstActivation = false;
     }
