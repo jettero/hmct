@@ -43,6 +43,7 @@ function TasksAssistant() {
 	Mojo.Event.listen(this.controller.get("hm_task_list"), Mojo.Event.listTap, this.taskListTap);
 
     this.checkForLogins();
+    this.firstActivation = true;
 
 };
 
@@ -136,8 +137,11 @@ function TasksAssistant() {
 /* {{{ /**/ TasksAssistant.prototype.activate = function() {
     Mojo.Log.info("Tasks::activate()");
 
-    // make the empty-list template show up on the initial load
-    this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
+    if( this.firstActivation ) {
+        // make the empty-list template show up on the initial load
+        this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
+        this.firstActivation = false;
+    }
 
     AMO.registerLoginChange(this.handleLoginChange);
     AMO.registerAcdetChange(this.handleAcdetChange);
