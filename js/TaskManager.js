@@ -11,6 +11,7 @@
 
     var lso = new Mojo.Model.Cookie("last search");
     // this.lastSearch = lso.get();
+    this.lastSearch = "tag/flurrget";
     this.setLastSearch = function(s) { lso.put(s); return s; };
 
     Mojo.Log.info("TaskManager() [lastSearch: %s]", this.lastSearch);
