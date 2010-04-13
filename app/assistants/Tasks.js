@@ -114,15 +114,18 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks::handleTasksChange()");
 
     this.tasksListModel.items = tasks;
-    tasks.each(function(t) {
 
-        t.short = this.taskTemplate.evaluate(t);
+    if( OPT._preTapTaask ) {
+        tasks.each(function(t) {
 
-        if( OPT._preTapTask )
-            if( t.record_locator === OPT._preTapTask || t.id === OPT._preTapTask )
-                this.SCa.showScene("Task", t);
+            t.short = this.taskTemplate.evaluate(t);
 
-    }.bind(this));
+            if( OPT._preTapTask )
+                if( t.record_locator === OPT._preTapTask || t.id === OPT._preTapTask )
+                    this.SCa.showScene("Task", t);
+
+        }.bind(this));
+    }
 
     this.controller.modelChanged(this.tasksListModel);
 };
