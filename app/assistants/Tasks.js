@@ -37,12 +37,13 @@ function TasksAssistant() {
         itemTemplate:  'misc/li-task',
         swipeToDelete: true
     };
-    this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: []};
+    this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: ['...']};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
 
 	Mojo.Event.listen(this.controller.get("hm_task_list"), Mojo.Event.listTap, this.taskListTap);
 
     this.checkForLogins();
+
 };
 
 /*}}}*/
@@ -127,15 +128,6 @@ function TasksAssistant() {
         }.bind(this));
     }
 
-    if( this.tasksListModel.items.length == 0 ) {
-        // XXX: this is to make the empty-list template show up correctly in
-        // the first load in that sense, it's not as stupid as it looks
-
-        this.tasksListModel.items = ['...'];
-        this.controller.modelChanged(this.tasksListModel);
-        this.tasksListModel.items = [];
-    }
-
     this.controller.modelChanged(this.tasksListModel);
 };
 
@@ -143,6 +135,9 @@ function TasksAssistant() {
 
 /* {{{ /**/ TasksAssistant.prototype.activate = function() {
     Mojo.Log.info("Tasks::activate()");
+
+    // make the empty-list template show up on the initial load
+    this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
 
     AMO.registerLoginChange(this.handleLoginChange);
     AMO.registerAcdetChange(this.handleAcdetChange);
