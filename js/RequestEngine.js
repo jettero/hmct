@@ -327,7 +327,7 @@ function RequestEngine() {
     var done = 0;
 
     var end = function() {
-        Mojo.Log.info("RequestEngine::dbCheckAge() [end lambda, did_stuff:%s, problems:%s]", did_stuff, problems);
+        Mojo.Log.info("RequestEngine::dbCheckAge()::end() [did_stuff:%s, problems:%s]", did_stuff, problems);
 
         if( problems ) {
             me.dbNewk();
