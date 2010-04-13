@@ -346,8 +346,10 @@ function RequestEngine() {
 
     var nothing_expired = true;
     for( var k in this.data.cache ) {
-        if( (now - this.data.cache[k].entered) >= OPT.cacheMaxAge ) {
-            Mojo.Log.info("RequestEngine::chechCache() [%s expired]", k);
+        var dt = now - this.data.cache[k].entered;
+
+        if( dt >= OPT.cacheMaxAge ) {
+            Mojo.Log.info("RequestEngine::checkCache() [%s expired; dt=%d]", k, dt);
 
             var err  = function() {
                 Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired, but apparently couldn't be removed]", k);
