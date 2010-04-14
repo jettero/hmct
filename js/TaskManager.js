@@ -101,7 +101,7 @@ TaskManager.prototype.setLastSearch = function(s) {
         this.lso.put(s);
     }
 
-    return s;
+    return (this.lastSearch = s);
 };
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
