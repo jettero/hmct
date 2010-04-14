@@ -118,10 +118,10 @@
 
         process: function(r) {
             var currentTime = (new Date());
-            var month = currentTime.getMonth() + 1;
-            var day   = currentTime.getDate();
-            var year  = currentTime.getFullYear();
-            var now   = (year + " " + month + " " + day).replace(/ /g, "0");
+            var month = "" + (currentTime.getMonth() + 1);
+            var day   = "" + currentTime.getDate();
+            var year  = "" + currentTime.getFullYear();
+            var now   = year + (month.length==2 ? month : "0"+month) + (day.length==2? day : "0"+day);
 
             return me.fixutf8( r.content.result ).evalJSON().each(function(t){
                 if( t.due ) {
