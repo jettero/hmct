@@ -9,10 +9,8 @@
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.handleAcdetChange = this.handleAcdetChange.bind(this);
 
-    var lso = new Mojo.Model.Cookie("last search");
-    // this.lastSearch = lso.get();
-    this.lastSearch = "tag/flurrget";
-    this.setLastSearch = function(s) { lso.put(s); return s; };
+    this.lso = new Mojo.Model.Cookie("last search");
+    this.lastSearch = "tag/flurrget"; // this.lso.get();
 
     Mojo.Log.info("TaskManager() [lastSearch: %s]", this.lastSearch);
 
@@ -93,6 +91,18 @@
 };
 
 /*}}}*/
+TaskManager.prototype.setLastSearch = function(s) {
+    Mojo.Log.info("TaskManager::setLastSearch(s=%s; lastSearch=%s)", s, this.lastSearch);
+
+    s = s.replace(/\s+/g, "/");
+
+    if( this.lastSearch !== s ) {
+        Mojo.Log.info("TaskManager::setLastSearch() [setting cookie, lso.put(%s)]", s);
+        this.lso.put(s);
+    }
+
+    return s;
+};
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
         if( !this.lastSearch ) {
@@ -110,7 +120,7 @@
     REQ.doRequest({
           desc: 'TaskManager::searchTasks()',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
-        params: {format: 'json', query: this.setLastSearch(search).replace(/\s+/g, "/")},
+        params: {format: 'json', query: this.setLastSearch(search)},
 
         force: force,
         cacheable: true,
