@@ -103,6 +103,9 @@ function TasksAssistant() {
 
     var sn = TMO.getSearchNames();
 
+    // NOTE: the task manager asks the account manager for lists from preminum accounts
+    // do not do that here
+
     for(i=0; i<sn.length; i++) {
         var n = sn[i];
         this.searchSubmenu.items.push({ label: n, command: 'search @@ ' + n });
