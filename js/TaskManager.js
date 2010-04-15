@@ -10,7 +10,7 @@
     this.handleAcdetChange = this.handleAcdetChange.bind(this);
 
     this.lso = new Mojo.Model.Cookie("last search");
-    this.lastSearch = "tag/flurrget"; // this.lso.get();
+    this.lastSearch = this.lso.get();
 
     Mojo.Log.info("TaskManager() [lastSearch: %s]", this.lastSearch);
 
