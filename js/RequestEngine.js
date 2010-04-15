@@ -62,8 +62,9 @@ function RequestEngine() {
 
     var required = ['method', 'url', 'desc'];
     var interr = false;
+    var i;
 
-    for(var i=0; i<required.length; i++) {
+    for(i=0; i<required.length; i++) {
         if( !_r[required[i]] ) {
             Mojo.Log.info("RequestEngine::doRequest(%s) [missing _r.[%s] param]", _r.desc, required[i]);
             interr = true;
@@ -72,7 +73,7 @@ function RequestEngine() {
 
     var forbidden = ['param'];
 
-    for(var i=0; i<forbidden.length; i++) {
+    for(i=0; i<forbidden.length; i++) {
         if( _r[forbidden[i]] ) {
             Mojo.Log.info("RequestEngine::doRequest(%s) [forbidden _r.[%s] param]", _r.desc, forbidden[i]);
             interr = true;

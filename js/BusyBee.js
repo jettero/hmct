@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global $
+/*global $ Mojo
 */
 
 function BusyBee() {

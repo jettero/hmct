@@ -1,6 +1,6 @@
-/*jslint white: false, onevar: false, maxerr: 500000
+/*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO REQ Template OPT setTimeout $
+/*global Mojo AMO REQ Template OPT setTimeout $ Element
 */
 
 /* {{{ */ function TaskManager() {
@@ -43,7 +43,7 @@
     if( this.namedSearches ) {
         for(i=0; i<this.namedSearches.length; i++)
             if( this.namedSearches[i].name === name )
-                return this.namedSearches[i].tokens
+                return this.namedSearches[i].tokens;
     }
 
     Mojo.Log.error("TaskManager::getSearchByName(name=%s) [namedSearches: %s] nothing found?",
@@ -91,7 +91,7 @@
 };
 
 /*}}}*/
-TaskManager.prototype.setLastSearch = function(s) {
+/* {{{ */ TaskManager.prototype.setLastSearch = function(s) {
     Mojo.Log.info("TaskManager::setLastSearch(s=%s; lastSearch=%s)", s, this.lastSearch);
 
     s = s.replace(/\s+/g, "/");
@@ -103,6 +103,8 @@ TaskManager.prototype.setLastSearch = function(s) {
 
     return (this.lastSearch = s);
 };
+
+/*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
         if( !this.lastSearch ) {
@@ -131,7 +133,7 @@ TaskManager.prototype.setLastSearch = function(s) {
             var month = "" + (currentTime.getMonth() + 1);
             var day   = "" + currentTime.getDate();
             var year  = "" + currentTime.getFullYear();
-            var now   = year + (month.length==2 ? month : "0"+month) + (day.length==2? day : "0"+day);
+            var now   = year + (month.length===2 ? month : "0"+month) + (day.length===2 ? day : "0"+day);
 
             return me.fixutf8( r.content.result ).evalJSON().each(function(t){
                 if( t.due ) {

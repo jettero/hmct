@@ -1,6 +1,6 @@
-/*jslint white: false, onevar: false
+/*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ Template palmGetResource
+/*global Mojo $ Template palmGetResource OPT TMO
 */
 
 function TaskAssistant(_i) {
@@ -162,11 +162,11 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
 
 /*}}}*/
 
-/* {{{ /**/ TaskAssistant.prototype.handleCommand = function(event) { var rl = this.task.record_locator;
+/* {{{ */ TaskAssistant.prototype.handleCommand = function(event) { var rl = this.task.record_locator;
     Mojo.Log.info("Task::handleCommand() [rl=%s]", rl);
 
     if (event.type === Mojo.Event.command) {
-        var s_a = event.command.split(/\s*(?:@@)\s*/)
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
 
         switch (s_a[0]) {
             case 'refresh':
@@ -180,7 +180,7 @@ TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPat
         }
     }
 
-}
+};
 
 /*}}}*/
 

@@ -1,3 +1,7 @@
+/*jslint white: false, onevar: false, maxerr: 500000, regexp: false
+*/
+/*global Mojo Template palmGetResource setTimeout TMO OPT AMO
+*/
 
 function TasksAssistant() {
     Mojo.Log.info("Tasks()");
@@ -12,7 +16,7 @@ function TasksAssistant() {
     this.taskTemplate      = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
 }
 
-/* {{{ /**/ TasksAssistant.prototype.setup = function() {
+/* {{{ */ TasksAssistant.prototype.setup = function() {
     Mojo.Log.info("Tasks::setup()");
 
     this.menuSetup();
@@ -58,7 +62,7 @@ function TasksAssistant() {
 
 /*}}}*/
 
-/* {{{ /**/ TasksAssistant.prototype.checkForLogins = function() {
+/* {{{ */ TasksAssistant.prototype.checkForLogins = function() {
     Mojo.Log.info("Tasks::checkForLogins()");
 
     var lc = AMO.getLoginCount();
@@ -70,10 +74,10 @@ function TasksAssistant() {
 
     if( lc < 1 )
         this.SCa.showScene("Preferences");
-}
+};
 
 /*}}}*/
-/* {{{ /**/ TasksAssistant.prototype.handleLoginChange = function(emails,current) {
+/* {{{ */ TasksAssistant.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("Tasks::handleLoginChange(current=%s)", current);
 
     if( current ) {
@@ -94,7 +98,7 @@ function TasksAssistant() {
 };
 
 /*}}}*/
-/* {{{ /**/ TasksAssistant.prototype.handleAcdetChange = function() {
+/* {{{ */ TasksAssistant.prototype.handleAcdetChange = function() {
     Mojo.Log.info("Tasks::handleAcdetChange()");
 
     var i,n;
@@ -107,7 +111,7 @@ function TasksAssistant() {
     // do not do that here
 
     for(i=0; i<sn.length; i++) {
-        var n = sn[i];
+        n = sn[i];
         this.searchSubmenu.items.push({ label: n, command: 'search @@ ' + n });
     }
 
@@ -115,7 +119,7 @@ function TasksAssistant() {
 };
 
 /*}}}*/
-/* {{{ /**/ TasksAssistant.prototype.handleTasksChange = function(tasks) {
+/* {{{ */ TasksAssistant.prototype.handleTasksChange = function(tasks) {
     Mojo.Log.info("Tasks::handleTasksChange()");
 
     this.tasksListModel.items = tasks;
@@ -135,7 +139,7 @@ function TasksAssistant() {
 
 /*}}}*/
 
-/* {{{ /**/ TasksAssistant.prototype.activate = function() {
+/* {{{ */ TasksAssistant.prototype.activate = function() {
     Mojo.Log.info("Tasks::activate()");
 
     if( this.firstActivation ) {
@@ -150,7 +154,7 @@ function TasksAssistant() {
 };
 
 /*}}}*/
-/* {{{ /**/ TasksAssistant.prototype.deactivate = function() {
+/* {{{ */ TasksAssistant.prototype.deactivate = function() {
     Mojo.Log.info("Tasks::deactivate()");
 
     AMO.unregisterLoginChange(this.handleLoginChange);
@@ -160,11 +164,11 @@ function TasksAssistant() {
 
 /*}}}*/
 
-/* {{{ /**/ TasksAssistant.prototype.handleCommand = function(event) {
+/* {{{ */ TasksAssistant.prototype.handleCommand = function(event) {
     Mojo.Log.info("Tasks::handleCommand()");
 
     if (event.type === Mojo.Event.command) {
-        var s_a = event.command.split(/\s*(?:@@)\s*/)
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
 
         switch (s_a[0]) {
             case 'refresh':
@@ -188,7 +192,7 @@ function TasksAssistant() {
         }
     }
 
-}
+};
 
 /*}}}*/
 
