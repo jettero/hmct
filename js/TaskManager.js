@@ -127,7 +127,7 @@
 
         force: force,
         cacheable: true,
-        keyStrings: [this.currentLogin, search],
+        keyStrings: ['search', this.currentLogin, search],
 
         process: function(r) {
             var currentTime = (new Date());
