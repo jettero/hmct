@@ -196,8 +196,6 @@
 /* {{{ */ AccountManager.prototype.getAccountDetails = function(force) {
     Mojo.Log.info("AccountManager::getAccountDetails(force: %s)", force ? "true" : "false");
 
-    force = true;
-
     delete this.data.meta.acdet;
     this.notifyAcdetChange();
 
@@ -228,8 +226,6 @@
 /*}}}*/
 /* {{{ */ AccountManager.prototype.getSearchLists = function(force) {
     Mojo.Log.info("AccountManager::getSearchLists(force: %s)", force ? "true" : "false");
-
-    force = true;
 
     delete this.data.meta.srchl;
     this.notifySrchlChange();
