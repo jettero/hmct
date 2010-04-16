@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo REQ Template BBO
+/*global Mojo REQ Template
 */
 
 /* {{{ */ function AccountManager() {
@@ -73,6 +73,7 @@
         delete this.data.meta.currentLogin;
 
     this.dbChanged("removed login");
+    this.notifyAcctsChange();
 };
 
 /*}}}*/
@@ -197,16 +198,91 @@
     delete this.data.meta.acdet;
     this.notifyAcdetChange();
 
-    var url = "http://hiveminder.com/=/model/user/email/" + this.data.meta.currentLogin + ".json";
+    var email = this.data.meta.currentLogin;
+
+    if( !email )
+        return;
+
+    var url = "http://hiveminder.com/=/model/user/email/" + email + ".json";
     var me = this;
 
-    REQ.doRequest({ desc: 'AccountManager::getAccountDetails()', url: url, method: 'get',
+    REQ.doRequest({ desc: 'AccountManager::getAccountDetails('+email+')', url: url, method: 'get',
+
+        cacheable: true, // uses desc as keystrings by default
+
+        // force: ??, // when should we do this?
+        // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
+
         finish: function(r) {
             Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
 
             me.data.meta.acdet = r;
             me.dbChanged("account details updated");
             me.notifyAcdetChange();
+
+            if( acdet.pro_account )
+                me.getSearchLists();
+        }
+    });
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.getSearchLists = function() {
+    Mojo.Log.info("AccountManager::getSearchLists()");
+
+    delete this.data.meta.searchLists = [];
+    this.notifySrchlChange();
+
+    var email = this.data.meta.currentLogin;
+    if( !email )
+        return;
+
+    var url = "http://hiveminder.com/=/action/SearchList.json";
+    var me = this;
+
+    REQ.doRequest({ desc: 'AccountManager::getSearchLists('+email+')', method: 'post',
+        url: "http://hiveminder.com/=/action/SearchList.json",
+
+        cacheable: true, // uses desc as keystrings by default
+
+        // force: ??, // when should we do this?
+        // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
+
+        process: function(r) {
+            var ret = [];
+
+            Mojo.Log.info("I AM TOO WORTHY: %s", Object.toJSON(r));
+
+            return ret;
+        },
+
+        finish: function(r) {
+            Mojo.Log.info("AccountManager::getSearchLists() [success] searches: %d", r.length);
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("AccountManager::getSearchLists() r.fail, r=%s", Object.toJSON(r));
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            Mojo.Controller.errorDialog(e.join("... "));
+
+            return false;
         }
     });
 };
@@ -236,6 +312,7 @@
     Mojo.Log.info("currently logged in: %s", data.meta.currentLogin);
 
     this.notifyAcctsChange();
+    this.notifyAcdetChange();
 
 };
 
