@@ -264,7 +264,11 @@
         },
 
         finish: function(r) {
-            Mojo.Log.info("AccountManager::getSearchLists() [success] searches: %d", r.length);
+            Mojo.Log.info("AccountManager::getSearchLists() [success] searches: %s", Object.toJSON(r));
+
+            me.data.meta.srchl = r;
+            me.dbChanged("search lists updated");
+            me.notifysrchlChange();
         },
 
         success: function(r) {
