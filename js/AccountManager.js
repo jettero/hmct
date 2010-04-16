@@ -410,9 +410,10 @@
     for( var i=0; i<this.acdetChangeCallbacks.length; i++ )
         this.notifyAcdetChangeStep(this.acdetChangeCallbacks[i]);
 
-    if( this.data.meta.acdet.pro_account )
-        if( this.acdetChangeCallbacks.length >= 0 )
-            this.getSearchLists();
+    if( this.data.meta.acdet )
+        if( this.data.meta.acdet.pro_account )
+            if( this.acdetChangeCallbacks.length >= 0 )
+                this.getSearchLists();
 };
 
 /*}}}*/
