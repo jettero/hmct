@@ -15,6 +15,7 @@
 
     this.loginChangeCallbacks = [];
     this.acdetChangeCallbacks = [];
+    this.srchlChangeCallbacks = [];
 
     var options = {
         name:    "HMCTAccounts",
@@ -219,9 +220,6 @@
             me.data.meta.acdet = r;
             me.dbChanged("account details updated");
             me.notifyAcdetChange();
-
-            if( acdet.pro_account )
-                me.getSearchLists();
         }
     });
 };
@@ -230,7 +228,7 @@
 /* {{{ */ AccountManager.prototype.getSearchLists = function() {
     Mojo.Log.info("AccountManager::getSearchLists()");
 
-    delete this.data.meta.searchLists = [];
+    delete this.data.meta.srchl;
     this.notifySrchlChange();
 
     var email = this.data.meta.currentLogin;
@@ -411,6 +409,45 @@
 
     for( var i=0; i<this.acdetChangeCallbacks.length; i++ )
         this.notifyAcdetChangeStep(this.acdetChangeCallbacks[i]);
+
+    if( this.data.meta.acdet.pro_account )
+        if( this.acdetChangeCallbacks.length >= 0 )
+            this.getSearchLists();
+};
+
+/*}}}*/
+
+/* {{{ */ AccountManager.prototype.registerSrchlChange = function(callback) {
+    Mojo.Log.info("AccountManager::registerSrchlChange()");
+
+    if( !this.data.meta.srchl ) // if we don't have the lists
+        if( this.srchlChangeCallbacks.length === 0 ) // and this is the first registration
+            this.getSearchLists(); // go get them
+
+    this.srchlChangeCallbacks.push(callback);
+    this.notifySrchlChangeStep(callback);
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.unregisterSrchlChange = function(callback) {
+    Mojo.Log.info("AccountManager::unregisterSrchlChange()");
+
+    this.acdetChangeCallbacks = this.acdetChangeCallbacks.reject(function(_c){ return _c === callback; });
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.notifySrchlChangeStep = function(callback) {
+    Mojo.Log.info("AccountManager::notifySrchlChangeStep()");
+
+    callback(this.data.meta.srchl);
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.notifySrchlChange = function() {
+    Mojo.Log.info("AccountManager::notifySrchlChange()");
+
+    for( var i=0; i<this.srchlChangeCallbacks.length; i++ )
+        this.notifySrchlChangeStep(this.srchlChangeCallbacks[i]);
 };
 
 /*}}}*/
