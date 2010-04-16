@@ -307,7 +307,7 @@
     Mojo.Log.info("AccountManager::registerAcdetChange()");
 
     if( !this.data.meta.acdet ) // if we don't have details
-        if( this.acdetChangeCallbacks === 0 ) // and this is the first registration
+        if( this.acdetChangeCallbacks.length === 0 ) // and this is the first registration
             this.getAccountDetails(); // go get them
 
     this.acdetChangeCallbacks.push(callback);
