@@ -193,8 +193,10 @@
 
 /*}}}*/
 
-/* {{{ */ AccountManager.prototype.getAccountDetails = function() {
-    Mojo.Log.info("AccountManager::getAccountDetails()");
+/* {{{ */ AccountManager.prototype.getAccountDetails = function(force) {
+    Mojo.Log.info("AccountManager::getAccountDetails(force: %s)", force ? "true" : "false");
+
+    force = true;
 
     delete this.data.meta.acdet;
     this.notifyAcdetChange();
@@ -210,8 +212,7 @@
     REQ.doRequest({ desc: 'AccountManager::getAccountDetails('+email+')', url: url, method: 'get',
 
         cacheable: true, // uses desc as keystrings by default
-
-        // force: ??, // when should we do this?
+        force: force,
         // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
 
         finish: function(r) {
@@ -225,8 +226,10 @@
 };
 
 /*}}}*/
-/* {{{ */ AccountManager.prototype.getSearchLists = function() {
-    Mojo.Log.info("AccountManager::getSearchLists()");
+/* {{{ */ AccountManager.prototype.getSearchLists = function(force) {
+    Mojo.Log.info("AccountManager::getSearchLists(force: %s)", force ? "true" : "false");
+
+    force = true;
 
     delete this.data.meta.srchl;
     this.notifySrchlChange();
@@ -242,8 +245,7 @@
         url: "http://hiveminder.com/=/action/SearchList.json", params: {post: "please"},
 
         cacheable: true, // uses desc as keystrings by default
-
-        // force: ??, // when should we do this?
+        force: force,
         // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
 
         process: function(r) {
