@@ -1,0 +1,26 @@
+---
+accepted_eula_version: 1
+access_level: guest
+auth_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+beta_features: 1
+calendar_starts_monday: 0
+created_on: 2009-06-22
+email: jettero@gmail.com
+email_confirmed: 1
+email_secret: xxxxxxxx
+email_service_updates: 1
+id: xxxxxxxx
+invited_by: ~
+last_visit: 2010-03-24 18:34:54
+likes_ticky_boxes: 1
+name: Paul Miller
+never_email: 0
+notification_email_frequency: never
+number_of_invites_sent: 0
+paid_until: 2010-07-17
+per_page: 0
+primary_account: xxxxxx
+pro_account: 1
+taskbar_on_bottom: 1
+time_zone: America/New_York
+was_pro_account: 1
