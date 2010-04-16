@@ -5,10 +5,10 @@ function StageAssistant() {
 
     OPT = Mojo.loadJSONFile(Mojo.appPath + "runtime_options.json");
 
+    REQ = new RequestEngine();
     AMO = new AccountManager();
     TMO = new TaskManager();
     BBO = new BusyBee();
-    REQ = new RequestEngine();
 }
 
 StageAssistant.prototype.setup = function() {
