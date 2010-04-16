@@ -251,24 +251,16 @@
         process: function(r) {
             var ret = [];
 
-            // r={"success": 1, "content": {"search": [{"owner": "42673",
-            // "created": "2009-07-17 10:43:27", "tokens": "accepted but first
-            // nothing not complete hidden until before tomorrow tag freelance
-            // not hidden forever", "name": "All Freelance", "id": "744"},
-            // {"owner": "42673", "created": "2009-07-25 18:09:44", "tokens":
-            // "accepted but first nothing not complete hidden until before
-            // tomorrow tag cpan not hidden forever", "name": "CPAN Stuff",
-            // "id": "757"}, {"owner": "42673", "created": "2009-07-21
-            // 09:44:24", "tokens": "accepted but first nothing not complete
-            // hidden until before tomorrow tag chores not hidden forever",
-            // "name": "Chores", "id": "748"}, {"owner": "42673", "created":
-            // "2009-07-26 10:07:19", "tokens": "complete completed after 4
-            // days ago sort_by completed_at", "name": "Done Recently", "id":
-            // "758"}, {"owner": "42673", "created": "2010-02-12 10:10:13",
-            // "tokens": "accepted but first nothing not complete due before 7
-            // days from
+            if( !r.content ) return ret;
+            if( !r.content.search ) return ret;
 
-            return ret;
+            return r.content.search; /*
+
+                see yml/search_list.yml
+
+                [ { owner: user_id, created: Date, tokens: "blarg blarg", name: "Blarg!", id: row_id }, ... ]
+
+            */
         },
 
         finish: function(r) {
