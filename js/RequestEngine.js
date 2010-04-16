@@ -234,7 +234,7 @@ function RequestEngine() {
             delete me.reqdb[_r.desc];
 
             if( _r.failure() ) {
-                var t = new Template("Ajax Error: #{status}");
+                var t = new Template("Ajax #{status} Error: #{responseText} fetching: " + _r.url);
                 var m = t.evaluate(transport);
                 var e = [m];
 
