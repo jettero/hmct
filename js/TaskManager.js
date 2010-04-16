@@ -32,6 +32,7 @@
     Mojo.Log.info("TaskManager::handleAcdetChange() [namedSearches: %s]", Object.toJSON(this.namedSearches));
 
     // TODO: go through acdet if applicable
+    Mojo.Log.info("TaskManager::handleAcdetChange() [acdet: %s]", Object.toJSON(acdet));
 };
 
 /*}}}*/
