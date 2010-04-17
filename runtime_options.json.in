@@ -2,7 +2,6 @@
     predefinedSearches: [
         { name: 'todo',     tokens: 'not/complete' },
         { name: 'overdue',  tokens: 'owner/me/not/complete/due/before/today' }
-        { name: 'flurggit', tokens: 'tag/flurggit' },
     ],
     unfoldTaskCompressors: %UNFOLD,['task']%,
     defaultSearch: %DEFSER,todo%,
