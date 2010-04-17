@@ -81,8 +81,12 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks::handleLoginChange(current=%s)", current);
 
     if( current ) {
-        this.commandMenuModel.items[2] = emails.length>1 ? this.commandMenuModelCurrentLoginTemplate(current) : { label: current };
+        this.commandMenuModel.items[2] = emails.length>1
+                                       ? this.commandMenuModelCurrentLoginTemplate(current)
+                                       : { label: current };
+
         var items = this.loginSubmenu.items = [];
+
         for(var i=0; i<emails.length; i++)
             items.push({ label: emails[i].email, command: "login-as @@ " + emails[i].email });
 
