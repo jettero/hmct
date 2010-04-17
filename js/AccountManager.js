@@ -107,11 +107,11 @@
 };
 
 /*}}}*/
-/* {{{ */ AccountManager.prototype.login = function(email,pass,s,f) {
+/* {{{ */ AccountManager.prototype.login = function(email, pass, success, fail, force) {
     Mojo.Log.info("AccountManager::login(email=%s)", email);
 
-    if( !s ) s = function() {};
-    if( !f ) f = function() {};
+    if( !success ) success = function() {};
+    if( !fail    ) fail    = function() {};
 
     var me = this;
 
@@ -131,7 +131,7 @@
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
 
-            if( f() ) {
+            if( fail() ) {
                 var e = [];
 
                 if( r.error )
@@ -155,9 +155,9 @@
             me.data.meta.currentLogin = email;
             me.dbChanged("new current login");
             me.notifyAcctsChange();
-            me.getAccountDetails();
+            me.getAccountDetails(force);
 
-            s(email, pass, r);
+            success(email, pass, r);
         }
     });
 
@@ -176,6 +176,15 @@
 /*}}}*/
 /* {{{ */ AccountManager.prototype.refreshCurrentLogin = function() {
     Mojo.Log.info("AccountManager::refreshCurrentLogin()");
+
+    if( !this.data.meta.currentLogin ) {
+        Mojo.Controller.errorDialog("Please login first...");
+        return;
+    }
+
+    var e = this.data.meta.currentLogin;
+    this.login( e, this.getPasswdForEmail(e), null, null, true );
+
 };
 
 /*}}}*/
@@ -223,7 +232,7 @@
 
             me.data.meta.acdet = r;
             me.dbChanged("account details updated");
-            me.notifyAcdetChange();
+            me.notifyAcdetChange(force);
         }
     });
 };
@@ -418,8 +427,8 @@
 };
 
 /*}}}*/
-/* {{{ */ AccountManager.prototype.notifyAcdetChange = function() {
-    Mojo.Log.info("AccountManager::notifyAcdetChange()");
+/* {{{ */ AccountManager.prototype.notifyAcdetChange = function(forceSearchLists) {
+    Mojo.Log.info("AccountManager::notifyAcdetChange(forceSearchLists: %s)", forceSearchLists ? "true" : "false");
 
     for( var i=0; i<this.acdetChangeCallbacks.length; i++ )
         this.notifyAcdetChangeStep(this.acdetChangeCallbacks[i]);
@@ -427,7 +436,7 @@
     if( this.data.meta.acdet )
         if( this.data.meta.acdet.pro_account )
             if( this.acdetChangeCallbacks.length >= 0 )
-                this.getSearchLists();
+                this.getSearchLists(forceSearchLists);
 };
 
 /*}}}*/
