@@ -88,6 +88,7 @@
 /*}}}*/
 /* {{{ */ TaskManager.prototype.namedSearchTasks = function(name,force) {
     Mojo.Log.info("TaskManager::namedSearchTasks(%s,[%s])", name, force ? "force" : "cache ok");
+
     this.searchTasks(this.getSearchByName(name),force);
 };
 
