@@ -7,12 +7,14 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks()");
 
     this.SCa = Mojo.Controller.stageController.assistant;
+
     this.menuSetup         = this.SCa.menuSetup.bind(this);
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.handleSrchlChange = this.handleSrchlChange.bind(this);
     this.handleTasksChange = this.handleTasksChange.bind(this);
     this.checkForLogins    = this.checkForLogins.bind(this);
     this.taskListTap       = this.taskListTap.bind(this);
+
     this.taskTemplate      = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
 }
 
