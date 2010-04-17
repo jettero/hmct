@@ -114,6 +114,11 @@ function TasksAssistant() {
     // NOTE: the task manager asks the account manager for lists from preminum accounts
     // do not do that here
 
+    for(i=0; i<sl.length; i++) {
+        n = sl[i].name;
+        this.searchSubmenu.items.push({ label: n, command: 'search @@ ' + n });
+    }
+
     for(i=0; i<sn.length; i++) {
         n = sn[i];
         this.searchSubmenu.items.push({ label: n, command: 'search @@ ' + n });
