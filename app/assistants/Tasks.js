@@ -9,7 +9,7 @@ function TasksAssistant() {
     this.SCa = Mojo.Controller.stageController.assistant;
     this.menuSetup         = this.SCa.menuSetup.bind(this);
     this.handleLoginChange = this.handleLoginChange.bind(this);
-    this.handleAcdetChange = this.handleAcdetChange.bind(this);
+    this.handleSrchlChange = this.handleSrchlChange.bind(this);
     this.handleTasksChange = this.handleTasksChange.bind(this);
     this.checkForLogins    = this.checkForLogins.bind(this);
     this.taskListTap       = this.taskListTap.bind(this);
@@ -98,8 +98,12 @@ function TasksAssistant() {
 };
 
 /*}}}*/
-/* {{{ */ TasksAssistant.prototype.handleAcdetChange = function() {
-    Mojo.Log.info("Tasks::handleAcdetChange()");
+/* {{{ */ TasksAssistant.prototype.handleSrchlChange = function(sl) {
+
+    if( !sl )
+        sl = [];
+
+    Mojo.Log.info("Tasks::handleSrchlChange(sl.len: %d)", sl.length);
 
     var i,n;
 
@@ -149,7 +153,7 @@ function TasksAssistant() {
     }
 
     AMO.registerLoginChange(this.handleLoginChange);
-    AMO.registerAcdetChange(this.handleAcdetChange);
+    AMO.registerSrchlChange(this.handleSrchlChange);
     TMO.registerTasksChange(this.handleTasksChange);
 };
 
@@ -158,7 +162,7 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks::deactivate()");
 
     AMO.unregisterLoginChange(this.handleLoginChange);
-    AMO.unregisterAcdetChange(this.handleAcdetChange);
+    AMO.unregisterSrchlChange(this.handleSrchlChange);
     TMO.unregisterTasksChange(this.handleTasksChange);
 };
 
