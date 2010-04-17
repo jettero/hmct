@@ -11,8 +11,11 @@ curl -F post=please -sb $HM http://hiveminder.com/=/action/SearchList.yml
 export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow
 export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow/tag/plate/sort_by/priority
 
-# download tasks given my query
-curl -F query=$Q -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml
+# download tasks given my query ( uses slashed query form )
+curl -F query="`echo $Q | sed 's, ,/,g'`" -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml
+
+# download tasks given my query ( uses spaced query form )
+curl -F tokens="`echo $Q | sed 's,/, ,g'`" -sb $HM http://hiveminder.com/=/action/TaskSearch.yml
 
 # get account options and pro status and things
 export E=jettero@gmail.com

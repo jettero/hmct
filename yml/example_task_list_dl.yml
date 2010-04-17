@@ -8,18 +8,13 @@ content:
       complete: 0
       completed_at: ~
       created: 2009-09-06 07:43:39
-      description: |-
-        I have permission from them to use the bee logo.  But I've renamed the app Hiveminder Cloud Tasks for now.
-        
-        VERSION 0.5 Mission: See everything, add new tasks.
-        
-        (EDITing tasks is the 0.75 release)
+      description: "I have permission from them to use the bee logo.  But I've renamed the app Hiveminder Cloud Tasks for now.\r\n\r\nVERSION 0.5 Mission: See everything, add new tasks.\r\n\r\n(EDITing tasks is the 0.75 release)"
       due: ~
       group: ~
       id: 849559
-      last_modified: 2010-03-30 21:14:50
-      next_action_by: 'Paul Miller <jettero@gmail>'
-      owner: 'Paul Miller <jettero@gmail>'
+      last_modified: 2010-04-17 11:40:28
+      next_action_by: 'Paul Miller <jettero@gmail.com>'
+      owner: 'Paul Miller <jettero@gmail.com>'
       priority: 3
       record_locator: TXNQ
       repeat_days_before_due: 1
@@ -27,13 +22,13 @@ content:
       repeat_next_create: ~
       repeat_period: once
       repeat_stacking: 0
-      requestor: 'Paul Miller <jettero@gmail>'
+      requestor: 'Paul Miller <jettero@gmail.com>'
       starts: ~
-      summary: build org.voltar.hiveminder version 0.5 release
+      summary: build org.voltar.hiveminder version 0.5 release (aka the View Only release)
       tags: Prē hiveminder plate vhb voltar.org webos
       time_estimate: ~
       time_left: ~
-      time_worked: 20h
+      time_worked: 1d8h
       type: task
       will_complete: 1
 error: ~
