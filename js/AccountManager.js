@@ -264,7 +264,7 @@
 
             me.data.meta.srchl = r;
             me.dbChanged("search lists updated");
-            me.notifysrchlChange();
+            me.notifySrchlChange();
         },
 
         success: function(r) {
