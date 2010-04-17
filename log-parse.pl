@@ -3,16 +3,23 @@
 use strict;
 use Time::Local qw(timegm_nocheck);
 use POSIX qw(strftime);
+use Getopt::Long;
+use Pod::Usage;
+
+my $on;
+my $less;
+
+Getopt::Long::Configure("bundling");
+GetOptions(
+    "help|H" => sub { pod2usage(-verbose=>1) },
+    "h"      => sub { pod2usage() },
+    "a"      => \$on,
+) or pod2usage();
 
 $SIG{INT} = sub { print "\nbye\n"; exit 0 };
 
-my $old = select STDIN; $| = 1;
-select $old; $| = 1;
-
 my @start = ( map { strftime('%H:%M:%S', gmtime(time() + $_)) } (0,-1,+1) );
 my $start = do { local $" = "|"; qr(@start) };
-
-my $on = $ENV{ALWAYS_ON} | $ENV{ALL};
 
 open my $dump, ">", "last_run.log" or die $!;
 
@@ -42,3 +49,46 @@ while(<STDIN>) {
     }
 }
 
+__END__
+
+=head1 NAME
+
+log-parse - parse webos log files into a human readable format
+
+=head1 DESCRIPTION
+
+blarg
+
+=head1 SYNOPSIS
+
+    app
+       -h           help
+       --help -H    full help
+
+       -a           show all lines, rather than waiting for the app to start up
+
+=head1 OPTIONS
+
+=over
+
+=item B<-h>
+
+Short help.
+
+=item B<-H> B<--help>
+
+Long help (this).
+
+=back
+
+=head1 COPYRIGHT
+
+Copyright 2009 -- Paul Miller C<< <jettero@cpan.org> >>
+
+Licensed under the current version of the GPL.
+
+=head1 SEE ALSO
+
+perl(1)
+
+=cut
