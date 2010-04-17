@@ -218,7 +218,7 @@
     if( !email )
         return;
 
-    var url = "http://hiveminder.com/=/model/user/email/" + email + ".json";
+    var url = "https://hiveminder.com/=/model/user/email/" + email + ".json";
     var me = this;
 
     REQ.doRequest({ desc: 'AccountManager::getAccountDetails('+email+')', url: url, method: 'get',
@@ -248,11 +248,10 @@
     if( !email )
         return;
 
-    var url = "http://hiveminder.com/=/action/SearchList.json";
     var me = this;
 
     REQ.doRequest({ desc: 'AccountManager::getSearchLists('+email+')', method: 'post',
-        url: "http://hiveminder.com/=/action/SearchList.json", params: {post: "please"},
+        url: "https://hiveminder.com/=/action/SearchList.json", params: {post: "please"},
 
         cacheable: true, // uses desc as keystrings by default
         force: force,
