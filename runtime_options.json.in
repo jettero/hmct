@@ -1,7 +1,27 @@
 {
     predefinedSearches: [
         { name: 'todo',     tokens: 'not/complete' },
-        { name: 'overdue',  tokens: 'owner/me/not/complete/due/before/today' }
+
+        { tokens: "/list/owner/me/not/complete/due/before/today",         name: "Overdue!"        },
+        { tokens: "/list/owner/me/not/complete/due/today",                name: "Due today"       },
+        { tokens: "/list/owner/me/not/complete/due/tomorrow",             name: "Due tomorrow"    },
+        { tokens: "/list/owner/me/not/complete/hidden/until/after/today", name: "Later"           },
+        { tokens: "/list/owner/me/unaccepted/not/complete",               name: "Unaccepted"      },
+        { tokens: "/list/requestor/me/not/owner/me/not/complete",         name: "My requests"     },
+        { tokens: "/list/owner/me/complete/sort_by/completed_at",         name: "Done"            },
+        { tokens: "/list/owner/me/not/repeat_period/once",                name: "Repeating tasks" },
+        { tokens: "/list/owner/me/hidden/forever",                        name: "Hidden forever"  },
+        { tokens: "/list/but/first/nothing/not/complete/owner/me/hidden/until/before/tomorrow/time/left/lte/15m",                  name: "Time left &lt; 15m" },
+        { tokens: "/list/but/first/nothing/not/complete/owner/me/hidden/until/before/tomorrow/time/left/gt/15m/time/left/lte/1h",  name: "Time left 15m-1h"   },
+        { tokens: "/list/but/first/nothing/not/complete/owner/me/hidden/until/before/tomorrow/time/left/gt/1h/time/left/lte/4h",   name: "Time left 1h-4h"    },
+        { tokens: "/list/but/first/nothing/not/complete/owner/me/hidden/until/before/tomorrow/time/left/gt/4h/time/left/lte/8h",   name: "Time left 4h-8h"    },
+        { tokens: "/list/but/first/nothing/not/complete/owner/me/hidden/until/before/tomorrow/time/left/gt/8h",                    name: "Time left &gt; 8h"  },
+        { tokens: "/list/not/complete/owner/me/time/estimate/none",         name: "No estimate"                    },
+        { tokens: "/list/not/next/action/by/me/not/complete",               name: "Waiting on"                     },
+        { tokens: "/list/next/action/by/me/not/complete",                   name: "Needs reply"                    },
+        { tokens: "/list/next/action/by/me/not/requestor/me/not/complete",  name: "Needs reply, others&#39; tasks" },
+        { tokens: "/list/next/action/by/me/requestor/me/not/complete",      name: "Needs reply, my tasks"          }
+
     ],
     unfoldTaskCompressors: %UNFOLD,['task']%,
     defaultSearch: %DEFSER,todo%,
