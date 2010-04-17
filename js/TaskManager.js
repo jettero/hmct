@@ -7,7 +7,7 @@
     Mojo.Log.info("TaskManager()");
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
-    this.handleAcdetChange = this.handleAcdetChange.bind(this);
+    this.handleSrchlChange = this.handleSrchlChange.bind(this);
 
     this.lso = new Mojo.Model.Cookie("last search");
     this.lastSearch = this.lso.get();
@@ -15,7 +15,7 @@
     Mojo.Log.info("TaskManager() [lastSearch: %s]", this.lastSearch);
 
     AMO.registerLoginChange(this.handleLoginChange);
-    AMO.registerAcdetChange(this.handleAcdetChange);
+    AMO.registerSrchlChange(this.handleSrchlChange);
 
     this.tasksChangeCallback = [];
     this.taskChangeCallback = {};
@@ -23,16 +23,17 @@
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.handleAcdetChange = function(acdet) {
-    Mojo.Log.info("TaskManager::handleAcdetChange()");
-
-    var i;
+/* {{{ */ TaskManager.prototype.handleSrchlChange = function(sl) {
+    Mojo.Log.info("TaskManager::handleSrchlChange()");
 
     this.namedSearches = OPT.predefinedSearches;
-    Mojo.Log.info("TaskManager::handleAcdetChange() [namedSearches: %s]", Object.toJSON(this.namedSearches));
 
-    // TODO: go through acdet if applicable
-    Mojo.Log.info("TaskManager::handleAcdetChange() [acdet: %s]", Object.toJSON(acdet));
+    Mojo.Log.info("TaskManager::handleSrchlChange() [namedSearches: %s]", Object.toJSON(this.namedSearches));
+    Mojo.Log.info("TaskManager::handleSrchlChange() [sl: %s]", Object.toJSON(sl));
+
+    if( sl )
+        for(var i = sl.length-1; i>=0; i--)
+            this.namedSearches.unshift(sl[i]); // I wonder if this could be simplifed, like perl: unshift @target, @add;
 };
 
 /*}}}*/
@@ -256,7 +257,7 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.notifyTaskChange = function(task) {
-    var rl  = task.record_locator; 
+    var rl  = task.record_locator;
     var tcc = this.taskChangeCallback[rl];
 
     var interestedParties = 0;
@@ -326,7 +327,7 @@
         },
 
         success: function(r) {
-            if( r.match(/^<\?xml/) ) 
+            if( r.match(/^<\?xml/) )
                 return true;
 
             Mojo.Log.info("TaskManager::getComments(%s) r=%s", rl, Object.toJSON(r));
