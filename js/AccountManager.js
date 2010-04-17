@@ -174,6 +174,11 @@
 };
 
 /*}}}*/
+/* {{{ */ AccountManager.prototype.refreshCurrentLogin = function() {
+    Mojo.Log.info("AccountManager::refreshCurrentLogin()");
+};
+
+/*}}}*/
 /* {{{ */ AccountManager.prototype.getLoginCount = function() {
     var ret = 0;
 

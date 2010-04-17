@@ -35,9 +35,14 @@ StageAssistant.prototype.handleCommand = function(event) {
 
     if(event.type == Mojo.Event.command) {
         Mojo.Log.info("executing menu command: %s", event.command);
+
         var a;
+
         if( a = event.command.match(/^myshow-(.+)/) )
             Mojo.Controller.stageController.assistant.showScene(a[1]);
+
+        if( event.command === "refresh-login" )
+            AMO.refreshCurrentLogin();
     }
 }
 
@@ -47,7 +52,8 @@ StageAssistant.prototype.menuSetup = function() {
         items: [
             { label: "Help",                   command: 'myshow-Help'        },
             { label: "About",                  command: 'myshow-About'       },
-            { label: "Preferences / Accounts", command: 'myshow-Preferences' }
+            { label: "Preferences & Accounts", command: 'myshow-Preferences' },
+            { label: "Refresh Current Login",  command: 'refresh-login'      }
         ]
     };
 
