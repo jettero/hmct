@@ -33,7 +33,7 @@
 
     if( sl )
         for(var i = sl.length-1; i>=0; i--) {
-            sl[i].name = sl[i].name = "[+] " . sl[i].name;
+            sl[i].name = "[+] " + sl[i].name;
 
             this.namedSearches.unshift(sl[i]);
         }
