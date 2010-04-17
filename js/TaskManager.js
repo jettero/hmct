@@ -32,8 +32,11 @@
     Mojo.Log.info("TaskManager::handleSrchlChange() [sl: %s]", Object.toJSON(sl));
 
     if( sl )
-        for(var i = sl.length-1; i>=0; i--)
-            this.namedSearches.unshift(sl[i]); // I wonder if this could be simplifed, like perl: unshift @target, @add;
+        for(var i = sl.length-1; i>=0; i--) {
+            sl[i].name = sl[i].name = "[+] " . sl[i].name;
+
+            this.namedSearches.unshift(sl[i]);
+        }
 };
 
 /*}}}*/
