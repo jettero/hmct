@@ -95,7 +95,7 @@ function RequestEngine() {
 
         if( !_r.cacheKey )
             _r.cacheKey = _r.keyStrings
-                        ? hex_md5( _r.keyStrings.join("|") )
+                        ? hex_md5( _r.desc + "||" + _r.keyStrings.join("|") )
                         : _r.desc;
 
         Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s; forced: %s]",

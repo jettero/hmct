@@ -132,7 +132,7 @@
 
         force: force,
         cacheable: true,
-        keyStrings: ['search', this.currentLogin, search],
+        keyStrings: [this.currentLogin, search],
 
         process: function(r) {
             var currentTime = (new Date());
@@ -298,7 +298,7 @@
         params: {},
 
         cacheable: true,
-        keyStrings: [this.currentLogin, 'getComments', rl],
+        keyStrings: [this.currentLogin],
         cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
 
         xml: true, // not a JSON request
