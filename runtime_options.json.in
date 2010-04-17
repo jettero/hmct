@@ -1,6 +1,6 @@
 {
     predefinedSearches: [
-        { name: 'todo',     tokens: 'not/complete' },
+        { name: 'Not Complete',  tokens: 'not/complete' },
 
         { tokens: "/list/owner/me/not/complete/due/before/today",         name: "Overdue!"        },
         { tokens: "/list/owner/me/not/complete/due/today",                name: "Due today"       },
@@ -24,7 +24,7 @@
 
     ],
     unfoldTaskCompressors: %UNFOLD,['task']%,
-    defaultSearch: %DEFSER,todo%,
+    defaultSearch: %DEFSER,Not Complete%,
     cacheMaxAge:   %MAXAGE,4000%,
     _preTapTask:   %PRETAP,false%
 }
