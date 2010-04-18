@@ -21,6 +21,8 @@
 .task-long div.dep    { font-size: small; }
 .task-long div.dep.bfc0, .task-long div.dep.atc0 { display: none; }
 
+.task-short .complete1 { text-decoration: line-through; }
+
 .task-id {
     font-family: monospace;
     font-weight: bold;
