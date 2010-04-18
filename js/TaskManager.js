@@ -408,7 +408,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             for(var i=0; i<me.tasks.length; i++) { var mt = me.tasks[i];
             for(var j=0; j<r.length; j++) {        var rt = r[j];
                 if( mt.id == rt.id ) { // STFU: we really do want the soft == here, one side seems to be string vs number
-                    delete rt[id]; // no need to copy this over
+                    delete rt.id; // no need to copy this over
 
                     for( var k in rt )
                         mt[k] = rt[i];
