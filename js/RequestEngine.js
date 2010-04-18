@@ -185,29 +185,41 @@ function RequestEngine() {
                 Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success transport=%s", _r.desc, Object.toJSON(transport));
 
                 var r;
-                if( _r.xml ) {
-                    r = transport.responseText;
+                try {
+                    if( _r.xml ) {
+                        r = transport.responseText;
 
-                } else {
-                    r = transport.responseJSON;
+                    } else {
+                        r = transport.responseJSON;
+                    }
                 }
 
-                if( r ) {
-                    if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
-                        r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
+                catch(_errcnt) {
+                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem finding request contents: %s", _r.desc, _errcnt);
+                }
 
-                        if( _r.cacheable ) // next, if it's cacheable,
-                            me.dbSetCache(_r.cacheKey, r); // do so
+                try {
+                    if( r ) {
+                        if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
+                            r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
 
-                        r._req_cacheAge = 0;
+                            if( _r.cacheable ) // next, if it's cacheable,
+                                me.dbSetCache(_r.cacheKey, r); // do so
 
-                        _r.finish(r); // lastly, pass the final result to finish
+                            r._req_cacheAge = 0;
+
+                            _r.finish(r); // lastly, pass the final result to finish
+                        }
+
+                    } else if( _r.failure() ) {
+                        e = ["Unknown error issuing " + _r.desc + " request"];
+
+                        Mojo.Controller.errorDialog(e.join("... "));
                     }
+                }
 
-                } else if( _r.failure() ) {
-                    e = ["Unknown error issuing " + _r.desc + " request"];
-
-                    Mojo.Controller.errorDialog(e.join("... "));
+                catch(_errcb) {
+                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r.desc, _errcb);
                 }
 
             } else if( !transport.status ) {
