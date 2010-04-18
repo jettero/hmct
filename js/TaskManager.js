@@ -392,10 +392,10 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 ret.push({
 
                     but_first_count: t.depends_on_count,
-                    but_first_html:  "<ul><li>" + t.depends_on_summaries.replace(/\t/g, "</li><li>") + "</li></ul>",
+                    but_first_html:  "<ul><li>" + t.depends_on_summaries.escapeHTML().replace(/\t/g, "</li><li>") + "</li></ul>",
 
                     and_then_count: t.depended_on_by_count,
-                    and_then_html:  "<ul><li>" + t.depended_on_by_summaries.replace(/\t/g, "</li><li>") + "</li></ul>",
+                    and_then_html:  "<ul><li>" + t.depended_on_by_summaries.escapeHTML().replace(/\t/g, "</li><li>") + "</li></ul>",
 
                     id: t.id
                 });
