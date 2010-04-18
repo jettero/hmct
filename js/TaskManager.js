@@ -383,20 +383,22 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         process: function(r) {
             var ret = [];
             var T = r.content.tasks;
-            var i,t,k,e;
+            var i,t,k;
 
             Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d) [process.T: %s]", cma, Object.toJSON(T));
 
             for(i=0; i<T.length; i++) {
                 t = T[i];
-                e = {id: t.id};
+                ret.push({
 
-                for(k in t) {
-                    if( k.match(/^depend/) )
-                        e[k] = t[k];
-                }
+                    but_first_count: t.depends_on_count,
+                    but_first_html:  "<ul><li>" + t.depends_on_summaries.replace(/\t/g, "</li><li>") + "</li></ul>",
 
-                ret.push(e);
+                    and_then_count: t.depended_on_by_count,
+                    and_then_html:  "<ul><li>" + t.depended_on_by_summaries.replace(/\t/g, "</li><li>") + "</li></ul>",
+
+                    id: t.id
+                });
             }
 
             return ret;

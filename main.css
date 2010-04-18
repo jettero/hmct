@@ -17,6 +17,10 @@
 .task-delta dd             { border-left: 2px solid #bbbbdd; padding-left: 3px; }
 .task-delta div.attachment { border-left: 2px solid #ffaaaa; padding-left: 3px; }
 
+.task-long div.dep li { font-size: small; font-style: italic; color: grey; }
+.task-long div.dep    { font-size: small; }
+.task-long div.dep.bfc0, .task-long div.dep.atc0 { display: none; }
+
 .task-id {
     font-family: monospace;
     font-weight: bold;
