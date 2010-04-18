@@ -110,6 +110,13 @@
     return (this.lastSearch = s);
 };
 
+TaskManager.prototype._getLastSearchSpaced = function(s) {
+    if( !this.lastSearch )
+        return "";
+
+    return this.lastSearch.replace(/\//g, ' '); // heh
+};
+
 /*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
@@ -157,6 +164,7 @@
             // can be either a fresh request or a cache result
             me.tasks = r;
             me.notifyTasksChange();
+            me.getFurtherDetails(r._req_cacheAge);
         },
 
         success: function(r) {
@@ -352,6 +360,30 @@
             Mojo.Controller.errorDialog(e.join("... "));
 
             return false;
+        }
+    });
+
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.getFurtherDetails = function(cma) {
+    Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d)", cma);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::getFurtherDetails()',
+        method: 'post', url: 'http://hiveminder.com/=/action/TaskSearch.yml',
+        params: {tokens: this._getLastSearchSpaced()},
+
+        cacheable: true,
+        keyStrings: [this.currentLogin],
+        cacheMaxAgeOverride: cma, // we're never interested in a cache older than our tasks
+
+        process: function(r) {
+        },
+
+        finish: function(r) {
         }
     });
 
