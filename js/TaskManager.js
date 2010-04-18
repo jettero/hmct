@@ -373,7 +373,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
     REQ.doRequest({
           desc: 'TaskManager::getFurtherDetails()',
-        method: 'post', url: 'http://hiveminder.com/=/action/TaskSearch.yml',
+        method: 'post', url: 'http://hiveminder.com/=/action/TaskSearch.json',
         params: {tokens: this._getLastSearchSpaced()},
 
         cacheable: true,
@@ -381,9 +381,66 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         cacheMaxAgeOverride: cma, // we're never interested in a cache older than our tasks
 
         process: function(r) {
+            var ret = [];
+            var T = r.content.tasks;
+            var i,t,k,e;
+
+            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d) [process.T: %s]", cma, Object.toJSON(T));
+
+            for(i=0; i<T.length; i++) {
+                t = T[i];
+                e = {id: t.id};
+
+                for(k in t) {
+                    if( k.match(/^depend/) )
+                        e[k] = t[k];
+                }
+
+                ret.push(e);
+            }
+
+            return ret;
         },
 
         finish: function(r) {
+            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d) [finish.r: %s]", cma, Object.toJSON(r));
+
+            for(var i=0; i<me.tasks.length; i++) { var mt = me.tasks[i];
+            for(var j=0; j<r.length; j++) {        var rt = r[j];
+                if( mt.id == rt.id ) { // STFU: we really do want the soft == here, one side seems to be string vs number
+                    delete rt[id]; // no need to copy this over
+
+                    for( var k in rt )
+                        mt[k] = rt[i];
+                }
+            }}
+
+            me.notifyTasksChange();
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::getFurtherDetails() r.fail, r=%s", Object.toJSON(r));
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search sequel ...");
+
+            Mojo.Controller.errorDialog(e.join("... "));
+
+            return false;
         }
     });
 
