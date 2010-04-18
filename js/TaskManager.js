@@ -411,7 +411,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                     delete rt.id; // no need to copy this over
 
                     for( var k in rt )
-                        mt[k] = rt[i];
+                        mt[k] = rt[k];
                 }
             }}
 
