@@ -192,7 +192,6 @@ function RequestEngine() {
                     r = transport.responseJSON;
                 }
 
-
                 if( r ) {
                     if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
                         r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
