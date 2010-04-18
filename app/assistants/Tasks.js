@@ -15,7 +15,8 @@ function TasksAssistant() {
     this.checkForLogins    = this.checkForLogins.bind(this);
     this.taskListTap       = this.taskListTap.bind(this);
 
-    this.taskTemplate      = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
+    this.taskTemplate = new Mojo.View.Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"),
+        "task-short", Mojo.View.escapeHTMLInTemplates);
 }
 
 /* {{{ */ TasksAssistant.prototype.setup = function() {

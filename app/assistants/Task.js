@@ -13,8 +13,8 @@ function TaskAssistant(_i) {
 }
 
 // Templates and Resources {{{
-TaskAssistant.prototype.shortTemplate = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"));
-TaskAssistant.prototype.longTemplate  = new Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"));
+TaskAssistant.prototype.shortTemplate = new Mojo.View.Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"), "task-short", Mojo.View.escapeHTMLInTemplates);
+TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(Mojo.appPath + "app/views/tt/task-long.html"),  "task-long",  Mojo.View.escapeHTMLInTemplates);
 // }}}
 
 /* {{{ */ TaskAssistant.prototype.setup = function() {
