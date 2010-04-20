@@ -1,10 +1,8 @@
 <div class="title todo-item task-long">
 
-    <div class="task-description">#{description}</div>
-
-    <br/>
-
-    <div class="dep but-first bfc#{but_first_count}">But First: #{-but_first_html}</div>
-    <div class="dep and-then atc#{and_then_count}">And Then: #{-and_then_html}</div>
+    <div class="task-description #{desc_class}"><em>Description:</em> &nbsp; #{description}</br></div>
+    <div class="task-hours #{hours_class}"><br><img src="img/clock.png"/> #{hours_txt} </div>
+    <div class="dep but-first bfc#{but_first_count}"><br/>But First: #{-but_first_html}</div>
+    <div class="dep and-then atc#{and_then_count}"><br>And Then: #{-and_then_html}</div>
 
 </div>

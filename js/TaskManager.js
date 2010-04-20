@@ -157,6 +157,28 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                     t.due_class = "not-due";
                 }
 
+                t.desc_class = t.description.match(/\S/) ? "" : "generically-hidden";
+
+                if( t.time_worked   === "~" ) delete t.time_worked;
+                if( t.time_left     === "~" ) delete t.time_left;
+                if( t.time_estimate === "~" ) delete t.time_estimate;
+
+                if( t.time_worked ) {
+                    t.hours_txt = t.time_worked;
+
+                    if( t.time_left )
+                        t.hours_txt += " / " + t.time_left;
+
+                    t.hours_class = "time-worked";
+
+                } else if( t.time_left ) {
+                    t.hours_txt = "0h / " + t.time_left;
+                    t.hours_class = "time-worked not-started";
+
+                } else {
+                    t.hours_class = "generically-hidden";
+                }
+
             });
         },
 
