@@ -78,6 +78,7 @@
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
     this.currentLogin = current;
+    this.currentLogin_re = new RegExp("<" + current + ">");
 
     if( current )
         this.searchTasks();
@@ -178,6 +179,9 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 } else {
                     t.hours_class = "generically-hidden";
                 }
+
+                if( t.requestor.match(me.currentLogin_re) )
+                    t.requestor_class = "generically-hidden";
 
             });
         },
