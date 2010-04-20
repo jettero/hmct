@@ -179,23 +179,28 @@ function RequestEngine() {
             BBO.done(_r.desc);
             delete me.reqdb[_r.desc];
 
-            var e;
-
             if( transport.status >= 200 && transport.status < 300 ) {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success transport=%s", _r.desc, Object.toJSON(transport));
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success", _r.desc);
 
                 var r;
                 try {
                     if( _r.xml ) {
                         r = transport.responseText;
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) chose responseText from transport", _r.desc);
 
                     } else {
                         r = transport.responseJSON;
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) chose responseJSON from transport", _r.desc);
                     }
                 }
 
                 catch(_errcnt) {
                     Mojo.Log.error("RequestEngine::_doRequest(%s) Problem finding request contents: %s", _r.desc, _errcnt);
+
+                    if( _r.failure() )
+                        Mojo.Controller.errorDialog("Unexpected js error pulling data during ajax request: " + _errcnt);
+
+                    return;
                 }
 
                 try {
@@ -212,31 +217,36 @@ function RequestEngine() {
                         }
 
                     } else if( _r.failure() ) {
-                        e = ["Unknown error issuing " + _r.desc + " request"];
+                        Mojo.Controller.errorDialog("Unknown error issuing " + _r.desc + " request");
 
-                        Mojo.Controller.errorDialog(e.join("... "));
+                        return;
                     }
                 }
 
                 catch(_errcb) {
                     Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r.desc, _errcb);
+
+                    if( _r.failure() )
+                        Mojo.Controller.errorDialog("Unexpected internal js error passing data to application: " + _errcb);
+
+                    return;
                 }
 
             } else if( !transport.status ) {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort? transport=%s", _r.desc, Object.toJSON(transport));
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort?", _r.desc);
 
                 // this seems to be what happens on an abort
 
             } else {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail r=%s", _r.desc, Object.toJSON(transport));
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail", _r.desc);
 
-                if( _r.failure() ) {
-                    e = ["Unknown error issuing " + _r.desc + " request"];
+                if( _r.failure() )
+                    Mojo.Controller.errorDialog("Unknown error issuing " + _r.desc + " request");
 
-                    Mojo.Controller.errorDialog(e.join("... "));
-                }
+                return;
             }
 
+            return;
         },
 
         onFailure: function(transport) {
@@ -245,10 +255,8 @@ function RequestEngine() {
 
             if( _r.failure() ) {
                 var t = new Template("Ajax #{status} Error: #{responseText} fetching: " + _r.url);
-                var m = t.evaluate(transport);
-                var e = [m];
 
-                Mojo.Controller.errorDialog(e.join("... "));
+                Mojo.Controller.errorDialog(t.evaluate(transport));
             }
         }
 
