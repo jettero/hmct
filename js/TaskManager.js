@@ -29,9 +29,6 @@
 
     this.namedSearches = OPT.predefinedSearches;
 
-    Mojo.Log.info("TaskManager::handleSrchlChange() [namedSearches: %s]", Object.toJSON(this.namedSearches));
-    Mojo.Log.info("TaskManager::handleSrchlChange() [sl: %s]", Object.toJSON(sl));
-
     if( sl )
         for(var i = sl.length-1; i>=0; i--) {
             sl[i].name = "[+] " + sl[i].name;
@@ -42,7 +39,7 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.getSearchByName = function(name) {
-    Mojo.Log.info("TaskManager::getSearchByName(name=%s) [namedSearches: %s]", name, Object.toJSON(this.namedSearches));
+    Mojo.Log.info("TaskManager::getSearchByName(name=%s)", name);
 
     var i;
 
@@ -52,15 +49,14 @@
                 return this.namedSearches[i].tokens;
     }
 
-    Mojo.Log.error("TaskManager::getSearchByName(name=%s) [namedSearches: %s] nothing found?",
-        name, Object.toJSON(this.namedSearches));
+    Mojo.Log.error("TaskManager::getSearchByName(name=%s) nothing found?", name);
 
     return "";
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.getSearchNames = function() {
-    Mojo.Log.info("TaskManager::getSearchNames() [namedSearches: %s]", Object.toJSON(this.namedSearches));
+    Mojo.Log.info("TaskManager::getSearchNames()");
 
     var i;
     var ret = [];
@@ -156,7 +152,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( r.success )
                 return true;
 
-            Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
+            Mojo.Log.info("TaskManager::searchTasks() r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -214,7 +210,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( r.success )
                 return true;
 
-            Mojo.Log.info("TaskManager::fetchOneTask() r.fail, r=%s", Object.toJSON(r));
+            Mojo.Log.info("TaskManager::fetchOneTask() r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -384,7 +380,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( r.match(/^<\?xml/) )
                 return true;
 
-            Mojo.Log.info("TaskManager::getComments(%s) r=%s", rl, Object.toJSON(r));
+            Mojo.Log.info("TaskManager::getComments(%s)", rl);
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -432,7 +428,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             var T = r.content.tasks;
             var i,t,k;
 
-            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d) [process.T: %s]", cma, Object.toJSON(T));
+            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d)", cma);
 
             for(i=0; i<T.length; i++) {
                 t = T[i];
@@ -452,7 +448,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         },
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d) [finish.r: %s]", cma, Object.toJSON(r));
+            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d)", cma);
 
             for(var i=0; i<me.tasks.length; i++) { var mt = me.tasks[i];
             for(var j=0; j<r.length; j++) {        var rt = r[j];
@@ -471,7 +467,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( r.success )
                 return true;
 
-            Mojo.Log.info("TaskManager::getFurtherDetails() r.fail, r=%s", Object.toJSON(r));
+            Mojo.Log.info("TaskManager::getFurtherDetails() r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
