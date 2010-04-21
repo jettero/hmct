@@ -4,7 +4,7 @@ use common::sense;
 use Scalar::Util qw(looks_like_number);
 
 while(<>) {
-    s/\%\s*([^%]+)\s*,\s*([^%]+)\s*\%/process_one($1,$2)/eg;
+    s/\%\s*([^%,]+)\s*,\s*([^%]+)\s*\%/process_one($1,$2)/eg;
 
     print $_;
 }
