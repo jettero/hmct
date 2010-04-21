@@ -23,7 +23,7 @@
         { tokens: "/list/next/action/by/me/requestor/me/not/complete",      name: "Needs reply, my tasks"      }
 
     ],
-    unfoldTaskCompressors: %UNFOLD,['task']%,
+    unfoldTaskCompressors: %UNFOLD,['task','history']%,
     defaultSearch: %DEFSER,Not Complete%,
     cacheMaxAge:   %MAXAGE,4000%,
     _preTapTask:   %PRETAP,false%
