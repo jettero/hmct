@@ -79,7 +79,7 @@ function CreateAccountAssistant() {
 
 /*}}}*/
 /* {{{ /**/ CreateAccountAssistant.prototype.createAccount = function() {
-    Mojo.Log.info("CreateAccount::createAccount() eModel=%s", Object.toJSON(this.eModel));
+    Mojo.Log.info("CreateAccount::createAccount()");
 
     var email = this.eModel.value.strip().toLowerCase();
     var pass  = this.pModel.value.strip();

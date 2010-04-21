@@ -91,7 +91,7 @@ function EditAccountAssistant(args) {
 
 /*}}}*/
 /* {{{ /**/ EditAccountAssistant.prototype.updateAccount = function() {
-    Mojo.Log.info("EditAccount::updateAccount() eModel=%s", Object.toJSON(this.eModel));
+    Mojo.Log.info("EditAccount::updateAccount()");
 
     var email = this.eModel.value.strip().toLowerCase();
     var pass  = this.pModel.value.strip();

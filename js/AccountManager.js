@@ -126,7 +126,7 @@
             if( r.success )
                 return true;
 
-            Mojo.Log.info("AccountManager::login() r.fail, r=%s", Object.toJSON(r));
+            Mojo.Log.info("AccountManager::login() r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -150,7 +150,7 @@
         },
 
         finish:  function(r) {
-            Mojo.Log.info("AccountManager::login() r.success r=%s", Object.toJSON(r));
+            Mojo.Log.info("AccountManager::login() r.success");
 
             me.data.meta.currentLogin = email;
             me.dbChanged("new current login");
@@ -228,7 +228,7 @@
         // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
 
         finish: function(r) {
-            Mojo.Log.info("AccountManager::getAccountDetails() [success] r=%s", Object.toJSON(r));
+            Mojo.Log.info("AccountManager::getAccountDetails() [success]");
 
             me.data.meta.acdet = r;
             me.dbChanged("account details updated");
@@ -273,7 +273,7 @@
         },
 
         finish: function(r) {
-            Mojo.Log.info("AccountManager::getSearchLists() [success] searches: %s", Object.toJSON(r));
+            Mojo.Log.info("AccountManager::getSearchLists() [success]");
 
             me.data.meta.srchl = r;
             me.dbChanged("search lists updated");
@@ -284,7 +284,7 @@
             if( r.success )
                 return true;
 
-            Mojo.Log.info("AccountManager::getSearchLists() r.fail, r=%s", Object.toJSON(r));
+            Mojo.Log.info("AccountManager::getSearchLists() r.fails");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
