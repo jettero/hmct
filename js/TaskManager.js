@@ -202,7 +202,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 if( me.tasks[i].id === theTask.id )
                     me.tasks[i] = theTask;
 
-            me.notifyTaskChange(theTask);
+            me.notifyTaskChange(theTask,true);
             me.getFurtherDetails(r._req_cacheAge, "id " + rl);
         },
 
@@ -306,7 +306,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.notifyTaskChange = function(task) {
+/* {{{ */ TaskManager.prototype.notifyTaskChange = function(task,forceCommentSkipCache) {
     var rl  = task.record_locator;
     var tcc = this.taskChangeCallback[rl];
 
@@ -326,7 +326,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     // someone asked.
 
     if( interestedParties && !task.comments )
-        this.getComments(task);
+        this.getComments(task,forceCommentSkipCache);
 };
 
 /*}}}*/
@@ -338,8 +338,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.getComments = function(task) { var rl;
-    Mojo.Log.info("TaskManager::getComments(record_locator=%s)", rl = task.record_locator);
+/* {{{ */ TaskManager.prototype.getComments = function(task,force) { var rl;
+    Mojo.Log.info("TaskManager::getComments(record_locator=%s,force=%s)", rl = task.record_locator, !!force);
 
     var me = this;
 
@@ -348,6 +348,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         method: 'get', url: 'http://hiveminder.com/mobile/task_history/' + rl,
         params: {},
 
+        force: force,
         cacheable: true,
         keyStrings: [this.currentLogin],
         cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
