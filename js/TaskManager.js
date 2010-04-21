@@ -199,7 +199,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             var theTask = r[0];
 
             for(var i=0; i<me.tasks.length; i++)
-                if( me.tasks.id === theTask.id )
+                if( me.tasks[i].id === theTask.id )
                     me.tasks[i] = theTask;
 
             me.notifyTaskChange(theTask);
