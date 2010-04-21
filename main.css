@@ -24,7 +24,7 @@
 .task-long div.dep li { font-style: italic; color: grey; }
 .task-long div.dep.bfc0, .task-long div.dep.atc0 { display: none; }
 
-.task-short .complete1 { text-decoration: line-through; }
+.task-short .complete1 { text-decoration: line-through; font-weight: normal; color: gray; }
 
 .task-id {
     font-family: monospace;
