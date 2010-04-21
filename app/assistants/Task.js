@@ -171,7 +171,7 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
         switch (s_a[0]) {
             case 'refresh':
                 Mojo.Log.info("Task::handleCommand(refresh) [rl=%s]", rl);
-                TMO.searchTasks(false, true); // use last search, force reload
+                TMO.fetchOneTask(rl, true); // force reload
                 break;
 
             default:
