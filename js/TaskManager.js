@@ -6,8 +6,9 @@
 /* {{{ */ function TaskManager() {
     Mojo.Log.info("TaskManager()");
 
-    this.handleLoginChange = this.handleLoginChange.bind(this);
-    this.handleSrchlChange = this.handleSrchlChange.bind(this);
+    this.handleLoginChange    = this.handleLoginChange.bind(this);
+    this.handleSrchlChange    = this.handleSrchlChange.bind(this);
+    this.processTaskDownloads = this.processTaskDownloads.bind(this);
 
     this.lso = new Mojo.Model.Cookie("last search");
     this.lastSearch = this.lso.get();
@@ -142,49 +143,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         cacheable: true,
         keyStrings: [this.currentLogin, search],
 
-        process: function(r) {
-            var currentTime = (new Date());
-            var month = "" + (currentTime.getMonth() + 1);
-            var day   = "" + currentTime.getDate();
-            var year  = "" + currentTime.getFullYear();
-            var now   = year + (month.length===2 ? month : "0"+month) + (day.length===2 ? day : "0"+day);
-
-            return me.fixutf8( r.content.result ).evalJSON().each(function(t){
-                if( t.due ) {
-                    var d = t.due.replace(/\D+/g, "");
-                    t.due_class = now>d ? "overdue" : "regular-due";
-
-                } else {
-                    t.due_class = "not-due";
-                }
-
-                t.desc_class = t.description.match(/\S/) ? "" : "generically-hidden";
-
-                if( t.time_worked   === "~" ) delete t.time_worked;
-                if( t.time_left     === "~" ) delete t.time_left;
-                if( t.time_estimate === "~" ) delete t.time_estimate;
-
-                if( t.time_worked ) {
-                    t.hours_txt = t.time_worked;
-
-                    if( t.time_left )
-                        t.hours_txt += " / " + t.time_left;
-
-                    t.hours_class = "time-worked";
-
-                } else if( t.time_left ) {
-                    t.hours_txt = "0h / " + t.time_left;
-                    t.hours_class = "time-worked not-started";
-
-                } else {
-                    t.hours_class = "generically-hidden";
-                }
-
-                if( t.requestor.match(me.currentLogin_re) )
-                    t.requestor_class = "generically-hidden";
-
-            });
-        },
+        process: this.processTaskDownloads,
 
         finish: function(r) {
             // can be either a fresh request or a cache result
@@ -198,6 +157,64 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 return true;
 
             Mojo.Log.info("TaskManager::searchTasks() r.fail, r=%s", Object.toJSON(r));
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            Mojo.Controller.errorDialog(e.join("... "));
+
+            return false;
+        }
+    });
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.fetchOneTask = function(rl,force) {
+    var search = "id/" + rl;
+
+    Mojo.Log.info("TaskManager::fetchOneTask(%s,[%s])", search, force ? "force" : "cache ok");
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::fetchOneTask()',
+        method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
+        params: {format: 'json', query: search},
+
+        force: force,
+        cacheable: true,
+        keyStrings: [this.currentLogin, search],
+
+        process: this.processTaskDownloads,
+
+        finish: function(r) {
+            // can be either a fresh request or a cache result
+            var theTask = r[0];
+
+            for(var i=0; i<me.tasks.length; i++)
+                if( me.tasks.id === theTask.id )
+                    me.tasks[i] = theTask;
+
+            me.notifyTaskChange(theTask);
+            me.getFurtherDetails(r._req_cacheAge, "id " + rl);
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::fetchOneTask() r.fail, r=%s", Object.toJSON(r));
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -392,15 +409,19 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.getFurtherDetails = function(cma) {
-    Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d)", cma);
+/* {{{ */ TaskManager.prototype.getFurtherDetails = function(cma,tokens) {
+
+    if( !tokens )
+        tokens = this._getLastSearchSpaced();
+
+    Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d, tokens)", cma, tokens);
 
     var me = this;
 
     REQ.doRequest({
           desc: 'TaskManager::getFurtherDetails()',
         method: 'post', url: 'http://hiveminder.com/=/action/TaskSearch.json',
-        params: {tokens: this._getLastSearchSpaced()},
+        params: {tokens: tokens},
 
         cacheable: true,
         keyStrings: [this.currentLogin],
@@ -504,6 +525,50 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     }
 
     return str;
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.processTaskDownloads = function(r) {
+    var currentTime = new Date();
+    var month = "" + (currentTime.getMonth() + 1);
+    var day   = "" + currentTime.getDate();
+    var year  = "" + currentTime.getFullYear();
+    var now   = year + (month.length===2 ? month : "0"+month) + (day.length===2 ? day : "0"+day);
+
+    return this.fixutf8( r.content.result ).evalJSON().each(function(t){
+        if( t.due ) {
+            var d = t.due.replace(/\D+/g, "");
+            t.due_class = now>d ? "overdue" : "regular-due";
+
+        } else {
+            t.due_class = "not-due";
+        }
+
+        t.desc_class = t.description.match(/\S/) ? "" : "generically-hidden";
+
+        if( t.time_worked   === "~" ) delete t.time_worked;
+        if( t.time_left     === "~" ) delete t.time_left;
+        if( t.time_estimate === "~" ) delete t.time_estimate;
+
+        if( t.time_worked ) {
+            t.hours_txt = t.time_worked;
+
+            if( t.time_left )
+                t.hours_txt += " / " + t.time_left;
+
+            t.hours_class = "time-worked";
+
+        } else if( t.time_left ) {
+            t.hours_txt = "0h / " + t.time_left;
+            t.hours_class = "time-worked not-started";
+
+        } else {
+            t.hours_class = "generically-hidden";
+        }
+
+        if( t.requestor.match(this.currentLogin_re) )
+            t.requestor_class = "generically-hidden";
+    });
 };
 
 /*}}}*/
