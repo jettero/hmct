@@ -308,7 +308,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         }
     }
 
-    if( interestedParties && !task.comments )
+    if( interestedParties )
         this.getComments(task);
 };
 
