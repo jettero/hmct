@@ -321,7 +321,11 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         }
     }
 
-    if( interestedParties )
+    // NOTE: go fetch the comments if the task has just been updated and
+    // therefore nolonger has comments defined, but don't bother with it unless
+    // someone asked.
+
+    if( interestedParties && !task.comments )
         this.getComments(task);
 };
 
