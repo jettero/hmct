@@ -124,7 +124,7 @@ function TasksAssistant() {
 };
 
 /*}}}*/
-/* {{{ */ TasksAssistant.prototype.handleTasksChange = function(tasks) {
+/* {{{ */ TasksAssistant.prototype.handleTasksChange = function(tasks, lastSearch) {
     Mojo.Log.info("Tasks::handleTasksChange()");
 
     this.tasksListModel.items = tasks;
@@ -140,6 +140,7 @@ function TasksAssistant() {
     }.bind(this));
 
     this.controller.modelChanged(this.tasksListModel);
+    this.controller.get("current-search").innerHTML = "&quot;" + lastSearch.replace(/\//g, " ") + "&quot;";
 };
 
 /*}}}*/
@@ -151,6 +152,7 @@ function TasksAssistant() {
         // make the empty-list template show up on the initial load
         this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
         this.firstActivation = false;
+        this.controller.get("current-search").innerHTML = "supz";
     }
 
     AMO.registerLoginChange(this.handleLoginChange);

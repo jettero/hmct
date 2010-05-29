@@ -77,6 +77,11 @@
     font-size: 16px;
 }
 
+#current-search {
+    font-size: 8px;
+    overflow: hidden;
+}
+
 .palm-row .title {
     font-size: 16px;
     font-weight: bold;

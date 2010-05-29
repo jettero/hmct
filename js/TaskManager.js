@@ -265,7 +265,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             tasks.push( this.tasks[i] );
          // tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
-    callback(tasks);
+    callback(tasks, this.lastSearch);
 };
 
 /*}}}*/
