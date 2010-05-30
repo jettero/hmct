@@ -39,6 +39,10 @@
     color: white;
 }
 
+.task-long .palm-row.selected li {
+    color: white;
+}
+
 .task-short .complete1          { text-decoration: line-through; color: black; }
 .task-short .summary            { color: black; }
 .task-short .complete1 .summary { font-weight: normal; color: #777777; }
