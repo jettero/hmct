@@ -22,11 +22,21 @@
 .task-long div { font-size: small; font-weight: normal }
 
 .task-long div.dep li { font-style: italic; color: grey; }
+.task-long div.dep ul { padding-left: 2em; margin-top: 0.25em; margin-bottom: 0.25em; }
 .task-long div.dep.bfc0, .task-long div.dep.atc0 { display: none; }
 
 .task-long .palm-row {
     background-image: none;
     background: none;
+}
+
+.task-long .palm-row.selected {
+    border: none;
+    background: none;
+    border-width: 0;
+    -webkit-border-image: none;
+    background: #33aa33;
+    color: white;
 }
 
 .task-short .complete1          { text-decoration: line-through; color: black; }

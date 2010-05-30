@@ -59,9 +59,12 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
 
-    this.controller.get("task-snl").select(".and-then").each(function(div){
-        div.setAttribute("x-mojo-tap-highlight", 'momentary');
-        div.addClassName("palm-row");
+    this.controller.get("task-snl").select(".and-then li").each(function(li){
+        li.setAttribute("x-mojo-tap-highlight", 'momentary');
+        li.addClassName("palm-row");
+        // li.observe('click', function(event){
+        //     Event.element(event).
+        // });
     });
 
     this.historyListModel.items = task.comments ? task.comments : [];
