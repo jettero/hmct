@@ -59,6 +59,10 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
         this.shortTemplate.evaluate(task) + this.longTemplate.evaluate(task)
     );
 
+    this.controller.get("task-snl").select(".and-then").each(function(div){
+        div.setAttribute("x-mojo-tap-highlight", 'momentary');
+        div.addClassName("palm-row");
+    });
 
     this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
