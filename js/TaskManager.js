@@ -567,6 +567,14 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             t.hours_class = "generically-hidden";
         }
 
+        if( t.group ) {
+            t.group_txt   = t.group;
+            t.group_class = "group";
+
+        } else {
+            t.group_class = "generically-hidden";
+        }
+
         if( t.requestor.match(this.currentLogin_re) )
             t.requestor_class = "generically-hidden";
     });
