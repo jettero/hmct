@@ -15,7 +15,7 @@ function StageAssistant() {
 StageAssistant.prototype.setup = function() {
 	Mojo.Log.info("StageAssistant()::setup()")
 
-    this.controller.assistant.showScene('Tasks');
+    this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
 }
 
 StageAssistant.prototype.showScene = function (sceneName, args) {

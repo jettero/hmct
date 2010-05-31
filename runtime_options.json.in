@@ -26,5 +26,6 @@
     unfoldTaskCompressors: %UNFOLD,['task','history']%,
     defaultSearch: %DEFSER,Not Complete%,
     cacheMaxAge:   %MAXAGE,4000%,
+    altStartPage:  %ALTPAGE,false%,
     _preTapTask:   %PRETAP,false%
 }
