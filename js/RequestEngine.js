@@ -296,7 +296,7 @@ function RequestEngine() {
     };
 
     this.dbo.add(key, data, sent, fail); // try to add the key
-    this.dbCheckAge(); // won't actually run until db_busy = false
+    this.dbCheckAgeStart(); // won't actually run for a while
 };
 
 /*}}}*/
@@ -327,7 +327,19 @@ function RequestEngine() {
 };
 
 /*}}}*/
+/* {{{ */ RequestEngine.prototype.dbCheckAgeStart = function() {
+    Mojo.Log.info("RequestEngine::dbCheckAgeStart()");
+
+    if( this._alreadyStartingCheckAge )
+        clearTimeout(this._alreadyStartingCheckAge);
+
+    this._alreadyStartingCheckAge = setTimeout(this.dbCheckAge, 15e3);
+};
+
+/*}}}*/
 /* {{{ */ RequestEngine.prototype.dbCheckAge = function() {
+    delete this._alreadyStartingCheckAge;
+
     if( this.dbBusy() ) {
         Mojo.Log.info("RequestEngine::dbCheckAge() [busy]");
         setTimeout(this.dbCheckAge, 500);
@@ -363,23 +375,10 @@ function RequestEngine() {
         }
     };
 
-    var nothing_expired = true;
-    for( var k in this.data.cache ) {
-        var dt = now - this.data.cache[k].entered;
+    var bindLexicals = function(k) {
+        return {
 
-        if( dt >= OPT.cacheMaxAge ) {
-            Mojo.Log.info("RequestEngine::checkCache() [%s expired; dt=%d]", k, dt);
-
-            var err  = function() {
-                Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired, but apparently couldn't be removed]", k);
-                problems = true;
-
-                done --;
-                if( done < 1 )
-                    end();
-            };
-
-            var sent = function() {
+            sent: function() {
                 Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired and removed]", k);
                 delete me.data.cache[k];
                 did_stuff = true;
@@ -387,10 +386,31 @@ function RequestEngine() {
                 done --;
                 if( done < 1 )
                     end();
-            };
+            },
+
+            err: function() {
+                Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired, but apparently couldn't be removed]", k);
+                problems = true;
+
+                done --;
+                if( done < 1 )
+                    end();
+            }
+
+        };
+    };
+
+    var nothing_expired = true;
+    for( var k in this.data.cache ) {
+        var dt = now - this.data.cache[k].entered;
+
+        if( dt >= OPT.cacheMaxAge ) {
+            Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired; dt=%d]", k, dt);
+
+            var _f = bindLexicals(k);
 
             done ++;
-            this.dbo.discard(k, sent, err);
+            this.dbo.discard(k, _f.sent, _f.err);
             nothing_expired = false;
         }
     }
@@ -455,9 +475,7 @@ function RequestEngine() {
         for( var k in this.data.cache )
             Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
 
-        // clear this now? wait until the first dbSetCache?
-        // this.dbCheckAge();
-
+        this.dbCheckAgeStart();
     }
 
     this.dbBusy(false);
