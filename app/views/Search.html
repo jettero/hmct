@@ -10,22 +10,29 @@
     </div>
 
     <div id="e_example"><div class="palm-group">
-        <div class="palm-group-title">Task, Notes or Tags Contains</div>
+        <div class="palm-group-title">Basics</div>
         <div class="palm-list">
             <div class="palm-row first">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">Search</div>
-                        <div id="query" x-mojo-element="TextField"></div>
+                        <div class="label"> contains <img src="img/white-basics.png"/> </div>
+                        <div id="query" x-mojo-element="TextField">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="palm-row last">
+            <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">Lacks</div>
+                        <div class="label">lacks <img src="img/white-basics.png"/> </div>
                         <div id="not-query" x-mojo-element="TextField"></div>
                     </div>
+                </div>
+            </div>
+            <div class="palm-row last" x-mojo-focus-highlight="true">
+                <div class="palm-row-wrapper">
+                    <div style="background-image: url(img/white-sort.png); margin: 0; padding: 0" class="palm-popup-icon right"></div>
+                    <div id="sort-by" x-mojo-element="ListSelector"></div>
                 </div>
             </div>
         </div>

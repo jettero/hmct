@@ -21,15 +21,34 @@ SearchAssistant.prototype.setup = function() {
         enterSubmits:  true
     };
 
+    // NOTE: secondaryIcon is a cssClassName, sIP is an image path, see widget_submenu.js
+    // NOTE: icon/iconPath works the same way.  Lastly, icons are on right, secondary icons are on left
+    var sortByAttributes = { label: "Sort By", choices: [
+        {label: "Default",    value: ""                                              },
+        {label: "Name",       value: "summary"                                       },
+        {label: "Priority",   value: "priority",     iconPath: 'img/dull-prio.png'   },
+        {label: "Due",        value: "due",          iconPath: 'img/date.png'        },
+        {label: "Completed",  value: "completed_at", iconPath: 'img/green-check.png' },
+        {label: "Hide until", value: "starts",       iconPath: 'img/date.png'        },
+        {label: "Age",        value: "created",      iconPath: 'img/date.png'        },
+        {label: "Owner",      value: "owner"                                         },
+        {label: "Requestor",  value: "requestor"                                     },
+        {label: "Progress",   value: "progress"                                      }
+    ]};
+
+    if( AMO.isCurrentAccountPro() )
+        sortByAttributes.choices.push({label: "Time Left",  value: "time_left", iconPath: 'img/clock.png' });
+
     this.controller.setupWidget('query',     queryTextFieldAttributes, this.queryModel    = {});
     this.controller.setupWidget('not-query', queryTextFieldAttributes, this.notQueryModel = {});
+    this.controller.setupWidget('sort-by',   sortByAttributes,         this.sortByModel   = {});
 };
 
 SearchAssistant.prototype.buildSearch = function() {
     var query = [];
 
     var append = function(x,y) {
-        var q = this[x + "Model"].value; 
+        var q = this[x + "Model"].value;
 
         if( q ) {
         if( q.match(/\S/) ) {
