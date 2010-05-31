@@ -41,6 +41,7 @@ SearchAssistant.prototype.setup = function() {
 
     this.controller.setupWidget('query',     queryTextFieldAttributes, this.queryModel    = {});
     this.controller.setupWidget('not-query', queryTextFieldAttributes, this.notQueryModel = {});
+    this.controller.setupWidget('group',     queryTextFieldAttributes, this.groupModel    = {});
     this.controller.setupWidget('sort-by',   sortByAttributes,         this.sortByModel   = {});
 };
 
@@ -60,6 +61,8 @@ SearchAssistant.prototype.buildSearch = function() {
 
     append("query",    "query");
     append("notQuery", "not/query");
+    append("group",    "group");
+    append("sortBy",   "sort_by");
 
     query = query.join("/");
 
