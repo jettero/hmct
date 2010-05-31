@@ -10,6 +10,10 @@ function SearchAssistant() {
 SearchAssistant.prototype.setup = function() {
     Mojo.Log.info("Search::setup()");
 
+    this.searchModel = { label: "Search", icon: 'search', command: 'search' };
+    this.commandMenuModel = { label: 'Search Command Menu', items: [ {}, {}, this.searchModel ]}
+	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+
     var queryTextFieldAttributes = {
         textCase:      Mojo.Widget.steModeLowerCase,
         multiline:     false,
@@ -17,8 +21,41 @@ SearchAssistant.prototype.setup = function() {
         enterSubmits:  true
     };
 
-    this.controller.setupWidget('query',     queryTextFieldAttributes, {});
-    this.controller.setupWidget('not-query', queryTextFieldAttributes, {});
+    this.controller.setupWidget('query',     queryTextFieldAttributes, this.queryModel    = {});
+    this.controller.setupWidget('not-query', queryTextFieldAttributes, this.notQueryModel = {});
+};
+
+SearchAssistant.prototype.buildSearch = function() {
+    var query = "";
+    var q;
+
+    q=this.queryModel.value;    if( q.match(/\S/) ) query += "query/"     + escape(q);
+    q=this.notQueryModel.value; if( q.match(/\S/) ) query += "not/query/" + escape(q);
+
+    Mojo.Log.info("built query: %s", query);
+    return query;
+};
+
+SearchAssistant.prototype.handleCommand = function(event) {
+    Mojo.Log.info("Search::handleCommand()");
+
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
+
+        switch (s_a[0]) {
+            case 'search':
+                Mojo.Log.info("Search::handleCommand(search)");
+                this.buildSearch();
+                //TMO.searchTasks(this.buildSearch());
+                //Mojo.Controller.stageController.popScene();
+                break;
+
+            default:
+                Mojo.Log.info("Search::handleCommand(unknown command: %s)", Object.toJSON(s_a));
+                break;
+        }
+    }
+
 };
 
 Mojo.Log.info('loaded(Search.js)');
