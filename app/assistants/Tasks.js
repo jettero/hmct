@@ -42,7 +42,7 @@ function TasksAssistant() {
         listTemplate:  'misc/naked-list-container',
         emptyTemplate: 'misc/empty-list',
         itemTemplate:  'misc/li-task',
-        swipeToDelete: true
+        //swipeToDelete: true
     };
     this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: ['...']};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
