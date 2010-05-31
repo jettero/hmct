@@ -13,6 +13,7 @@
     { "source": "app/assistants/EditAccount.js" },
     { "source": "app/assistants/Tasks.js" },
     { "source": "app/assistants/Task.js" },
+    { "source": "app/assistants/Search.js" },
 
     { "source": "stage-assistant.js" }
 ]
