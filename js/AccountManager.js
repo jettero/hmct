@@ -439,6 +439,15 @@
 };
 
 /*}}}*/
+/* {{{ */ AccountManager.prototype.isCurrentAccountPro = function() {
+    if( this.data.meta.acdet )
+        if( this.data.meta.acdet.pro_account )
+            return true;
+
+    return false;
+};
+
+/*}}}*/
 
 /* {{{ */ AccountManager.prototype.registerSrchlChange = function(callback) {
     Mojo.Log.info("AccountManager::registerSrchlChange()");
