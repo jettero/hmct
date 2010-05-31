@@ -7,13 +7,31 @@
 	            <div x-mojo-element="ToggleButton" id="trackingToggle" class="header-toggle-button"></div>
 	        </div>
 	        <div class="title">
-				Hiveminder Cloud Tasks
+				Hiveminder Cloud Task Search
 	        </div>
 	    </div>
     </div>
 
-    <div class="palm-row" style="background: white">
-        hiya
+    <div id="e_example"><div class="palm-group">
+        <div class="palm-group-title">Task, Notes or Tags Contains</div>
+        <div class="palm-list">
+            <div class="palm-row first">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">Search</div>
+                        <div id="query" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="palm-row last">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">Lacks</div>
+                        <div id="not-query" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
