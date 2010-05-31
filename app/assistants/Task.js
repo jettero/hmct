@@ -70,6 +70,15 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
         });
     });
 
+    this.controller.get("task-snl").select(".but-first").each(function(x){
+        x.setAttribute("x-mojo-tap-highlight", 'momentary');
+        x.addClassName("palm-row");
+        x.observe('click', function(){
+            TMO.searchTasks("not hidden forever not complete and then " + rl);
+            Mojo.Controller.stageController.popScene();
+        });
+    });
+
     this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
 };
