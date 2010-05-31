@@ -26,11 +26,23 @@ SearchAssistant.prototype.setup = function() {
 };
 
 SearchAssistant.prototype.buildSearch = function() {
-    var query = "";
-    var q;
+    var query = [];
 
-    q=this.queryModel.value;    if( q.match(/\S/) ) query += "query/"     + escape(q);
-    q=this.notQueryModel.value; if( q.match(/\S/) ) query += "not/query/" + escape(q);
+    var append = function(x,y) {
+        var q = this[x + "Model"].value; 
+
+        if( q ) {
+        if( q.match(/\S/) ) {
+            query.push(y);
+            query.push(escape(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
+        }}
+
+    }.bind(this);
+
+    append("query",    "query");
+    append("notQuery", "not/query");
+
+    query = query.join("/");
 
     Mojo.Log.info("built query: %s", query);
     return query;
@@ -45,9 +57,8 @@ SearchAssistant.prototype.handleCommand = function(event) {
         switch (s_a[0]) {
             case 'search':
                 Mojo.Log.info("Search::handleCommand(search)");
-                this.buildSearch();
-                //TMO.searchTasks(this.buildSearch());
-                //Mojo.Controller.stageController.popScene();
+                TMO.searchTasks(this.buildSearch());
+                Mojo.Controller.stageController.popScene();
                 break;
 
             default:

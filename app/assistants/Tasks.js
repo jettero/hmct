@@ -110,7 +110,7 @@ function TasksAssistant() {
 
     var i,n;
 
-    this.searchSubmenu.items = [];
+    this.searchSubmenu.items = [{label: "<custom>", command: 'search @@ <custom>'}];
 
     var sn = TMO.getSearchNames();
 
@@ -190,7 +190,12 @@ function TasksAssistant() {
 
             case 'search':
                 Mojo.Log.info("Tasks::handleCommand(search: %s)", s_a[1]);
-                TMO.namedSearchTasks(s_a[1], false); // use named search and allow a cached reload
+                if( s_a[1] === "<custom>" ) {
+                    this.SCa.showScene('Search');
+
+                } else {
+                    TMO.namedSearchTasks(s_a[1], false); // use named search and allow a cached reload
+                }
                 break;
 
             default:
