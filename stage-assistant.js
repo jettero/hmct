@@ -17,8 +17,13 @@ StageAssistant.prototype.setup = function() {
 
     this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
 
-    if (this.controller.setWindowOrientation)
-        this.controller.setWindowOrientation("free");
+    this.controller.lockOrientation = function() {
+        this.setWindowOrientation(this.getWindowOrientation());
+    };
+
+    this.controller.freeOrientation = function() {
+        this.setWindowOrientation("free");
+    };
 }
 
 StageAssistant.prototype.showScene = function (sceneName, args) {
