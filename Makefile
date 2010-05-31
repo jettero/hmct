@@ -23,6 +23,9 @@ myinstall-usb: clean
 	@echo build $@
 	@./JSON_preparser.pl $< > $@
 
+ri remake-ins:
+	@+for i in *.json.in; do x=`echo $$i|sed s/.in$$//`; touch $$i; make --no-print-directory $$x; done 
+
 build: framework_config.json runtime_options.json
 	@echo checking for version mismatch between appinfo.json and app/views/About.html
 	@VV=`perl -ne 'print "$$1\n" if m/"?version"?:\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html
