@@ -16,6 +16,9 @@ StageAssistant.prototype.setup = function() {
 	Mojo.Log.info("StageAssistant()::setup()")
 
     this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
+
+    if (this.controller.setWindowOrientation)
+        this.controller.setWindowOrientation("free");
 }
 
 StageAssistant.prototype.showScene = function (sceneName, args) {
