@@ -26,6 +26,13 @@ myinstall-usb: clean
 ri remake-ins:
 	@+for i in *.json.in; do x=`echo $$i|sed s/.in$$//`; touch $$i; make --no-print-directory $$x; done 
 
+README: app/views/About.html app/views/Help.html Makefile
+	@ echo -----=: app/views/About.html  > README
+	@ elinks -dump app/views/About.html >> README
+	@ echo                              >> README
+	#@ echo -----=: app/views/Help.html  >> README
+	#@ elinks -dump app/views/Help.html  >> README
+
 build: framework_config.json runtime_options.json
 	@echo checking for version mismatch between appinfo.json and app/views/About.html
 	@VV=`perl -ne 'print "$$1\n" if m/"?version"?:\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html

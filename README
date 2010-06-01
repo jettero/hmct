@@ -1,1 +1,45 @@
-This is a WebOS client for http://hiveminder.com/ — it's in the very early stages of development.
+-----=: app/views/About.html
+   Hiveminder Cloud Tasks
+
+  About
+
+   Written from scratch by [1]Paul Miller.
+
+   This is version 0.0.1 of HMCT.
+
+   This app is pretty much just a caching GUI for the
+   [2]http;//hiveminder.com/ website. They encourage building applications
+   like this by offering a very nice self-discovering [3]ReSTful API.
+
+   Bugs and problems should be reported in the Github issue tracking system:
+   [4]http://github.com/jettero/hmct/issues
+
+   The entire source for this app can be found there as well:
+   [5]http://github.com/jettero/hmct
+
+  Copyright
+
+   This app is Copyright Paul Miller 2010.
+
+  License
+
+   This source for this app and all the CGI source is licensed under the GNU
+   GPLv3.
+
+  Thanks
+
+   There were additional contributions made by the following people:
+
+     * [6]The entire Best Practical (LLC) Hiveminder Team — they built a
+       great product and encourage 3rd party apps like this.
+
+References
+
+   Visible links
+   1. http://jettero.github.com/
+   2. http://hiveminder.com/
+   3. http://hiveminder.com/help/reference/API.html
+   4. http://github.com/jettero/hmct/issues
+   5. http://github.com/jettero/hmct
+   6. http://hiveminder.com/about/team.html
+
