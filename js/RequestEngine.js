@@ -303,10 +303,13 @@ function RequestEngine() {
 
 /* {{{ */ RequestEngine.prototype.dbBusy = function(arg) {
 
-    if( arg != null ) // neither null nor undefined
+    if( arg != null ) // neither null nor undefined, since null==undefined
         this._dbBusy = arg;
 
     Mojo.Log.info("RequestEngine::dbBusy(%s) [%s]", arg, this._dbBusy);
+
+    if( this._dbBusy )
+        return true; // if the db is busy, then dbBusy is true
 
     return !this.engineLoaded(); // if the engine isn't loaded, then dbBusy() is true!
 };
