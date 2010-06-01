@@ -49,8 +49,19 @@ StageAssistant.prototype.handleCommand = function(event) {
         if( a = event.command.match(/^myshow-(.+)/) )
             Mojo.Controller.stageController.assistant.showScene(a[1]);
 
-        if( event.command === "refresh-login" )
-            AMO.refreshCurrentLogin();
+        else switch( event.command ) {
+            case 'refresh-login':
+                AMO.refreshCurrentLogin();
+                break;
+
+            case 'clear-cache':
+                REQ.dbNewk();
+                break;
+
+            default:
+                Mojo.Log.info("unknown command menu command: " + event.command);
+                break;
+        }
     }
 }
 
@@ -61,7 +72,8 @@ StageAssistant.prototype.menuSetup = function() {
             { label: "Help",                   command: 'myshow-Help'        },
             { label: "About",                  command: 'myshow-About'       },
             { label: "Preferences & Accounts", command: 'myshow-Preferences' },
-            { label: "Refresh Current Login",  command: 'refresh-login'      }
+            { label: "Refresh Current Login",  command: 'refresh-login'      },
+            { label: "Clear Cache",            command: 'clear-cache'        }
         ]
     };
 
