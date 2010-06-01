@@ -415,7 +415,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     if( !tokens )
         tokens = this._getLastSearchSpaced();
 
-    Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d, tokens)", cma, tokens);
+    Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d, tokens: %s)", cma, tokens);
 
     var me = this;
 
