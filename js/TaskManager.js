@@ -338,8 +338,9 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.getComments = function(task,force) { var rl;
-    Mojo.Log.info("TaskManager::getComments(record_locator=%s,force=%s)", rl = task.record_locator, !!force);
+/* {{{ */ TaskManager.prototype.getComments = function(task,force) { var rl; var cma;
+    Mojo.Log.info("TaskManager::getComments(record_locator=%s, cma=%d, force=%s)",
+        rl = task.record_locator, cma = task._rec_cacheAge, !!force);
 
     var me = this;
 
@@ -351,7 +352,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         force: force,
         cacheable: true,
         keyStrings: [this.currentLogin],
-        cacheMaxAgeOverride: task._req_cacheAge, // we're rarely going to be intersted in comments older than the task
+        cacheMaxAgeOverride: cma,
 
         xml: true, // not a JSON request
 
