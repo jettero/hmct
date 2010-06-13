@@ -367,8 +367,6 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                     container.innerHTML = r;
 
                 container.select("div.transaction").each(function(t){
-                    Mojo.Log.info("TaskManager::getComments() [found transaction div]");
-
                     try      { ret.push({row_html: t.innerHTML}); }
                     catch(e) { Mojo.Log.info("TaskManager::getComments() [problem finding inner html for transaction: %s]", e); }
                 });
@@ -434,8 +432,6 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             var T = r.content.tasks;
             var i,t,k;
 
-            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d)", cma);
-
             for(i=0; i<T.length; i++) {
                 t = T[i];
                 ret.push({
@@ -454,8 +450,6 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         },
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d)", cma);
-
             for(var i=0; i<me.tasks.length; i++) { var mt = me.tasks[i];
             for(var j=0; j<r.length; j++) {        var rt = r[j];
                 if( mt.id == rt.id ) { // STFU: we really do want the soft == here, one side seems to be string vs number
