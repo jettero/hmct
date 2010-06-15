@@ -41,6 +41,8 @@ while(<STDIN>) {
         my $esec = timegm_nocheck($sec,$min,$hour,$day,$month,$year);
         my $time = strftime('%H:%M:%S', localtime($esec));
 
+        s/ $me [.\w]*: \s+ //x;
+
         s(LunaSysMgr:\s+{LunaSysMgrJS}:\s+)();
         s(, file://.*)();
         s(, palmInitFramework\d+:\d+)();
