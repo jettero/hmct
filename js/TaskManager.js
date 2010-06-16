@@ -144,6 +144,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         finish: function(r) {
             // can be either a fresh request or a cache result
             me.tasks = r;
+            me.tasks.each(function(t){ t._req_cacheAge = r._req_cacheAge; });
             me.notifyTasksChange();
             me.getFurtherDetails(r._req_cacheAge);
         },
@@ -340,7 +341,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /* {{{ */ TaskManager.prototype.getComments = function(task,force) { var rl; var cma;
     Mojo.Log.info("TaskManager::getComments(record_locator=%s, cma=%d, force=%s)",
-        rl = task.record_locator, cma = task._rec_cacheAge, !!force);
+        rl = task.record_locator, cma = task._req_cacheAge, !!force);
 
     var me = this;
 
@@ -377,6 +378,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
         finish: function(r) {
             task.comments = r;
+            Mojo.Log.info("TaskManager::getComments() [finish: rl:%s; #:%d; cq:%d]", rl, r.length, r._req_cacheAge);
             me.notifyTaskChange(task);
         },
 
@@ -384,7 +386,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( r.match(/^<\?xml/) )
                 return true;
 
-            Mojo.Log.info("TaskManager::getComments(%s)", rl);
+            Mojo.Log.info("TaskManager::getComments() r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -450,6 +452,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         },
 
         finish: function(r) {
+            Mojo.Log.info("TaskManager::getFurtherDetails() [finish: #:%d; cq:%d]", r.length, r._req_cacheAge);
+
             for(var i=0; i<me.tasks.length; i++) { var mt = me.tasks[i];
             for(var j=0; j<r.length; j++) {        var rt = r[j];
                 if( mt.id == rt.id ) { // STFU: we really do want the soft == here, one side seems to be string vs number
