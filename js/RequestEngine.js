@@ -330,7 +330,7 @@ function RequestEngine() {
 
 /*}}}*/
 /* {{{ */ RequestEngine.prototype.pushBusyCall = function(fp, args) {
-    this._busyCalls.push([fp, args]);
+    this._busyCalls.push({fp: fp, args: args});
 
     Mojo.Log.info("RequestEngine::pushBusyCall() [depth: %d]", this._busyCalls.length);
 };
@@ -339,12 +339,12 @@ function RequestEngine() {
 /* {{{ */ RequestEngine.prototype.popBusyCall = function() {
     Mojo.Log.info("RequestEngine::popBusyCall() [depth: %d]",  this._busyCalls.length);
 
-    var x = this._busyCalls.shift();
-
-    if( !x )
+    if( this._busyCalls.length < 1 )
         return false; // return false if we have nothing to do
 
-    x.shift().apply(this, x);
+    var x = this._busyCalls.shift();
+
+    x.fp.apply(this, x.args);
 
     return true; // and true when we do
 };
