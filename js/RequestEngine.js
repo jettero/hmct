@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Mojo Ajax Template hex_md5 OPT BBO setTimeout
+/*global Mojo Ajax Template hex_md5 OPT BBO setTimeout clearTimeout
 */
 
 function RequestEngine() {
@@ -18,7 +18,7 @@ function RequestEngine() {
         Mojo.Controller.errorDialog("Failed to open cache Depot (#" + r.message + ").");
     });
 
-    this.dbCheckAge = this.dbCheckAge.bind(this); // used in setTimeout without need for local bindings
+    this.dbCheckAge = this.dbCheckAge.bind(this);  // used in setTimeout without need for local bindings
 
     this.dbSent     = this.dbSent.bind(this);
     this.dbRecv     = this.dbRecv.bind(this);
@@ -28,6 +28,8 @@ function RequestEngine() {
     this.engineLoaded(false);
     this.dbInit();
     this.dbRestore();
+
+    this._busyCalls = [];
 }
 
 /* {{{ */ RequestEngine.prototype.now = function() {
@@ -41,7 +43,6 @@ function RequestEngine() {
 /*}}}*/
 
 /* {{{ */ RequestEngine.prototype.engineLoaded = function(arg) {
-
     if( arg != null ) // neither null nor undefined
         this._engineLoaded = arg;
 
@@ -53,10 +54,13 @@ function RequestEngine() {
 /*}}}*/
 
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
+    if( !_r.desc ) _r.desc = "";
+    _r.desc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
+
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
     if( this.dbBusy() ) {
-        setTimeout(function(){ this.doRequest(_r); }.bind(this), 500);
+        this.pushBusyCall(this.doRequest, [_r]);
         return;
     }
 
@@ -273,17 +277,17 @@ function RequestEngine() {
         return;
     }
 
-    var me = this;
-
     if( this.dbBusy() ) {
         Mojo.Log.info("RequestEngine::dbSetCache() [busy]");
-        setTimeout(function() { me.dbSetCache(key, data); }, 500);
+        this.pushBusyCall(this.dbSetCache, [key,data]);
         return;
     }
 
     this.dbBusy(true);
 
     Mojo.Log.info("RequestEngine::dbSetCache(key=%s) [adding]", key);
+
+    var me = this;
 
     var fail = function() { me.dbBusy(false); /* failed to add key, life goes on */ };
     var sent = function() {
@@ -302,16 +306,47 @@ function RequestEngine() {
 /*}}}*/
 
 /* {{{ */ RequestEngine.prototype.dbBusy = function(arg) {
+    var engineLoaded = this.engineLoaded();
 
-    if( arg != null ) // neither null nor undefined, since null==undefined
+    if( arg != null ) { // neither null nor undefined, since null==undefined
         this._dbBusy = arg;
 
-    Mojo.Log.info("RequestEngine::dbBusy(%s) [%s]", arg, this._dbBusy);
+        if( !arg && engineLoaded )
+            return this.popBusyCall(); // when there's something to pop, we get a true
+                                       // this works as a kind of soft busy signal, althoug
+                                       // since there's an argument, we're probably not *asking*
+                                       // about the busy status at all.
+    }
 
-    if( this._dbBusy )
-        return true; // if the db is busy, then dbBusy is true
+    var result = this._dbBusy || !engineLoaded;
+        // we're busy if the engine isn't loaded, no matter what the value of _dbBusy
+        // if the db is busy, then dbBusy is true
 
-    return !this.engineLoaded(); // if the engine isn't loaded, then dbBusy() is true!
+    Mojo.Log.info("RequestEngine::dbBusy(%s) [dbBusy:%s + engineLoaded:%s: %s]",
+        arg, this._dbBusy, engineLoaded, result);
+
+    return result;
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.pushBusyCall = function(fp, args) {
+    this._busyCalls.push([fp, args]);
+
+    Mojo.Log.info("RequestEngine::pushBusyCall() [depth: %d]", this._busyCalls.length);
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.popBusyCall = function() {
+    Mojo.Log.info("RequestEngine::popBusyCall() [depth: %d]",  this._busyCalls.length);
+
+    var x = this._busyCalls.shift();
+
+    if( !x )
+        return false; // return false if we have nothing to do
+
+    x.shift().apply(this, x);
+
+    return true; // and true when we do
 };
 
 /*}}}*/
