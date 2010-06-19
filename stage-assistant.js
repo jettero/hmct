@@ -43,18 +43,18 @@ StageAssistant.prototype.showScene = function (sceneName, args) {
 };
 
 StageAssistant.prototype.handleCommand = function(event) {
-    // this.controller = Mojo.Controller.stageController.activeScene();
-    // I have this bound to the current scene, so ... this isn't necessary
+    // NOTE: if the stageassistant and the sceneassistant both have a
+    // handleCommand, they *both* receive commands
 
     if(event.type === Mojo.Event.command) {
-        Mojo.Log.info("executing menu command: %s", event.command);
+        var cmd = event.command;
+        Mojo.Log.info("StageAssistant::handleCommand(%s)", cmd);
 
         var a;
-
-        if( a = event.command.match(/^myshow-(.+)/) )
+        if( a = cmd.match(/^myshow-(.+)/) )
             Mojo.Controller.stageController.assistant.showScene(a[1]);
 
-        else switch( event.command ) {
+        else switch( cmd ) {
             case 'refresh-login':
                 AMO.refreshCurrentLogin();
                 break;
@@ -64,7 +64,7 @@ StageAssistant.prototype.handleCommand = function(event) {
                 break;
 
             default:
-                Mojo.Log.info("unknown command menu command: " + event.command);
+                Mojo.Log.info("StageAssistant::handleCommand(%s): unknown menu command", cmd);
                 break;
         }
     }
