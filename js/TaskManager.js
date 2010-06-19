@@ -432,7 +432,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         params: {tokens: tokens},
 
         cacheable: true,
-        keyStrings: [this.currentLogin],
+        keyStrings: [this.currentLogin, tokens],
         cacheMaxAgeOverride: cma, // we're never interested in a cache older than our tasks
 
         process: function(r) {
