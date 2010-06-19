@@ -142,6 +142,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         process: this.processTaskDownloads,
 
         finish: function(r) {
+            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: rca=%d]", search, r._req_cacheAge);
+
             // can be either a fresh request or a cache result
             me.tasks = r;
             me.tasks.each(function(t){ t._req_cacheAge = r._req_cacheAge; });
@@ -196,7 +198,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         process: this.processTaskDownloads,
 
         finish: function(r) {
-            // can be either a fresh request or a cache result
+            Mojo.Log.info("TaskManager::fetchOneTask(%s) [finish: rca:%d]", search, r._req_cacheAge);
+
             var theTask = r[0];
 
             for(var i=0; i<me.tasks.length; i++)
@@ -377,8 +380,9 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         },
 
         finish: function(r) {
+            Mojo.Log.info("TaskManager::getComments(id/%s) [finish: |r|:%d; rca:%d]", rl, r.length, r._req_cacheAge);
+
             task.comments = r;
-            Mojo.Log.info("TaskManager::getComments() [finish: rl:%s; #:%d; cq:%d]", rl, r.length, r._req_cacheAge);
             me.notifyTaskChange(task);
         },
 
@@ -452,7 +456,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         },
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::getFurtherDetails() [finish: #:%d; cq:%d]", r.length, r._req_cacheAge);
+            Mojo.Log.info("TaskManager::getFurtherDetails(%s) [finish: |r|:%d; rca:%d]", tokens, r.length, r._req_cacheAge);
 
             for(var i=0; i<me.tasks.length; i++) { var mt = me.tasks[i];
             for(var j=0; j<r.length; j++) {        var rt = r[j];
