@@ -1,7 +1,12 @@
+/*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
+*/
+/*global Mojo BusyBee RequestEngine AccountManager TaskManager
+*/
+
 var AMO, TMO, BBO, OPT, REQ;
 
 function StageAssistant() {
-	Mojo.Log.info("StageAssistant()")
+	Mojo.Log.info("StageAssistant()");
 
     OPT = Mojo.loadJSONFile(Mojo.appPath + "runtime_options.json");
 
@@ -13,7 +18,7 @@ function StageAssistant() {
 }
 
 StageAssistant.prototype.setup = function() {
-	Mojo.Log.info("StageAssistant()::setup()")
+	Mojo.Log.info("StageAssistant()::setup()");
 
     this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
 
@@ -24,10 +29,10 @@ StageAssistant.prototype.setup = function() {
     this.controller.freeOrientation = function() {
         this.setWindowOrientation("free");
     };
-}
+};
 
 StageAssistant.prototype.showScene = function (sceneName, args) {
-	Mojo.Log.info("StageAssistant()::showScene(%s)", sceneName)
+	Mojo.Log.info("StageAssistant()::showScene(%s)", sceneName);
 
 	if (args === undefined) {
 		this.controller.pushScene({name: sceneName, sceneTemplate: sceneName});
@@ -41,7 +46,7 @@ StageAssistant.prototype.handleCommand = function(event) {
     // this.controller = Mojo.Controller.stageController.activeScene();
     // I have this bound to the current scene, so ... this isn't necessary
 
-    if(event.type == Mojo.Event.command) {
+    if(event.type === Mojo.Event.command) {
         Mojo.Log.info("executing menu command: %s", event.command);
 
         var a;
@@ -63,7 +68,7 @@ StageAssistant.prototype.handleCommand = function(event) {
                 break;
         }
     }
-}
+};
 
 StageAssistant.prototype.menuSetup = function() {
     this.appMenuModel = {
@@ -78,6 +83,6 @@ StageAssistant.prototype.menuSetup = function() {
     };
 
     this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, this.appMenuModel);
-}
+};
 
 Mojo.Log.info('loaded(stage-assistant.js)');
