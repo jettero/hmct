@@ -126,6 +126,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         }
     }
 
+    search = this.setLastSearch(search);
+
     Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
     var me = this;
@@ -133,7 +135,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     REQ.doRequest({
           desc: 'TaskManager::searchTasks()',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
-        params: {format: 'json', query: this.setLastSearch(search)},
+        params: {format: 'json', query: search},
 
         force: force,
         cacheable: true,
@@ -142,7 +144,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         process: this.processTaskDownloads,
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: rca=%d]", search, r._req_cacheAge);
+            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d]", search, r.length, r._req_cacheAge);
 
             // can be either a fresh request or a cache result
             me.tasks = r;
@@ -198,7 +200,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         process: this.processTaskDownloads,
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::fetchOneTask(%s) [finish: rca:%d]", search, r._req_cacheAge);
+            Mojo.Log.info("TaskManager::fetchOneTask(%s) [finish: |r|:%d, rca:%d]", search, r.length, r._req_cacheAge);
 
             var theTask = r[0];
 
