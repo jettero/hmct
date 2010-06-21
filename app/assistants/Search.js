@@ -39,10 +39,15 @@ SearchAssistant.prototype.setup = function() {
     if( AMO.isCurrentAccountPro() )
         sortByAttributes.choices.push({label: "Time Left",  value: "time_left", iconPath: 'img/clock.png' });
 
-    this.controller.setupWidget('query',     queryTextFieldAttributes, this.queryModel    = {});
-    this.controller.setupWidget('not-query', queryTextFieldAttributes, this.notQueryModel = {});
-    this.controller.setupWidget('group',     queryTextFieldAttributes, this.groupModel    = {});
-    this.controller.setupWidget('sort-by',   sortByAttributes,         this.sortByModel   = {});
+    this.controller.setupWidget('query',     queryTextFieldAttributes, this.queryModel    = {value: ""});
+    this.controller.setupWidget('not-query', queryTextFieldAttributes, this.notQueryModel = {value: ""});
+    this.controller.setupWidget('group',     queryTextFieldAttributes, this.groupModel    = {value: ""});
+    this.controller.setupWidget('sort-by',   sortByAttributes,         this.sortByModel   = {value: ""});
+
+    var doneAttributes = { trueValue: 'on', falseValue: 'off' };
+
+    this.controller.setupWidget('done-cb',     doneAttributes, this.doneModel    = {value: "off"});
+    this.controller.setupWidget('not-done-cb', doneAttributes, this.notDoneModel = {value: "off"});
 };
 
 SearchAssistant.prototype.buildSearch = function() {
