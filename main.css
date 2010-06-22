@@ -30,6 +30,16 @@
     background: none;
 }
 
+.cb-under {
+    border: 1px dotted red;
+
+    /*
+    padding: 0; margin: 0;
+    margin-left: 0.5em; margin-right: 0.5em;
+    white-space: nowrap;
+    */
+}
+
 .task-long .palm-row.selected {
     border: none;
     background: none;
