@@ -95,14 +95,14 @@ SearchAssistant.prototype.buildSearch = function() {
     append_txt("group",    "group");
     append_txt("sortBy",   "sort_by");
 
-    append_bin("done",        "done");
-    append_bin("notDone",     "not/done");
-    append_bin("accepted",    "accepted");
-    append_bin("declined",    "not/accepted");
-    append_bin("unaccepted",  "unaccepted");
+    append_bin("done",     "done");
+    append_bin("notDone",  "not/done");
+    append_bin("accepted", "accepted");
+    append_bin("declined", "not/accepted");
+    append_bin("unaccept", "unaccepted");
 
-    append_bin("hiddenFE",     "not/hidden/forever");
-    append_bin("notHiddenFE",  "hidden/forever");
+    append_bin("hiddenFE",    "not/hidden/forever");
+    append_bin("notHiddenFE", "hidden/forever");
 
     query = query.join("/");
 
