@@ -62,20 +62,32 @@ SearchAssistant.prototype.buildSearch = function() {
     var me = this;
 
     var append_txt = function(x,y) {
-        var q = me[x + "Model"].value;
+        try {
+            var q = me[x + "Model"].value;
 
-        if( q ) {
-        if( q.match(/\S/) ) {
-            query.push(y);
-            query.push(escape(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
-        }}
+            if( q ) {
+            if( q.match(/\S/) ) {
+                query.push(y);
+                query.push(escape(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
+            }}
+        }
+
+        catch(e) {
+            Mojo.Log.error("problem reading " + x + "-txt from search objects: " + e);
+        }
     };
 
     var append_bin = function(x,y) {
-        var q = me[x + "Model"].value;
+        try {
+            var q = me[x + "Model"].value;
 
-        if( q === "on" )
-            query.push(y);
+            if( q === "on" )
+                query.push(y);
+        }
+
+        catch(e) {
+            Mojo.Log.error("problem reading " + x + "-bin from search objects: " + e);
+        }
     };
 
     append_txt("query",    "query");
