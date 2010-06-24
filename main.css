@@ -31,13 +31,11 @@
 }
 
 .cb-under {
-    border: 1px dotted red;
-
-    /*
-    padding: 0; margin: 0;
+    border: 1px solid #dddddd;
+    padding: 1px; margin: 1px;
     margin-left: 0.5em; margin-right: 0.5em;
     white-space: nowrap;
-    */
+    clear: all;
 }
 
 .task-long .palm-row.selected {

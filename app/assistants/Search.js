@@ -52,6 +52,9 @@ SearchAssistant.prototype.setup = function() {
     this.controller.setupWidget('accepted-cb', doneAttributes, this.acceptedModel = {value: "off"});
     this.controller.setupWidget('declined-cb', doneAttributes, this.declinedModel = {value: "off"});
     this.controller.setupWidget('unaccept-cb', doneAttributes, this.unacceptModel = {value: "off"});
+
+    this.controller.setupWidget('hiddenfe-cb',     doneAttributes, this.hiddenFEModel    = {value: "off"});
+    this.controller.setupWidget('not-hiddenfe-cb', doneAttributes, this.notHiddenFEModel = {value: "off"});
 };
 
 SearchAssistant.prototype.buildSearch = function() {
