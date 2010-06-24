@@ -95,8 +95,8 @@ SearchAssistant.prototype.buildSearch = function() {
     append_txt("group",    "group");
     append_txt("sortBy",   "sort_by");
 
-    append_bin("done",     "done");
-    append_bin("notDone",  "not/done");
+    append_bin("done",     "complete");
+    append_bin("notDone",  "not/complete");
     append_bin("accepted", "accepted");
     append_bin("declined", "not/accepted");
     append_bin("unaccept", "unaccepted");
