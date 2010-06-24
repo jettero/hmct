@@ -59,22 +59,38 @@ SearchAssistant.prototype.setup = function() {
 
 SearchAssistant.prototype.buildSearch = function() {
     var query = [];
+    var me = this;
 
-    var append = function(x,y) {
-        var q = this[x + "Model"].value;
+    var append_txt = function(x,y) {
+        var q = me[x + "Model"].value;
 
         if( q ) {
         if( q.match(/\S/) ) {
             query.push(y);
             query.push(escape(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
         }}
+    };
 
-    }.bind(this);
+    var append_bin = function(x,y) {
+        var q = me[x + "Model"].value;
 
-    append("query",    "query");
-    append("notQuery", "not/query");
-    append("group",    "group");
-    append("sortBy",   "sort_by");
+        if( q === "on" )
+            query.push(y);
+    };
+
+    append_txt("query",    "query");
+    append_txt("notQuery", "not/query");
+    append_txt("group",    "group");
+    append_txt("sortBy",   "sort_by");
+
+    append_bin("done",        "done");
+    append_bin("notDone",     "not/done");
+    append_bin("accepted",    "accepted");
+    append_bin("declined",    "not/accepted");
+    append_bin("unaccepted",  "unaccepted");
+
+    append_bin("hiddenFE",     "not/hidden/forever");
+    append_bin("notHiddenFE",  "hidden/forever");
 
     query = query.join("/");
 
