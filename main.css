@@ -34,8 +34,7 @@
     border: 1px solid #dddddd;
     padding: 1px; margin: 1px;
     margin-left: 0.5em; margin-right: 0.5em;
-    white-space: nowrap;
-    clear: all;
+    font-size: 12px;
 }
 
 .task-long .palm-row.selected {
