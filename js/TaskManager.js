@@ -173,6 +173,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
+            Mojo.Log.error("TaskManager::searchTasks() [error dialog]: ", e.join("... "));
             Mojo.Controller.errorDialog(e.join("... "));
 
             return false;
@@ -232,6 +233,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
+            Mojo.Log.error("TaskManager::findOneTask() [error dialog]: ", e.join("... "));
             Mojo.Controller.errorDialog(e.join("... "));
 
             return false;
@@ -408,6 +410,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong while retrieving comments...");
 
+            Mojo.Log.error("TaskManager::getComments() [error dialog]: ", e.join("... "));
             Mojo.Controller.errorDialog(e.join("... "));
 
             return false;
@@ -493,6 +496,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search sequel ...");
 
+            Mojo.Log.error("TaskManager::getFurtherDetails() [error dialog]: ", e.join("... "));
             Mojo.Controller.errorDialog(e.join("... "));
 
             return false;
@@ -595,12 +599,14 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
     try { str = this.fixutf8(str); } catch(e1) {
         t = new Template("Problem fixing utf8 (where necessary) on string during \"#{desc}\" request: #{error}");
+        Mojo.Log.error("TaskManager::processJSONString() [error dialog]: ", t.evaluate({desc: desc, error: e1}));
         Mojo.Controller.errorDialog(t.evaluate({desc: desc, error: e1}));
         return [];
     }
 
     try { json = str.evalJSON(); } catch(e2) {
         t = new Template("Problem evaluating JSON string during \"#{desc}\" request: #{error}");
+        Mojo.Log.error("TaskManager::processJSONString() [error dialog]: ", t.evaluate({desc: desc, error: e2}));
         Mojo.Controller.errorDialog(t.evaluate({desc: desc, error: e2}));
         return [];
     }
