@@ -503,37 +503,6 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) { // stolen from: http://www.webtoolkit.info/javascript-utf8.html
-    var str = "";
-    var i = 0;
-    var c,c1,c2,c3;
-
-    while( i<utftext.length ) {
-
-        c = utftext.charCodeAt(i);
-
-        if (c < 128) {
-            str += String.fromCharCode(c);
-            i++;
-
-        } else if((c > 191) && (c < 224)) {
-            c2 = utftext.charCodeAt(i+1);
-            str += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-            i += 2;
-
-        } else {
-            c2 = utftext.charCodeAt(i+1);
-            c3 = utftext.charCodeAt(i+2);
-            str += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-            i += 3;
-        }
-
-    }
-
-    return str;
-};
-
-/*}}}*/
 /* {{{ */ TaskManager.prototype.processTaskDownloads = function(r) {
     var currentTime = new Date();
     var month = "" + (currentTime.getMonth() + 1);
@@ -541,7 +510,9 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var year  = "" + currentTime.getFullYear();
     var now   = year + (month.length===2 ? month : "0"+month) + (day.length===2 ? day : "0"+day);
 
-    return this.fixutf8( r.content.result ).evalJSON().each(function(t){
+    var jsonStr = r.content.result;  delete r;
+
+    return this.processJSONString(jsonStr).each(function(t){
         if( t.due ) {
             var d = t.due.replace(/\D+/g, "");
             t.due_class = now>d ? "overdue" : "regular-due";
@@ -583,6 +554,53 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         if( t.requestor.match(this.currentLogin_re) )
             t.requestor_class = "generically-hidden";
     });
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) { // stolen from: http://www.webtoolkit.info/javascript-utf8.html
+    var str = "";
+    var i = 0;
+    var c,c1,c2,c3;
+
+    while( i<utftext.length ) {
+
+        c = utftext.charCodeAt(i);
+
+        if (c < 128) {
+            str += String.fromCharCode(c);
+            i++;
+
+        } else if((c > 191) && (c < 224)) {
+            c2 = utftext.charCodeAt(i+1);
+            str += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+            i += 2;
+
+        } else {
+            c2 = utftext.charCodeAt(i+1);
+            c3 = utftext.charCodeAt(i+2);
+            str += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+            i += 3;
+        }
+
+    }
+
+    return str;
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.processJSONString = function(str, desc) {
+    var json;
+
+    try { str = this.fixutf8(str); } catch(e1) {
+        Mojo.Controller.errorDialog("Problem fixing utf8 (where necessary) on string during \"%s\" request: %s", desc, e1);
+    }
+
+    try { json = str.evalJSON(); } catch(e2) {
+        Mojo.Controller.errorDialog("Problem evauluating JSON string during \"%s\" request: %s", desc, e2);
+    }
+
+    return json;
 };
 
 /*}}}*/
