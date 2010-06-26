@@ -591,13 +591,18 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 /*}}}*/
 /* {{{ */ TaskManager.prototype.processJSONString = function(str, desc) {
     var json;
+    var t;
 
     try { str = this.fixutf8(str); } catch(e1) {
-        Mojo.Controller.errorDialog("Problem fixing utf8 (where necessary) on string during \"%s\" request: %s", desc, e1);
+        t = new Template("Problem fixing utf8 (where necessary) on string during \"#{desc}\" request: #{error}");
+        Mojo.Controller.errorDialog(t.evaluate({desc: desc, error: e1}));
+        return [];
     }
 
     try { json = str.evalJSON(); } catch(e2) {
-        Mojo.Controller.errorDialog("Problem evauluating JSON string during \"%s\" request: %s", desc, e2);
+        t = new Template("Problem evaluating JSON string during \"#{desc}\" request: #{error}");
+        Mojo.Controller.errorDialog(t.evaluate({desc: desc, error: e2}));
+        return [];
     }
 
     return json;
