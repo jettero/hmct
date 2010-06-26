@@ -516,7 +516,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
     var jsonStr = r.content.result;  delete r;
 
-    return this.processJSONString(jsonStr).each(function(t){
+    return this.processJSONString(jsonStr, "process-task-downloads").each(function(t){
         if( t.due ) {
             var d = t.due.replace(/\D+/g, "");
             t.due_class = now>d ? "overdue" : "regular-due";
