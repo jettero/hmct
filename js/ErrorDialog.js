@@ -11,5 +11,8 @@ ErrorDialog.prototype.showError = function(desc,error) {
     var errorText = this.t.evaluate({desc: desc, error: error});
 
     Mojo.Log.error(errorText);
-    Mojo.Controller.errorDialog(errorText.substr(0,100));
+
+    if( errorText.length > OPT.maxErrLen )
+         Mojo.Controller.errorDialog(errorText.substr(0, OPT.maxErrLen-4) + " ...");
+    else Mojo.Controller.errorDialog(errorText);
 };
