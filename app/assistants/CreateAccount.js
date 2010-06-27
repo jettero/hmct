@@ -8,6 +8,9 @@ function CreateAccountAssistant() {
     this.createAccount   = this.createAccount   .bind(this);
     this.checkedUserPass = this.checkedUserPass .bind(this);
     this.failedUserPass  = this.failedUserPass  .bind(this);
+
+    this.e = new ErrorDialog("CreateAccount");
+    this.E = this.e.showError;
 }
 
 /* {{{ /**/ CreateAccountAssistant.prototype.setup = function() {
@@ -88,7 +91,7 @@ function CreateAccountAssistant() {
         this.spinning = true;
 
     if (AMO.hasAccount(email)) {
-        Mojo.Controller.errorDialog('You already have an account named \"' + email + '\".  Edit it instead.');
+        this.E("createAccount", "create", 'You already have an account named \"' + email + '\".  Edit it instead.');
         this.nospin();
         return;
     }
