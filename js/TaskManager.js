@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO REQ Template OPT setTimeout $ Element
+/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element
 */
 
 /* {{{ */ function TaskManager() {
@@ -20,6 +20,7 @@
 
     this.tasksChangeCallback = [];
     this.taskChangeCallback = {};
+    this.E = new ErrorDialog("TaskManager");
 }
 
 /*}}}*/
@@ -173,8 +174,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
-            Mojo.Log.error("TaskManager::searchTasks() [error dialog]: ", e.join("... "));
-            Mojo.Controller.errorDialog(e.join("... "));
+            this.E("searchTasks", "search fail", e.join("; "));
 
             return false;
         }
@@ -233,8 +233,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
-            Mojo.Log.error("TaskManager::findOneTask() [error dialog]: ", e.join("... "));
-            Mojo.Controller.errorDialog(e.join("... "));
+            this.E("findOneTask", "find fail", e.join("; "));
 
             return false;
         }
@@ -410,8 +409,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong while retrieving comments...");
 
-            Mojo.Log.error("TaskManager::getComments() [error dialog]: ", e.join("... "));
-            Mojo.Controller.errorDialog(e.join("... "));
+            this.E("getComments", "get fail", e.join("; "));
 
             return false;
         }
@@ -496,8 +494,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search sequel ...");
 
-            Mojo.Log.error("TaskManager::getFurtherDetails() [error dialog]: ", e.join("... "));
-            Mojo.Controller.errorDialog(e.join("... "));
+            this.E("getFurtherDetails", "get fail", e.join("; "));
 
             return false;
         }
@@ -599,15 +596,13 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
     try { str = this.fixutf8(str); } catch(e1) {
         t = new Template("Problem fixing utf8 (where necessary) on string during \"#{desc}\" request: #{error}");
-        Mojo.Log.error("TaskManager::processJSONString() [error dialog]: ", t.evaluate({desc: desc, error: e1}));
-        Mojo.Controller.errorDialog(t.evaluate({desc: desc, error: e1}));
+        this.E("processJSONString", "utf8 fail", t.evaluate({desc: desc, error: e1}));
         return [];
     }
 
     try { json = str.evalJSON(); } catch(e2) {
         t = new Template("Problem evaluating JSON string during \"#{desc}\" request: #{error}");
-        Mojo.Log.error("TaskManager::processJSONString() [error dialog]: ", t.evaluate({desc: desc, error: e2}));
-        Mojo.Controller.errorDialog(t.evaluate({desc: desc, error: e2}));
+        this.E("processJSONString", "eval fail", t.evaluate({desc: desc, error: e2}));
         return [];
     }
 
