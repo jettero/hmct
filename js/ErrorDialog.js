@@ -1,10 +1,11 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo Template
+/*global Mojo Template OPT
 */
 
 function ErrorDialog(launcher) {
     this.logTemplate = new Template(launcher + "::#{fname}() [#{desc}]: #{error}");
+    this.showError = this.showError.bind(this);
 }
 
 ErrorDialog.prototype.showError = function(fname,desc,error) {

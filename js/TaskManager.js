@@ -20,7 +20,9 @@
 
     this.tasksChangeCallback = [];
     this.taskChangeCallback = {};
-    this.E = new ErrorDialog("TaskManager");
+
+    this.e = new ErrorDialog("TaskManager");
+    this.E = this.e.showError;
 }
 
 /*}}}*/
@@ -511,7 +513,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var year  = "" + currentTime.getFullYear();
     var now   = year + (month.length===2 ? month : "0"+month) + (day.length===2 ? day : "0"+day);
 
-    var jsonStr = r.content.result;  delete r;
+    var jsonStr = r.content.result;
+    delete r; // STFU: this actually works, but jslint thinks it shouldn't.
 
     return this.processJSONString(jsonStr, "process-task-downloads").each(function(t){
         if( t.due ) {
