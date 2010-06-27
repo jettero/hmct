@@ -23,8 +23,11 @@
         replace: false // opening existing if possible
     };
 
+    this.e = new ErrorDialog("AccountManager");
+    this.E = this.e.showError;
+
     this.dbo = new Mojo.Depot(options, function(){}, function(t,r){
-        Mojo.Controller.errorDialog("Can't open location database (#" + r.message + ").");
+        this.E(false, "depot", "Can't open location database (#" + r.message + ").");
     });
 
     Mojo.Log.info("AccountManager() restoring=true (1)");
@@ -51,8 +54,7 @@
 
 /*}}}*/
 /* {{{ */ AccountManager.prototype.dbSentFail = function(transaction, error) {
-    Mojo.Log.info("AccountManager::dbSentFail()");
-    Mojo.Controller.errorDialog("ERROR storing information (#" + error.message + ").");
+    this.E("dbSentFail", "login", "ERROR storing information (#" + error.message + ").");
 
 };
 
@@ -143,7 +145,7 @@
                 if( !e.length )
                     e.push("Something went wrong with the login ...");
 
-                Mojo.Controller.errorDialog(e.join("... "));
+                me.E("login", "login", e.join("; "));
             }
 
             return false;
@@ -178,7 +180,7 @@
     Mojo.Log.info("AccountManager::refreshCurrentLogin()");
 
     if( !this.data.meta.currentLogin ) {
-        Mojo.Controller.errorDialog("Please login first...");
+        this.E("refreshCurrentLogin", "login", "Please log in first...");
         return;
     }
 
@@ -300,7 +302,7 @@
             if( !e.length )
                 e.push("Something went wrong while trying to fetch the search lists for: " + email);
 
-            Mojo.Controller.errorDialog(e.join("... "));
+            me.E("getSearchLists", "details", e.join("; "));
 
             return false;
         }
@@ -338,8 +340,7 @@
 
 /*}}}*/
 /* {{{ */ AccountManager.prototype.dbRecvFail = function(transaction, error) {
-    Mojo.Log.info("AccountManager::dbRecvFail()");
-    Mojo.Controller.errorDialog("ERROR restoring account information (#" + error.message + ").");
+    this.E("dbRecvFail", "depot", "ERROR restoring account information (#" + error.message + ")");
 
 };
 
