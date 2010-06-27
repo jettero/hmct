@@ -14,8 +14,11 @@ function RequestEngine() {
         replace: false // false, instead open existing if possible
     };
 
+    this.e = new ErrorDialog("RequestEngine");
+    this.E = this.e.showError;
+
     this.dbo = new Mojo.Depot(options, function(){}, function(t, r){
-        Mojo.Controller.errorDialog("Failed to open cache Depot (#" + r.message + ").");
+        this.E(false, "depot", "Failed to open cache Depot (#" + r.message + ")");
     });
 
     this.dbCheckAge = this.dbCheckAge.bind(this);  // used in setTimeout without need for local bindings
@@ -85,7 +88,7 @@ function RequestEngine() {
     }
 
     if( interr ) {
-        Mojo.Controller.errorDialog("internal error reqeust not sent");
+        this.E("doRequest", "required/forbidden", "internal error reqeust not sent");
         return;
     }
 
@@ -202,7 +205,7 @@ function RequestEngine() {
                     Mojo.Log.error("RequestEngine::_doRequest(%s) Problem finding request contents: %s", _r.desc, _errcnt);
 
                     if( _r.failure() )
-                        Mojo.Controller.errorDialog("Unexpected js error pulling data during ajax request: " + _errcnt);
+                        me.E("_doRequest", "xml missing", "Unexpected js error pulling data during ajax request: " + _errcnt);
 
                     return;
                 }
@@ -221,7 +224,7 @@ function RequestEngine() {
                         }
 
                     } else if( _r.failure() ) {
-                        Mojo.Controller.errorDialog("Unknown error issuing " + _r.desc + " request");
+                        me.E("_doRequest", "no result", "Unknown error issuing " + _r.desc + " request");
 
                         return;
                     }
@@ -231,7 +234,7 @@ function RequestEngine() {
                     Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r.desc, _errcb);
 
                     if( _r.failure() )
-                        Mojo.Controller.errorDialog("Unexpected internal js error passing data to application: " + _errcb);
+                        me.E("_doRequest", "callback", "Unexpected internal js error passing data to application: " + _errcb);
 
                     return;
                 }
@@ -245,7 +248,7 @@ function RequestEngine() {
                 Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail", _r.desc);
 
                 if( _r.failure() )
-                    Mojo.Controller.errorDialog("Unknown error issuing " + _r.desc + " request");
+                    me.E("_doRequest", "mystery", "Unknown error issuing " + _r.desc + " request");
 
                 return;
             }
@@ -259,8 +262,7 @@ function RequestEngine() {
 
             if( _r.failure() ) {
                 var t = new Template("Ajax #{status} Error: #{responseText} fetching: " + _r.url);
-
-                Mojo.Controller.errorDialog(t.evaluate(transport));
+                me.E("_doRequest", "ajax", t.evaluate(transport));
             }
         }
 
@@ -483,8 +485,7 @@ function RequestEngine() {
 
 /*}}}*/
 /* {{{ */ RequestEngine.prototype.dbSentFail = function(transaction, error) {
-    Mojo.Log.info("RequestEngine::dbSentFail()");
-    Mojo.Controller.errorDialog("ERROR storing cache information (#" + error.message + ").  Clearing cache if possible.");
+    this.E("dbSentFail", 'cache', "ERROR storing cache information (#" + error.message + ").  Clearing cache if possible.");
 
     // Is this an overreaction or downright prudent?  Personally, I hate the
     // idea of the cache db getting corrupted and losing track of huge keys in
@@ -522,8 +523,7 @@ function RequestEngine() {
 
 /*}}}*/
 /* {{{ */ RequestEngine.prototype.dbRecvFail = function(transaction, error) {
-    Mojo.Log.info("RequestEngine::dbRecvFail()");
-    Mojo.Controller.errorDialog("ERROR restoring cache information (#" + error.message + ").");
+    this.E("dbRecvFail", 'cache', "ERROR storing cache information (#" + error.message + ").  Clearing cache if possible.");
 
     // weird... I hope this doesn't come up much.  I don't understand the implications of a db load fail
     // should we clear the cache here? [see dbSentFail for initial discussion]
