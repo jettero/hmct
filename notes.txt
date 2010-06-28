@@ -37,3 +37,12 @@ curl -F task_id=$ID -sb $HM http://hiveminder.com/=/action/SearchTaskEmail.yml
 
 # comments?
 curl -sb $HM http://hiveminder.com/mobile/task_history/TXNQ
+
+
+# grab results by hand with perl and curl
+curl -F query=complete -F format=json -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml > complete.yml
+use YAML::Syck; $x = Load($y = slurp("complete.yml")); write_file('complete.js'=>"$x->{content}{result}");
+    # syck because my completes are too effing long for JSON::XS aparently
+
+curl -F query=complete -F format=json -sb $HM http://hiveminder.com/=/action/DownloadTasks.json > complete.json
+use JSON; $x = decode_json(slurp("complete.json")); write_file('complete.js'=>"$x->{content}{result}");
