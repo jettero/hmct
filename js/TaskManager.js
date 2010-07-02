@@ -562,7 +562,12 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) { // stolen from: http://www.webtoolkit.info/javascript-utf8.html
+/* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) {
+    
+    // stolen from: http://www.webtoolkit.info/javascript-utf8.html
+
+    return utftext; // XXX: disabled, was causing grief.  It's possible the HM team fixed this anyway.
+
     var str = "";
     var i = 0;
     var c,c1,c2,c3;
