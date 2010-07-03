@@ -101,8 +101,8 @@ SearchAssistant.prototype.buildSearch = function() {
     append_bin("declined", "not/accepted");
     append_bin("unaccept", "unaccepted");
 
-    append_bin("hiddenFE",    "not/hidden/forever");
-    append_bin("notHiddenFE", "hidden/forever");
+    append_bin("hiddenFE",    "hidden/forever");
+    append_bin("notHiddenFE", "not/hidden/forever");
 
     query = query.join("/");
 
