@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ OPT TMO
+/*global Mojo $ OPT TMO AMO escape
 */
 
 function SearchAssistant() {
@@ -11,10 +11,10 @@ SearchAssistant.prototype.setup = function() {
     Mojo.Log.info("Search::setup()");
 
     this.searchModel = { label: "Search", icon: 'search', command: 'search' };
-    this.commandMenuModel = { label: 'Search Command Menu', items: [ {}, {}, this.searchModel ]}
+    this.commandMenuModel = { label: 'Search Command Menu', items: [ {}, {}, this.searchModel ]};
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 
-    var queryTextFieldAttributes = {
+    var textFieldAttributes = {
         textCase:      Mojo.Widget.steModeLowerCase,
         multiline:     false,
         autoFocus:     false,
@@ -39,22 +39,24 @@ SearchAssistant.prototype.setup = function() {
     if( AMO.isCurrentAccountPro() )
         sortByAttributes.choices.push({label: "Time Left",  value: "time_left", iconPath: 'img/clock.png' });
 
-    this.controller.setupWidget('query',     queryTextFieldAttributes, this.queryModel    = {value: ""});
-    this.controller.setupWidget('not-query', queryTextFieldAttributes, this.notQueryModel = {value: ""});
-    this.controller.setupWidget('group',     queryTextFieldAttributes, this.groupModel    = {value: ""});
-    this.controller.setupWidget('sort-by',   sortByAttributes,         this.sortByModel   = {value: ""});
+    this.controller.setupWidget('query',     textFieldAttributes, this.queryModel    = {value: ""});
+    this.controller.setupWidget('not-query', textFieldAttributes, this.notQueryModel = {value: ""});
+    this.controller.setupWidget('group',     textFieldAttributes, this.groupModel    = {value: ""});
+    this.controller.setupWidget('sort-by',   sortByAttributes,    this.sortByModel   = {value: ""});
 
-    var doneAttributes = { trueValue: 'on', falseValue: 'off' };
+    var checkBoxAttributes = { trueValue: 'on', falseValue: 'off' };
 
-    this.controller.setupWidget('done-cb',     doneAttributes, this.doneModel    = {value: "off"});
-    this.controller.setupWidget('not-done-cb', doneAttributes, this.notDoneModel = {value: "off"});
+    this.controller.setupWidget('done-cb',     checkBoxAttributes, this.doneModel    = {value: "off"});
+    this.controller.setupWidget('not-done-cb', checkBoxAttributes, this.notDoneModel = {value: "off"});
 
-    this.controller.setupWidget('accepted-cb', doneAttributes, this.acceptedModel = {value: "off"});
-    this.controller.setupWidget('declined-cb', doneAttributes, this.declinedModel = {value: "off"});
-    this.controller.setupWidget('unaccept-cb', doneAttributes, this.unacceptModel = {value: "off"});
+    this.controller.setupWidget('accepted-cb', checkBoxAttributes, this.acceptedModel = {value: "off"});
+    this.controller.setupWidget('declined-cb', checkBoxAttributes, this.declinedModel = {value: "off"});
+    this.controller.setupWidget('unaccept-cb', checkBoxAttributes, this.unacceptModel = {value: "off"});
 
-    this.controller.setupWidget('hiddenfe-cb',     doneAttributes, this.hiddenFEModel    = {value: "off"});
-    this.controller.setupWidget('not-hiddenfe-cb', doneAttributes, this.notHiddenFEModel = {value: "off"});
+    this.controller.setupWidget('hiddenfe-cb',     checkBoxAttributes, this.hiddenFEModel    = {value: "off"});
+    this.controller.setupWidget('not-hiddenfe-cb', checkBoxAttributes, this.notHiddenFEModel = {value: "off"});
+
+    this.controller.setupWidget('task-contains', textFieldAttributes, this.taskContainsModel = {value: ""});
 };
 
 SearchAssistant.prototype.buildSearch = function() {
