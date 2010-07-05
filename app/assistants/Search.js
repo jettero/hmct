@@ -50,23 +50,37 @@ SearchAssistant.prototype.setup = function() {
     };
 
     this.setupToggleRow = function(name, nnme) {
-        this.controller.setupWidget(name, textFieldAttributes, this[modelize(name)] = {value: ""});
-        this.controller.setupWidget(nnme, textFieldAttributes, this[modelize(nnme)] = {value: ""});
+        try {
 
-        Mojo.Event.listen(this.controller.get(name + "-t"), Mojo.Event.tap, function(){
-            this.controller.get(name + "-c").addClassName("generically-hidden");
-            this.controller.get(nnme + "-c").removeClassName("generically-hidden");
-        }.bind(this));
+            this.controller.setupWidget(name, textFieldAttributes, this[modelize(name)] = {value: ""});
+            this.controller.setupWidget(nnme, textFieldAttributes, this[modelize(nnme)] = {value: ""});
 
-        Mojo.Event.listen(this.controller.get(nnme + "-t"), Mojo.Event.tap, function(){
-            this.controller.get(nnme + "-c").addClassName("generically-hidden");
-            this.controller.get(name + "-c").removeClassName("generically-hidden");
-        }.bind(this));
+            Mojo.Event.listen(this.controller.get(name + "-t"), Mojo.Event.tap, function(){
+                this.controller.get(name + "-c").addClassName("generically-hidden");
+                this.controller.get(nnme + "-c").removeClassName("generically-hidden");
+            }.bind(this));
+
+            Mojo.Event.listen(this.controller.get(nnme + "-t"), Mojo.Event.tap, function(){
+                this.controller.get(nnme + "-c").addClassName("generically-hidden");
+                this.controller.get(name + "-c").removeClassName("generically-hidden");
+            }.bind(this));
+
+        } catch(e) {
+            Mojo.Log.error("problem with setupToggleRow(%s,%s): %s", name, nnme, e);
+        }
 
     }.bind(this);
 
-    this.setupToggleRow("query", "not-query");
-    this.setupToggleRow("task-contains", "task-lacks");
+    this.setupToggleRow("query",              "not-query");
+    this.setupToggleRow("task-contains",      "task-lacks");
+    this.setupToggleRow("notes-contains",     "notes-lacks");
+    this.setupToggleRow("tag-contains",       "tag-lacks");
+    this.setupToggleRow("owner-is",           "owner-isnt");
+    this.setupToggleRow("requestor-is",       "requestor-isnt");
+    this.setupToggleRow("nextaction-by",      "nextaction-notby");
+    this.setupToggleRow("hidden-until-after", "hidden-until-before");
+    this.setupToggleRow("due-after",          "due-before");
+    this.setupToggleRow("completed-after",    "completed-before");
 
     this.controller.setupWidget('group',     textFieldAttributes, this.groupModel    = {value: ""});
     this.controller.setupWidget('sort-by',   sortByAttributes,    this.sortByModel   = {value: ""});
