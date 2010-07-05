@@ -66,6 +66,7 @@ SearchAssistant.prototype.setup = function() {
     }.bind(this);
 
     this.setupToggleRow("query", "not-query");
+    this.setupToggleRow("task-contains", "task-lacks");
 
     this.controller.setupWidget('group',     textFieldAttributes, this.groupModel    = {value: ""});
     this.controller.setupWidget('sort-by',   sortByAttributes,    this.sortByModel   = {value: ""});
