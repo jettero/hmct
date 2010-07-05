@@ -41,6 +41,15 @@ SearchAssistant.prototype.setup = function() {
 
     this.controller.setupWidget('query',     textFieldAttributes, this.queryModel    = {value: ""});
     this.controller.setupWidget('not-query', textFieldAttributes, this.notQueryModel = {value: ""});
+    Mojo.Event.listen(this.controller.get("qc-t"), Mojo.Event.tap, function(){
+        this.controller.get("query-c").addClassName("generically-hidden");
+        this.controller.get("not-query-c").removeClassName("generically-hidden");
+    }.bind(this));
+    Mojo.Event.listen(this.controller.get("nqc-t"), Mojo.Event.tap, function(){
+        this.controller.get("not-query-c").addClassName("generically-hidden");
+        this.controller.get("query-c").removeClassName("generically-hidden");
+    }.bind(this));
+
     this.controller.setupWidget('group',     textFieldAttributes, this.groupModel    = {value: ""});
     this.controller.setupWidget('sort-by',   sortByAttributes,    this.sortByModel   = {value: ""});
 
