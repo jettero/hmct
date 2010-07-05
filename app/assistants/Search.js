@@ -91,8 +91,8 @@ SearchAssistant.prototype.setup = function() {
         {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
         {label: "High",    value: "high",    iconPath: 'img/high.png'    },
         {label: "Normal",  value: "normal",  iconPath: 'img/normal.png'  },
-        {label: "low",     value: "low",     iconPath: 'img/low.png'     },
-        {label: "lowest",  value: "lowest",  iconPath: 'img/lowest.png'  },
+        {label: "Low",     value: "low",     iconPath: 'img/low.png'     },
+        {label: "Lowest",  value: "lowest",  iconPath: 'img/lowest.png'  },
     ];
     this.setupToggleRow("priority-higher-than", 'priority-lower-than',
         {label: "priority higher than", choices: prios},
