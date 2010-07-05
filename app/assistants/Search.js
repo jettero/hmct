@@ -98,7 +98,19 @@ SearchAssistant.prototype.setup = function() {
         {label: "priority higher than", choices: prios},
         {label: "priority lower than",  choices: prios});
 
+    this.setupToggleRow("but-first", "and-then");
+
     this.controller.setupWidget('group', textFieldAttributes, this.groupModel = {value: ""});
+
+     if( AMO.isCurrentAccountPro() ) {
+        this.setupToggleRow("estimate-less-than", "estimate-greater-than");
+        this.setupToggleRow("worked-less-than",   "worked-greater-than");
+        this.setupToggleRow("left-less-than",     "left-greater-than");
+
+    } else {
+        this.controller.get("last-row-before-pro").addClassName("last");
+        this.controller.get("pro").addClassName('generically-hidden');
+    }
 
     var checkBoxAttributes = { trueValue: 'on', falseValue: 'off' };
 
