@@ -91,14 +91,14 @@
                         <div id='task-contains-c'>
                             <div class="label">
                                 task contains
-                                <div class='tiny-button' id="query-t">!</div>
+                                <div class='tiny-button' id="task-contains-t">!</div>
                             </div>
                             <div id="task-contains" x-mojo-element="TextField"></div>
                         </div>
                         <div id='not-task-contains-c' class='generically-hidden'>
                             <div class="label">
                                 task lacks
-                                <div class='tiny-button' id="query-t">+</div>
+                                <div class='tiny-button' id="not-task-contains-t">+</div>
                             </div>
                             <div id="task-lacks" x-mojo-element="TextField"></div>
                         </div>
@@ -112,14 +112,14 @@
                         <div id='notes-contains-c'>
                             <div class="label">
                                 notes contains
-                                <div class='tiny-button' id="query-t">!</div>
+                                <div class='tiny-button' id="notes-contains-t">!</div>
                             </div>
                             <div id="notes-contains" x-mojo-element="TextField"></div>
                         </div>
                         <div id='not-notes-contains-c' class='generically-hidden'>
                             <div class="label">
                                 notes lacks
-                                <div class='tiny-button' id="query-t">+</div>
+                                <div class='tiny-button' id="not-notes-contains-t">+</div>
                             </div>
                             <div id="notes-lacks" x-mojo-element="TextField"></div>
                         </div>
@@ -134,7 +134,7 @@
                             <div class="label">
                                 tag contains
                                 <img src="img/tag.png">
-                                <div class='tiny-button' id="query-t">!</div>
+                                <div class='tiny-button' id="tag-contains-t">!</div>
                             </div>
                             <div id="tag-contains" x-mojo-element="TextField"></div>
                         </div>
@@ -142,7 +142,7 @@
                             <div class="label">
                                 tag lacks
                                 <img src="img/tag.png">
-                                <div class='tiny-button' id="query-t">+</div>
+                                <div class='tiny-button' id="not-tag-contains-t">+</div>
                             </div>
                             <div id="tag-lacks" x-mojo-element="TextField"></div>
                         </div>
@@ -156,14 +156,14 @@
                         <div id='owner-is-c'>
                             <div class="label">
                                 owner is
-                                <div class='tiny-button' id="query-t">!</div>
+                                <div class='tiny-button' id="owner-is-t">!</div>
                             </div>
                             <div id="owner-is" x-mojo-element="TextField"></div>
                         </div>
                         <div id='not-owner-is-c' class='generically-hidden'>
                             <div class="label">
                                 owner isn't
-                                <div class='tiny-button' id="query-t">+</div>
+                                <div class='tiny-button' id="not-owner-is-t">+</div>
                             </div>
                             <div id="owner-isnt" x-mojo-element="TextField"></div>
                         </div>
@@ -177,14 +177,14 @@
                         <div id='requestor-is-c'>
                             <div class="label">
                                 requestor is
-                                <div class='tiny-button' id="query-t">!</div>
+                                <div class='tiny-button' id="requestor-is-t">!</div>
                             </div>
                             <div id="requestor-is" x-mojo-element="TextField"></div>
                         </div>
                         <div id='not-requestor-is-c' class='generically-hidden'>
                             <div class="label">
                                 requestor isn't
-                                <div class='tiny-button' id="query-t">+</div>
+                                <div class='tiny-button' id="not-requestor-is-t">+</div>
                             </div>
                             <div id="requestor-isnt" x-mojo-element="TextField"></div>
                         </div>
@@ -198,14 +198,14 @@
                         <div id='nextaction-by-c'>
                             <div class="label">
                                 next action by
-                                <div class='tiny-button' id="query-t">!</div>
+                                <div class='tiny-button' id="nextaction-by-t">!</div>
                             </div>
                             <div id="nextaction-by" x-mojo-element="TextField"></div>
                         </div>
                         <div id='not-nextaction-by-c' class='generically-hidden'>
                             <div class="label">
                                 next action not by
-                                <div class='tiny-button' id="query-t">+</div>
+                                <div class='tiny-button' id="not-nextaction-by-t">+</div>
                             </div>
                             <div id="nextaction-notby" x-mojo-element="TextField"></div>
                         </div>
@@ -220,7 +220,7 @@
                             <div class="label">
                                 hidden ≥
                                 <img src="img/date.png">
-                                <div class='tiny-button' id="query-t">≤</div>
+                                <div class='tiny-button' id="hidden-until-after-t">≤</div>
                             </div>
                             <div id="hidden-until-after" x-mojo-element="textfield"></div>
                         </div>
@@ -228,7 +228,7 @@
                             <div class="label">
                                 hidden ≤
                                 <img src="img/date.png">
-                                <div class='tiny-button' id="query-t">≥</div>
+                                <div class='tiny-button' id="not-hidden-until-after-t">≥</div>
                             </div>
                             <div id="hidden-until-before" x-mojo-element="textfield"></div>
                         </div>
@@ -243,7 +243,7 @@
                             <div class="label">
                                 due ≥
                                 <img src="img/date.png">
-                                <div class='tiny-button' id="query-t">≤</div>
+                                <div class='tiny-button' id="due-after-t">≤</div>
                             </div>
                             <div id="due-after" x-mojo-element="textfield"></div>
                         </div>
@@ -251,7 +251,7 @@
                             <div class="label">
                                 due ≤
                                 <img src="img/date.png">
-                                <div class='tiny-button' id="query-t">≥</div>
+                                <div class='tiny-button' id="not-due-after-t">≥</div>
                             </div>
                             <div id="due-before" x-mojo-element="textfield"></div>
                         </div>
@@ -266,7 +266,7 @@
                             <div class="label">
                                 completed ≥
                                 <img src="img/date.png">
-                                <div class='tiny-button' id="query-t">≤</div>
+                                <div class='tiny-button' id="completed-after-t">≤</div>
                             </div>
                             <div id="completed-after" x-mojo-element="textfield"></div>
                         </div>
@@ -274,7 +274,7 @@
                             <div class="label">
                                 completed ≤
                                 <img src="img/date.png">
-                                <div class='tiny-button' id="query-t">≥</div>
+                                <div class='tiny-button' id="not-completed-after-t">≥</div>
                             </div>
                             <div id="completed-before" x-mojo-element="textfield"></div>
                         </div>
