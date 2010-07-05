@@ -61,15 +61,18 @@
 
                 <table cellspacing="0" cellpadding="0" border="0">
                     <tr>
+                    <td> <img src="img/green-check.png"> </td>
                     <td> <div id="done-cb"     x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">    done</div> </td>
                     <td> <div id="not-done-cb" x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">not done</div> </td>
                     </tr>
                     <tr>
+                    <td> <img src="img/thumb-up.png"> </td>
                     <td> <div id="accepted-cb" x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">accepted</div> </td>
                     <td> <div id="declined-cb" x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">declined</div> </td>
                     <td> <div id="unaccept-cb" x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">unaccepted</div> </td>
                     </tr>
                     <tr>
+                    <td></td>
                     <td> <div id="hiddenfe-cb"     x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">hidden forever</div> </td>
                     <td> <div id="not-hiddenfe-cb" x-mojo-element="CheckBox"></div> <div class='cb-under'><br clear="all">not hidden forever</div> </td>
                     </tr>
@@ -98,7 +101,7 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">tag contains</div>
+                        <div class="label">tag contains <img src="img/tag.png"> </div>
                         <div id="tag-contains" x-mojo-element="TextField"></div>
                     </div>
                 </div>
@@ -122,11 +125,29 @@
                 </div>
             </div>
 
-            <div class="palm-row last">
+            <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
                         <div class="label">next action by</div>
                         <div id="next-action-by" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">hidden until after <img src="img/date.png"> </div>
+                        <div id="hidden-until-after" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row last">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">due after</div>
+                        <div id="due-after" x-mojo-element="TextField"></div>
                     </div>
                 </div>
             </div>
