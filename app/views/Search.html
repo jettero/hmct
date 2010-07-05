@@ -19,8 +19,8 @@
                         <div id='query-c'>
                             <div class="label">
                                 contains
-                                <div x-mojo-touch-feedback='delayed' class='tiny-button' id="query-t">!</div>
                                 <img src="img/white-basics.png"/>
+                                <div class='tiny-button' id="query-t">!</div>
                             </div>
                             <div id="query" x-mojo-element="TextField"></div>
                         </div>
@@ -28,8 +28,8 @@
                         <div id='not-query-c' class='generically-hidden'>
                             <div class="label">
                                 lacks
-                                <div x-mojo-touch-feedback='delayed' class='tiny-button' id="not-query-t">+</div>
                                 <img src="img/white-basics.png"/>
+                                <div class='tiny-button' id="not-query-t">+</div>
                             </div>
                             <div id="not-query" x-mojo-element="TextField"></div>
                         </div>
@@ -88,8 +88,20 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">notes contains</div>
-                        <div id="notes-contains" x-mojo-element="TextField"></div>
+                        <div id='task-contains-c'>
+                            <div class="label">
+                                task contains
+                                <div class='tiny-button' id="query-t">!</div>
+                            </div>
+                            <div id="task-contains" x-mojo-element="TextField"></div>
+                        </div>
+                        <div id='not-task-contains-c' class='generically-hidden'>
+                            <div class="label">
+                                task lacks
+                                <div class='tiny-button' id="query-t">+</div>
+                            </div>
+                            <div id="task-lacks" x-mojo-element="TextField"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,8 +109,20 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">task contains</div>
-                        <div id="task-contains" x-mojo-element="TextField"></div>
+                        <div id='notes-contains-c'>
+                            <div class="label">
+                                notes contains
+                                <div class='tiny-button' id="query-t">!</div>
+                            </div>
+                            <div id="notes-contains" x-mojo-element="TextField"></div>
+                        </div>
+                        <div id='not-notes-contains-c' class='generically-hidden'>
+                            <div class="label">
+                                notes lacks
+                                <div class='tiny-button' id="query-t">+</div>
+                            </div>
+                            <div id="notes-lacks" x-mojo-element="TextField"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,8 +130,22 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">tag contains <img src="img/tag.png"> </div>
-                        <div id="tag-contains" x-mojo-element="TextField"></div>
+                        <div id='tag-contains-c'>
+                            <div class="label">
+                                tag contains
+                                <img src="img/tag.png">
+                                <div class='tiny-button' id="query-t">!</div>
+                            </div>
+                            <div id="tag-contains" x-mojo-element="TextField"></div>
+                        </div>
+                        <div id='not-tag-contains-c' class='generically-hidden'>
+                            <div class="label">
+                                tag lacks
+                                <img src="img/tag.png">
+                                <div class='tiny-button' id="query-t">+</div>
+                            </div>
+                            <div id="tag-lacks" x-mojo-element="TextField"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,8 +153,20 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">owner is</div>
-                        <div id="owner-is" x-mojo-element="TextField"></div>
+                        <div id='owner-is-c'>
+                            <div class="label">
+                                owner is
+                                <div class='tiny-button' id="query-t">!</div>
+                            </div>
+                            <div id="owner-is" x-mojo-element="TextField"></div>
+                        </div>
+                        <div id='not-owner-is-c' class='generically-hidden'>
+                            <div class="label">
+                                owner isn't
+                                <div class='tiny-button' id="query-t">+</div>
+                            </div>
+                            <div id="owner-isnt" x-mojo-element="TextField"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,8 +174,20 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">requestor is</div>
-                        <div id="requestor-is" x-mojo-element="TextField"></div>
+                        <div id='requestor-is-c'>
+                            <div class="label">
+                                requestor is
+                                <div class='tiny-button' id="query-t">!</div>
+                            </div>
+                            <div id="requestor-is" x-mojo-element="TextField"></div>
+                        </div>
+                        <div id='not-requestor-is-c' class='generically-hidden'>
+                            <div class="label">
+                                requestor isn't
+                                <div class='tiny-button' id="query-t">+</div>
+                            </div>
+                            <div id="requestor-isnt" x-mojo-element="TextField"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,8 +195,20 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">next action by</div>
-                        <div id="next-action-by" x-mojo-element="TextField"></div>
+                        <div id='nextaction-by-c'>
+                            <div class="label">
+                                next action by
+                                <div class='tiny-button' id="query-t">!</div>
+                            </div>
+                            <div id="nextaction-by" x-mojo-element="TextField"></div>
+                        </div>
+                        <div id='not-nextaction-by-c' class='generically-hidden'>
+                            <div class="label">
+                                next action not by
+                                <div class='tiny-button' id="query-t">+</div>
+                            </div>
+                            <div id="nextaction-notby" x-mojo-element="TextField"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -142,17 +216,68 @@
             <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">hidden until after <img src="img/date.png"> </div>
-                        <div id="hidden-until-after" x-mojo-element="TextField"></div>
+                        <div id='hidden-until-after-c'>
+                            <div class="label">
+                                hidden ≥
+                                <img src="img/date.png">
+                                <div class='tiny-button' id="query-t">≤</div>
+                            </div>
+                            <div id="hidden-until-after" x-mojo-element="textfield"></div>
+                        </div>
+                        <div id='not-hidden-until-after-c' class='generically-hidden'>
+                            <div class="label">
+                                hidden ≤
+                                <img src="img/date.png">
+                                <div class='tiny-button' id="query-t">≥</div>
+                            </div>
+                            <div id="hidden-until-before" x-mojo-element="textfield"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="palm-row last">
+            <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
-                        <div class="label">due after</div>
-                        <div id="due-after" x-mojo-element="TextField"></div>
+                        <div id='due-after-c'>
+                            <div class="label">
+                                due ≥
+                                <img src="img/date.png">
+                                <div class='tiny-button' id="query-t">≤</div>
+                            </div>
+                            <div id="due-after" x-mojo-element="textfield"></div>
+                        </div>
+                        <div id='not-due-after-c' class='generically-hidden'>
+                            <div class="label">
+                                due ≤
+                                <img src="img/date.png">
+                                <div class='tiny-button' id="query-t">≥</div>
+                            </div>
+                            <div id="due-before" x-mojo-element="textfield"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div id='completed-after-c'>
+                            <div class="label">
+                                completed ≥
+                                <img src="img/date.png">
+                                <div class='tiny-button' id="query-t">≤</div>
+                            </div>
+                            <div id="completed-after" x-mojo-element="textfield"></div>
+                        </div>
+                        <div id='not-completed-after-c' class='generically-hidden'>
+                            <div class="label">
+                                completed ≤
+                                <img src="img/date.png">
+                                <div class='tiny-button' id="query-t">≥</div>
+                            </div>
+                            <div id="completed-before" x-mojo-element="textfield"></div>
+                        </div>
                     </div>
                 </div>
             </div>
