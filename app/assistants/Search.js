@@ -39,8 +39,19 @@ SearchAssistant.prototype.setup = function() {
     if( AMO.isCurrentAccountPro() )
         sortByAttributes.choices.push({label: "Time Left",  value: "time_left", iconPath: 'img/clock.png' });
 
-    this.setupRowToggle = function(name) {
-        var nnme = "not-" + name;
+    var modelize = function(str) {
+        var s = str.split("-");
+        var r = "";
+
+        for(var i=0; i<s.length; i++)
+            r += i!=0 ? s[i].charAt(0).toUpperCase() + s[i].slice(1) : s[i];
+
+        return r + "Model";
+    };
+
+    this.setupToggleRow = function(name, nnme) {
+        this.controller.setupWidget(name, textFieldAttributes, this[modelize(name)] = {value: ""});
+        this.controller.setupWidget(nnme, textFieldAttributes, this[modelize(nnme)] = {value: ""});
 
         Mojo.Event.listen(this.controller.get(name + "-t"), Mojo.Event.tap, function(){
             this.controller.get(name + "-c").addClassName("generically-hidden");
@@ -51,11 +62,10 @@ SearchAssistant.prototype.setup = function() {
             this.controller.get(nnme + "-c").addClassName("generically-hidden");
             this.controller.get(name + "-c").removeClassName("generically-hidden");
         }.bind(this));
-    };
 
-    this.controller.setupWidget('query',     textFieldAttributes, this.queryModel    = {value: ""});
-    this.controller.setupWidget('not-query', textFieldAttributes, this.notQueryModel = {value: ""});
-    this.setupRowToggle("query");
+    }.bind(this);
+
+    this.setupToggleRow("query", "not-query");
 
     this.controller.setupWidget('group',     textFieldAttributes, this.groupModel    = {value: ""});
     this.controller.setupWidget('sort-by',   sortByAttributes,    this.sortByModel   = {value: ""});
@@ -71,8 +81,6 @@ SearchAssistant.prototype.setup = function() {
 
     this.controller.setupWidget('hiddenfe-cb',     checkBoxAttributes, this.hiddenFEModel    = {value: "off"});
     this.controller.setupWidget('not-hiddenfe-cb', checkBoxAttributes, this.notHiddenFEModel = {value: "off"});
-
-    this.controller.setupWidget('task-contains', textFieldAttributes, this.taskContainsModel = {value: ""});
 };
 
 SearchAssistant.prototype.buildSearch = function() {
