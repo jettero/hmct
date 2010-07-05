@@ -39,6 +39,8 @@ SearchAssistant.prototype.setup = function() {
     if( AMO.isCurrentAccountPro() )
         sortByAttributes.choices.push({label: "Time Left",  value: "time_left", iconPath: 'img/clock.png' });
 
+    this.controller.setupWidget('sort-by', sortByAttributes, this.sortByModel = {value: ""});
+
     var modelize = function(str) {
         var s = str.split("-");
         var r = "";
@@ -49,11 +51,14 @@ SearchAssistant.prototype.setup = function() {
         return r + "Model";
     };
 
-    this.setupToggleRow = function(name, nnme) {
+    this.setupToggleRow = function(name, nnme, na_attr, nn_attr) {
+        if( !na_attr ) na_attr = textFieldAttributes;
+        if( !nn_attr ) nn_attr = textFieldAttributes;
+
         try {
 
-            this.controller.setupWidget(name, textFieldAttributes, this[modelize(name)] = {value: ""});
-            this.controller.setupWidget(nnme, textFieldAttributes, this[modelize(nnme)] = {value: ""});
+            this.controller.setupWidget(name, na_attr, this[modelize(name)] = {value: ""});
+            this.controller.setupWidget(nnme, nn_attr, this[modelize(nnme)] = {value: ""});
 
             Mojo.Event.listen(this.controller.get(name + "-t"), Mojo.Event.tap, function(){
                 this.controller.get(name + "-c").addClassName("generically-hidden");
@@ -82,8 +87,18 @@ SearchAssistant.prototype.setup = function() {
     this.setupToggleRow("due-after",          "due-before");
     this.setupToggleRow("completed-after",    "completed-before");
 
-    this.controller.setupWidget('group',     textFieldAttributes, this.groupModel    = {value: ""});
-    this.controller.setupWidget('sort-by',   sortByAttributes,    this.sortByModel   = {value: ""});
+    var prios = [
+        {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
+        {label: "High",    value: "high",    iconPath: 'img/high.png'    },
+        {label: "Normal",  value: "normal",  iconPath: 'img/normal.png'  },
+        {label: "low",     value: "low",     iconPath: 'img/low.png'     },
+        {label: "lowest",  value: "lowest",  iconPath: 'img/lowest.png'  },
+    ];
+    this.setupToggleRow("priority-higher-than", 'priority-lower-than',
+        {label: "priority higher than", choices: prios},
+        {label: "priority lower than",  choices: prios});
+
+    this.controller.setupWidget('group', textFieldAttributes, this.groupModel = {value: ""});
 
     var checkBoxAttributes = { trueValue: 'on', falseValue: 'off' };
 

@@ -259,7 +259,7 @@
                 </div>
             </div>
 
-            <div class="palm-row last">
+            <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
                         <div id='completed-after-c'>
@@ -278,6 +278,25 @@
                             </div>
                             <div id="completed-before" x-mojo-element="TextField"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row last" x-mojo-focus-highlight="true">
+                <div class="palm-row-wrapper">
+                    <div id='priority-higher-than-c'>
+                        <div class="label">
+                            <img src="img/dull-prio.png">
+                            <div class='tiny-button' id="priority-higher-than-t">!</div>
+                        </div>
+                        <div id="priority-higher-than" x-mojo-element="ListSelector"></div>
+                    </div>
+                    <div id='priority-lower-than-c' class='generically-hidden'>
+                        <div class="label">
+                            <img src="img/dull-prio.png">
+                            <div class='tiny-button' id="priority-lower-than-t">+</div>
+                        </div>
+                        <div id="priority-lower-than" x-mojo-element="ListSelector"></div>
                     </div>
                 </div>
             </div>
