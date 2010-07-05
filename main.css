@@ -20,25 +20,10 @@
     -webkit-border-radius: 3px;
 }
 
-/*
-.palm-button,
-#palm-dialog-box .palm-button {
-  clear: both;
-  margin: 5px 6px 5px 6px;
-  height: 52px;
-  padding: 0;
-  font-size: 20px;
-  text-align: center;
-  text-transform: capitalize;
-  color: #fff;
-  line-height: 52px;
-  background: none;
-  border-width: 0 17px;
-  -webkit-box-sizing: border-box;
-  -webkit-border-image: url(../images/palm-button-medium.png) 0 17 104 17 repeat repeat;
+#priority-lower-than  .label, #priority-higher-than .label {
+    /* the text of the label, .title styles the selection */
+    max-width: 250px;
 }
-
-*/
 
 .task-delta div, .task-delta p, .task-delta dt, .task-delta dd
     { font-weight: normal; font-size: small; margin: 0; padding: 2px 2px; }
