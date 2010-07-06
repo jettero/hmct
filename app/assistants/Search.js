@@ -158,19 +158,59 @@ SearchAssistant.prototype.buildSearch = function() {
         }
     };
 
+    // group/1/query/2/not/query/3/sort_by/4
     append_txt("query",    "query");
     append_txt("notQuery", "not/query");
     append_txt("group",    "group");
     append_txt("sortBy",   "sort_by");
 
-    append_bin("done",     "complete");
-    append_bin("notDone",  "not/complete");
-    append_bin("accepted", "accepted");
-    append_bin("declined", "not/accepted");
-    append_bin("unaccept", "unaccepted");
-
+    // accepted/not/accepted/complete/not/complete/has/attachment/
+    // has/no/attachments/unaccepted/not/hidden/forever/hidden/forever
+    append_bin("done",        "complete");
+    append_bin("notDone",     "not/complete");
+    append_bin("accepted",    "accepted");
+    append_bin("declined",    "not/accepted");
+    append_bin("unaccept",    "unaccepted");
     append_bin("hiddenFE",    "hidden/forever");
     append_bin("notHiddenFE", "not/hidden/forever");
+
+    // description/3/not/description/4/summary/1/not/summary/2/tag/5/not/tag/6
+    append_txt("taskContains",  "summary");
+    append_txt("taskLacks",     "not/summary");
+    append_txt("notesContains", "description");
+    append_txt("notesLacks",    "not/description");
+    append_txt("tagContains",   "tag");
+    append_txt("tagLacks",      "not/tag");
+
+    // next/action/by/5/not/next/action/by/6/owner/1/not/owner/2/requestor/3/not/requestor/4
+    append_txt("ownerIs",         "owner");
+    append_txt("ownerIsnt",       "not/owner");
+    append_txt("requestorIs",     "requestor");
+    append_txt("requestorIsnt",   "not/requestor");
+    append_txt("nextactionBy",    "next/action/by");
+    append_txt("nextactionNotby", "not/next/action/by");
+
+    // completed/after/5/completed/before/6/due/after/3/due/before/4/
+    // priority/above/2/priority/below/4/hidden/until/after/1/hidden/until/before/2
+    append_txt("hiddenUntilAfter",   "hiddenUntilAfter");
+    append_txt("hiddenUntilBefore",  "hiddenUntilBefore");
+    append_txt("dueAfter",           "due/after");
+    append_txt("dueBefore",          "due/before");
+    append_txt("completedAfter",     "completed/after");
+    append_txt("completedBefore",    "completed/before");
+    append_txt("priorityHigherThan", "priority/above");
+    append_txt("priorityLowerThan",  "priority/below");
+
+    // and/then/2/but/first/1/time/estimate/gt/4/time/estimate/lt/3
+    // time/left/gt/8/time/left/lt/7/time/worked/gt/6/time/worked/lt/5
+    append_txt("butFirst",            "but/first");
+    append_txt("andThen",             "and/then");
+    append_txt("estimateLessThan",    "time/estimate/lt");
+    append_txt("estimateGreaterThan", "time/estimate/gt");
+    append_txt("workedLessThan",      "time/worked/lt");
+    append_txt("workedGreaterThan",   "time/worked/gt");
+    append_txt("leftLessThan",        "time/left/lt");
+    append_txt("leftGreaterThan",     "time/left/gt");
 
     query = query.join("/");
 
