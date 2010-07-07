@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ OPT TMO AMO escape
+/*global Mojo $ OPT TMO AMO encodeURIComponent
 */
 
 function SearchAssistant() {
@@ -136,7 +136,16 @@ SearchAssistant.prototype.buildSearch = function() {
             if( q ) {
             if( q.match(/\S/) ) {
                 query.push(y);
-                query.push(escape(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
+                query.push(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " "));
+
+                // NOTE: I tried hard to sanitize the query input, but these
+                // just don't work with unicode or maybe hiveminder doesn't
+                // decode it right ...  in any case, the hope is that the Ajax
+                // object handles the more egregeous local problems and
+                // hiveminder should handle the rest.
+
+                // query.push(escape(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
+                // query.push(encodeURIComponent(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ")));
             }}
         }
 
