@@ -256,7 +256,7 @@
         url: "https://hiveminder.com/=/action/SearchList.json", params: {post: "please"},
 
         cacheable: true, // uses desc as keystrings by default
-        force: force,
+        force: force,   // by always forcing... in effect, we accept the cache entry, but then look for new data anyway
         // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
 
         process: function(r) {
