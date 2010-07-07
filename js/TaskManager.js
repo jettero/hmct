@@ -563,6 +563,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     
     // stolen from: http://www.webtoolkit.info/javascript-utf8.html
 
+    if( true )
     return utftext; // XXX: disabled, was causing grief.  It's possible the HM team fixed this anyway.
 
     var str = "";
