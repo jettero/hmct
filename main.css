@@ -9,7 +9,8 @@
     display: none;
 }
 
-.generically-hidden { display: none; }
+.todo-item .extra-data div { display: inline }
+.generically-hidden { display: none !important; }
 
 .tiny-button {
     display: inline;
@@ -83,9 +84,7 @@
     font-weight: normal;
 }
 
-.todo-item .extra-data .inner-overdue { color: red }
-.todo-item .extra-data .not-due       { display: none; }
-
+.todo-item .extra-data .due           { color: #7777bb; }
 .todo-item .extra-data .inner-overdue { color: red }
 .todo-item .extra-data .not-due       { display: none; }
 
