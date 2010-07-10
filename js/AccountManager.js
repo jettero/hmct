@@ -229,6 +229,15 @@
         force: force,
         // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
 
+        process: function(r) {
+            r.pro_account            = parseInt(r.pro_account)            ? true:false; // parseBoolean
+            r.calendar_starts_monday = parseInt(r.calendar_starts_monday) ? true:false;
+            r.was_pro_account        = parseInt(r.was_pro_account)        ? true:false;
+            r.beta_features          = parseInt(r.beta_features)          ? true:false;
+
+            return r;
+        },
+
         finish: function(r) {
             Mojo.Log.info("AccountManager::getAccountDetails() [success]");
 
@@ -241,7 +250,6 @@
 
 /*}}}*/
 /* {{{ */ AccountManager.prototype.getSearchLists = function(force) {
-    Mojo.Log.info("AccountManager::getSearchLists(force: %s)", force ? "true" : "false");
 
     delete this.data.meta.srchl;
     this.notifySrchlChange();
@@ -249,6 +257,11 @@
     var email = this.data.meta.currentLogin;
     if( !email )
         return;
+
+    if( !this.isCurrentAccountPro() ) {
+        Mojo.Log.info("AccountManager::getSearchLists() [skipping fetch, not a pro account]");
+        return;
+    }
 
     var me = this;
 
@@ -433,18 +446,20 @@
     for( var i=0; i<this.acdetChangeCallbacks.length; i++ )
         this.notifyAcdetChangeStep(this.acdetChangeCallbacks[i]);
 
-    if( this.data.meta.acdet )
-        if( this.data.meta.acdet.pro_account )
-            if( this.acdetChangeCallbacks.length >= 0 )
-                this.getSearchLists(forceSearchLists);
+    if( this.srchlChangeCallbacks.length >= 0 )
+        this.getSearchLists(forceSearchLists);
 };
 
 /*}}}*/
 /* {{{ */ AccountManager.prototype.isCurrentAccountPro = function() {
-    if( this.data.meta.acdet )
-        if( this.data.meta.acdet.pro_account )
+    if( this.data.meta.acdet ) {
+        if( this.data.meta.acdet.pro_account ) {
+            Mojo.Log.info("AccountManager::isCurrentAccountPro() [yes]");
             return true;
+        }
+    }
 
+    Mojo.Log.info("AccountManager::isCurrentAccountPro() [no]");
     return false;
 };
 
