@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global Mojo REQ Template
+/*global Mojo REQ Template ErrorDialog
 */
 
 /* {{{ */ function AccountManager() {
@@ -238,10 +238,10 @@
         // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
 
         process: function(r) {
-            r.pro_account            = parseInt(r.pro_account)            ? true:false; // parseBoolean
-            r.calendar_starts_monday = parseInt(r.calendar_starts_monday) ? true:false;
-            r.was_pro_account        = parseInt(r.was_pro_account)        ? true:false;
-            r.beta_features          = parseInt(r.beta_features)          ? true:false;
+            r.pro_account            = parseInt(r.pro_account, 10)            ? true:false; // parseBoolean
+            r.calendar_starts_monday = parseInt(r.calendar_starts_monday, 10) ? true:false;
+            r.was_pro_account        = parseInt(r.was_pro_account, 10)        ? true:false;
+            r.beta_features          = parseInt(r.beta_features, 10)          ? true:false;
 
             return r;
         },
