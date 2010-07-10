@@ -30,10 +30,16 @@
 /* {{{ */ TaskManager.prototype.handleSrchlChange = function(sl) {
     Mojo.Log.info("TaskManager::handleSrchlChange()");
 
-    this.namedSearches = OPT.predefinedSearches;
+    this.namedSearches = [];
+
+    var i;
+
+    if( OPT.predefinedSearches )
+        for(i=0; i<OPT.predefinedSearches.length; i++)
+            this.namedSearches.push( OPT.predefinedSearches[i] );
 
     if( sl )
-        for(var i = sl.length-1; i>=0; i--)
+        for(i = sl.length-1; i>=0; i--)
             this.namedSearches.unshift({name: "[+] " + sl[i].name, tokens: sl[i].tokens});
 };
 
@@ -560,7 +566,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 /*}}}*/
 
 /* {{{ */ TaskManager.prototype.fixutf8 = function (utftext) {
-    
+
     // stolen from: http://www.webtoolkit.info/javascript-utf8.html
 
     if( true )
