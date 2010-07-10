@@ -115,6 +115,9 @@
     if( !success ) success = function() {};
     if( !fail    ) fail    = function() {};
 
+    this.clearAccountDetails();
+    this.clearSearchLists();
+
     var me = this;
 
     REQ.doRequest({
@@ -209,11 +212,16 @@
 
 /*}}}*/
 
+/* {{{ */ AccountManager.prototype.clearAccountDetails = function() {
+    delete this.data.meta.acdet;
+    this.notifyAcdetChange();
+};
+
+/*}}}*/
 /* {{{ */ AccountManager.prototype.getAccountDetails = function(force) {
     Mojo.Log.info("AccountManager::getAccountDetails(force: %s)", force ? "true" : "false");
 
-    delete this.data.meta.acdet;
-    this.notifyAcdetChange();
+    this.clearAccountDetails();
 
     var email = this.data.meta.currentLogin;
 
@@ -249,10 +257,14 @@
 };
 
 /*}}}*/
-/* {{{ */ AccountManager.prototype.getSearchLists = function(force) {
-
+/* {{{ */ AccountManager.prototype.clearSearchLists = function() {
     delete this.data.meta.srchl;
     this.notifySrchlChange();
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.getSearchLists = function(force) {
+    this.clearSearchLists();
 
     var email = this.data.meta.currentLogin;
     if( !email )
