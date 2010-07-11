@@ -1,0 +1,39 @@
+---
+action_class: BTDT::Action::DownloadTasks
+content:
+  result: |
+    ---
+    - accepted: 1
+      attachment_count: 0
+      complete: 0
+      completed_at: ~
+      created: 2010-07-09 00:44:35
+      description: ' '
+      due: 2010-07-10
+      group: ~
+      id: 1105963
+      last_modified: 2010-07-11 07:56:06
+      next_action_by: 'Paul Miller <jettero@gmail.com>'
+      owner: 'Paul Miller <jettero@gmail.com>'
+      priority: 3
+      record_locator: 33R3E
+      repeat_days_before_due: 1
+      repeat_every: 1
+      repeat_next_create: ~
+      repeat_period: weeks
+      repeat_stacking: 0
+      requestor: 'Paul Miller <jettero@gmail.com>'
+      starts: 2010-07-09
+      summary: clean the birdcage
+      tags: bird plate vhb
+      time_estimate: ~
+      time_left: ~
+      time_worked: ~
+      type: task
+      will_complete: 1
+error: ~
+failure: 0
+field_errors: {}
+field_warnings: {}
+message: ~
+success: 1
