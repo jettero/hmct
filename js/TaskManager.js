@@ -154,7 +154,10 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
             // can be either a fresh request or a cache result
             me.tasks = r;
-            me.tasks.each(function(t){ t._req_cacheAge = r._req_cacheAge; });
+            me.tasks.each(function(t){
+                t._req_cacheAge = r._req_cacheAge;
+                if( !t.tags ) t.tags = "<none>";
+            });
             me.notifyTasksChange();
             me.getFurtherDetails(r._req_cacheAge);
         },
