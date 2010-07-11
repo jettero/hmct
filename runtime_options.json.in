@@ -1,6 +1,6 @@
 {
     predefinedSearches: [
-        { name: 'Not Complete',  tokens: 'not/complete' },
+        { name: "TODO",  tokens: "not/complete" },
 
         { tokens: "/list/owner/me/not/complete/due/before/today",         name: "Overdue!"        },
         { tokens: "/list/owner/me/not/complete/due/today",                name: "Due today"       },
