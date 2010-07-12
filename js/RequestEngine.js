@@ -105,8 +105,10 @@ function RequestEngine() {
                         ? hex_md5( _r.desc + "||" + _r.keyStrings.join("|") )
                         : _r.desc;
 
-        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s; forced: %s]",
-            _r.desc, _r.cacheKey, _r.force ? "yes" : "no");
+        Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s; forced: %s; rcma: %d(%s)]",
+            _r.desc, _r.cacheKey, _r.force ? "yes" : "no",
+            _r.cacheMaxAgeOverride, typeof(_r.cacheMaxAgeOverride)
+        );
 
         if( !_r.force ) {
             var entry = this.data.cache[_r.cacheKey];
@@ -135,8 +137,11 @@ function RequestEngine() {
                         if( ds >= cma ) {
                             Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
 
-                            _r.force = true;
+                            _r.force = true; // is this necessary?
                             this._doRequest(_r);
+
+                        } else {
+                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is good enough (%d < %d)]", _r.desc, ds, cma);
                         }
 
                     }.bind(this),
