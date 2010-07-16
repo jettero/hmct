@@ -10,7 +10,7 @@
     { "source": "app/assistants/About.js" },
     { "source": "app/assistants/Help.js" },
     { "source": "app/assistants/Preferences.js" },
-    { "source": "app/assistants/CreateAccount.js" },
+    { "source": "app/assistants/AddAccount.js" },
     { "source": "app/assistants/EditAccount.js" },
     { "source": "app/assistants/Tasks.js" },
     { "source": "app/assistants/Task.js" },

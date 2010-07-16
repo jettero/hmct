@@ -27,7 +27,7 @@
     this.menuSetup = this.SCa.menuSetup.bind(this);
 
     this.loginListTap          = function(event){ this.SCa.showScene("EditAccount", {email: event.item.email}); }.bind(this);
-    this.addAccountTap         = function(event){ this.SCa.showScene("CreateAccount"); }.bind(this);
+    this.addAccountTap         = function(event){ this.SCa.showScene("AddAccount"); }.bind(this);
     this.rmAccountSlide        = function(event){ AMO.rmAccount(event.item.email); }.bind(this);
     this.handleLoginListChange = function(e){
 

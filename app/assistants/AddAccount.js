@@ -1,20 +1,20 @@
-function CreateAccountAssistant() {
-    Mojo.Log.info("CreateAccount()");
+function AddAccountAssistant() {
+    Mojo.Log.info("AddAccount()");
 
     this.SC  = Mojo.Controller.stageController;
     this.SCa = this.SC.assistant;
 
     this.menuSetup       = this.SCa.menuSetup   .bind(this);
-    this.createAccount   = this.createAccount   .bind(this);
+    this.addAccount      = this.addAccount   .bind(this);
     this.checkedUserPass = this.checkedUserPass .bind(this);
     this.failedUserPass  = this.failedUserPass  .bind(this);
 
-    this.e = new ErrorDialog("CreateAccount");
+    this.e = new ErrorDialog("AddAccount");
     this.E = this.e.showError;
 }
 
-/* {{{ /**/ CreateAccountAssistant.prototype.setup = function() {
-    Mojo.Log.info("CreateAccount::setup()");
+/* {{{ /**/ AddAccountAssistant.prototype.setup = function() {
+    Mojo.Log.info("AddAccount::setup()");
 
     this.menuSetup();
 
@@ -35,26 +35,26 @@ function CreateAccountAssistant() {
     this.controller.setupWidget('emailtf', eAttributes, this.eModel );
     this.controller.setupWidget('passtf',  pAttributes, this.pModel );
 
-    this.controller.setupWidget('create_button', {type: Mojo.Widget.activityButton}, {label: "Create Account"} );
-    Mojo.Event.listen($("create_button"), Mojo.Event.tap, this.createAccount)
+    this.controller.setupWidget('add_button', {type: Mojo.Widget.activityButton}, {label: "Add Account"} );
+    Mojo.Event.listen($("add_button"), Mojo.Event.tap, this.addAccount)
 };
 
 /*}}}*/
-/* {{{ /**/ CreateAccountAssistant.prototype.nospin = function(event) {
-    $('create_button').mojo.deactivate();
+/* {{{ /**/ AddAccountAssistant.prototype.nospin = function(event) {
+    $('add_button').mojo.deactivate();
     this.spinning = false;
 };
 
 /*}}}*/
-/* {{{ /**/ CreateAccountAssistant.prototype.noticedCreation = function(value) {
-    Mojo.Log.info("CreateAccount::noticedCreation(value=%s)", value);
+/* {{{ /**/ AddAccountAssistant.prototype.noticedAddition = function(value) {
+    Mojo.Log.info("AddAccount::noticedAddition(value=%s)", value);
     this.SC.popScene();
 };
 
 /*}}}*/
 
-/* {{{ /**/ CreateAccountAssistant.prototype.checkedUserPass = function(email, pass, r) {
-    Mojo.Log.info("CreateAccount::checkedUserPass(email=%s)", email);
+/* {{{ /**/ AddAccountAssistant.prototype.checkedUserPass = function(email, pass, r) {
+    Mojo.Log.info("AddAccount::checkedUserPass(email=%s)", email);
 
     this.nospin();
     AMO.addReplaceAccount(email,pass);
@@ -65,24 +65,24 @@ function CreateAccountAssistant() {
     // "failure": 0, "error": null, "field_warnings": {}}
 
     this.controller.showAlertDialog({
-        onChoose: this.noticedCreation,
-        title:    'Account Created',
+        onChoose: this.noticedAddition,
+        title:    'Account Addd',
         message:  r.message,
         choices:  [ {label: 'OK', value: 'OK', type: 'color'} ]
     });
 };
 
 /*}}}*/
-/* {{{ /**/ CreateAccountAssistant.prototype.failedUserPass = function(e) {
-    Mojo.Log.info("CreateAccount::failedUserPass()");
+/* {{{ /**/ AddAccountAssistant.prototype.failedUserPass = function(e) {
+    Mojo.Log.info("AddAccount::failedUserPass()");
     this.nospin();
 
     return true; // continue with the usual error processing
 };
 
 /*}}}*/
-/* {{{ /**/ CreateAccountAssistant.prototype.createAccount = function() {
-    Mojo.Log.info("CreateAccount::createAccount()");
+/* {{{ /**/ AddAccountAssistant.prototype.addAccount = function() {
+    Mojo.Log.info("AddAccount::addAccount()");
 
     var email = this.eModel.value.strip().toLowerCase();
     var pass  = this.pModel.value.strip();
@@ -91,7 +91,7 @@ function CreateAccountAssistant() {
         this.spinning = true;
 
     if (AMO.hasAccount(email)) {
-        this.E("createAccount", "create", 'You already have an account named \"' + email + '\".  Edit it instead.');
+        this.E("addAccount", "add", 'You already have an account named \"' + email + '\".  Edit it instead.');
         this.nospin();
         return;
     }
@@ -101,4 +101,4 @@ function CreateAccountAssistant() {
 
 /*}}}*/
 
-Mojo.Log.info('loaded(CreateAccount.js)');
+Mojo.Log.info('loaded(AddAccount.js)');
