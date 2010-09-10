@@ -1,7 +1,11 @@
 <div class="title todo-item task-long">
 
     <div class="task-description #{desc_class}"><em>Description:</em> &nbsp; #{description}<br></div>
-    <div class="task-requestor #{requestor_class}">Requested by: #{requestor}<br></div>
+    <div class="task-parties">
+        <div class="#{owner_class}">          <span class="lbl">Owned by:</span>       <em>#{owner}</em><br></div>
+        <div class="#{requestor_class}">      <span class="lbl">Requested by:</span>   <em>#{requestor}</em><br></div>
+        <div class="#{next_action_by_class}"> <span class="lbl">Next Action by:</span> <em>#{next_action_by}</em><br></div>
+    </div>
     <div class="dep but-first bfc#{but_first_count}">But First: #{-but_first_html}</div>
     <div class="dep and-then atc#{and_then_count}">And Then: #{-and_then_html}</div>
 

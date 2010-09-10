@@ -36,6 +36,9 @@
 
 .task-long div { font-size: small; font-weight: normal }
 
+.task-long div.task-parties { margin-bottom: 1em; }
+.task-long div.task-parties em { color: cornflowerblue; }
+
 .task-long div.dep li { font-style: italic; color: grey; }
 .task-long div.dep ul { padding-left: 2em; margin-top: 0.25em; margin-bottom: 0.25em; }
 .task-long div.dep.bfc0, .task-long div.dep.atc0 { display: none; }

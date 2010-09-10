@@ -81,11 +81,12 @@
     Mojo.Log.info("TaskManager::handleLoginChange(current=%s)", current);
 
     this.currentLogin = current;
+
+    if( !current )
+        return;
+
     this.currentLogin_re = new RegExp("<" + current + ">");
-
-    if( current )
-        this.searchTasks();
-
+    this.searchTasks();
 };
 
 /*}}}*/
@@ -522,6 +523,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var jsonStr = r.content.result;
     delete r; // STFU: this actually works, but jslint thinks it shouldn't.
 
+    var RE = this.currentLogin_re;
     return this.processJSONString(jsonStr, "process-task-downloads").each(function(t){
         if( t.due ) {
             var d = t.due.replace(/\D+/g, "");
@@ -561,8 +563,24 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             t.group_class = "generically-hidden";
         }
 
-        if( t.requestor.match(this.currentLogin_re) )
-            t.requestor_class = "generically-hidden";
+        if( OPT.hideOnwerRequestorWhenSelf && RE ) {
+            Mojo.Log.info("TaskManager::processTaskDownloads() hiding o/r/n using %s against %s/%s/%s",
+                RE, t.owner, t.requestor, t.next_action_by);
+
+            if( t.owner.match(RE) )
+                t.owner_class = "generically-hidden";
+
+            if( t.requestor.match(RE) )
+                t.requestor_class = "generically-hidden";
+
+            if( t.next_action_by.match(RE) )
+                t.next_action_by_class = "generically-hidden";
+
+        } else {
+            Mojo.Log.info("TaskManager::processTaskDownloads() not attempting to hide o/r/n: opt:%s re:%s",
+                OPT.hideOnwerRequestorWhenSelf, RE);
+        }
+
     });
 };
 
