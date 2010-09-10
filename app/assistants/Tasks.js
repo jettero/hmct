@@ -26,10 +26,11 @@ function TasksAssistant() {
 
     this.refreshModel = { label: "Reload", icon: 'refresh', command: 'refresh' };
     this.searchModel  = { label: "Search", icon: 'search',  submenu: 'search-submenu' };
+    this.newModel     = { label: "New",    icon: 'new',     command: 'new' };
 
     this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
     this.commandMenuModel = { label: 'Tasks Command Menu', items: [
-       this.refreshModel, this.searchModel, {/* populated by handleLoginChange */} ] };
+       this.refreshModel, this.searchModel, this.newModel, {/* populated by handleLoginChange */} ] };
 
     this.loginSubmenu  = { label: 'Login Submenu',  items: [] };
     this.searchSubmenu = { label: 'Search Submenu', items: [] };
@@ -83,8 +84,10 @@ function TasksAssistant() {
 /* {{{ */ TasksAssistant.prototype.handleLoginChange = function(emails,current) {
     Mojo.Log.info("Tasks::handleLoginChange(current=%s)", current);
 
+    var x = this.commandMenuModel.items.length -1;
+
     if( current ) {
-        this.commandMenuModel.items[2] = emails.length>1
+        this.commandMenuModel.items[x] = emails.length>1
                                        ? this.commandMenuModelCurrentLoginTemplate(current)
                                        : { label: current };
 
@@ -94,7 +97,7 @@ function TasksAssistant() {
             items.push({ label: emails[i].email, command: "login-as @@ " + emails[i].email });
 
     } else {
-        this.commandMenuModel.items[2] = {};
+        this.commandMenuModel.items[x] = {};
         this.loginSubmenu.items = [];
 
         if( emails.length>0 )
