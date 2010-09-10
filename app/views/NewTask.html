@@ -1,6 +1,35 @@
 <div>
     <span id="brain-dump-title" class="palm-dialog-title">Braindump</span>
-    <div class="palm-group unlabeled">
+
+    <div class='palm-group'>
+        <div class="palm-group-title">append to each task</div>
+
+        <div class="palm-list">
+            <div class="palm-row single">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div x-mojo-element="TextField" id="append"></div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class='palm-group'>
+        <div class="palm-group-title">tasks</div>
+
+        <div class="palm-list">
+            <div class="palm-row single">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div x-mojo-element="RichTextEdit" id="braindump"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table width="100%" class="margin: 0; padding: 0">
+    <tr>
+    <td> <div x-mojo-element="Button" id="go"></div> </td>
+    <td> <div x-mojo-element="Button" id="no"></div> </td>
+    </tr>
+    </table>
 
 </div>
