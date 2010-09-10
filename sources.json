@@ -15,6 +15,7 @@
     { "source": "app/assistants/Tasks.js" },
     { "source": "app/assistants/Task.js" },
     { "source": "app/assistants/Search.js" },
+    { "source": "app/assistants/NewTask.js" },
 
     { "source": "stage-assistant.js" }
 ]
