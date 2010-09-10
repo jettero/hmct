@@ -30,7 +30,7 @@ function TasksAssistant() {
 
     this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
     this.commandMenuModel = { label: 'Tasks Command Menu', items: [
-       this.refreshModel, this.searchModel, this.newModel, {/* populated by handleLoginChange */} ] };
+       { items: [this.refreshModel, this.searchModel, this.newModel] }, {/* populated by handleLoginChange */} ] };
 
     this.loginSubmenu  = { label: 'Login Submenu',  items: [] };
     this.searchSubmenu = { label: 'Search Submenu', items: [] };
