@@ -19,7 +19,17 @@ myinstall-usb: clean
 	@+HM_LOGLEVEL=0 HM_DEFSER='$(mydefser)' env -u HM_UNFOLD -u HM_PRETAP -u HM_MAXAGE make --no-print-directory build
 	palm-install -d castle-linux *.ipk
 
-%.json: %.json.in
+newenvvars:
+	if [ -f envvars ]; then \
+        set | grep ^HM_ | sort > $@; \
+        m1=$$(md5sum $@); m2=$$(md5sum envvars); \
+        if [ "$$m1" = "$$m2" ]; then rm $@; else mv $@ envvars; fi \
+	fi
+
+envvars:
+	set | grep ^HM_ | sort > $@
+
+%.json: %.json.in newenvvars envvars
 	@echo build $@
 	@./JSON_preparser.pl $< > $@
 
@@ -42,7 +52,7 @@ build: framework_config.json runtime_options.json
                      --exclude $(name) --exclude contrib --exclude Makefile \
                      --exclude log-parse.pl --exclude JSON_preparser.pl \
                      --exclude framework_config.json.in --exclude notes.txt \
-                     --exclude yml \
+                     --exclude yml --exclude envvars --exclude newenvvars \
         $(name) && rm $(name)
 
 clean:
