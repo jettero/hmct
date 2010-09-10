@@ -3,27 +3,20 @@
 /*global Mojo
 */
 
-function NewTaskAssistant(sceneAssistant) {
+function NewTaskAssistant() {
     Mojo.Log.info("NewTask()");
-
-    this.sceneAssistant = sceneAssistant;
-    this.controller     = sceneAssistant.controller;
-
 }
 
-NewTaskAssistant.prototype.setup = function(widget) {
+NewTaskAssistant.prototype.setup = function() {
     Mojo.Log.info("NewTask::setup()");
 
-    this.widget = widget;
+    this.titleAttributes = {autoFocus: true, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
+    this.titleModel = {};
+    this.controller.setupWidget("title", this.titleAttributes, this.titleModel); 
 
-    this.braindumpAttributes = {autoFocus: true};
-    this.appendAttributes    = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, autoFocus: false};
-
-    this.braindumpModel = {};
-    this.appendModel    = {};
-
-    this.controller.setupWidget("braindump", this.braindumpAttributes, this.braindumpModel); 
-    this.controller.setupWidget("append",    this.appendAttributes,    this.appendModel); 
+    this.descriptionAttributes = {autoFocus: false, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
+    this.descriptionModel = {};
+    this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel); 
 
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Send"}); 
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"}); 
@@ -39,4 +32,5 @@ NewTaskAssistant.prototype.go = function() {
 
 NewTaskAssistant.prototype.no = function() {
     Mojo.Log.info("NewTask::no()");
+    Mojo.Controller.stageController.popScene();
 };

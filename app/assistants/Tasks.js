@@ -203,10 +203,7 @@ function TasksAssistant() {
 
             case 'new':
                 Mojo.Log.info("Tasks::handleCommand(search: %s)", s_a[1]);
-                this.controller.showDialog({
-                    template: 'NewTask',
-                    assistant: new NewTaskAssistant(this)
-                });
+                this.SCa.showScene('NewTask');
                 break;
 
             default:
