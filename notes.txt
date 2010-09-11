@@ -4,8 +4,8 @@ that: if the field name starts with a -, then the contents are not escaped.
 # get this from your browser
 export HM=JIFTY_SID_HIVEMINDER=42042042042042042042042042042042
 
-# lists my lists and the tokens
-curl -F post=please -sb $HM http://hiveminder.com/=/action/SearchList.yml
+# list of groups
+curl -F post=please -sb $HM http://hiveminder.com/=/action/SearchGroup.yml
 
 # the tokens field of the lists
 export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow
