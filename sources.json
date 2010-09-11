@@ -1,6 +1,7 @@
 [
     { "source": "js/md5.js" },
     { "source": "js/ErrorDialog.js" },
+    { "source": "js/SuccessDialog.js" },
     { "source": "js/RequestEngine.js" },
     { "source": "js/BusyBee.js" },
 

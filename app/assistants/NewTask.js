@@ -7,10 +7,15 @@ function NewTaskAssistant() {
     Mojo.Log.info("NewTask()");
 
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
+    this.go                    = this.go.bind(this);
+    this.no                    = this.no.bind(this);
 }
 
 NewTaskAssistant.prototype.setup = function() {
     Mojo.Log.info("NewTask::setup()");
+
+    this.s = new SuccessDialog("NewTask", this.controller);
+    this.S = this.s.showSuccess;
 
     this.titleAttributes = {autoFocus: true, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
     this.controller.setupWidget("title", this.titleAttributes, this.titleModel = {});
@@ -28,7 +33,7 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {});
     this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {});
 
-    this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:'personal'});
+    this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:''});
 
     var prios = [
         {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
@@ -76,6 +81,7 @@ NewTaskAssistant.prototype.go = function() {
     // [ ] this.priorityModel
     // [ ] this.hiddenForeverModel
 
+    this.S("go", "heard go button", "TODO: task not actually posted...");
 };
 
 NewTaskAssistant.prototype.no = function() {
@@ -86,7 +92,7 @@ NewTaskAssistant.prototype.no = function() {
 NewTaskAssistant.prototype.handleGroupListChange = function(groups) {
     Mojo.Log.info("NewTask::handleGroupListChange()");
 
-    var l = [{label: 'Personal', value: 'personal'}];
+    var l = [{label: 'Personal', value: ''}];
 
     try {
         // if( false )

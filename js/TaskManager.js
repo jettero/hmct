@@ -646,4 +646,40 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 
+/* {{{ */ TaskManager.prototype.postNewTask = function(params) {
+    Mojo.Log.info("TaskManager::postNewTask()");
+    REQ.doRequest({
+        method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
+        params: params, cacheable: false,
+        process:  function(r) {},
+        finish:   function(r) {},
+        succcess: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::postNewTask() r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task post ...");
+
+            this.E("postNewTask", "post fail", e.join("; "));
+
+            return false;
+        }
+    });
+};
+
+/*}}}*/
+
 Mojo.Log.info('loaded(TaskManager.js)');
