@@ -58,6 +58,7 @@ NewTaskAssistant.prototype.handleGroupListChange = function(groups) {
     var l = [{label: '', value: ''}];
 
     try {
+        // if( false )
         for(var i=0; i<groups.length; i++)
             l.push({label: groups[i].name, value: groups[i].id});
 
