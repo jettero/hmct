@@ -118,6 +118,7 @@
 
     this.clearAccountDetails();
     this.clearSearchLists();
+    this.clearSearchGroups();
 
     var me = this;
 
@@ -527,14 +528,17 @@
 };
 
 /*}}}*/
-/* {{{ */ AccountManager.prototype.notifyAcdetChange = function(forceSearchLists) {
-    Mojo.Log.info("AccountManager::notifyAcdetChange(forceSearchLists: %s)", forceSearchLists ? "true" : "false");
+/* {{{ */ AccountManager.prototype.notifyAcdetChange = function(force) {
+    Mojo.Log.info("AccountManager::notifyAcdetChange(force: %s)", force ? "true" : "false");
 
     for( var i=0; i<this.acdetChangeCallbacks.length; i++ )
         this.notifyAcdetChangeStep(this.acdetChangeCallbacks[i]);
 
     if( this.srchlChangeCallbacks.length >= 0 )
-        this.getSearchLists(forceSearchLists);
+        this.getSearchLists(force);
+
+    if( this.srchgChangeCallbacks.length >= 0 )
+        this.getSearchGroups(force);
 };
 
 /*}}}*/

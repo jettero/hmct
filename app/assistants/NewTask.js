@@ -55,7 +55,7 @@ NewTaskAssistant.prototype.no = function() {
 NewTaskAssistant.prototype.handleGroupListChange = function(groups) {
     Mojo.Log.info("NewTask::handleGroupListChange()");
 
-    var l = [{label: '<none>', value: ''}];
+    var l = [{label: '', value: ''}];
 
     try {
         for(var i=0; i<groups.length; i++)
