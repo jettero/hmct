@@ -26,6 +26,10 @@
     max-width: 250px;
 }
 
+.task-short.not-accepted .task-id      { color: red; }
+.task-long .accepted-desc.not-accepted { color: red; }
+.task-long .accepted-desc.accepted     { display: none; }
+
 .task-delta div, .task-delta p, .task-delta dt, .task-delta dd
     { font-weight: normal; font-size: small; margin: 0; padding: 2px 2px; }
 

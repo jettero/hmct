@@ -533,6 +533,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             t.due_class = "not-due";
         }
 
+        t.accepted_class = t.accepted ? "accepted" : "not-accepted";
+
         t.desc_class = t.description.match(/\S/) ? "" : "generically-hidden";
 
         if( t.time_worked   === "~" ) delete t.time_worked;
