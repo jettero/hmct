@@ -19,7 +19,7 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {});
     this.controller.setupWidget("comment",     this.descriptionAttributes, this.commentModel     = {});
 
-    this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Send"});
+    this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Submit"});
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
 
     this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
@@ -61,6 +61,21 @@ NewTaskAssistant.prototype.setup = function() {
 
 NewTaskAssistant.prototype.go = function() {
     Mojo.Log.info("NewTask::go()");
+
+    // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/NewTask.js 
+    // [ ] this.titleModel
+    // [ ] this.descriptionModel
+    // [ ] this.commentModel
+    // [ ] this.goModel
+    // [ ] this.noModel
+    // [ ] this.tagsModel
+    // [ ] this.ownerModel
+    // [ ] this.hideUntilModel
+    // [ ] this.dueDateModel
+    // [ ] this.groupModel
+    // [ ] this.priorityModel
+    // [ ] this.hiddenForeverModel
+
 };
 
 NewTaskAssistant.prototype.no = function() {
