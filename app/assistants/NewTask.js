@@ -13,21 +13,22 @@ NewTaskAssistant.prototype.setup = function() {
     Mojo.Log.info("NewTask::setup()");
 
     this.titleAttributes = {autoFocus: true, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
-    this.controller.setupWidget("title", this.titleAttributes, this.titleModel={}); 
+    this.controller.setupWidget("title", this.titleAttributes, this.titleModel = {});
 
     this.descriptionAttributes = {autoFocus: false, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
-    this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel={}); 
+    this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {});
+    this.controller.setupWidget("comment",     this.descriptionAttributes, this.commentModel     = {});
 
-    this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Send"}); 
-    this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"}); 
+    this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Send"});
+    this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
 
     this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
-    this.controller.setupWidget("tags",       this.boringAttributes, this.tagsModel      = {}); 
-    this.controller.setupWidget("owner",      this.boringAttributes, this.ownerModel     = {}); 
-    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {}); 
-    this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {}); 
+    this.controller.setupWidget("tags",       this.boringAttributes, this.tagsModel      = {});
+    this.controller.setupWidget("owner",      this.boringAttributes, this.ownerModel     = {});
+    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {});
+    this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {});
 
-    this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:'personal'}); 
+    this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:'personal'});
 
     var prios = [
         {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
@@ -50,6 +51,9 @@ NewTaskAssistant.prototype.setup = function() {
 
     Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
     Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
+
+    var checkBoxAttributes = { trueValue: 'on', falseValue: 'off' };
+    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: "off"});
 
     this.handleGroupListChange([]); // kick it off
 };

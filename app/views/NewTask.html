@@ -3,7 +3,7 @@
 		<div class="palm-page-header-wrapper">
 	        <div class="icon hmct"></div>
 	        <div class="title">
-				New Hiveminder Cloud Tasks
+				New Hiveminder Cloud Task
 	        </div>
 	    </div>
     </div>
@@ -36,6 +36,20 @@
         </div>
     </div>
 
+    <div class='palm-group'>
+        <div class="palm-group-title">comment</div>
+
+        <div class="palm-list">
+            <div class="palm-row single">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div x-mojo-element="TextField" id="comment"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table width="100%" class="margin: 0; padding: 0">
     <tr>
     <td> <div x-mojo-element="Button" id="go"></div> </td>
@@ -46,14 +60,14 @@
     <!--
         [x] tags
         [x] notes
-        [ ] comments
-        [ ] complete
+        [x] comments
+        [ ] ((complete)) [edit only]
         [x] group
         [x] owner
         [x] hide until
         [x] due date
         [x] priority
-        [ ] hide forever
+        [x] hide forever
         [ ] schedule [repeat]
         [ ] every [repeat]
         [ ] stacks [repeat]
@@ -111,11 +125,20 @@
                 </div>
             </div>
 
-            <div class="palm-row last">
+            <div class="palm-row">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
                         <div class="label">hide until <img src="img/date.png"/> </div>
                         <div id="hide-until" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row last">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">hidden forever</div>
+                        <div id="hidden-forever" x-mojo-element="CheckBox"></div>
                     </div>
                 </div>
             </div>
