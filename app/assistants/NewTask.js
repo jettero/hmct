@@ -22,7 +22,10 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"}); 
 
     this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
-    this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel={}); 
+    this.controller.setupWidget("tags",       this.boringAttributes, this.tagsModel      = {}); 
+    this.controller.setupWidget("owner",      this.boringAttributes, this.ownerModel     = {}); 
+    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {}); 
+    this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {}); 
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices: []}); 
 
@@ -34,7 +37,16 @@ NewTaskAssistant.prototype.setup = function() {
         {label: "Lowest",  value: "lowest",  iconPath: 'img/lowest.png'  }
     ];
 
-    this.controller.setupWidget("priority", {label: "priority", choices: prios}, this.priorityModel={});
+    this.controller.setupWidget("priority", {label: "priority", choices: prios}, this.priorityModel={value:'normal'});
+    Mojo.Event.listen(this.controller.get("priority"), Mojo.Event.propertyChange, function() {
+        var v = this.priorityModel.value;
+        if(v) {
+            for(var i=0; i<prios.length; i++)
+                if( prios[i].value === v )
+                    this.controller.get("prio-img").src = prios[i].iconPath;
+        }
+
+    }.bind(this));
 
     Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
     Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
