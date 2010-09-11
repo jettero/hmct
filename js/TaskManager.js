@@ -183,7 +183,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
-            this.E("searchTasks", "search fail", e.join("; "));
+            me.E("searchTasks", "search fail", e.join("; "));
 
             return false;
         }
@@ -242,7 +242,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
-            this.E("findOneTask", "find fail", e.join("; "));
+            me.E("findOneTask", "find fail", e.join("; "));
 
             return false;
         }
@@ -418,7 +418,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong while retrieving comments...");
 
-            this.E("getComments", "get fail", e.join("; "));
+            me.E("getComments", "get fail", e.join("; "));
 
             return false;
         }
@@ -503,7 +503,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task search sequel ...");
 
-            this.E("getFurtherDetails", "get fail", e.join("; "));
+            me.E("getFurtherDetails", "get fail", e.join("; "));
 
             return false;
         }
@@ -646,13 +646,22 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.postNewTask = function(params) {
+/* {{{ */ TaskManager.prototype.postNewTask = function(params,cb) {
     Mojo.Log.info("TaskManager::postNewTask()");
+
+    var me = this;
+
     REQ.doRequest({
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
         params: params, cacheable: false,
         process:  function(r) {},
-        finish:   function(r) {},
+        finish:   function(r) {
+            if( cb ) {
+                try { cb(); } catch(e) {
+                    me.E("postNewTask", "post succeeded", "failed to issue callback after successfully posting task: " + e);
+                }
+            }
+        },
         succcess: function(r) {
             if( r.success )
                 return true;
@@ -673,7 +682,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( !e.length )
                 e.push("Something went wrong with the task post ...");
 
-            this.E("postNewTask", "post fail", e.join("; "));
+            me.E("postNewTask", "post fail", e.join("; "));
 
             return false;
         }
