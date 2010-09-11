@@ -26,14 +26,14 @@
 
   License
 
-   This source for this app and all the CGI source is licensed under the GNU
-   GPLv3.
+   This app is licensed under the GNU GPLv3.
+   [6]http://www.opensource.org/licenses/gpl-3.0.html
 
   Thanks
 
    There were additional contributions made by the following people:
 
-     * [6]The entire Best Practical (LLC) Hiveminder Team — they built a
+     * [7]The entire Best Practical (LLC) Hiveminder Team — they built a
        great product and encourage 3rd party apps like this.
 
 References
@@ -44,7 +44,8 @@ References
    3. http://hiveminder.com/help/reference/API.html
    4. http://github.com/jettero/hmct/issues
    5. http://github.com/jettero/hmct
-   6. http://hiveminder.com/about/team.html
+   6. http://www.opensource.org/licenses/gpl-3.0.html
+   7. http://hiveminder.com/about/team.html
 
 -----=: app/views/Help.html
    Hiveminder Cloud Tasks
@@ -57,24 +58,51 @@ References
   Account Required
 
    You will need a Hiveminder account in order to use this app. If you do not
-   have one, click here to get one: [1]http://hiveminder.com/splash/signup/.
+   have one, click here to get one:
+
+   [1]http://hiveminder.com/splash/signup/.
+
    You won't regret signing up. Hiveminder is probably the coolest way to
-   track your tasks yet invented.ou won't regret signing up. Hiveminder is
+   track your tasks yet invented. You won't regret signing up. Hiveminder is
    probably the coolest way to track your tasks yet invented. You can
    interact with your tasks via email, IM, the command line, and IMAP.
    Basically whatever seems handy.
 
-  BUGS
+  Hiveminder Help
 
-   You will undoubtedly find bugs in this application. Please do not report
-   them to the Hiveminder staff unless you're quite certain they are
-   hiveminder bugs and not actually a problem with this application.
+   For assistance with Hiveminder terms and features, please browse their
+   help pages on the web:
 
-   Bugs in this application should be reported via the github ticket system
-   (only). [2]http://github.com/jettero/hmct/issues
+   [2]http://hiveminder.com/help
+
+  Other Help
+
+   My hope is that the interface is intuitive enough that, once users are
+   already acclimatized to Hiveminder, most things are obvious enough to not
+   require a help document at all. This obviously isn't very realistic, but
+   that is the goal. For additional help, just [3]shoot me an email.
+
+  Bugs
+
+   You will undoubtedly find bugs in this application. You will also find
+   that certain things are missing. Please do not report these things to the
+   Hiveminder staff unless you're quite certain they are Hiveminder bugs and
+   not actually a problem with this application.
+
+   Bugs and feature requests for this application should be reported via the
+   github issue tracker only.
+
+   [4]http://github.com/jettero/hmct/issues
+
+   If you are unable or unwilling to operate the github issue tracker, if you
+   have a question regarding your issue (e.g. whether it is an issue at all),
+   or if you just have some other concern; just [5]shoot me an email instead.
 
 References
 
    Visible links
    1. http://hiveminder.com/splash/signup/
-   2. http://github.com/jettero/hmct/issues
+   2. http://hiveminder.com/help
+   3. mailto:jettero@gmail.com
+   4. http://github.com/jettero/hmct/issues
+   5. mailto:jettero@gmail.com
