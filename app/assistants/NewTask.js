@@ -81,7 +81,13 @@ NewTaskAssistant.prototype.go = function() {
     // [ ] this.priorityModel
     // [ ] this.hiddenForeverModel
 
-    this.S("go", "heard go button", "TODO: task not actually posted...");
+    var params = { summary: this.titleModel.value, wtf: "test" };
+    this.S("go", "heard go button", "TODO: task not actually posted... wtf: " + Object.toJSON({
+        tm: this.titleModel,
+        dm: this.descriptionModel,
+        cm: this.commentModel,
+        p: params
+    }));
 };
 
 NewTaskAssistant.prototype.no = function() {
