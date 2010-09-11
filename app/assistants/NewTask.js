@@ -81,13 +81,11 @@ NewTaskAssistant.prototype.go = function() {
     // [ ] this.priorityModel
     // [ ] this.hiddenForeverModel
 
-    var params = { summary: this.titleModel.value, wtf: "test" };
-    this.S("go", "heard go button", "TODO: task not actually posted... wtf: " + Object.toJSON({
-        tm: this.titleModel,
-        dm: this.descriptionModel,
-        cm: this.commentModel,
-        p: params
-    }));
+    var params = { summary: this.titleModel.value };
+    var me = this;
+    TMO.postNewTask(params, function(){
+        me.S("NewTask::go()", "posted task successfully", "New task posted.  Manually refresh any lists where it should be listed.");
+    });
 };
 
 NewTaskAssistant.prototype.no = function() {

@@ -220,6 +220,9 @@ function RequestEngine() {
                         if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
                             r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
 
+                            if( typeof r !== 'object' )
+                                r = {}; // sometimes process() doesn't do anything
+
                             if( _r.cacheable ) // next, if it's cacheable,
                                 me.dbSetCache(_r.cacheKey, r); // do so
 
