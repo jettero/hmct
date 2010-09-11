@@ -1,4 +1,4 @@
-/*jslint white: false, onevar: false
+/*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
 /*global Mojo REQ Template ErrorDialog
 */
@@ -16,6 +16,7 @@
     this.loginChangeCallbacks = [];
     this.acdetChangeCallbacks = [];
     this.srchlChangeCallbacks = [];
+    this.srchgChangeCallbacks = [];
 
     var options = {
         name:    "HMCTAccounts",
@@ -311,7 +312,7 @@
             if( r.success )
                 return true;
 
-            Mojo.Log.info("AccountManager::getSearchLists() r.fails");
+            Mojo.Log.info("AccountManager::getSearchLists() r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -328,6 +329,80 @@
                 e.push("Something went wrong while trying to fetch the search lists for: " + email);
 
             me.E("getSearchLists", "details", e.join("; "));
+
+            return false;
+        }
+    });
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.clearSearchGroups = function() {
+    delete this.data.meta.srchg;
+    this.notifySrchgChange();
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.getSearchGroups = function(force) {
+    this.clearSearchGroups();
+
+    var email = this.data.meta.currentLogin;
+    if( !email )
+        return;
+
+    var me = this;
+
+    REQ.doRequest({ desc: 'AccountManager::getSearchGroups('+email+')', method: 'post',
+        url: "https://hiveminder.com/=/action/SearchGroup.json", params: {post: "please"},
+
+        cacheable: true, // uses desc as keystrings by default
+        force: force,   // by always forcing... in effect, we accept the cache entry, but then look for new data anyway
+        // cacheMaxAgeOverride: 787, // how many seconds is too old... should we override?
+
+        process: function(r) {
+            var ret = [];
+
+            if( !r.content ) return ret;
+            if( !r.content.search ) return ret;
+
+            return r.content.search; /*
+
+                see yml/search_group.yml
+
+                [ { broadcast_comments: 1, description: "Tasks Relating to the HMCT webos app.",
+                        id: 8448, name: 'HMCT' }, ... ]
+
+            */
+        },
+
+        finish: function(r) {
+            Mojo.Log.info("AccountManager::getSearchGroups() [success]");
+
+            me.data.meta.srchg = r;
+            me.dbChanged("search groups updated");
+            me.notifySrchgChange();
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("AccountManager::getSearchGroups() r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong while trying to fetch the search groups for: " + email);
+
+            me.E("getSearchGroups", "details", e.join("; "));
 
             return false;
         }
@@ -492,7 +567,7 @@
 /* {{{ */ AccountManager.prototype.unregisterSrchlChange = function(callback) {
     Mojo.Log.info("AccountManager::unregisterSrchlChange()");
 
-    this.acdetChangeCallbacks = this.acdetChangeCallbacks.reject(function(_c){ return _c === callback; });
+    this.srchlChangeCallbacks = this.srchlChangeCallbacks.reject(function(_c){ return _c === callback; });
 };
 
 /*}}}*/
@@ -508,6 +583,41 @@
 
     for( var i=0; i<this.srchlChangeCallbacks.length; i++ )
         this.notifySrchlChangeStep(this.srchlChangeCallbacks[i]);
+};
+
+/*}}}*/
+
+/* {{{ */ AccountManager.prototype.registerSrchgChange = function(callback) {
+    Mojo.Log.info("AccountManager::registerSrchgChange()");
+
+    if( !this.data.meta.srchg ) // if we don't have the lists
+        if( this.srchgChangeCallbacks.length === 0 ) // and this is the first registration
+            this.getSearchGroups(); // go get them
+
+    this.srchgChangeCallbacks.push(callback);
+    this.notifySrchgChangeStep(callback);
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.unregisterSrchgChange = function(callback) {
+    Mojo.Log.info("AccountManager::unregisterSrchgChange()");
+
+    this.srchgChangeCallbacks = this.srchgChangeCallbacks.reject(function(_c){ return _c === callback; });
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.notifySrchgChangeStep = function(callback) {
+    Mojo.Log.info("AccountManager::notifySrchgChangeStep()");
+
+    callback(this.data.meta.srchg);
+};
+
+/*}}}*/
+/* {{{ */ AccountManager.prototype.notifySrchgChange = function() {
+    Mojo.Log.info("AccountManager::notifySrchgChange()");
+
+    for( var i=0; i<this.srchgChangeCallbacks.length; i++ )
+        this.notifySrchgChangeStep(this.srchgChangeCallbacks[i]);
 };
 
 /*}}}*/
