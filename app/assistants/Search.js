@@ -95,8 +95,28 @@ SearchAssistant.prototype.setup = function() {
         {label: "Lowest",  value: "lowest",  iconPath: 'img/lowest.png'  }
     ];
     this.setupToggleRow("priority-higher-than", 'priority-lower-than',
-        {label: "priority higher than", choices: prios},
-        {label: "priority lower than",  choices: prios});
+        {label: "prio higher than", choices: prios},
+        {label: "prio lower than",  choices: prios});
+
+    Mojo.Event.listen(this.controller.get("priority-higher-than"), Mojo.Event.propertyChange, function() {
+        var v = this.priorityHigherThanModel.value;
+        if(v) {
+            for(var i=0; i<prios.length; i++)
+                if( prios[i].value === v )
+                    this.controller.get("prio-ht-img").src = prios[i].iconPath;
+        }
+
+    }.bind(this));
+
+    Mojo.Event.listen(this.controller.get("priority-lower-than"), Mojo.Event.propertyChange, function() {
+        var v = this.priorityLowerThanModel.value;
+        if(v) {
+            for(var i=0; i<prios.length; i++)
+                if( prios[i].value === v )
+                    this.controller.get("prio-lt-img").src = prios[i].iconPath;
+        }
+
+    }.bind(this));
 
     this.setupToggleRow("but-first", "and-then");
 
