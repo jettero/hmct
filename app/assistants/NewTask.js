@@ -27,7 +27,7 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {}); 
     this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {}); 
 
-    this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices: []}); 
+    this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:'personal'}); 
 
     var prios = [
         {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
@@ -67,7 +67,7 @@ NewTaskAssistant.prototype.no = function() {
 NewTaskAssistant.prototype.handleGroupListChange = function(groups) {
     Mojo.Log.info("NewTask::handleGroupListChange()");
 
-    var l = [{label: '', value: ''}];
+    var l = [{label: 'Personal', value: 'personal'}];
 
     try {
         // if( false )
