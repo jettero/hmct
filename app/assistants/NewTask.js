@@ -22,7 +22,7 @@ NewTaskAssistant.prototype.setup = function() {
 
     this.descriptionAttributes = {autoFocus: false, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {});
-    this.controller.setupWidget("comment",     this.descriptionAttributes, this.commentModel     = {});
+    // this.controller.setupWidget("comment",     this.descriptionAttributes, this.commentModel     = {});
 
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Submit"});
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
