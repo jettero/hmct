@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO ErrorDialog SuccessDialog TMO
+/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit
 */
 
 function NewTaskAssistant() {
@@ -73,11 +73,8 @@ NewTaskAssistant.prototype.go = function() {
     // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/NewTask.js 
     // - won't impliment; t - tested; x - added;
     // [t] this.titleModel
-    // [x] this.descriptionModel
-    // [-] this.commentModel
-    // [ ] this.goModel
-    // [ ] this.noModel
-    // [ ] this.tagsModel
+    // [t] this.descriptionModel
+    // [t] this.tagsModel
     // [ ] this.ownerModel
     // [ ] this.hideUntilModel
     // [ ] this.dueDateModel
@@ -86,6 +83,7 @@ NewTaskAssistant.prototype.go = function() {
     // [ ] this.hiddenForeverModel
     // [ ] this.timeWorkedModel
     // [ ] this.timeLeftModel
+    // [-] this.commentModel
 
     var params = {};
     var v; var f = function(x) { if(typeof x === "string" && x.length>0) return true; return false; };
@@ -98,6 +96,17 @@ NewTaskAssistant.prototype.go = function() {
     params.summary = this.titleModel.value;
 
     if( f(v = this.descriptionModel.value) ) params.description = v;
+
+    if( f(v = this.tagsModel.value) ) {
+        var q = qsplit(v);
+        if( q ) params.tags = q.join(" ");
+        else {
+            this.E("NewTask::go()", "post error", "tag list must be space separated tokens with balanced quotes");
+            return;
+        }
+    }
+
+    Mojo.Log.info("NewTask::go() params: %s", Object.toJSON(params));
 
     TMO.postNewTask(params, function(){
         this.S("NewTask::go()",
