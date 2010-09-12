@@ -39,14 +39,14 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:''});
 
     var prios = [
-        {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
-        {label: "High",    value: "high",    iconPath: 'img/high.png'    },
-        {label: "Normal",  value: "normal",  iconPath: 'img/normal.png'  },
-        {label: "Low",     value: "low",     iconPath: 'img/low.png'     },
-        {label: "Lowest",  value: "lowest",  iconPath: 'img/lowest.png'  }
+        {label: "Highest", value: "5", iconPath: 'img/highest.png' },
+        {label: "High",    value: "4", iconPath: 'img/high.png'    },
+        {label: "Normal",  value: "3", iconPath: 'img/normal.png'  },
+        {label: "Low",     value: "2", iconPath: 'img/low.png'     },
+        {label: "Lowest",  value: "1", iconPath: 'img/lowest.png'  }
     ];
 
-    this.controller.setupWidget("priority", {label: "priority", choices: prios}, this.priorityModel={value:'normal'});
+    this.controller.setupWidget("priority", {label: "priority", choices: prios}, this.priorityModel={value:"3"});
     Mojo.Event.listen(this.controller.get("priority"), Mojo.Event.propertyChange, function() {
         var v = this.priorityModel.value;
         if(v) {
@@ -75,11 +75,11 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.titleModel
     // [t] this.descriptionModel
     // [t] this.tagsModel
-    // [t] this.ownerModel
     // [t] this.groupModel
+    // [t] this.ownerModel
+    // [ ] this.priorityModel
     // [ ] this.hideUntilModel
     // [ ] this.dueDateModel
-    // [ ] this.priorityModel
     // [ ] this.hiddenForeverModel
     // [ ] this.timeWorkedModel
     // [ ] this.timeLeftModel
@@ -97,7 +97,7 @@ NewTaskAssistant.prototype.go = function() {
 
     if( f(v = this.descriptionModel.value) ) params.description = v;
     if( f(v = this.ownerModel      .value) ) params.owner_id    = v;
-    if( f(v = this.groupModel      .value) ) params.group_id    = v;
+    if( f(v = this.priorityModel   .value) ) params.priority    = v;
 
     if( f(v = this.tagsModel.value) ) {
         var q = qsplit(v);
