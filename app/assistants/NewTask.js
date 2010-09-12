@@ -75,10 +75,10 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.titleModel
     // [t] this.descriptionModel
     // [t] this.tagsModel
-    // [ ] this.ownerModel
+    // [t] this.ownerModel
+    // [t] this.groupModel
     // [ ] this.hideUntilModel
     // [ ] this.dueDateModel
-    // [ ] this.groupModel
     // [ ] this.priorityModel
     // [ ] this.hiddenForeverModel
     // [ ] this.timeWorkedModel
@@ -96,6 +96,8 @@ NewTaskAssistant.prototype.go = function() {
     params.summary = this.titleModel.value;
 
     if( f(v = this.descriptionModel.value) ) params.description = v;
+    if( f(v = this.ownerModel      .value) ) params.owner_id    = v;
+    if( f(v = this.groupModel      .value) ) params.group_id    = v;
 
     if( f(v = this.tagsModel.value) ) {
         var q = qsplit(v);
