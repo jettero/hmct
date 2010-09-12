@@ -31,10 +31,20 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
 
     this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
+    this.numberAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
+
     this.controller.setupWidget("tags",       this.boringAttributes, this.tagsModel      = {});
     this.controller.setupWidget("owner",      this.boringAttributes, this.ownerModel     = {});
-    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {});
     this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {});
+    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {});
+    this.controller.setupWidget("every",      this.numberAttributes, this.everyModel     = {});
+    this.controller.setupWidget("heads-up",   this.numberAttributes, this.headsUpModel   = {});
+
+    this.controller.setupWidget("time-worked", this.boringAttributes, this.timeWorkedModel = {});
+    this.controller.setupWidget("time-left",   this.boringAttributes, this.timeLeftModel   = {});
+
+    if( AMO.isCurrentAccountPro() )
+        this.controller.get("pro-time").removeClassName("generically-hidden");
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:''});
 
@@ -57,11 +67,21 @@ NewTaskAssistant.prototype.setup = function() {
 
     }.bind(this));
 
+    var schedules = [
+        {label: "Once",     value: "once"   },
+        {label: "Daily",    value: "days"   },
+        {label: "Weekly",   value: "weeks"  },
+        {label: "Monthly",  value: "months" },
+        {label: "Annually", value: "years"  }
+    ];
+    this.controller.setupWidget("schedule", {label: "schedule", choices: schedules}, this.scheduleModel={value:"once"});
+
     Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
     Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
 
     var checkBoxAttributes = { trueValue: 'on', falseValue: 'off' };
-    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: "off"});
+    // this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: "off"});
+    this.controller.setupWidget('stacks-up', checkBoxAttributes, this.stacksUpModel = {value: "off"});
 
     this.handleGroupListChange([]); // kick it off
 };
@@ -80,8 +100,15 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.priorityModel
     // [t] this.dueDateModel
     // [t] this.hideUntilModel
-    // [ ] this.timeWorkedModel
-    // [ ] this.timeLeftModel
+
+    // [x] this.scheduleModel
+    // [x] this.stacksUpModel
+    // [x] this.everyModel
+    // [x] this.headsUpModel
+
+    // [x] this.timeWorkedModel
+    // [x] this.timeLeftModel
+
     // [-] this.hiddenForeverModel
     // [-] this.commentModel
 
@@ -95,12 +122,17 @@ NewTaskAssistant.prototype.go = function() {
 
     params.summary = this.titleModel.value;
 
-    if( f(v = this.descriptionModel  .value) ) params.description = v;
-    if( f(v = this.ownerModel        .value) ) params.owner_id    = v;
-    if( f(v = this.priorityModel     .value) ) params.priority    = v;
-    if( f(v = this.dueDateModel      .value) ) params.due         = v;
-    if( f(v = this.hideUntilModel    .value) ) params.starts      = v;
-    if( f(v = this.hiddenForeverModel.value) ) params.starts      = v;
+    if( f(v = this.descriptionModel.value) ) params.description            = v;
+    if( f(v = this.ownerModel      .value) ) params.owner_id               = v;
+    if( f(v = this.priorityModel   .value) ) params.priority               = v;
+    if( f(v = this.dueDateModel    .value) ) params.due                    = v;
+    if( f(v = this.hideUntilModel  .value) ) params.starts                 = v;
+    if( f(v = this.scheduleModel   .value) ) params.repeat_period          = v;
+    if( f(v = this.stacksUpModel   .value) ) params.repeat_stacking        = v==="on" ? "1":"0";
+    if( f(v = this.headsUpModel    .value) ) params.repeat_days_before_due = v; // heh, really?
+    if( f(v = this.everyModel      .value) ) params.repeat_every           = v;
+    if( f(v = this.timeWorkedModel .value) ) params.time_worked            = v;
+    if( f(v = this.timeLeftModel   .value) ) params.time_left              = v;
 
     if( f(v = this.tagsModel.value) ) {
         var q = qsplit(v);
