@@ -22,6 +22,8 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.s = new SuccessDialog("NewTask", this.controller);
     this.S = this.s.showSuccess;
+
+    this.controller.get("id").update(this.task.record_locator);
 }
 
 Mojo.Log.info('loaded(EditTask.js)');
