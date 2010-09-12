@@ -23,7 +23,8 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     this.menuSetup();
 
     this.refreshModel     = { label: "Reload", icon: 'refresh', command: 'refresh' };
-    this.commandMenuModel = { label: 'Task Command Menu', items: [ this.refreshModel ] };
+    this.editModel        = { label: "Edit",   icon: 'edit',    command: 'edit'    };
+    this.commandMenuModel = { label: 'Task Command Menu', items: [ this.refreshModel, this.editModel ] };
 
 	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 
@@ -191,6 +192,11 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
             case 'refresh':
                 Mojo.Log.info("Task::handleCommand(refresh) [rl=%s]", rl);
                 TMO.fetchOneTask(rl, true); // force reload
+                break;
+
+            case 'edit':
+                Mojo.Log.info("Task::handleCommand(edit) [rl=%s]", rl);
+                this.SCa.showScene("EditTask", event.item);
                 break;
 
             default:
