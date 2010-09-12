@@ -80,6 +80,12 @@ NewTaskAssistant.prototype.setup = function() {
         {label: "Annually", value: "years"  }
     ];
     this.controller.setupWidget("schedule", {label: "schedule", choices: schedules}, this.scheduleModel={value:"once"});
+    Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, function() {
+        var v = this.scheduleModel.value;
+        if(v === 'once') this.controller.get("schedule-img").   addClassName("generically-hidden");
+        else             this.controller.get("schedule-img").removeClassName("generically-hidden");
+
+    }.bind(this));
 
     Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
     Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
