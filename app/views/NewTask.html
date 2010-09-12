@@ -70,13 +70,13 @@
         [x] due date
         [x] priority
         [x] hide forever
-        [ ] schedule [repeat]
-        [ ] every [repeat]
-        [ ] stacks [repeat]
-        [ ] heads up [repeat]
+        [x] schedule [repeat]
+        [x] every [repeat]
+        [x] stacks [repeat]
+        [x] heads up [repeat]
         [ ] ((accept)) [edit only, unaccepted only]
-        [ ] time worked [pro]
-        [ ] time left   [pro]
+        [x] time worked [pro]
+        [x] time left   [pro]
     -->
 
     <div class='palm-group'>
@@ -129,7 +129,7 @@
                 </div>
             </div>
 
-            <div class="palm-row">
+            <div class="palm-row last">
                 <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
                     <div class="title">
                         <div class="label">hide until <img src="img/date.png"/> </div>
@@ -151,6 +151,71 @@
 
         </div>
 
+    </div>
+
+    <div class='palm-group'>
+        <div class="palm-group-title">recurrence options</div>
+        <div class="palm-list">
+
+            <div class="palm-row first">
+                <div class="palm-row-wrapper">
+                    <div id="schedule" x-mojo-element="ListSelector"></div>
+                </div>
+            </div>
+
+            <div class="palm-row">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">every how many</div>
+                        <div id="every" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">stack up repeats</div>
+                        <div id="stacks-up" x-mojo-element="CheckBox"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row last">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">heads up (days)</div>
+                        <div id="heads-up" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class='palm-group generically-hidden' id='pro-time'>
+        <div class="palm-group-title">time tracking options</div>
+        <div class="palm-list">
+
+            <div class="palm-row first">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">worked</div>
+                        <div id="time-worked" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="palm-row last">
+                <div class="palm-row-wrapper textfield-group" x-mojo-focus-highlight="true">
+                    <div class="title">
+                        <div class="label">left</div>
+                        <div id="time-left" x-mojo-element="TextField"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </div>
