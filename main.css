@@ -108,6 +108,8 @@
 .todo-item .extra-data .prio.p2 { background-image: url(img/low.png);     }
 .todo-item .extra-data .prio.p1 { background-image: url(img/lowest.png);  }
 
+.palm-menu-icon.edit { background-image: url(img/menu-icon-edit.png); }
+
 .task-description { font-weight: normal; font-size: 0.75em; }
 .task-comment div { font-weight: normal; font-size: 0.75em; }
 
