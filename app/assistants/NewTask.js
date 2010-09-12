@@ -6,6 +6,9 @@
 function NewTaskAssistant() {
     Mojo.Log.info("NewTask()");
 
+    this.SCa = Mojo.Controller.stageController.assistant;
+
+    this.menuSetup             = this.SCa.menuSetup.bind(this);
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
     this.go                    = this.go.bind(this);
     this.no                    = this.no.bind(this);
@@ -16,6 +19,8 @@ function NewTaskAssistant() {
 
 NewTaskAssistant.prototype.setup = function() {
     Mojo.Log.info("NewTask::setup()");
+
+    this.menuSetup();
 
     this.s = new SuccessDialog("NewTask", this.controller);
     this.S = this.s.showSuccess;
