@@ -207,3 +207,5 @@ NewTaskAssistant.prototype.deactivate = function() {
 
     AMO.unregisterSrchgChange(this.handleGroupListChange);
 };
+
+Mojo.Log.info('loaded(NewTask.js)');
