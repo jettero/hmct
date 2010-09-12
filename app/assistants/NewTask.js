@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO
+/*global Mojo AMO ErrorDialog SuccessDialog TMO
 */
 
 function NewTaskAssistant() {
@@ -9,6 +9,9 @@ function NewTaskAssistant() {
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
     this.go                    = this.go.bind(this);
     this.no                    = this.no.bind(this);
+
+    this.e = new ErrorDialog("NewTask");
+    this.E = this.e.showError;
 }
 
 NewTaskAssistant.prototype.setup = function() {
@@ -68,9 +71,10 @@ NewTaskAssistant.prototype.go = function() {
     Mojo.Log.info("NewTask::go()");
 
     // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/NewTask.js 
-    // [ ] this.titleModel
-    // [ ] this.descriptionModel
-    // [ ] this.commentModel
+    // - won't impliment; t - tested; x - added;
+    // [t] this.titleModel
+    // [x] this.descriptionModel
+    // [-] this.commentModel
     // [ ] this.goModel
     // [ ] this.noModel
     // [ ] this.tagsModel
@@ -80,12 +84,27 @@ NewTaskAssistant.prototype.go = function() {
     // [ ] this.groupModel
     // [ ] this.priorityModel
     // [ ] this.hiddenForeverModel
+    // [ ] this.timeWorkedModel
+    // [ ] this.timeLeftModel
 
-    var params = { summary: this.titleModel.value };
-    var me = this;
+    var params = {};
+    var v; var f = function(x) { if(typeof x === "string" && x.length>0) return true; return false; };
+
+    if( !this.titleModel.value ) {
+        this.E("NewTask::go()", "post error", "Please provide a title for the task");
+        return;
+    }
+
+    params.summary = this.titleModel.value;
+
+    if( f(v = this.descriptionModel.value) ) params.description = v;
+
     TMO.postNewTask(params, function(){
-        me.S("NewTask::go()", "posted task successfully", "New task posted.  Manually refresh any lists where it should be listed.");
-    });
+        this.S("NewTask::go()",
+            "posted task successfully",
+            "New task posted.  Manually refresh any lists where it should be listed.");
+
+    }.bind(this));
 };
 
 NewTaskAssistant.prototype.no = function() {
