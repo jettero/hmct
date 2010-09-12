@@ -77,9 +77,9 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.tagsModel
     // [t] this.groupModel
     // [t] this.ownerModel
-    // [ ] this.priorityModel
-    // [ ] this.hideUntilModel
-    // [ ] this.dueDateModel
+    // [t] this.priorityModel
+    // [t] this.dueDateModel
+    // [t] this.hideUntilModel
     // [ ] this.hiddenForeverModel
     // [ ] this.timeWorkedModel
     // [ ] this.timeLeftModel
@@ -98,6 +98,8 @@ NewTaskAssistant.prototype.go = function() {
     if( f(v = this.descriptionModel.value) ) params.description = v;
     if( f(v = this.ownerModel      .value) ) params.owner_id    = v;
     if( f(v = this.priorityModel   .value) ) params.priority    = v;
+    if( f(v = this.dueDateModel    .value) ) params.due         = v;
+    if( f(v = this.hideUntilModel  .value) ) params.starts      = v;
 
     if( f(v = this.tagsModel.value) ) {
         var q = qsplit(v);
