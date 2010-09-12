@@ -1,5 +1,6 @@
 [
     { "source": "js/md5.js" },
+    { "source": "js/qsplit.js" },
     { "source": "js/ErrorDialog.js" },
     { "source": "js/SuccessDialog.js" },
     { "source": "js/RequestEngine.js" },
