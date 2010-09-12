@@ -92,6 +92,7 @@ NewTaskAssistant.prototype.go = function() {
 
     // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/NewTask.js 
     // - won't impliment; t - tested; x - added;
+
     // [t] this.titleModel
     // [t] this.descriptionModel
     // [t] this.tagsModel
@@ -101,13 +102,13 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.dueDateModel
     // [t] this.hideUntilModel
 
-    // [x] this.scheduleModel
-    // [x] this.stacksUpModel
-    // [x] this.everyModel
-    // [x] this.headsUpModel
+    // [t] this.scheduleModel
+    // [t] this.stacksUpModel
+    // [t] this.everyModel
+    // [t] this.headsUpModel
 
-    // [x] this.timeWorkedModel
-    // [x] this.timeLeftModel
+    // [t] this.timeWorkedModel
+    // [t] this.timeLeftModel
 
     // [-] this.hiddenForeverModel
     // [-] this.commentModel
