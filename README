@@ -1,14 +1,14 @@
 -----=: app/views/About.html
-   Hiveminder Cloud Tasks
+   About Hiveminder Cloud Tasks
 
   About
 
    Written by [1]Paul Miller.
 
-   This is version 0.5.0 of HMCT.
+   This is version 0.6.0 of HMCT.
 
-   The 0.5.0 release (code name TXNQ) is a milestone release. It is intended
-   to be a view-only client.
+   The 0.6.0 release is a milestone release — which includes an interface to
+   add tasks.
 
    This app is pretty much just a caching GUI for the
    [2]http;//hiveminder.com/ website. They encourage building applications
@@ -22,7 +22,7 @@
 
   Copyright
 
-   This app is Copyright Paul Miller 2010.
+   Copyright 2010 Paul Miller
 
   License
 
@@ -48,12 +48,7 @@ References
    7. http://hiveminder.com/about/team.html
 
 -----=: app/views/Help.html
-   Hiveminder Cloud Tasks
-
-  View Only
-
-   This release is view only. There is no interface or creating, removing,
-   completing or editing tasks.
+   Hiveminder Cloud Tasks Help
 
   Account Required
 
