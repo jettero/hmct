@@ -18,6 +18,7 @@
     { "source": "app/assistants/Task.js" },
     { "source": "app/assistants/Search.js" },
     { "source": "app/assistants/NewTask.js" },
+    { "source": "app/assistants/EditTask.js" },
 
     { "source": "stage-assistant.js" }
 ]
