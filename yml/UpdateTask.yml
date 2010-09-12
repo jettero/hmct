@@ -1,0 +1,125 @@
+---
+accepted:
+  label: Accepted
+  valid_values:
+    - display: accepted
+      value: 1
+    - display: declined
+      value: 0
+    - display: (no change)
+      value: ''
+add_time_worked:
+  ajax_validates: 1
+  label: Add time worked
+comment:
+  label: Add a comment
+complete:
+  documentation: Is this task marked as complete?
+  label: Done?
+  mandatory: 1
+description:
+  documentation: An expanded description of the task
+  label: Notes
+due:
+  documentation: The date by which the task must be completed
+  label: Date due
+group_id:
+  documentation: The group the task is in
+  label: Group
+  valid_values:
+    - display: (A group you can't see)
+      value: ~
+    - display: HMCT
+      value: 8448
+    - display: MEI.net
+      value: 8451
+    - display: VHB
+      value: 6768
+hidden_forever:
+  default_value: 1
+  label: Hide forever?
+id:
+  mandatory: 1
+milestone:
+  ajax_validates: 1
+  label: Milestone
+  valid_values: []
+owner_id:
+  ajax_validates: 1
+  documentation: The person responsible for completing the task
+  label: Owner
+priority:
+  documentation: How important the task is
+  label: Priority
+  valid_values:
+    - display: highest
+      value: 5
+    - display: high
+      value: 4
+    - display: normal
+      value: 3
+    - display: low
+      value: 2
+    - display: lowest
+      value: 1
+project:
+  ajax_validates: 1
+  label: Project
+  valid_values: []
+repeat_days_before_due:
+  documentation: How soon before the due date does this task show up?
+  hints: How many days notice do you want?
+  label: Heads up
+repeat_every:
+  documentation: 'How many days, weeks, months, or years between repeats (see also repeat_period)'
+  label: Every how many?
+repeat_period:
+  documentation: 'Does this task repeat once, daily, weekly, monthly, or yearly?'
+  label: Schedule
+  valid_values:
+    - display: once
+      value: once
+    - display: daily
+      value: days
+    - display: weekly
+      value: weeks
+    - display: monthly
+      value: months
+    - display: annually
+      value: years
+repeat_stacking:
+  documentation: Do this task's repeats stack up?
+  hints: Paying the rent stacks up if you skip it. Watering the plants doesn't.
+  label: Stack up repeats?
+  mandatory: 1
+requestor_id:
+  ajax_validates: 1
+  documentation: The person who wants this task to be completed
+  label: Requestor
+starts:
+  documentation: When the task will appear in your todo list
+  label: Hide until
+summary:
+  documentation: The one-line description of the task
+  hints: '(Example: <i>Pick up milk at the store</i>)'
+  label: Task
+tags:
+  documentation: Labels that help you find tasks
+  label: Tags
+time_left:
+  ajax_validates: 1
+  label: Time left
+time_worked:
+  ajax_validates: 1
+  label: Time worked
+type:
+  documentation: 'What type of task is this?  Is it a normal task, a project, or a milestone?'
+  mandatory: 1
+  valid_values:
+    - task
+    - project
+    - milestone
+will_complete:
+  documentation: Whether the owner intends to complete this task
+  label: Will complete?
+  mandatory: 1
