@@ -2,7 +2,7 @@ name=HiveminderCloudTasks
 ssh=ssh -p 2222 -l root localhost
 mydefser=accepted but first nothing not complete sort_by priority hidden until before tomorrow tag plate
 
-default: test
+default: test README
 
 test: clean
 	@+HM_LOGLEVEL=99 make --no-print-directory build
