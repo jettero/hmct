@@ -196,7 +196,7 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
             case 'edit':
                 Mojo.Log.info("Task::handleCommand(edit) [rl=%s]", rl);
-                this.SCa.showScene("EditTask", event.item);
+                this.SCa.showScene("EditTask", this.task);
                 break;
 
             default:
