@@ -155,9 +155,9 @@ NewTaskAssistant.prototype.go = function() {
 
         this.S("NewTask::go()",
             "posted task successfully",
-            "New task posted.  Manually refresh any lists where it should be listed.");
-
-        Mojo.Controller.stageController.popScene();
+            "New task posted.  Manually refresh any lists where it should be listed.", function(value){
+                Mojo.Controller.stageController.popScene();
+            });
 
     }.bind(this));
 };

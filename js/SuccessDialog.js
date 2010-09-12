@@ -9,7 +9,7 @@ function SuccessDialog(launcher,controller) {
     this.controller  = controller;
 }
 
-SuccessDialog.prototype.showSuccess = function(fname,desc,message) {
+SuccessDialog.prototype.showSuccess = function(fname,desc,message,cb) {
     var o = {desc: desc, message: message};
 
     if( fname ) o.fname = "::" + fname;
@@ -17,7 +17,7 @@ SuccessDialog.prototype.showSuccess = function(fname,desc,message) {
 
     Mojo.Log.info( this.logTemplate.evaluate(o) );
     this.controller.showAlertDialog({
-		onChoose: function(value) {},
+		onChoose: function(value) {try{cb(value)}catch(e){}},
 		title:    'Success',
 		message:  message,
 		choices: [ {label:'OK', value:'OK', type:'color'} ]
