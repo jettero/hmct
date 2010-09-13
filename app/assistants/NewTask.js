@@ -30,7 +30,6 @@ NewTaskAssistant.prototype.setup = function() {
 
     this.descriptionAttributes = {autoFocus: false, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {});
-    // this.controller.setupWidget("comment",     this.descriptionAttributes, this.commentModel     = {});
 
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Submit"});
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
@@ -90,9 +89,8 @@ NewTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
     Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
 
-    var checkBoxAttributes = { trueValue: 'on', falseValue: 'off' };
-    // this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: "off"});
-    this.controller.setupWidget('stacks-up', checkBoxAttributes, this.stacksUpModel = {value: "off"});
+    var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
+    this.controller.setupWidget('stacks-up', checkBoxAttributes, this.stacksUpModel = {value: "0"});
 
     this.handleGroupListChange([]); // kick it off
 };
@@ -114,7 +112,7 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.hideUntilModel
 
     // [t] this.scheduleModel
-    // [t] this.stacksUpModel
+    // [x] this.stacksUpModel
     // [t] this.everyModel
     // [t] this.headsUpModel
 
@@ -140,7 +138,7 @@ NewTaskAssistant.prototype.go = function() {
     if( f(v = this.dueDateModel    .value) ) params.due                    = v;
     if( f(v = this.hideUntilModel  .value) ) params.starts                 = v;
     if( f(v = this.scheduleModel   .value) ) params.repeat_period          = v;
-    if( f(v = this.stacksUpModel   .value) ) params.repeat_stacking        = v==="on" ? "1":"0";
+    if( f(v = this.stacksUpModel   .value) ) params.repeat_stacking        = v;
     if( f(v = this.headsUpModel    .value) ) params.repeat_days_before_due = v; // heh, really?
     if( f(v = this.everyModel      .value) ) params.repeat_every           = v;
     if( f(v = this.timeWorkedModel .value) ) params.time_worked            = v;
