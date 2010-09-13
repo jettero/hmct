@@ -24,6 +24,15 @@ EditTaskAssistant.prototype.setup = function() {
     this.S = this.s.showSuccess;
 
     this.controller.get("id").update(this.task.record_locator);
+
+    this.boringAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
+    this.controller.setupWidget("title", this.boringAttributes, this.titleModel = {value: this.task.summary});
+
+    this.descriptionAttributes = {autoFocus: false, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
+    this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {value: this.task.description});
+
+    this.commentAttributes = {autoFocus: true, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
+    this.controller.setupWidget("comment", this.commentAttributes, this.commentModel = {});
 }
 
 Mojo.Log.info('loaded(EditTask.js)');
