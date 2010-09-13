@@ -569,13 +569,13 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             Mojo.Log.info("TaskManager::processTaskDownloads() hiding o/r/n using %s against %s/%s/%s",
                 RE, t.owner, t.requestor, t.next_action_by);
 
-            if( t.owner.match(RE) )
+            if( t.owner.match(RE) || t.owner === "<>" || !t.owner )
                 t.owner_class = "generically-hidden";
 
-            if( t.requestor.match(RE) )
+            if( t.requestor.match(RE) || t.requestor === "<>" || !t.requestor )
                 t.requestor_class = "generically-hidden";
 
-            if( t.next_action_by.match(RE) )
+            if( t.next_action_by.match(RE) || t.next_action_by === "<>" || !t.next_action_by )
                 t.next_action_by_class = "generically-hidden";
 
         } else {
