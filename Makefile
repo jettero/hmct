@@ -4,6 +4,9 @@ mydefser=accepted but first nothing not complete sort_by priority hidden until b
 
 default: test README
 
+release: clean
+	env -i make --no-print-directory build
+
 test: clean
 	@+HM_LOGLEVEL=99 make --no-print-directory build
 	palm-install -d emulator *.ipk
