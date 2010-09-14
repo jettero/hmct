@@ -10,6 +10,7 @@ function EditTaskAssistant(_i) {
     this.SCa = Mojo.Controller.stageController.assistant;
 
     this.menuSetup = this.SCa.menuSetup.bind(this);
+    this.handleGroupListChange = this.handleGroupListChange.bind(this);
 
     this.e = new ErrorDialog("EditTask");
     this.E = this.e.showError;
