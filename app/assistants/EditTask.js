@@ -126,4 +126,9 @@ EditTaskAssistant.prototype.handleGroupListChange = function(groups) {
     else this.controller.get("group-row").addClassName("generically-hidden");
 };
 
+EditTaskAssistant.prototype.no = function() {
+    Mojo.Log.info("EditTask::no()");
+    Mojo.Controller.stageController.popScene();
+};
+
 Mojo.Log.info('loaded(EditTask.js)');
