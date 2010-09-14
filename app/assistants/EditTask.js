@@ -165,6 +165,9 @@ EditTaskAssistant.prototype.go = function() {
         return;
     }
 
+    // NOTE: we should only populate params of items that actually changed. So
+    // we'll need to compare to this.task as well as checking for stringity.
+
     /*
     params.summary = this.titleModel.value;
 
