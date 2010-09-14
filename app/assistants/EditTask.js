@@ -131,4 +131,76 @@ EditTaskAssistant.prototype.no = function() {
     Mojo.Controller.stageController.popScene();
 };
 
+EditTaskAssistant.prototype.go = function() {
+    Mojo.Log.info("EditTask::go()");
+
+    // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/EditTask.js 
+    // - won't impliment; t - tested; x - added;
+
+    // [ ] this.titleModel
+    // [ ] this.descriptionModel
+    // [ ] this.tagsModel
+    // [ ] this.groupModel
+    // [ ] this.ownerModel
+    // [ ] this.priorityModel
+    // [ ] this.dueDateModel
+    // [ ] this.hideUntilModel
+
+    // [ ] this.scheduleModel
+    // [ ] this.stacksUpModel
+    // [ ] this.everyModel
+    // [ ] this.headsUpModel
+
+    // [ ] this.timeWorkedModel
+    // [ ] this.timeLeftModel
+
+    // [ ] this.hiddenForeverModel
+    // [ ] this.commentModel
+
+    var params = {};
+    var v; var f = function(x) { if(typeof x === "string" && x.length>0) return true; return false; };
+
+    if( !this.titleModel.value ) {
+        this.E("EditTask::go()", "post error", "Please provide a title for the task");
+        return;
+    }
+
+    /*
+    params.summary = this.titleModel.value;
+
+    if( f(v = this.descriptionModel.value) ) params.description            = v;
+    if( f(v = this.ownerModel      .value) ) params.owner_id               = v;
+    if( f(v = this.priorityModel   .value) ) params.priority               = v;
+    if( f(v = this.dueDateModel    .value) ) params.due                    = v;
+    if( f(v = this.hideUntilModel  .value) ) params.starts                 = v;
+    if( f(v = this.scheduleModel   .value) ) params.repeat_period          = v;
+    if( f(v = this.stacksUpModel   .value) ) params.repeat_stacking        = v;
+    if( f(v = this.headsUpModel    .value) ) params.repeat_days_before_due = v; // heh, really?
+    if( f(v = this.everyModel      .value) ) params.repeat_every           = v;
+    if( f(v = this.timeWorkedModel .value) ) params.time_worked            = v;
+    if( f(v = this.timeLeftModel   .value) ) params.time_left              = v;
+
+    if( f(v = this.tagsModel.value) ) {
+        var q = qsplit(v);
+        if( q ) params.tags = q.join(" ");
+        else {
+            this.E("EditTask::go()", "post error", "tag list must be space separated tokens with balanced quotes");
+            return;
+        }
+    }
+
+    Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
+
+    TMO.postNewTask(params, function(){
+
+        this.S("EditTask::go()",
+            "posted task successfully",
+            "New task posted.  Manually refresh any lists where it should be listed.", function(value){
+                Mojo.Controller.stageController.popScene();
+            });
+
+    }.bind(this));
+    */
+};
+
 Mojo.Log.info('loaded(EditTask.js)');
