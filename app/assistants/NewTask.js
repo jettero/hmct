@@ -50,7 +50,7 @@ NewTaskAssistant.prototype.setup = function() {
     if( AMO.isCurrentAccountPro() )
         this.controller.get("pro-time").removeClassName("generically-hidden");
 
-    this.controller.setupWidget("group", {label: "group"}, this.groupModel={value:''});
+    this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:''});
 
     var prios = [
         {label: "Highest", value: "5", iconPath: 'img/highest.png' },
@@ -186,12 +186,9 @@ NewTaskAssistant.prototype.handleGroupListChange = function(groups) {
     this.groupModel.choices = l;
     this.controller.modelChanged(this.groupModel);
 
-    if( this.groupModel.choices.length >= 2 ) {
-        this.controller.get("group-row").removeClassName("generically-hidden");
-
-    } else {
-        this.controller.get("group-row").addClassName("generically-hidden");
-    }
+    if( this.groupModel.choices.length >= 2 )
+         this.controller.get("group-row").removeClassName("generically-hidden");
+    else this.controller.get("group-row").addClassName("generically-hidden");
 };
 
 NewTaskAssistant.prototype.activate = function() {
