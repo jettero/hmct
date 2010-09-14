@@ -29,5 +29,6 @@
     maxErrLen:     %MAXERR,150%,
     cacheMaxAge:   %MAXAGE,4000%,
     altStartPage:  %ALTPAGE,false%,
-    _preTapTask:   %PRETAP,false%
+    _preTapTask:   %PRETAP,false%,
+    _preEditTask:  %PREEDIT,false%
 }
