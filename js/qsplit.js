@@ -3,8 +3,7 @@
 
 // parse:  "tag \"list\" about \"stuff with spaces\""
 // return: ["\"tag\"","\"list\"","\"about\"","\"stuff with spaces\""]
-
-function qsplit(x) {
+/* {{{ */ function qsplit(x) {
     var r = [];
     var i,e;
     var ok;
@@ -47,3 +46,19 @@ function qsplit(x) {
 
     return r;
 }
+
+/*}}}*/
+
+// process: ["\"tag\"","\"list\"","\"about\"","\"stuff with spaces\""]
+// return:  "tag list about \"stuff with spaces\"";
+/* {{{ */ function revqsplit(ar) {
+
+    for(var i=0; i<ar.length; i++) {
+        if( ar[i].match(/^"[^"\s]+"$/) )
+            ar[i] = ar[i].replace(/^"/, "").replace(/"$/, "");
+    }
+
+    return ar.join(" ");
+}
+
+/*}}}*/
