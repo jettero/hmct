@@ -82,6 +82,9 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
+
+    if( OPT._preEditTask )
+        this.SCa.showScene("EditTask", this.task);
 };
 
 /*}}}*/
