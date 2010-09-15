@@ -168,7 +168,7 @@ EditTaskAssistant.prototype.go = function() {
 
     var params = {};
     var v; var f = function(x) {
-        if( (v=this[x].value) !== this[x]._oVal) return false;
+        if( (v=this[x].value) === this[x]._oVal) return false;
         return true;
     }.bind(this);
 
