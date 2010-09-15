@@ -690,5 +690,51 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
+/* {{{ */ TaskManager.prototype.updateTask = function(params,cb) {
+    Mojo.Log.info("TaskManager::updateTask()");
+
+    var me = this;
+
+    REQ.doRequest({
+        method: 'post', url: 'http://hiveminder.com/=/action/UpdateTask.json',
+        params: params, cacheable: false,
+        process:  function(r) {},
+        finish:   function(r) {
+            me.fetchOneTask(me.task.record_locator,true);
+
+            if( cb ) {
+                try { cb(); } catch(e) {
+                    me.E("updateTask", "post succeeded", "failed to issue callback after successfully posting task: " + e);
+                }
+            }
+        },
+        succcess: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::updateTask() r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task post ...");
+
+            me.E("updateTask", "post fail", e.join("; "));
+
+            return false;
+        }
+    });
+};
+
+/*}}}*/
 
 Mojo.Log.info('loaded(TaskManager.js)');
