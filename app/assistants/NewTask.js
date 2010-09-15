@@ -105,7 +105,7 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.titleModel
     // [t] this.descriptionModel
     // [t] this.tagsModel
-    // [ ] this.groupModel
+    // [t] this.groupModel
     // [t] this.ownerModel
     // [t] this.priorityModel
     // [t] this.dueDateModel
@@ -134,6 +134,7 @@ NewTaskAssistant.prototype.go = function() {
 
     if( f(v = this.descriptionModel.value) ) params.description            = v;
     if( f(v = this.ownerModel      .value) ) params.owner_id               = v;
+    if( f(v = this.groupModel      .value) ) params.group_id               = v;
     if( f(v = this.priorityModel   .value) ) params.priority               = v;
     if( f(v = this.dueDateModel    .value) ) params.due                    = v;
     if( f(v = this.hideUntilModel  .value) ) params.starts                 = v;
