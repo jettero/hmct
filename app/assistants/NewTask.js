@@ -105,7 +105,7 @@ NewTaskAssistant.prototype.go = function() {
     // [t] this.titleModel
     // [t] this.descriptionModel
     // [t] this.tagsModel
-    // [t] this.groupModel
+    // [ ] this.groupModel
     // [t] this.ownerModel
     // [t] this.priorityModel
     // [t] this.dueDateModel
