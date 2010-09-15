@@ -168,10 +168,9 @@ EditTaskAssistant.prototype.go = function() {
 
     var params = {};
     var v; var f = function(x) {
-        if( typeof x !== "string" ) return false;
-        if( (v=this[x].value) !== this[x]._oval) return false;
+        if( (v=this[x].value) !== this[x]._oVal) return false;
         return true;
-    };
+    }.bind(this);
 
     if( !this.titleModel.value ) {
         this.E("EditTask::go()", "post error", "Please provide a title for the task");
