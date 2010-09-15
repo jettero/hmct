@@ -41,6 +41,9 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Update"});
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
 
+    Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
+    Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
+
     var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
     this.controller.setupWidget('stacks-up',      checkBoxAttributes, this.stacksUpModel      = {value: t.repeat_stacking});
     this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: t.starts !== null ? "1":"0"});
