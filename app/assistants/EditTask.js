@@ -92,6 +92,10 @@ EditTaskAssistant.prototype.setup = function() {
 
     if( AMO.isCurrentAccountPro() )
         this.controller.get("pro-time").removeClassName("generically-hidden");
+
+    for(var key in this)
+        if( key.match(/Model$/) )
+            this[key]._oVal = this[key].value;
 };
 
 EditTaskAssistant.prototype.activate = function() {
