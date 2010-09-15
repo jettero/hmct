@@ -162,32 +162,32 @@ EditTaskAssistant.prototype.go = function() {
     // [ ] this.commentModel
 
     var params = {};
-    var v; var f = function(x) { if(typeof x === "string" && x.length>0) return true; return false; };
+    var v; var f = function(x) {
+        if( typeof x !== "string" ) return false;
+        if( (v=this[x].value) !== this[x]._oval) return false;
+        return true;
+    };
 
     if( !this.titleModel.value ) {
         this.E("EditTask::go()", "post error", "Please provide a title for the task");
         return;
     }
 
-    // NOTE: we should only populate params of items that actually changed. So
-    // we'll need to compare to this.task as well as checking for stringity.
+    if( f("titleModel") ) params.summary = v;
 
-    /*
-    params.summary = this.titleModel.value;
+    if( f("descriptionModel") ) params.description            = v;
+    if( f("ownerModel"      ) ) params.owner_id               = v;
+    if( f("priorityModel"   ) ) params.priority               = v;
+    if( f("dueDateModel"    ) ) params.due                    = v;
+    if( f("hideUntilModel"  ) ) params.starts                 = v;
+    if( f("scheduleModel"   ) ) params.repeat_period          = v;
+    if( f("stacksUpModel"   ) ) params.repeat_stacking        = v;
+    if( f("headsUpModel"    ) ) params.repeat_days_before_due = v;
+    if( f("everyModel"      ) ) params.repeat_every           = v;
+    if( f("timeWorkedModel" ) ) params.time_worked            = v;
+    if( f("timeLeftModel"   ) ) params.time_left              = v;
 
-    if( f(v = this.descriptionModel.value) ) params.description            = v;
-    if( f(v = this.ownerModel      .value) ) params.owner_id               = v;
-    if( f(v = this.priorityModel   .value) ) params.priority               = v;
-    if( f(v = this.dueDateModel    .value) ) params.due                    = v;
-    if( f(v = this.hideUntilModel  .value) ) params.starts                 = v;
-    if( f(v = this.scheduleModel   .value) ) params.repeat_period          = v;
-    if( f(v = this.stacksUpModel   .value) ) params.repeat_stacking        = v;
-    if( f(v = this.headsUpModel    .value) ) params.repeat_days_before_due = v; // heh, really?
-    if( f(v = this.everyModel      .value) ) params.repeat_every           = v;
-    if( f(v = this.timeWorkedModel .value) ) params.time_worked            = v;
-    if( f(v = this.timeLeftModel   .value) ) params.time_left              = v;
-
-    if( f(v = this.tagsModel.value) ) {
+    if( f("tagsModel") ) {
         var q = qsplit(v);
         if( q ) params.tags = q.join(" ");
         else {
@@ -198,13 +198,10 @@ EditTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
 
-    TMO.postNewTask(params, function(){
+    /*
+    TMO.postTaskUpdate(params, function(){
 
-        this.S("EditTask::go()",
-            "posted task successfully",
-            "New task posted.  Manually refresh any lists where it should be listed.", function(value){
-                Mojo.Controller.stageController.popScene();
-            });
+        // TODO: download the task
 
     }.bind(this));
     */
