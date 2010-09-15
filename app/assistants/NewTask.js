@@ -34,6 +34,9 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Submit"});
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
 
+    Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
+    Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
+
     this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
     this.numberAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
 
@@ -85,9 +88,6 @@ NewTaskAssistant.prototype.setup = function() {
         else             this.controller.get("schedule-img").removeClassName("generically-hidden");
 
     }.bind(this));
-
-    Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
-    Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
 
     var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
     this.controller.setupWidget('stacks-up', checkBoxAttributes, this.stacksUpModel = {value: "0"});
