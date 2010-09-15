@@ -9,7 +9,7 @@ function EditTaskAssistant(_i) {
 
     this.SCa = Mojo.Controller.stageController.assistant;
 
-    this.menuSetup = this.SCa.menuSetup.bind(this);
+    this.menuSetup             = this.SCa.menuSetup.bind(this);
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
     this.go                    = this.go.bind(this);
     this.no                    = this.no.bind(this);
