@@ -167,7 +167,7 @@ EditTaskAssistant.prototype.go = function() {
     // [x] this.completeModel
     // [x] this.hiddenForeverModel
 
-    var params = {};
+    var params = {id: this.task.id};
     var v; var f = function(x) {
         if( (v=this[x].value) === this[x]._oVal) return false;
         return true;
@@ -207,9 +207,14 @@ EditTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
 
-    TMO.postTaskUpdate(params, function(){
-        TMO.fetchOneTask(this.task.record_locator,true);
-    }.bind(this));
+    var stuff = 0;
+    for(var k in params)
+        stuff ++;
+
+    if( stuff === 1 )
+        this.E("EditTask::go()", "post error", "nothing changed, update not posted");
+
+    // else TMO.postTaskUpdate(params);
 };
 
 Mojo.Log.info('loaded(EditTask.js)');
