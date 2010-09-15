@@ -1,7 +1,7 @@
 
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO ErrorDialog SuccessDialog TMO
+/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit
 */
 
 function EditTaskAssistant(_i) {
