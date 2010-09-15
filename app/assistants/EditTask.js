@@ -36,7 +36,7 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {value: t.description});
 
     this.commentAttributes = {autoFocus: true, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
-    this.controller.setupWidget("comment", this.commentAttributes, this.commentModel = {});
+    this.controller.setupWidget("comment", this.commentAttributes, this.commentModel = {value:""});
 
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Update"});
     this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
@@ -163,8 +163,9 @@ EditTaskAssistant.prototype.go = function() {
     // [x] this.timeWorkedModel
     // [x] this.timeLeftModel
 
-    // [ ] this.hiddenForeverModel
-    // [ ] this.commentModel
+    // [x] this.commentModel
+    // [x] this.completeModel
+    // [x] this.hiddenForeverModel
 
     var params = {};
     var v; var f = function(x) {
@@ -179,18 +180,21 @@ EditTaskAssistant.prototype.go = function() {
 
     if( f("titleModel") ) params.summary = v;
 
-    if( f("descriptionModel") ) params.description            = v;
-    if( f("ownerModel"      ) ) params.owner_id               = v;
-    if( f("groupModel"      ) ) params.group_id               = v;
-    if( f("priorityModel"   ) ) params.priority               = v;
-    if( f("dueDateModel"    ) ) params.due                    = v;
-    if( f("hideUntilModel"  ) ) params.starts                 = v;
-    if( f("scheduleModel"   ) ) params.repeat_period          = v;
-    if( f("stacksUpModel"   ) ) params.repeat_stacking        = v;
-    if( f("headsUpModel"    ) ) params.repeat_days_before_due = v;
-    if( f("everyModel"      ) ) params.repeat_every           = v;
-    if( f("timeWorkedModel" ) ) params.time_worked            = v;
-    if( f("timeLeftModel"   ) ) params.time_left              = v;
+    if( f("descriptionModel"  ) ) params.description            = v;
+    if( f("ownerModel"        ) ) params.owner_id               = v;
+    if( f("groupModel"        ) ) params.group_id               = v;
+    if( f("priorityModel"     ) ) params.priority               = v;
+    if( f("dueDateModel"      ) ) params.due                    = v;
+    if( f("hideUntilModel"    ) ) params.starts                 = v;
+    if( f("scheduleModel"     ) ) params.repeat_period          = v;
+    if( f("stacksUpModel"     ) ) params.repeat_stacking        = v;
+    if( f("headsUpModel"      ) ) params.repeat_days_before_due = v;
+    if( f("everyModel"        ) ) params.repeat_every           = v;
+    if( f("timeWorkedModel"   ) ) params.time_worked            = v;
+    if( f("timeLeftModel"     ) ) params.time_left              = v;
+    if( f("commentModel"      ) ) params.comment                = v;
+    if( f("completeModel"     ) ) params.complete               = v;
+    if( f("hiddenForeverModel") ) params.hidden_forever         = v;
 
     if( f("tagsModel") ) {
         var q = qsplit(v);
