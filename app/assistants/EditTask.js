@@ -207,13 +207,9 @@ EditTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
 
-    /*
     TMO.postTaskUpdate(params, function(){
-
-        // TODO: download the task
-
+        TMO.fetchOneTask(this.task.record_locator,true);
     }.bind(this));
-    */
 };
 
 Mojo.Log.info('loaded(EditTask.js)');
