@@ -11,6 +11,8 @@ function EditTaskAssistant(_i) {
 
     this.menuSetup = this.SCa.menuSetup.bind(this);
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
+    this.go                    = this.go.bind(this);
+    this.no                    = this.no.bind(this);
 
     this.e = new ErrorDialog("EditTask");
     this.E = this.e.showError;
