@@ -50,8 +50,8 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
 
-    this.controller.setupWidget("tags", this.boringAttributes, this.tagsModel = {value: t.summary});
-    this.controller.setupWidget("owner", this.boringAttributes, this.ownerModel = {value:t.owner});
+    this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel  = {value: revqsplit(qsplit(t.tags))});
+    this.controller.setupWidget("owner", this.boringAttributes, this.ownerModel = {value: t.owner});
 
     var prios = [
         {label: "Highest", value: "5", iconPath: 'img/highest.png' },
