@@ -146,22 +146,22 @@ EditTaskAssistant.prototype.go = function() {
     // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/EditTask.js 
     // - won't impliment; t - tested; x - added;
 
-    // [ ] this.titleModel
-    // [ ] this.descriptionModel
-    // [ ] this.tagsModel
-    // [ ] this.groupModel
-    // [ ] this.ownerModel
-    // [ ] this.priorityModel
-    // [ ] this.dueDateModel
-    // [ ] this.hideUntilModel
+    // [x] this.titleModel
+    // [x] this.descriptionModel
+    // [x] this.tagsModel
+    // [x] this.groupModel
+    // [x] this.ownerModel
+    // [x] this.priorityModel
+    // [x] this.dueDateModel
+    // [x] this.hideUntilModel
 
-    // [ ] this.scheduleModel
-    // [ ] this.stacksUpModel
-    // [ ] this.everyModel
-    // [ ] this.headsUpModel
+    // [x] this.scheduleModel
+    // [x] this.stacksUpModel
+    // [x] this.everyModel
+    // [x] this.headsUpModel
 
-    // [ ] this.timeWorkedModel
-    // [ ] this.timeLeftModel
+    // [x] this.timeWorkedModel
+    // [x] this.timeLeftModel
 
     // [ ] this.hiddenForeverModel
     // [ ] this.commentModel
@@ -181,6 +181,7 @@ EditTaskAssistant.prototype.go = function() {
 
     if( f("descriptionModel") ) params.description            = v;
     if( f("ownerModel"      ) ) params.owner_id               = v;
+    if( f("groupModel"      ) ) params.group_id               = v;
     if( f("priorityModel"   ) ) params.priority               = v;
     if( f("dueDateModel"    ) ) params.due                    = v;
     if( f("hideUntilModel"  ) ) params.starts                 = v;
