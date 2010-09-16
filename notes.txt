@@ -11,6 +11,9 @@ curl -F post=please -sb $HM http://hiveminder.com/=/action/SearchGroup.yml
 export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow
 export Q=accepted/but/first/nothing/not/complete/hidden/until/before/tomorrow/tag/plate/sort_by/priority
 
+# download one task by record_locator
+curl -F query=id/35I6O -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml
+
 # download tasks given my query ( uses slashed query form )
 curl -F query="`echo $Q | sed 's, ,/,g'`" -F format=yaml -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml
 
