@@ -128,14 +128,16 @@ function RequestEngine() {
 
                         var now = this.now();
                         var ds  = now - entry.entered;
+                        var st  = entry.stale;
                         var cma = typeof(_r.cacheMaxAgeOverride) === 'number' ? _r.cacheMaxAgeOverride :  OPT.cacheMaxAge;
 
                         data._req_cacheAge = ds;
+                        data._req_cacheKey = _r.cacheKey;
 
                         _r.finish(data);
 
-                        if( ds >= cma ) {
-                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older, issuing new request]", _r.desc);
+                        if( ds >= cma || st ) {
+                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older or stale, issuing new request]", _r.desc);
 
                             _r.force = true; // is this necessary?
                             this._doRequest(_r);
@@ -227,6 +229,7 @@ function RequestEngine() {
                                 me.dbSetCache(_r.cacheKey, r); // do so
 
                             r._req_cacheAge = 0;
+                            r._req_cacheKey = _r.cacheKey;
 
                             _r.finish(r); // lastly, pass the final result to finish
                         }
@@ -305,11 +308,23 @@ function RequestEngine() {
 
         Mojo.Log.info("RequestEngine::dbSetCache(key=%s) [added, informing cache_list, now=%d]", key, now);
 
-        me.data.cache[key] = { entered: now };
+        me.data.cache[key] = { entered: now, stale: false };
         me.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
     };
 
     this.dbo.add(key, data, sent, fail); // try to add the key
+    this.dbCheckAgeStart(); // won't actually run for a while
+};
+
+/*}}}*/
+/* {{{ */ RequestEngine.prototype.markCacheStale = function(key) {
+    Mojo.Log.info("RequestEngine::markCacheStale(key=%s)", key);
+
+    if( this.data.cache[key] )
+        this.data.cache[key].stale = true;
+    else
+        Mojo.Log.info("RequestEngine::markCacheStale(key=%s): no such key, not marking");
+
     this.dbCheckAgeStart(); // won't actually run for a while
 };
 
@@ -451,9 +466,10 @@ function RequestEngine() {
     var nothing_expired = true;
     for( var k in this.data.cache ) {
         var dt = now - this.data.cache[k].entered;
+        var st = this.data.cache[k].stale;
 
-        if( dt >= OPT.cacheMaxAge ) {
-            Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired; dt=%d]", k, dt);
+        if( dt >= OPT.cacheMaxAge || st ) {
+            Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired; dt=%d; stale=%s]", k, dt, st);
 
             var _f = bindLexicals(k);
 
@@ -520,7 +536,8 @@ function RequestEngine() {
         var now = this.now();
 
         for( var k in this.data.cache )
-            Mojo.Log.info("restored cache: %s [age: %ds]", k, now - this.data.cache[k].entered);
+            Mojo.Log.info("restored cache: %s [age: %ds, stale: %s]",
+                k, now - this.data.cache[k].entered, this.data.cache[k].stale);
 
         this.dbCheckAgeStart();
     }
