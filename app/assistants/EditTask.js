@@ -214,7 +214,7 @@ EditTaskAssistant.prototype.go = function() {
     if( stuff === 1 )
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
-    // else TMO.postTaskUpdate(params);
+    else TMO.updateTask(params);
 };
 
 Mojo.Log.info('loaded(EditTask.js)');
