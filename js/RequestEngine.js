@@ -321,12 +321,14 @@ function RequestEngine() {
 /* {{{ */ RequestEngine.prototype.markCacheStale = function(key) {
     Mojo.Log.info("RequestEngine::markCacheStale(key=%s)", key);
 
-    if( this.data.cache[key] )
+    if( this.data.cache[key] ) {
         this.data.cache[key].stale = true;
-    else
-        Mojo.Log.info("RequestEngine::markCacheStale(key=%s): no such key, not marking");
+        this.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
+        this.dbCheckAgeStart(); // won't actually run for a while
 
-    this.dbCheckAgeStart(); // won't actually run for a while
+    } else {
+        Mojo.Log.info("RequestEngine::markCacheStale(key=%s): no such key, not marking");
+    }
 };
 
 /*}}}*/
