@@ -46,7 +46,7 @@ EditTaskAssistant.prototype.setup = function() {
 
     var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
     this.controller.setupWidget('stacks-up',      checkBoxAttributes, this.stacksUpModel      = {value: t.repeat_stacking});
-    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: t.starts !== null ? "1":"0"});
+    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value:!t.will_complete});
     this.controller.setupWidget('complete',       checkBoxAttributes, this.completeModel      = {value: t.complete});
     this.controller.setupWidget('accept',         checkBoxAttributes, this.acceptModel        = {value: t.accepted});
 
