@@ -46,7 +46,7 @@ EditTaskAssistant.prototype.setup = function() {
 
     var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
     this.controller.setupWidget('stacks-up',      checkBoxAttributes, this.stacksUpModel      = {value: t.repeat_stacking});
-    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value:!t.will_complete});
+    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: t.will_complete=="0"?"1":"0"});
     this.controller.setupWidget('complete',       checkBoxAttributes, this.completeModel      = {value: t.complete});
     this.controller.setupWidget('accept',         checkBoxAttributes, this.acceptModel        = {value: t.accepted});
 
@@ -143,7 +143,7 @@ EditTaskAssistant.prototype.no = function() {
 EditTaskAssistant.prototype.go = function() {
     Mojo.Log.info("EditTask::go()");
 
-    // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/EditTask.js 
+    // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/EditTask.js
     // - won't impliment; t - tested; x - added;
 
     // [x] this.titleModel
@@ -168,8 +168,14 @@ EditTaskAssistant.prototype.go = function() {
     // [x] this.hiddenForeverModel
 
     var params = {id: this.task.id};
+    // var mandatories = [ "will_complete", "repeat_stacking", "type" ];
+    // for(var _m in mandatories)
+    //     params[mandatories[_m]] = this.task[mandatories[_m]];
+
+    var did_stuff = false;
     var v; var f = function(x) {
         if( (v=this[x].value) === this[x]._oVal) return false;
+        did_stuff = true;
         return true;
     }.bind(this);
 
@@ -194,7 +200,7 @@ EditTaskAssistant.prototype.go = function() {
     if( f("timeLeftModel"     ) ) params.time_left              = v;
     if( f("commentModel"      ) ) params.comment                = v;
     if( f("completeModel"     ) ) params.complete               = v;
-    if( f("hiddenForeverModel") ) params.hidden_forever         = v;
+    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1";
 
     if( f("tagsModel") ) {
         var q = qsplit(v);
@@ -207,14 +213,10 @@ EditTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
 
-    var stuff = 0;
-    for(var k in params)
-        stuff ++;
-
-    if( stuff === 1 )
+    if( !did_stuff )
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
-    else TMO.updateTask(params);
+    else TMO.updateTask(params,this.task);
 };
 
 Mojo.Log.info('loaded(EditTask.js)');
