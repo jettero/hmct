@@ -690,7 +690,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.updateTask = function(params,cb) {
+/* {{{ */ TaskManager.prototype.updateTask = function(params,task,cb) {
     Mojo.Log.info("TaskManager::updateTask()");
 
     var me = this;
@@ -700,7 +700,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         params: params, cacheable: false,
         process:  function(r) {},
         finish:   function(r) {
-            me.fetchOneTask(me.task.record_locator,true);
+            me.fetchOneTask(task.record_locator,true);
 
             if( cb ) {
                 try { cb(); } catch(e) {
