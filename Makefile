@@ -13,6 +13,9 @@ test: clean
 	$(ssh) luna-send -n 1 palm://com.palm.applicationManager/launch "'{\"id\":\"org.voltar.hiveminder\"}'"
 	$(ssh) tail -n 1000 -f /var/log/messages | ./log-parse.pl
 
+lc logcontinue cl continuelog:
+	$(ssh) tail -n 0 -f /var/log/messages | ./log-parse.pl -c
+
 myinstall: clean
 	@+HM_LOGLEVEL=0 HM_DEFSER='$(mydefser)' env -u HM_UNFOLD -u HM_PRETAP -u HM_MAXAGE make --no-print-directory build
 	scp *.ipk $${INSTHOST:-castle.vhb}:
