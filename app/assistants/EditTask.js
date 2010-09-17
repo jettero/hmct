@@ -84,8 +84,18 @@ EditTaskAssistant.prototype.setup = function() {
     ];
     var sch = function() {
         var v = this.scheduleModel.value;
-        if(v === 'once') this.controller.get("schedule-img").   addClassName("generically-hidden");
-        else             this.controller.get("schedule-img").removeClassName("generically-hidden");
+        if(v === 'once') {
+            this.controller.get("schedule-img").addClassName("generically-hidden");
+            this.controller.get("recurrence-sub-opt").addClassName("generically-hidden");
+            this.controller.get("recurrence-pri-opt-row").addClassName('single');
+            this.controller.get("recurrence-pri-opt-row").removeClassName('first');
+
+        } else {
+            this.controller.get("schedule-img").removeClassName("generically-hidden");
+            this.controller.get("recurrence-sub-opt").removeClassName("generically-hidden");
+            this.controller.get("recurrence-pri-opt-row").removeClassName('single');
+            this.controller.get("recurrence-pri-opt-row").addClassName('first');
+        }
 
     }.bind(this);
     this.controller.setupWidget("schedule", {label: "schedule", choices: schedules}, this.scheduleModel={value:t.repeat_period});
