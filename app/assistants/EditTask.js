@@ -168,9 +168,12 @@ EditTaskAssistant.prototype.go = function() {
     // [x] this.hiddenForeverModel
 
     var params = {id: this.task.id};
-    // var mandatories = [ "will_complete", "repeat_stacking", "type" ];
-    // for(var _m in mandatories)
-    //     params[mandatories[_m]] = this.task[mandatories[_m]];
+    var mandatories = [ "will_complete" ];
+    for(var _m in mandatories)
+        params[mandatories[_m]] = this.task[mandatories[_m]];
+        // NOTE: there are other "manditory" fields, but only this one seems to
+        // actually be manditory -- manditory in the sense that  if it's
+        // absent, HM thinks it's supposed to change it to false
 
     var did_stuff = false;
     var v; var f = function(x) {
