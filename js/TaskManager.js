@@ -235,7 +235,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             if( cs ) { for( csi in cs ) { if( cs[csi] ) {
                 REQ.markCacheStale(csi);
                 cs[csi] = false;
-            }}}
+
+            } } }
         },
 
         success: function(r) {
