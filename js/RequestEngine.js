@@ -137,7 +137,8 @@ function RequestEngine() {
                         _r.finish(data);
 
                         if( ds >= cma || st ) {
-                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older or stale, issuing new request]", _r.desc);
+                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older(%d>=%d) or stale(%s), issuing new request]",
+                                 _r.desc, ds, cma, st);
 
                             _r.force = true; // is this necessary?
                             this._doRequest(_r);
