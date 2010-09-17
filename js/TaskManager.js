@@ -23,6 +23,8 @@
 
     this.e = new ErrorDialog("TaskManager");
     this.E = this.e.showError;
+
+    this.searchCacheSnoop = {};
 }
 
 /*}}}*/
@@ -158,6 +160,11 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             me.tasks.each(function(t){
                 t._req_cacheAge = r._req_cacheAge;
                 if( !t.tags ) t.tags = "<none>";
+
+                if(!me.searchCacheSnoop[t.record_locator] )
+                    me.searchCacheSnoop[t.record_locator] = {};
+
+                me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
             });
             me.notifyTasksChange();
             me.getFurtherDetails(r._req_cacheAge);
@@ -213,6 +220,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             Mojo.Log.info("TaskManager::fetchOneTask(%s) [finish: |r|:%d, rca:%d]", search, r.length, r._req_cacheAge);
 
             var theTask = r[0];
+            var cs;
+            var csi;
 
             for(var i=0; i<me.tasks.length; i++)
                 if( me.tasks[i].id === theTask.id )
@@ -220,6 +229,13 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
             me.notifyTaskChange(theTask,true);
             me.getFurtherDetails(r._req_cacheAge, "id " + rl);
+
+            // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
+            cs = me.searchCacheSnoop[theTask.record_locator];
+            if( cs ) { for( csi in cs ) { if( cs[csi] ) {
+                REQ.markCacheStale(csi);
+                cs[csi] = false;
+            }}}
         },
 
         success: function(r) {
