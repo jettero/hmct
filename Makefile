@@ -14,7 +14,7 @@ test: clean
 	$(ssh) tail -n 1000 -f /var/log/messages | ./log-parse.pl
 
 lc logcontinue cl continuelog:
-	$(ssh) tail -n 0 -f /var/log/messages | ./log-parse.pl -c
+	$(ssh) tail -n 0 -f /var/log/messages | ./log-parse.pl -ca
 
 myinstall: clean
 	@+HM_LOGLEVEL=0 HM_DEFSER='$(mydefser)' env -u HM_UNFOLD -u HM_PRETAP -u HM_MAXAGE make --no-print-directory build
