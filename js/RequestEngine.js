@@ -323,7 +323,7 @@ function RequestEngine() {
 
     if( this.data.cache[key] ) {
         this.data.cache[key].stale = true;
-        this.dbo.add("cache_list", me.data, me.dbSent, me.dbSentFail);
+        this.dbo.add("cache_list", this.data, this.dbSent, this.dbSentFail);
         this.dbCheckAgeStart(); // won't actually run for a while
 
     } else {
