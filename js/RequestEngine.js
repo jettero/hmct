@@ -57,8 +57,13 @@ function RequestEngine() {
 /*}}}*/
 
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
-    if( !_r.desc ) _r.desc = "";
-    _r.desc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
+    if( !_r.desc )
+        _r.desc = "";
+
+    if( !_r._desc_mutilated ) {
+        _r.desc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
+        _r._desc_mutilated = true;
+    }
 
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
