@@ -539,7 +539,7 @@ function RequestEngine() {
         var now = this.now();
 
         for( var k in this.data.cache )
-            Mojo.Log.info("restored cache: %s [age: %ds, stale: %s]",
+            Mojo.Log.info("RequestEngine::dbRecv() restored cache: %s [age: %ds, stale: %s]",
                 k, now - this.data.cache[k].entered, this.data.cache[k].stale);
 
         this.dbCheckAgeStart();
@@ -560,3 +560,5 @@ function RequestEngine() {
 };
 
 /*}}}*/
+
+Mojo.Log.info('loaded(RequestEngine.js)');
