@@ -216,10 +216,13 @@ EditTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
 
-    if( !did_stuff )
+    if( !did_stuff ) {
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
-    else TMO.updateTask(params,this.task);
+    } else {
+        TMO.updateTask(params,this.task);
+        Mojo.Controller.stageController.popScene();
+    }
 };
 
 Mojo.Log.info('loaded(EditTask.js)');
