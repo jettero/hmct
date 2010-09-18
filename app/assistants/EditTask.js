@@ -11,8 +11,6 @@ function EditTaskAssistant(_i) {
 
     this.menuSetup             = this.SCa.menuSetup.bind(this);
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
-    this.go                    = this.go.bind(this);
-    this.no                    = this.no.bind(this);
 
     this.e = new ErrorDialog("EditTask");
     this.E = this.e.showError;
@@ -23,6 +21,10 @@ EditTaskAssistant.prototype.setup = function() {
     var t = this.task;
 
     this.menuSetup();
+
+    this.sendModel        = { label: "Send", icon: 'send', command: 'go' };
+    this.commandMenuModel = { label: 'EditTask Command Menu', items: [ {}, this.sendModel ] };
+	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 
     this.s = new SuccessDialog("EditTask", this.controller);
     this.S = this.s.showSuccess;
@@ -37,12 +39,6 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.commentAttributes = {autoFocus: true, multiline: true /*, textCase: Mojo.Widget.steModeLowerCase*/ };
     this.controller.setupWidget("comment", this.commentAttributes, this.commentModel = {value:""});
-
-    this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Update"});
-    this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
-
-    Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
-    Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
 
     var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
     this.controller.setupWidget('stacks-up',      checkBoxAttributes, this.stacksUpModel      = {value: t.repeat_stacking});
@@ -233,6 +229,26 @@ EditTaskAssistant.prototype.go = function() {
         TMO.updateTask(params,this.task);
         Mojo.Controller.stageController.popScene();
     }
+};
+
+EditTaskAssistant.prototype.handleCommand = function(event) {
+    Mojo.Log.info("EditTask::handleCommand()");
+
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
+
+        switch (s_a[0]) {
+            case 'go':
+                Mojo.Log.info("EditTask::handleCommand(go)");
+                this.go();
+                break;
+
+            default:
+                Mojo.Log.info("EditTask::handleCommand(unknown command: %s)", Object.toJSON(s_a));
+                break;
+        }
+    }
+
 };
 
 Mojo.Log.info('loaded(EditTask.js)');
