@@ -476,14 +476,19 @@ function RequestEngine() {
         var dt = now - this.data.cache[k].entered;
         var st = this.data.cache[k].stale;
 
-        if( dt >= OPT.cacheMaxAge || st ) {
-            Mojo.Log.info("RequestEngine::dbCheckAge() [%s expired; dt=%d; stale=%s]", k, dt, st);
+        if( dt >= OPT.cacheCollectAge || (OPT.cacheCollectStale && st) ) {
+            Mojo.Log.info("RequestEngine::dbCheckAge() main-loop:[%s expired; dt=%d>%d; stale=%s]",
+                k, dt, OPT.cacheCollectAge, st);
 
             var _f = bindLexicals(k);
 
             done ++;
             this.dbo.discard(k, _f.sent, _f.err);
             nothing_expired = false;
+
+        } else {
+            Mojo.Log.info("RequestEngine::dbCheckAge() main-loop:[%s still-good; dt=%d≤%d; stale=%s]",
+                k, dt, OPT.cacheCollectAge, st);
         }
     }
 
