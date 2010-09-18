@@ -756,12 +756,22 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     Mojo.Log.info("TaskManager::deleteTask()");
 
     var me = this;
+    var fp;
 
     REQ.doRequest({
+        failure: function() {
+            // DeleteTask issues a 302 with the application/json in it, the
+            // Location is spurious and 404s...  The best we can do is pretend
+            // it worked and do what we would have done if it did.
+
+            fp();
+            return false;
+        },
+
         method: 'post', url: 'http://hiveminder.com/=/action/DeleteTask.json',
         params: {id: task.id}, cacheable: false,
-        process:  function(r) {},
-        finish:   function(r) {
+        process: function(r) {},
+        finish: fp = function(r) {
             // snoop cache to stale out searchlists with this task
 
             // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
