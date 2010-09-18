@@ -32,10 +32,10 @@ EditTaskAssistant.prototype.setup = function() {
     this.boringAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
     this.controller.setupWidget("title", this.boringAttributes, this.titleModel = {value: t.summary});
 
-    this.descriptionAttributes = {autoFocus: false, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
+    this.descriptionAttributes = {autoFocus: false, multiline: true /*, textCase: Mojo.Widget.steModeLowerCase*/ };
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {value: t.description});
 
-    this.commentAttributes = {autoFocus: true, multiline: true, textCase: Mojo.Widget.steModeLowerCase};
+    this.commentAttributes = {autoFocus: true, multiline: true /*, textCase: Mojo.Widget.steModeLowerCase*/ };
     this.controller.setupWidget("comment", this.commentAttributes, this.commentModel = {value:""});
 
     this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Update"});
