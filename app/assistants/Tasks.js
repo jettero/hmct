@@ -14,6 +14,7 @@ function TasksAssistant() {
     this.handleTasksChange = this.handleTasksChange.bind(this);
     this.checkForLogins    = this.checkForLogins.bind(this);
     this.taskListTap       = this.taskListTap.bind(this);
+    this.taskListSwipe     = this.taskListSwipe.bind(this);
 
     this.taskTemplate = new Mojo.View.Template(palmGetResource(Mojo.appPath + "app/views/tt/task-short.html"),
         "task-short", Mojo.View.escapeHTMLInTemplates);
@@ -43,12 +44,13 @@ function TasksAssistant() {
         listTemplate:  'misc/naked-list-container',
         emptyTemplate: 'misc/empty-list',
         itemTemplate:  'misc/li-task',
-        //swipeToDelete: true
+        swipeToDelete: true
     };
     this.tasksListModel = {listTitle: 'Hiveminder Tasks', items: ['...']};
     this.controller.setupWidget('hm_task_list', this.tasksListAttrs, this.tasksListModel);
 
-	Mojo.Event.listen(this.controller.get("hm_task_list"), Mojo.Event.listTap, this.taskListTap);
+	Mojo.Event.listen(this.controller.get("hm_task_list"), Mojo.Event.listTap,    this.taskListTap);
+	Mojo.Event.listen(this.controller.get("hm_task_list"), Mojo.Event.listDelete, this.taskListSwipe);
 
     this.checkForLogins();
     this.firstActivation = true;
@@ -62,6 +64,18 @@ function TasksAssistant() {
 
     this.SCa.showScene("Task", event.item);
 
+};
+
+/*}}}*/
+/* {{{ */ TasksAssistant.prototype.taskListSwipe = function(event) {
+    Mojo.Log.info("Tasks::taskListSwipe(%s)", event.item.record_locator);
+
+    TMO.deleteTask(event.item);
+
+    // NOTE: I don't think I need to do this stuff... swiping moves them out of
+    // the list and the next activate or handleTasksChange will update this for me anyway.
+        // this.tasksListModel.items.reject(function(i) { return i===event.item });
+        // this.controller.modelChanged(this.tasksListModel);
 };
 
 /*}}}*/
