@@ -12,8 +12,12 @@
 
     this.lso = new Mojo.Model.Cookie("last search");
     this.lastSearch = this.lso.get();
+    if( typeof this.lastSearch !== "object" )
+        this.lastSearch = {};
 
-    Mojo.Log.info("TaskManager() [lastSearch: %s]", this.lastSearch);
+    this.dbNewk = function() { this.lso.put(0); }.bind(this);
+
+    Mojo.Log.info("TaskManager() [lastSearch: %s]", Object.toJSON(this.lastSearch));
 
     AMO.registerLoginChange(this.handleLoginChange);
     AMO.registerSrchlChange(this.handleSrchlChange);
@@ -105,33 +109,36 @@
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.setLastSearch = function(s) {
-    Mojo.Log.info("TaskManager::setLastSearch(s=%s; lastSearch=%s)", s, this.lastSearch);
+    Mojo.Log.info("TaskManager::setLastSearch(s=%s; lastSearch=%s)", s, Object.toJSON(this.lastSearch));
 
     s = s.replace(/\s+/g, "/");
 
-    if( this.lastSearch !== s ) {
-        Mojo.Log.info("TaskManager::setLastSearch() [setting cookie, lso.put(%s)]", s);
-        this.lso.put(s);
+    if( this.lastSearch[this.currentLogin] !== s ) {
+        this.lastSearch[this.currentLogin] = s;
+        Mojo.Log.info("TaskManager::setLastSearch() [setting cookie, lso.put(%s)]", Object.toJSON(this.lastSearch));
+        this.lso.put(this.lastSearch);
     }
 
-    return (this.lastSearch = s);
+    return s;
 };
 
 TaskManager.prototype._getLastSearchSpaced = function(s) {
-    if( !this.lastSearch )
+    if( !this.lastSearch[this.currentLogin] )
         return "";
 
-    return this.lastSearch.replace(/\//g, ' '); // heh
+    return this.lastSearch[this.currentLogin].replace(/\//g, ' '); // heh
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
-        if( !this.lastSearch ) {
+        var ls = this.lastSearch[this.currentLogin];
+
+        if( !ls || !ls.length ) {
             search = this.getSearchByName(OPT.defaultSearch);
 
         } else {
-            search = this.lastSearch;
+            search = ls;
         }
     }
 
@@ -296,7 +303,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             tasks.push( this.tasks[i] );
          // tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
-    callback(tasks, this.lastSearch);
+    callback(tasks, this.lastSearch[this.currentLogin]);
 };
 
 /*}}}*/

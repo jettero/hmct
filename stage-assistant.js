@@ -61,6 +61,8 @@ StageAssistant.prototype.handleCommand = function(event) {
 
             case 'clear-cache':
                 REQ.dbNewk();
+                TMO.dbNewk();
+
                 break;
 
             default:
