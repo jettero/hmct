@@ -5,6 +5,14 @@
 
 function SearchAssistant() {
     Mojo.Log.info("Search()");
+
+    this.SCa = Mojo.Controller.stageController.assistant;
+
+    this.menuSetup             = this.SCa.menuSetup.bind(this);
+    this.handleGroupListChange = this.handleGroupListChange.bind(this);
+
+    this.e = new ErrorDialog("Search");
+    this.E = this.e.showError;
 }
 
 SearchAssistant.prototype.setup = function() {
@@ -120,7 +128,7 @@ SearchAssistant.prototype.setup = function() {
 
     this.setupToggleRow("but-first", "and-then");
 
-    this.controller.setupWidget('group', textFieldAttributes, this.groupModel = {value: ""});
+    this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:''});
 
      if( AMO.isCurrentAccountPro() ) {
         this.setupToggleRow("estimate-less-than", "estimate-greater-than");
@@ -143,6 +151,18 @@ SearchAssistant.prototype.setup = function() {
 
     this.controller.setupWidget('hiddenfe-cb',     checkBoxAttributes, this.hiddenFEModel    = {value: "off"});
     this.controller.setupWidget('not-hiddenfe-cb', checkBoxAttributes, this.notHiddenFEModel = {value: "off"});
+};
+
+SearchAssistant.prototype.activate = function() {
+    Mojo.Log.info("Search::activate()");
+
+    AMO.registerSrchgChange(this.handleGroupListChange);
+};
+
+SearchAssistant.prototype.deactivate = function() {
+    Mojo.Log.info("Search::deactivate()");
+
+    AMO.unregisterSrchgChange(this.handleGroupListChange);
 };
 
 SearchAssistant.prototype.buildSearch = function() {
@@ -266,6 +286,26 @@ SearchAssistant.prototype.handleCommand = function(event) {
         }
     }
 
+};
+
+SearchAssistant.prototype.handleGroupListChange = function(groups) {
+    Mojo.Log.info("Search::handleGroupListChange()");
+
+    var l = [{label: 'Personal', value: ''}];
+
+    try {
+        // if( false )
+        for(var i=0; i<groups.length; i++)
+            l.push({label: groups[i].name, value: groups[i].id});
+
+    } catch (e) { /* this just means groups was undefined, yawn */ }
+
+    this.groupModel.choices = l;
+    this.controller.modelChanged(this.groupModel);
+
+    if( this.groupModel.choices.length >= 2 )
+         this.controller.get("group-row").removeClassName("generically-hidden");
+    else this.controller.get("group-row").addClassName("generically-hidden");
 };
 
 Mojo.Log.info('loaded(Search.js)');
