@@ -10,8 +10,6 @@ function NewTaskAssistant() {
 
     this.menuSetup             = this.SCa.menuSetup.bind(this);
     this.handleGroupListChange = this.handleGroupListChange.bind(this);
-    this.go                    = this.go.bind(this);
-    this.no                    = this.no.bind(this);
 
     this.e = new ErrorDialog("NewTask");
     this.E = this.e.showError;
@@ -22,6 +20,10 @@ NewTaskAssistant.prototype.setup = function() {
 
     this.menuSetup();
 
+    this.sendModel        = { label: "Send", icon: 'send', command: 'go' };
+    this.commandMenuModel = { label: 'NewTask Command Menu', items: [ {}, this.sendModel ] };
+	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+
     this.s = new SuccessDialog("NewTask", this.controller);
     this.S = this.s.showSuccess;
 
@@ -30,12 +32,6 @@ NewTaskAssistant.prototype.setup = function() {
 
     this.descriptionAttributes = {autoFocus: false, multiline: true /*, textCase: Mojo.Widget.steModeLowerCase*/ };
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {});
-
-    this.controller.setupWidget("go", {}, this.goModel = {buttonClass: 'affirmative', label: "Submit"});
-    this.controller.setupWidget("no", {}, this.noModel = {buttonClass: 'negative',  label: "Cancel"});
-
-    Mojo.Event.listen(this.controller.get("go"), Mojo.Event.tap, this.go);
-    Mojo.Event.listen(this.controller.get("no"), Mojo.Event.tap, this.no);
 
     this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
     this.numberAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
@@ -212,6 +208,26 @@ NewTaskAssistant.prototype.deactivate = function() {
     Mojo.Log.info("NewTask::deactivate()");
 
     AMO.unregisterSrchgChange(this.handleGroupListChange);
+};
+
+NewTaskAssistant.prototype.handleCommand = function(event) {
+    Mojo.Log.info("NewTask::handleCommand()");
+
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
+
+        switch (s_a[0]) {
+            case 'go':
+                Mojo.Log.info("NewTask::handleCommand(go)");
+                this.go();
+                break;
+
+            default:
+                Mojo.Log.info("NewTask::handleCommand(unknown command: %s)", Object.toJSON(s_a));
+                break;
+        }
+    }
+
 };
 
 Mojo.Log.info('loaded(NewTask.js)');
