@@ -1,6 +1,6 @@
 name=HiveminderCloudTasks
 ssh=ssh -p 2222 -l root localhost
-mydefser=accepted but first nothing not complete sort_by priority hidden until before tomorrow tag plate
+mydefser=TODO
 
 default: test README
 

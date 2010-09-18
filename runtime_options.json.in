@@ -25,7 +25,7 @@
     ],
     "unfoldTaskCompressors":      %UNFOLD,["task","history"]%,
     "hideOnwerRequestorWhenSelf": %HIDEME,true%,
-    "defaultSearch":              %DEFSER,Not Complete%,
+    "defaultSearch":              %DEFSER,TODO%,
     "maxErrLen":                  %MAXERR,150%,
     "cacheMaxAge":                %MAXAGE,4e3%,
     "cacheCollectAge":            4e5,
