@@ -26,7 +26,7 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     this.editModel        = { label: "Edit",   icon: 'edit',    command: 'edit'    };
     this.commandMenuModel = { label: 'Task Command Menu', items: [ this.refreshModel, this.editModel ] };
 
-	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     // comments list // -------------------------------------------------
 

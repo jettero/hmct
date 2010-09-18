@@ -36,7 +36,7 @@ function TasksAssistant() {
     this.loginSubmenu  = { label: 'Login Submenu',  items: [] };
     this.searchSubmenu = { label: 'Search Submenu', items: [] };
 
-	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 	this.controller.setupWidget('login-submenu',  undefined, this.loginSubmenu);
 	this.controller.setupWidget('search-submenu', undefined, this.searchSubmenu);
 

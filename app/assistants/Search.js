@@ -20,7 +20,7 @@ SearchAssistant.prototype.setup = function() {
 
     this.searchModel = { label: "Search", icon: 'search', command: 'search' };
     this.commandMenuModel = { label: 'Search Command Menu', items: [ {}, {}, this.searchModel ]};
-	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     var textFieldAttributes = {
         textCase:      Mojo.Widget.steModeLowerCase,
