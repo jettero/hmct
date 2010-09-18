@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Date: Sat, 18 Sep 2010 19:34:06 GMT
+Content-Type: text/x-yaml; charset=UTF-8
+Set-Cookie: JIFTY_SID_HIVEMINDER=f6b46e03c1e76c384085f5aada974c56; path=/; expires=Tue, 12 Jul 2011 02:19:07 GMT
+X-Cache: MISS from hiveminder.com
+Transfer-Encoding: chunked
+
+---
+depends_on:
+  label: Depends on
+task_id:
+  label: Task
