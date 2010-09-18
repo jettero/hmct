@@ -31,5 +31,5 @@ sub process_value {
     return $val if $val =~ m/^[\[\{]/; # objects
 
     return $val if looks_like_number($val);
-    return "'$val'";
+    return "\"$val\"";
 }
