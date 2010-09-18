@@ -24,7 +24,7 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.sendModel        = { label: "Send", icon: 'send', command: 'go' };
     this.commandMenuModel = { label: 'EditTask Command Menu', items: [ {}, this.sendModel ] };
-	this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     this.s = new SuccessDialog("EditTask", this.controller);
     this.S = this.s.showSuccess;
