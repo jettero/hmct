@@ -605,6 +605,9 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 OPT.hideOnwerRequestorWhenSelf, RE);
         }
 
+        t.but_first_count =
+        t.and_then_count  = 0;
+
     });
 };
 
