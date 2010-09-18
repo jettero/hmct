@@ -169,7 +169,7 @@ function TasksAssistant() {
         // make the empty-list template show up on the initial load
         this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
         this.firstActivation = false;
-        this.controller.get("current-search").innerHTML = "supz";
+        this.controller.get("current-search").innerHTML = "... loading ...";
     }
 
     AMO.registerLoginChange(this.handleLoginChange);
