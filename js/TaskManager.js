@@ -220,8 +220,6 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             Mojo.Log.info("TaskManager::fetchOneTask(%s) [finish: |r|:%d, rca:%d]", search, r.length, r._req_cacheAge);
 
             var theTask = r[0];
-            var cs;
-            var csi;
 
             for(var i=0; i<me.tasks.length; i++)
                 if( me.tasks[i].id === theTask.id )
@@ -231,8 +229,8 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             me.getFurtherDetails(r._req_cacheAge, "id " + rl);
 
             // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-            cs = me.searchCacheSnoop[theTask.record_locator];
-            if( cs ) { for( csi in cs ) { if( cs[csi] ) {
+            var cs = me.searchCacheSnoop[theTask.record_locator];
+            if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
                 REQ.markCacheStale(csi);
                 cs[csi] = false;
 
@@ -718,10 +716,11 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         process:  function(r) {},
         finish:   function(r) {
             me.fetchOneTask(task.record_locator,true);
+            // fetchOneTask does a cache snoop for us, don't do it here
 
             if( cb ) {
                 try { cb(); } catch(e) {
-                    me.E("updateTask", "post succeeded", "failed to issue callback after successfully posting task: " + e);
+                    me.E("updateTask", "post succeeded", "failed to issue callback after successfully updating task: " + e);
                 }
             }
         },
@@ -746,6 +745,60 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 e.push("Something went wrong with the task post ...");
 
             me.E("updateTask", "post fail", e.join("; "));
+
+            return false;
+        }
+    });
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.deleteTask = function(task,cb) {
+    Mojo.Log.info("TaskManager::deleteTask()");
+
+    var me = this;
+
+    REQ.doRequest({
+        method: 'post', url: 'http://hiveminder.com/=/action/DeleteTask.json',
+        params: {id: task.id}, cacheable: false,
+        process:  function(r) {},
+        finish:   function(r) {
+            // snoop cache to stale out searchlists with this task
+
+            // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
+            var cs = me.searchCacheSnoop[task.record_locator];
+            if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
+                REQ.markCacheStale(csi);
+                cs[csi] = false;
+
+            } } }
+
+            if( cb ) {
+                try { cb(); } catch(e) {
+                    me.E("deleteTask", "post succeeded", "failed to issue callback after successfully deleting task: " + e);
+                }
+            }
+        },
+        succcess: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::deleteTask() r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task delete ...");
+
+            me.E("deleteTask", "post fail", e.join("; "));
 
             return false;
         }
