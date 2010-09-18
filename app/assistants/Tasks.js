@@ -29,7 +29,7 @@ function TasksAssistant() {
     this.searchModel  = { label: "Search", icon: 'search',  submenu: 'search-submenu' };
     this.newModel     = { label: "New",    icon: 'new',     command: 'new' };
 
-    this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, submenu: 'login-submenu'}; };
+    this.commandMenuModelCurrentLoginTemplate = function(a) { return {label: a, width: 150, submenu: 'login-submenu'}; };
     this.commandMenuModel = { label: 'Tasks Command Menu', items: [
        { items: [this.refreshModel, this.searchModel, this.newModel] }, {/* populated by handleLoginChange */} ] };
 
