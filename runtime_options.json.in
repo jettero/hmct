@@ -23,12 +23,14 @@
         { tokens: "/list/next/action/by/me/requestor/me/not/complete",      name: "Needs reply, my tasks"      }
 
     ],
-    unfoldTaskCompressors: %UNFOLD,['task','history']%,
+    unfoldTaskCompressors:      %UNFOLD,['task','history']%,
     hideOnwerRequestorWhenSelf: %HIDEME,true%,
-    defaultSearch: %DEFSER,Not Complete%,
-    maxErrLen:     %MAXERR,150%,
-    cacheMaxAge:   %MAXAGE,4000%,
-    altStartPage:  %ALTPAGE,false%,
-    _preTapTask:   %PRETAP,false%,
-    _preEditTask:  %PREEDIT,false%
+    defaultSearch:              %DEFSER,Not Complete%,
+    maxErrLen:                  %MAXERR,150%,
+    cacheMaxAge:                %MAXAGE,4e3%,
+    cacheCollectAge:            4e5,
+    cacheCollectStale:          false,
+    altStartPage:               %ALTPAGE,false%,
+    _preTapTask:                %PRETAP,false%,
+    _preEditTask:               %PREEDIT,false%
 }
