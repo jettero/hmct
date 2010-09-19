@@ -4,8 +4,10 @@ mydefser=TODO
 
 default: test README
 
-release: clean
+release: clean README
 	env -i make --no-print-directory build
+	git fetch github gh-pages:gh-pages
+	git checkout gh-pages; git add *.ipk; git clean -dfx
 
 test: clean
 	@+HM_LOGLEVEL=99 make --no-print-directory build
