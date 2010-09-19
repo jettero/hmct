@@ -103,7 +103,7 @@ function TasksAssistant() {
     if( current ) {
         this.commandMenuModel.items[x] = emails.length>1
                                        ? this.commandMenuModelCurrentLoginTemplate(current)
-                                       : { label: current };
+                                       : { label: current, width: 150 };
 
         var items = this.loginSubmenu.items = [];
 
