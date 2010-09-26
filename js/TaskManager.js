@@ -587,22 +587,33 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             t.group_class = "generically-hidden";
         }
 
-        if( OPT.hideOnwerRequestorWhenSelf && RE ) {
-            Mojo.Log.info("TaskManager::processTaskDownloads() hiding o/r/n using %s against %s/%s/%s",
+        if( RE ) {
+            Mojo.Log.info("TaskManager::processTaskDownloads() using %s against %s/%s/%s to generate css classes",
                 RE, t.owner, t.requestor, t.next_action_by);
 
-            if( t.owner.match(RE) || t.owner === "<>" || !t.owner )
-                t.owner_class = "generically-hidden";
+            if( t.owner.match(RE) ) {
+                if( OPT.hideOnwerRequestorWhenSelf )
+                    t.owner_class = "generically-hidden";
 
-            if( t.requestor.match(RE) || t.requestor === "<>" || !t.requestor )
-                t.requestor_class = "generically-hidden";
+                t.recloc_class = "mine my-task";
+            }
 
-            if( t.next_action_by.match(RE) || t.next_action_by === "<>" || !t.next_action_by )
-                t.next_action_by_class = "generically-hidden";
+            if( t.requestor.match(RE) ) {
+                if( OPT.hideOnwerRequestorWhenSelf )
+                    t.requestor_class = "generically-hidden";
+            }
+
+            if( t.next_action_by.match(RE) ) {
+
+                if( OPT.hideOnwerRequestorWhenSelf )
+                    t.next_action_by_class = "generically-hidden";
+
+                t.recloc_class = "mine my-problem";
+            }
 
         } else {
-            Mojo.Log.info("TaskManager::processTaskDownloads() not attempting to hide o/r/n: opt:%s re:%s",
-                OPT.hideOnwerRequestorWhenSelf, RE);
+            Mojo.Log.info("TaskManager::processTaskDownloads() no re for %s/%s/%s, not generating css classes",
+                t.owner, t.requestor, t.next_action_by);
         }
 
         t.but_first_count =
