@@ -162,12 +162,13 @@ NewTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("NewTask::go() params: %s", Object.toJSON(params));
 
+    Mojo.Controller.stageController.popScene();
+
     TMO.postNewTask(params, function(){
 
         this.S("NewTask::go()",
             "posted task successfully",
             "New task posted.  Manually refresh any lists where it should be listed.", function(value){
-                Mojo.Controller.stageController.popScene();
             });
 
     }.bind(this));
