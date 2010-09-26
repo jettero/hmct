@@ -223,10 +223,18 @@ function RequestEngine() {
                     return;
                 }
 
+                var part = "??";
                 try {
                     if( r ) {
+                        part = "success";
+
                         if( _r.success(r) ) { // sometimes successful ajax isn't a successful API call
+
+                            part = "process";
+
                             r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
+
+                            part = "cache";
 
                             if( typeof r !== 'object' )
                                 r = {}; // sometimes process() doesn't do anything
@@ -236,6 +244,8 @@ function RequestEngine() {
 
                             r._req_cacheAge = 0;
                             r._req_cacheKey = _r.cacheKey;
+
+                            part = "finish";
 
                             _r.finish(r); // lastly, pass the final result to finish
                         }
@@ -251,7 +261,10 @@ function RequestEngine() {
                     Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r.desc, _errcb);
 
                     if( _r.failure() )
-                        me.E("_doRequest", "callback", "Unexpected internal js error passing data to application: " + _errcb);
+                        me.E("_doRequest", "callback",
+                            "Unexpected internal js error passing \""
+                            + _r.desc + "[" + part + "]"
+                            + "\" data to application: " + _errcb);
 
                     return;
                 }
