@@ -26,7 +26,6 @@
     max-width: 250px;
 }
 
-.task-short.not-accepted .task-id      { color: red; }
 .task-long .accepted-desc.not-accepted { color: red; }
 .task-long .accepted-desc.accepted     { display: none; }
 
@@ -75,6 +74,9 @@
 .task-short .complete1          { text-decoration: line-through; color: black; }
 .task-short .summary            { color: black; }
 .task-short .complete1 .summary { font-weight: normal; color: #777777; }
+
+.task-short.accepted     .extra-data .task-waiting { display: none; }
+.task-short.not-accepted .extra-data .task-waiting { font-size: 0.75; color: #ca9563; }
 
 .task-id {
     font-family: monospace;
