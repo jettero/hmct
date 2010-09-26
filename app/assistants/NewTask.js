@@ -13,6 +13,9 @@ function NewTaskAssistant() {
 
     this.e = new ErrorDialog("NewTask");
     this.E = this.e.showError;
+
+    this.s = new SuccessDialog("NewTask");
+    this.S = this.s.showSuccess;
 }
 
 NewTaskAssistant.prototype.setup = function() {
@@ -23,9 +26,6 @@ NewTaskAssistant.prototype.setup = function() {
     this.sendModel        = { label: "Send", icon: 'send', command: 'go' };
     this.commandMenuModel = { label: 'NewTask Command Menu', items: [ {}, this.sendModel ] };
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
-
-    this.s = new SuccessDialog("NewTask", this.controller);
-    this.S = this.s.showSuccess;
 
     this.titleAttributes = {autoFocus: true, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
     this.controller.setupWidget("title", this.titleAttributes, this.titleModel = {});

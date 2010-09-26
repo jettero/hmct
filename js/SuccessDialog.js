@@ -3,10 +3,9 @@
 /*global Mojo Template
 */
 
-function SuccessDialog(launcher,controller) {
+function SuccessDialog(launcher) {
     this.logTemplate = new Template(launcher + "#{fname}() [#{desc}]: #{message}");
     this.showSuccess = this.showSuccess.bind(this);
-    this.controller  = controller;
 }
 
 SuccessDialog.prototype.showSuccess = function(fname,desc,message,cb) {
@@ -16,7 +15,7 @@ SuccessDialog.prototype.showSuccess = function(fname,desc,message,cb) {
     else        o.fname = "";
 
     Mojo.Log.info( this.logTemplate.evaluate(o) );
-    this.controller.showAlertDialog({
+    Mojo.Controller.stageController.topScene().showAlertDialog({
 		onChoose: function(value) {try{cb(value)}catch(e){}},
 		title:    'Success',
 		message:  message,
