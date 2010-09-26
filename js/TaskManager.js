@@ -609,7 +609,11 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 if( OPT.hideOnwerRequestorWhenSelf )
                     t.owner_class = "generically-hidden";
 
-                t.recloc_class = "mine my-task";
+                t.waiting_on = "for you";
+                // does this ever get set?  see next_action below
+
+            } else {
+                t.waiting_on = "for other";
             }
 
             if( t.requestor.match(RE) ) {
@@ -622,7 +626,10 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                 if( OPT.hideOnwerRequestorWhenSelf )
                     t.next_action_by_class = "generically-hidden";
 
-                t.recloc_class = "mine my-problem";
+                t.waiting_on = "for you";
+
+            } else {
+                t.waiting_on = "for other";
             }
 
         } else {
