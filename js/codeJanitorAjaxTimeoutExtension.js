@@ -1,3 +1,8 @@
+/*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
+*/
+/*global Ajax setTimeout clearTimeout OPT
+*/
+
 /*
 ** 
 ** http://codejanitor.com/wp/2006/03/23/ajax-timeouts-with-prototype/
@@ -10,19 +15,17 @@ function callInProgress (xmlhttp) {
         case 2:
         case 3:
             return true;
-            break;
 
         // Case 4 and 0
         default:
             return false;
-            break;
     }
 }
 
 Ajax.Responders.register({
     onCreate: function(request) {
 
-        request.timeoutId = window.setTimeout(
+        request.timeoutId = setTimeout(
 
             function() {
                 if (callInProgress(request.transport)) {
@@ -39,6 +42,6 @@ Ajax.Responders.register({
     },
 
     onComplete: function(request) {
-        window.clearTimeout(request.timeoutId);
+        clearTimeout(request.timeoutId);
     }
 });
