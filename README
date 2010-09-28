@@ -5,10 +5,7 @@
 
    Written by [1]Paul Miller.
 
-   This is version 0.7.2 of HMCT.
-
-   The 0.7.2 release is bugfix release after the milestone which includes
-   interfaces to add and edit tasks.
+   This is version 0.7.4 of HMCT.
 
    This app is pretty much just a caching GUI for the
    [2]http;//hiveminder.com/ website. They encourage building applications

@@ -621,7 +621,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                     t.requestor_class = "generically-hidden";
             }
 
-            if( t.next_action_by.match(RE) ) {
+            if( t.next_action_by.match(RE) || t.next_action_by === "<>" ) {
 
                 if( OPT.hideOnwerRequestorWhenSelf )
                     t.next_action_by_class = "generically-hidden";
