@@ -9,7 +9,7 @@ echo 3. clearup any trouble
 echo -n '[1-3] '
 read X
 
-old=$(sudo iptables --line -nL OUTPUT | grep hiveminder)
+old=$(sudo iptables --line -nL OUTPUT | grep hiveminder) || /bin/true
 
 if [ -n "$old" ]; then
     sudo iptables -D OUTPUT $(echo $old | cut -d' ' -f1)
