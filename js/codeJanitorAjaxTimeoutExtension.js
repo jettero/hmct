@@ -34,8 +34,14 @@ Ajax.Responders.register({
 
                     request.transport.abort();
 
-                    if (request.options.onFailure)
-                        request.options.onFailure(request.transport, request.json);
+                    if (request.options.onFailure) {
+                        var x = {
+                            'status':       "Timeout",
+                            'responseText': "timeout after " + (OPT.ajaxTimeout/1e3) + " seconds"
+                        };
+
+                        request.options.onFailure(x);
+                    }
                 }
             },
 

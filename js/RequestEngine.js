@@ -291,7 +291,7 @@ function RequestEngine() {
             delete me.reqdb[_r.desc];
 
             if( _r.failure() ) {
-                var t = new Template("Ajax #{status} Error: #{responseText} fetching: \"" + _r.url + "\"");
+                var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
                 me.E("_doRequest", "ajax", t.evaluate(transport));
             }
         }
