@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Ajax setTimeout clearTimeout OPT
+/*global Ajax setTimeout clearTimeout OPT Mojo
 */
 
 /*
@@ -28,6 +28,8 @@ Ajax.Responders.register({
         request.timeoutId = setTimeout(
 
             function() {
+                Mojo.Log.info("AJAX Timeout fired");
+
                 if (callInProgress(request.transport)) {
 
                     request.transport.abort();
@@ -42,6 +44,7 @@ Ajax.Responders.register({
     },
 
     onComplete: function(request) {
+        Mojo.Log.info("AJAX Timeout cleared normally");
         clearTimeout(request.timeoutId);
     }
 });
