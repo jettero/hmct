@@ -290,7 +290,7 @@ function RequestEngine() {
             BBO.done(_r.desc);
             delete me.reqdb[_r.desc];
 
-            if( _r.failure() ) {
+            if( _r.failure(_r, transport) ) {
                 var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
                 me.E("_doRequest", "ajax", t.evaluate(transport));
             }
