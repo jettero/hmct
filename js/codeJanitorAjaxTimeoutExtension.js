@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Ajax setTimeout clearTimeout OPT Mojo
+/*global Ajax setTimeout clearTimeout OPT Mojo REQ
 */
 
 /*
@@ -25,10 +25,13 @@ function callInProgress (xmlhttp) {
 Ajax.Responders.register({
     onCreate: function(request) {
 
-        request.timeoutId = setTimeout(
+        var before = REQ.now();
 
+        request.timeoutId = setTimeout(
             function() {
-                Mojo.Log.info("AJAX Timeout fired");
+                var after = REQ.now();
+
+                Mojo.Log.info("AJAX Timeout fired dt=%d", after-before);
 
                 if (callInProgress(request.transport)) {
 
