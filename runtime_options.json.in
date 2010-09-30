@@ -33,5 +33,5 @@
     "altStartPage":               %ALTPAGE,false%,
     "_preTapTask":                %PRETAP,false%,
     "_preEditTask":               %PREEDIT,false%,
-    "ajaxTimeout":                %AJAXTO,15e3%
+    "ajaxTimeout":                %AJAXTO,60e3%
 }
