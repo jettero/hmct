@@ -25,13 +25,10 @@ function callInProgress (xmlhttp) {
 Ajax.Responders.register({
     onCreate: function(request) {
 
-        var before = REQ.now();
-
+        request.before = REQ.now();
         request.timeoutId = setTimeout(
             function() {
-                var after = REQ.now();
-
-                Mojo.Log.info("AJAX Timeout fired dt=%d", after-before);
+                Mojo.Log.info("AJAX Timeout fired dt=%d", REQ.now() - request.before);
 
                 if (callInProgress(request.transport)) {
 
@@ -53,7 +50,7 @@ Ajax.Responders.register({
     },
 
     onComplete: function(request) {
-        Mojo.Log.info("AJAX Timeout cleared normally");
+        Mojo.Log.info("AJAX Timeout cleared normally dt=%d", REQ.now() - request.before);
         clearTimeout(request.timeoutId);
     }
 });
