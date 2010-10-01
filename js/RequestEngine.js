@@ -364,11 +364,15 @@ function RequestEngine() {
     if( arg != null ) { // neither null nor undefined, since null==undefined
         this._dbBusy = arg;
 
-        if( !arg && engineLoaded )
+        if( !arg && engineLoaded ) {
+            Mojo.Log.info("RequestEngine::dbBusy(%s) [dbBusy:%s + engineLoaded:%s: *POPBUSY*]",
+                arg, this._dbBusy, engineLoaded);
+
             return this.popBusyCall(); // when there's something to pop, we get a true
                                        // this works as a kind of soft busy signal, althoug
                                        // since there's an argument, we're probably not *asking*
                                        // about the busy status at all.
+        }
     }
 
     var result = this._dbBusy || !engineLoaded;
@@ -386,11 +390,15 @@ function RequestEngine() {
     if( arg != null ) { // neither null nor undefined, since null==undefined
         this._reqBusy = arg;
 
-        if( !arg )
+        if( !arg && engineLoaded ) {
+            Mojo.Log.info("RequestEngine::reqBusy(%s) [reqBusy:%s + engineLoaded:%s: *POPBUSY*]",
+                arg, this._reqBusy, engineLoaded);
+
             return this.popBusyCall(); // when there's something to pop, we get a true
                                        // this works as a kind of soft busy signal, althoug
                                        // since there's an argument, we're probably not *asking*
                                        // about the busy status at all.
+        }
     }
 
     var result = this._reqBusy;
