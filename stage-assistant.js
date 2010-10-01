@@ -11,19 +11,24 @@ function StageAssistant() {
     OPT = Mojo.loadJSONFile(Mojo.appPath + "runtime_options.json");
 
     var pc = new Mojo.Model.Cookie("OPT.prefs");
+
     OPT.loadPrefs = function() {
-        if( var l = pc.get() )
+        var l = pc.get();
+
+        if( l )
             for( var k in l ) {
                 if( OPT[k] != null )
                     OPT[k] = l[k];
             }
     };
+
     OPT.savePrefs = function() {
         var x = {};
 
         for( var k in OPT ) {
             if( typeof OPT[k] !== "function" )
                 x[k] = OPT[k];
+        }
 
         pc.put(x);
     };
