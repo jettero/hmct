@@ -174,8 +174,8 @@ function RequestEngine() {
 };
 
 /*}}}*/
-/* {{{ */ RequestEngine.prototype._doRequest = function(_r) {
-    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request]", _r.desc);
+/* {{{ */ RequestEngine.prototype._doRequest = function(_r,isRetry) {
+    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request] isRetry=%s", _r.desc, isRetry);
 
     if( this.reqdb[_r.desc] ) {
         Mojo.Log.info("RequestEngine::_doRequest(%s) [canceling apparently running request]", _r.desc);
@@ -190,6 +190,7 @@ function RequestEngine() {
     }
 
     BBO.busy(_r.desc);
+
     var me = this;
 
     this.reqdb[_r.desc] = new Ajax.Request(_r.url, {
@@ -290,9 +291,15 @@ function RequestEngine() {
             BBO.done(_r.desc);
             delete me.reqdb[_r.desc];
 
-            if( _r.failure(_r, transport) ) {
-                var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
-                me.E("_doRequest", "ajax", t.evaluate(transport));
+            var fres;
+            if( fres = _r.failure(_r, transport) ) {
+                if( fres === "retry" ) {
+                    me._doRequest(_r, true);
+
+                } else {
+                    var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
+                    me.E("_doRequest", "ajax", t.evaluate(transport));
+                }
             }
         }
 
