@@ -365,13 +365,15 @@ function RequestEngine() {
         this._dbBusy = arg;
 
         if( !arg && engineLoaded ) {
-            Mojo.Log.info("RequestEngine::dbBusy(%s) [dbBusy:%s + engineLoaded:%s: *POPBUSY*]",
-                arg, this._dbBusy, engineLoaded);
+            var popres = this.popBusyCall();
+            // when there's something to pop, we get a true this works as a
+            // kind of soft busy signal, althoug since there's an argument,
+            // we're probably not *asking* about the busy status at all.
 
-            return this.popBusyCall(); // when there's something to pop, we get a true
-                                       // this works as a kind of soft busy signal, althoug
-                                       // since there's an argument, we're probably not *asking*
-                                       // about the busy status at all.
+            Mojo.Log.info("RequestEngine::dbBusy(%s) [dbBusy:%s + engineLoaded:%s: *POPBUSY*:%s]",
+                arg, this._dbBusy, engineLoaded, popres);
+
+            return popres;
         }
     }
 
@@ -391,13 +393,15 @@ function RequestEngine() {
         this._reqBusy = arg;
 
         if( !arg && engineLoaded ) {
-            Mojo.Log.info("RequestEngine::reqBusy(%s) [reqBusy:%s + engineLoaded:%s: *POPBUSY*]",
-                arg, this._reqBusy, engineLoaded);
+            var popres = this.popBusyCall();
+            // when there's something to pop, we get a true this works as a
+            // kind of soft busy signal, althoug since there's an argument,
+            // we're probably not *asking* about the busy status at all.
 
-            return this.popBusyCall(); // when there's something to pop, we get a true
-                                       // this works as a kind of soft busy signal, althoug
-                                       // since there's an argument, we're probably not *asking*
-                                       // about the busy status at all.
+            Mojo.Log.info("RequestEngine::reqBusy(%s) [reqBusy:%s + engineLoaded:%s: *POPBUSY*:%s]",
+                arg, this._reqBusy, engineLoaded, popres);
+
+            return popres;
         }
     }
 
