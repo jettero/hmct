@@ -203,7 +203,7 @@ function RequestEngine() {
         method: _r.method, parameters: _r.params, evalJSON: !_r.xml, evalJS: !_r.xml,
 
         onSuccess: function(transport) {
-            this.reqBusy(false);
+            me.reqBusy(false);
 
             BBO.done(_r.desc);
             delete me.reqdb[_r.desc];
@@ -295,7 +295,7 @@ function RequestEngine() {
         },
 
         onFailure: function(transport) {
-            this.reqBusy(false);
+            me.reqBusy(false);
 
             BBO.done(_r.desc);
             delete me.reqdb[_r.desc];
