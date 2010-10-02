@@ -35,7 +35,7 @@ function RequestEngine() {
     this.dbInit();
     this.dbRestore();
 
-    this._busyCalls = [];
+    this._busyCalls = { db: [], req: [] };
 }
 
 /* {{{ */ RequestEngine.prototype.now = function() {
@@ -420,20 +420,24 @@ function RequestEngine() {
 };
 
 /*}}}*/
-/* {{{ */ RequestEngine.prototype.pushBusyCall = function(fp, args) {
-    this._busyCalls.push({fp: fp, args: args});
+/* {{{ */ RequestEngine.prototype.pushBusyCall = function(stack, fp, args) {
+    stack = this._busyCalls[stack];
 
-    Mojo.Log.info("RequestEngine::pushBusyCall() [depth: %d]", this._busyCalls.length);
+    stack.push({fp: fp, args: args});
+
+    Mojo.Log.info("RequestEngine::pushBusyCall() [depth: %d]", stack.length);
 };
 
 /*}}}*/
-/* {{{ */ RequestEngine.prototype.popBusyCall = function() {
-    Mojo.Log.info("RequestEngine::popBusyCall() [depth: %d]",  this._busyCalls.length);
+/* {{{ */ RequestEngine.prototype.popBusyCall = function(stack) {
+    stack = this._busyCalls[stack];
 
-    if( this._busyCalls.length < 1 )
+    Mojo.Log.info("RequestEngine::popBusyCall() [depth: %d]",  stack.length);
+
+    if( stack.length < 1 )
         return false; // return false if we have nothing to do
 
-    var x = this._busyCalls.shift();
+    var x = stack.shift();
 
     x.fp.apply(this, x.args);
 
