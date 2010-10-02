@@ -31,7 +31,11 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.controller.get("id").update(t.record_locator);
 
-    this.boringAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase};
+    this.boringAttributes  = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
+    this.preSelBAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, focusMode: Mojo.Widget.focusSelectMode };
+    this.numberAttributes  = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
+    this.preSelNAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock, focusMode: Mojo.Widget.focusSelectMode };
+
     this.controller.setupWidget("title", this.boringAttributes, this.titleModel = {value: t.summary});
 
     this.descriptionAttributes = {autoFocus: false, multiline: true /*, textCase: Mojo.Widget.steModeLowerCase*/ };
@@ -52,7 +56,7 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
 
     this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel  = {value: revqsplit(qsplit(t.tags))});
-    this.controller.setupWidget("owner", this.boringAttributes, this.ownerModel = {value: t.owner});
+    this.controller.setupWidget("owner", this.preSelBAttributes, this.ownerModel = {value: t.owner});
 
     var prios = [
         {label: "Highest", value: "5", iconPath: 'img/highest.png' },
@@ -64,12 +68,11 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.controller.setupWidget("priority", {label: "priority", choices: prios}, this.priorityModel={value:t.priority});
 
-    this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {value: t.due});
-    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {value: t.starts});
+    this.controller.setupWidget("due-date",   this.preSelBAttributes, this.dueDateModel   = {value: t.due});
+    this.controller.setupWidget("hide-until", this.preSelBAttributes, this.hideUntilModel = {value: t.starts});
 
-    this.numberAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
-    this.controller.setupWidget("every",      this.numberAttributes, this.everyModel     = {value: t.repeat_every});
-    this.controller.setupWidget("heads-up",   this.numberAttributes, this.headsUpModel   = {value: t.repeat_days_before_due});
+    this.controller.setupWidget("every",      this.preSelNAttributes, this.everyModel     = {value: t.repeat_every});
+    this.controller.setupWidget("heads-up",   this.preSelNAttributes, this.headsUpModel   = {value: t.repeat_days_before_due});
 
     var schedules = [
         {label: "Once",     value: "once"   },
@@ -98,8 +101,8 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
-    this.controller.setupWidget("time-worked", this.boringAttributes, this.timeWorkedModel = {value: t.time_worked});
-    this.controller.setupWidget("time-left",   this.boringAttributes, this.timeLeftModel   = {value: t.time_left});
+    this.controller.setupWidget("time-worked", this.preSelBAttributes, this.timeWorkedModel = {value: t.time_worked});
+    this.controller.setupWidget("time-left",   this.preSelBAttributes, this.timeLeftModel   = {value: t.time_left});
 
     if( AMO.isCurrentAccountPro() )
         this.controller.get("pro-time").removeClassName("generically-hidden");
