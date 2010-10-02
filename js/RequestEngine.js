@@ -189,7 +189,7 @@ function RequestEngine() {
 
     if( this.reqBusy() ) {
         Mojo.Log.info("RequestEngine::_doRequest() [busy]");
-        this.pushBusyCall(this._doRequest, [_r,isRetry]);
+        this.pushBusyCall('req', this._doRequest, [_r,isRetry]);
         return;
     }
 
@@ -327,7 +327,7 @@ function RequestEngine() {
 
     if( this.dbBusy() ) {
         Mojo.Log.info("RequestEngine::dbSetCache() [busy]");
-        this.pushBusyCall(this.dbSetCache, [key,data]);
+        this.pushBusyCall('db', this.dbSetCache, [key,data]);
         return;
     }
 
@@ -374,7 +374,7 @@ function RequestEngine() {
         this._dbBusy = arg;
 
         if( !arg && engineLoaded ) {
-            var popres = this.popBusyCall();
+            var popres = this.popBusyCall('db');
             // when there's something to pop, we get a true this works as a
             // kind of soft busy signal, althoug since there's an argument,
             // we're probably not *asking* about the busy status at all.
@@ -402,7 +402,7 @@ function RequestEngine() {
         this._reqBusy = arg;
 
         if( !arg ) {
-            var popres = this.popBusyCall();
+            var popres = this.popBusyCall('req');
             // when there's something to pop, we get a true this works as a
             // kind of soft busy signal, althoug since there's an argument,
             // we're probably not *asking* about the busy status at all.
