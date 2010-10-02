@@ -28,7 +28,10 @@ function RequestEngine() {
     this.dbSentFail = this.dbSentFail.bind(this);
     this.dbRecvFail = this.dbRecvFail.bind(this);
 
-    this.engineLoaded(false);
+    this._engineLoaded = 
+    this._dbBusy       =
+    this._reqBusy      = false;
+
     this.dbInit();
     this.dbRestore();
 
