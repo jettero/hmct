@@ -67,11 +67,6 @@ function RequestEngine() {
 
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
-    if( this.dbBusy() ) {
-        this.pushBusyCall(this.doRequest, [_r]);
-        return;
-    }
-
     var required = ['method', 'url', 'desc'];
     var interr = false;
     var i;
