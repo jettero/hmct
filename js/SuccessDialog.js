@@ -16,7 +16,7 @@ SuccessDialog.prototype.showSuccess = function(fname,desc,message,cb) {
 
     Mojo.Log.info( this.logTemplate.evaluate(o) );
     Mojo.Controller.stageController.topScene().showAlertDialog({
-		onChoose: function(value) {try{cb(value)}catch(e){}},
+		onChoose: function(value) {try{cb(value);}catch(e){}},
 		title:    'Success',
 		message:  message,
 		choices: [ {label:'OK', value:'OK', type:'color'} ]
