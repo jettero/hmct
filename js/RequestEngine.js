@@ -17,6 +17,9 @@ function RequestEngine() {
     this.e = new ErrorDialog("RequestEngine");
     this.E = this.e.showError;
 
+    this.r = new RetryDialog("RequestEngine");
+    this.R = this.r.showRetry;
+
     this.dbo = new Mojo.Depot(options, function(){}, function(t, r){
         this.E(false, "depot", "Failed to open cache Depot (#" + r.message + ")");
     });
@@ -315,16 +318,11 @@ function RequestEngine() {
             delete me.reqdb[_r.desc];
 
             var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
-            var fres;
-            if( fres = _r.failure(_r, transport, t) ) {
-
-                // We retry whenever the card that requested this says we should.
-                if( fres === "retry" ) {
-                    me._doRequest(_r, true);
-
-                } else {
-                    me.E("_doRequest", "ajax", t.evaluate(transport));
-                }
+            if( _r.failure(_r, transport, t) ) {
+                me.R("_doRequest", "ajax", t.evaluate(transport), function(value) {
+                    if( value === "retry" )
+                        me._doRequest(_r);
+                });
             }
         }
 
