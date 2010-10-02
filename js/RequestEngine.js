@@ -420,19 +420,19 @@ function RequestEngine() {
 };
 
 /*}}}*/
-/* {{{ */ RequestEngine.prototype.pushBusyCall = function(stack, fp, args) {
-    stack = this._busyCalls[stack];
+/* {{{ */ RequestEngine.prototype.pushBusyCall = function(stackName, fp, args) {
+    var stack = this._busyCalls[stackName];
 
     stack.push({fp: fp, args: args});
 
-    Mojo.Log.info("RequestEngine::pushBusyCall() [depth: %d]", stack.length);
+    Mojo.Log.info("RequestEngine::pushBusyCall() [stack: %s; depth: %d]", stackName, stack.length);
 };
 
 /*}}}*/
-/* {{{ */ RequestEngine.prototype.popBusyCall = function(stack) {
-    stack = this._busyCalls[stack];
+/* {{{ */ RequestEngine.prototype.popBusyCall = function(stackName) {
+    var stack = this._busyCalls[stackName];
 
-    Mojo.Log.info("RequestEngine::popBusyCall() [depth: %d]",  stack.length);
+    Mojo.Log.info("RequestEngine::popBusyCall() [stack: %s; depth: %d]", stackName, stack.length);
 
     if( stack.length < 1 )
         return false; // return false if we have nothing to do
