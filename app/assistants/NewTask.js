@@ -33,18 +33,20 @@ NewTaskAssistant.prototype.setup = function() {
     this.descriptionAttributes = {autoFocus: false, multiline: true /*, textCase: Mojo.Widget.steModeLowerCase*/ };
     this.controller.setupWidget("description", this.descriptionAttributes, this.descriptionModel = {});
 
-    this.boringAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
-    this.numberAttributes = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
+    this.boringAttributes  = {multiline: false, textCase: Mojo.Widget.steModeLowerCase};
+    this.preSelBAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, focusMode: Mojo.Widget.focusSelectMode };
+    this.numberAttributes  = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
+    this.preSelNAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock, focusMode: Mojo.Widget.focusSelectMode };
 
-    this.controller.setupWidget("tags",       this.boringAttributes, this.tagsModel      = {});
-    this.controller.setupWidget("owner",      this.boringAttributes, this.ownerModel     = {});
-    this.controller.setupWidget("due-date",   this.boringAttributes, this.dueDateModel   = {});
-    this.controller.setupWidget("hide-until", this.boringAttributes, this.hideUntilModel = {});
-    this.controller.setupWidget("every",      this.numberAttributes, this.everyModel     = {});
-    this.controller.setupWidget("heads-up",   this.numberAttributes, this.headsUpModel   = {});
+    this.controller.setupWidget("tags",       this.boringAttributes,  this.tagsModel      = {});
+    this.controller.setupWidget("owner",      this.preSelBAttributes, this.ownerModel     = {});
+    this.controller.setupWidget("due-date",   this.preSelBAttributes, this.dueDateModel   = {});
+    this.controller.setupWidget("hide-until", this.preSelBAttributes, this.hideUntilModel = {});
+    this.controller.setupWidget("every",      this.preSelNAttributes, this.everyModel     = {});
+    this.controller.setupWidget("heads-up",   this.preSelNAttributes, this.headsUpModel   = {});
 
-    this.controller.setupWidget("time-worked", this.boringAttributes, this.timeWorkedModel = {});
-    this.controller.setupWidget("time-left",   this.boringAttributes, this.timeLeftModel   = {});
+    this.controller.setupWidget("time-worked", this.preSelBAttributes, this.timeWorkedModel = {});
+    this.controller.setupWidget("time-left",   this.preSelBAttributes, this.timeLeftModel   = {});
 
     if( AMO.isCurrentAccountPro() )
         this.controller.get("pro-time").removeClassName("generically-hidden");
