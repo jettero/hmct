@@ -181,27 +181,35 @@ function RequestEngine() {
 /* {{{ */ RequestEngine.prototype._doRequest = function(_r,isRetry) {
     Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request] isRetry=%s", _r.desc, isRetry);
 
-    if( this.reqdb[_r.desc] ) {
-        Mojo.Log.info("RequestEngine::_doRequest(%s) [canceling apparently running request]", _r.desc);
+    if( !isRetry ) {
+        if( this.reqdb[_r.desc] ) {
+            Mojo.Log.info("RequestEngine::_doRequest(%s) [canceling apparently running request]", _r.desc);
 
-        try {
-            this.reqdb[_r.desc].transport.abort();
+            try {
+                this.reqdb[_r.desc].transport.abort();
+            }
+
+            catch(e) {
+                Mojo.Log.info("RequestEngine::_doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
+            }
         }
 
-        catch(e) {
-            Mojo.Log.info("RequestEngine::_doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
+        if( this.reqBusy() ) {
+            Mojo.Log.info("RequestEngine::_doRequest() [busy]");
+            this.pushBusyCall('req', this._doRequest, [_r,isRetry]);
+            return;
         }
+
+        this.reqBusy(true);
+
+        BBO.busy(_r.desc);
     }
 
-    if( this.reqBusy() ) {
-        Mojo.Log.info("RequestEngine::_doRequest() [busy]");
-        this.pushBusyCall('req', this._doRequest, [_r,isRetry]);
-        return;
+    /*
+    else {
+        ... well, all that shit is really already done for us ...
     }
-
-    this.reqBusy(true);
-
-    BBO.busy(_r.desc);
+    */
 
     var me = this;
 
@@ -306,13 +314,15 @@ function RequestEngine() {
             BBO.done(_r.desc);
             delete me.reqdb[_r.desc];
 
+            var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
             var fres;
-            if( fres = _r.failure(_r, transport) ) {
+            if( fres = _r.failure(_r, transport, t) ) {
+
+                // We retry whenever the card that requested this says we should.
                 if( fres === "retry" ) {
                     me._doRequest(_r, true);
 
                 } else {
-                    var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
                     me.E("_doRequest", "ajax", t.evaluate(transport));
                 }
             }
