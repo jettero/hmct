@@ -320,8 +320,13 @@ function RequestEngine() {
             var t = new Template("Ajax #{status} Error: #{responseText} while fetching: \"" + _r.url + "\"");
             if( _r.failure(_r, transport, t) ) {
                 me.R("_doRequest", "ajax", t.evaluate(transport), function(value) {
-                    if( value === "retry" )
+                    if( value === "retry" ) {
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) ajax retry requested", _r.desc);
                         me._doRequest(_r);
+
+                    } else {
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) ajax ignore requested", _r.desc);
+                    }
                 });
             }
         }

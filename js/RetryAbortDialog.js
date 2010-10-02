@@ -3,12 +3,12 @@
 /*global Mojo Template
 */
 
-function RetryDialog(launcher) {
+function RetryAbortDialog(launcher) {
     this.logTemplate = new Template(launcher + "#{fname}() [#{desc}]: #{message}");
     this.showRetry = this.showRetry.bind(this);
 }
 
-RetryDialog.prototype.showRetry = function(fname,desc,message,cb) {
+RetryAbortDialog.prototype.showRetry = function(fname,desc,message,cb) {
     var o = {desc: desc, message: message};
 
     if( fname ) o.fname = "::" + fname;
@@ -22,7 +22,8 @@ RetryDialog.prototype.showRetry = function(fname,desc,message,cb) {
 		message:  message,
 		choices: [
             {label:'Retry',  value:'retry', type:'affirmative'},
-            {label:'Ignore', value:'ignore'}
+            {label:'Abort',  value:'abort', type:'negative'},
+            {label:'Keep Waiting', value:'wait'}
         ]
 	});
 };

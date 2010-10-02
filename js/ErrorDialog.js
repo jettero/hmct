@@ -15,5 +15,7 @@ ErrorDialog.prototype.showError = function(fname,desc,error) {
     else        o.fname = "";
 
     Mojo.Log.error( this.logTemplate.evaluate(o) );
-    Mojo.Controller.errorDialog( error.length > OPT.maxErrLen ? error.substr(0, OPT.maxErrLen-4) + " ..." : error );
+
+    return Mojo.Controller.errorDialog(
+        error.length > OPT.maxErrLen ? error.substr(0, OPT.maxErrLen-4) + " ..." : error );
 };
