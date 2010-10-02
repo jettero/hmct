@@ -5,9 +5,10 @@
 
     { "source": "js/ErrorDialog.js" },
     { "source": "js/SuccessDialog.js" },
-    { "source": "js/RequestEngine.js" },
-    { "source": "js/BusyBee.js" },
+    { "source": "js/RetryDialog.js" },
 
+    { "source": "js/BusyBee.js" },
+    { "source": "js/RequestEngine.js" },
     { "source": "js/AccountManager.js" },
     { "source": "js/TaskManager.js" },
 
