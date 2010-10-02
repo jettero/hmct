@@ -228,7 +228,7 @@ function RequestEngine() {
 
                             part = "process";
 
-                            r = _r.process(r); // when thinks go well, send the request back for preprocessing, if desired
+                            r = _r.process(r); // when things go well, send the request back for preprocessing, if desired
 
                             part = "cache";
 
@@ -259,8 +259,7 @@ function RequestEngine() {
                     if( _r.failure() )
                         me.E("_doRequest", "callback",
                             "Unexpected internal js error passing \""
-                            + _r.desc + "[" + part + "]"
-                            + "\" data to application: " + _errcb);
+                            + _r.desc + "\" [" + part + "] data to application: " + _errcb);
 
                     return;
                 }
