@@ -398,14 +398,14 @@ function RequestEngine() {
     if( arg != null ) { // neither null nor undefined, since null==undefined
         this._reqBusy = arg;
 
-        if( !arg && engineLoaded ) {
+        if( !arg ) {
             var popres = this.popBusyCall();
             // when there's something to pop, we get a true this works as a
             // kind of soft busy signal, althoug since there's an argument,
             // we're probably not *asking* about the busy status at all.
 
-            Mojo.Log.info("RequestEngine::reqBusy(%s) [reqBusy:%s + engineLoaded:%s: *POPBUSY*:%s]",
-                arg, this._reqBusy, engineLoaded, popres);
+            Mojo.Log.info("RequestEngine::reqBusy(%s) [reqBusy:%s ... *POPBUSY*:%s]",
+                arg, this._reqBusy, popres);
 
             return popres;
         }
