@@ -33,14 +33,16 @@ Ajax.Responders.register({
                     Mojo.Log.info("AJAX-ext Timeout fired dt=%d", REQ.now() - request.before);
 
                     request.timeoutDialog =
-                        (new RetryAbortDialog('cJATE')).showRetry("cJATE::TO", "timeout",
+                        (new RetryAbortDialog('AJAX-ext')).showRetry("AJAX-ext::to", "timeout",
                             "The current request has timed out...", function(value) {
 
                                 request.timeoutDialog = undefined;
 
+                                Mojo.Log.info("AJAX-ext user selected: %s", value);
+
                                 switch(value) {
+                                    case "retry": request.retryRequested = true;
                                     case "abort": request.transport.abort(); break;
-                                    case "retry": request.retryRequested = true; break;
                                     case "wait":
                                         request.before = REQ.now();
                                         request.timeoutId = setTimeout(f, OPT.ajaxTimeout);
