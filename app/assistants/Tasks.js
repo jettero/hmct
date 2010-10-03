@@ -212,7 +212,7 @@ function TasksAssistant() {
             while(deleteSpacer) {
                 if(justSwiped !== deleteSpacer && deleteSpacer._mojoDeletedListNode) {
                     var itemModel = this.listItems[deleteSpacer._mojoListIndex];
-                    var itemNode  = /* where do we get this? */ undefined;
+                    var itemNode  = deleteSpacer._mojoDeletedListNode;
 
                     Mojo.Log.info("Tasks::activate()::swipe-delete: multi-swipe-complete(%d, %s)!!",
                         deleteSpacer._mojoListIndex, itemModel.record_locator);
