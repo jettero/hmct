@@ -70,8 +70,9 @@ function TasksAssistant() {
 /* {{{ */ TasksAssistant.prototype.taskListSwipe = function(event) {
     Mojo.Log.info("Tasks::taskListSwipe(%s)", event.item.record_locator);
 
-    TMO.deleteTask(event.item);
+    TMO.completeTask(event.item);
 
+    // TMO.deleteTask(event.item);
     // NOTE: I don't think I need to do this stuff... swiping moves them out of
     // the list and the next activate or handleTasksChange will update this for me anyway.
         // this.tasksListModel.items.reject(function(i) { return i===event.item });
@@ -173,18 +174,11 @@ function TasksAssistant() {
 
         var mytemplate = (Mojo.appPath + "app/views/misc/complete-item").replace(/^file:\/\//, "");
 
-        try {
-            var listWidget = $("hm_task_list")._mojoController.assistant;
-                listWidget.deleteTemplateNode = Mojo.View.convertToNode(
-                    Mojo.View.render({ template: mytemplate }),
-                    listWidget.controller.document
-                );
-
-        } catch(e) {
-            Mojo.Log.info("OKWUTNOW: %s", e);
-            Mojo.Log.info("OKWUTNOW: %s", Mojo.Widget.getSystemTemplatePath("list/delete-item"));
-            Mojo.Log.info("OKWUTNOW: %s", mytemplate);
-        }
+        var listWidget = $("hm_task_list")._mojoController.assistant;
+            listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+                Mojo.View.render({ template: mytemplate }),
+                listWidget.controller.document
+            );
 
         // original deleteTemplateNode setup // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
         // original deleteTemplateNode setup //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
