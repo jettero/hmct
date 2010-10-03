@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo Template palmGetResource setTimeout TMO OPT AMO
+/*global Mojo Template palmGetResource setTimeout TMO OPT AMO $
 */
 
 function TasksAssistant() {
@@ -171,21 +171,37 @@ function TasksAssistant() {
         this.firstActivation = false;
         this.controller.get("current-search").innerHTML = "... loading ...";
 
+        var mytemplate = (Mojo.appPath + "app/views/misc/complete-item").replace(/^file:\/\//, "");
 
-        var listWidget = $("hm_task_list")._mojoController;
-        Mojo.Log.info("DEBUG-htlmc: it=%s", listWidget);
-        for(var k in listWidget) {
-            Mojo.Log.info("DEBUG-htlmc: k=%s", k);
+        try {
+            var listWidget = $("hm_task_list")._mojoController.assistant;
+                listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+                    Mojo.View.render({ template: mytemplate }),
+                    listWidget.controller.document
+                );
 
-            try { for(var l in listWidget[k]) {
-                Mojo.Log.info("DEBUG-htlmc:         l=", l);
-
-            }} catch (e) {}
+        } catch(e) {
+            Mojo.Log.info("OKWUTNOW: %s", e);
+            Mojo.Log.info("OKWUTNOW: %s", Mojo.Widget.getSystemTemplatePath("list/delete-item"));
+            Mojo.Log.info("OKWUTNOW: %s", mytemplate);
         }
 
-        // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
-        //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
-        //     listWidget.controller.document);
+        // original deleteTemplateNode setup // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+        // original deleteTemplateNode setup //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
+        // original deleteTemplateNode setup //     listWidget.controller.document);
+
+        // to locate deleteTemplateNode // var listWidget = $("hm_task_list")._mojoController;
+        // to locate deleteTemplateNode // Mojo.Log.info("DEBUG-htlmc: it=%s", listWidget);
+        // to locate deleteTemplateNode // for(var k in listWidget) {
+        // to locate deleteTemplateNode //     Mojo.Log.info("DEBUG-htlmc: k=%s", k);
+        // to locate deleteTemplateNode //     try { for(var l in listWidget[k]) {
+        // to locate deleteTemplateNode //         Mojo.Log.info("DEBUG-htlmc:         l=", l);
+        // to locate deleteTemplateNode //     }} catch (e) {}
+        // to locate deleteTemplateNode // }
+
+        // original deleteTemplateNode setup // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+        // original deleteTemplateNode setup //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
+        // original deleteTemplateNode setup //     listWidget.controller.document);
     }
 
     AMO.registerLoginChange(this.handleLoginChange);

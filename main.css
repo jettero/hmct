@@ -186,3 +186,12 @@
 body.hiveminder {
     background: white;
 }
+
+.voltar-swipe-complete-button {
+  /*-webkit-border-image: url(img/swipe-complete-button-down.png) 0 14 0 14 repeat repeat;*/
+  -webkit-border-image: url(img/swipe-complete-button-up.png) 0 14 0 14 repeat repeat;
+}
+
+.voltar-swipe-complete-button.selected {
+  -webkit-border-image: url(img/swipe-complete-button-down.png) 0 14 0 14 repeat repeat;
+}
