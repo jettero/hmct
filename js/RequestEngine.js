@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Mojo Ajax Template hex_md5 OPT BBO setTimeout clearTimeout ErrorDialog
+/*global Mojo Ajax Template hex_md5 OPT BBO setTimeout clearTimeout ErrorDialog RetryDialog
 */
 
 function RequestEngine() {
