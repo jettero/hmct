@@ -79,7 +79,7 @@ Ajax.Responders.register({
 
         if( request.timeoutDialog ) {
             Mojo.Log.info("AJAX-ext RetryAbortDialog is open, closing");
-            request.timeoutDialog.close();
+            request.timeoutDialog.mojo.close();
         }
     }
 });
