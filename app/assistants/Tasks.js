@@ -190,7 +190,7 @@ function TasksAssistant() {
             if( action === "complete" ) {
                 Mojo.Log.info("Tasks::activate()::swipe-delete: tap-complete(%s)!!", event.item.record_locator);
 
-                // TMO.completeTask(event.item);
+                TMO.completeTask(event.item);
 
                 Event.stop(event);
                 this.cleanupSwipeDelete(itemNode);
@@ -217,7 +217,7 @@ function TasksAssistant() {
                     Mojo.Log.info("Tasks::activate()::swipe-delete: multi-swipe-complete(%d, %s)!!",
                         deleteSpacer._mojoListIndex, itemModel.record_locator);
 
-                    // TMO.completeTask(itemModel);
+                    TMO.completeTask(itemModel);
 
                     this.markModelDeleted(itemModel, this.kDeletedItemCancelled);
                     this.cleanupSwipeDelete(itemNode);
