@@ -215,8 +215,9 @@ function RequestEngine() {
     */
 
     var me = this;
+    var request;
 
-    this.reqdb[_r.desc] = new Ajax.Request(_r.url, {
+    this.reqdb[_r.desc] = request = new Ajax.Request(_r.url, {
         method: _r.method, parameters: _r.params, evalJSON: !_r.xml, evalJS: !_r.xml,
 
         onSuccess: function(transport) {
@@ -298,6 +299,11 @@ function RequestEngine() {
                 Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort?", _r.desc);
 
                 // this seems to be what happens on an abort
+
+                if( request.retryRequested ) {
+                    Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort-retry requested", _r.desc);
+                    me._doRequest(_r); // NOTE: we do not set isRetry here because we've already set reqBusy(false)
+                }
 
             } else {
                 Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail", _r.desc);
