@@ -30,7 +30,7 @@ Ajax.Responders.register({
         request.timeoutId = setTimeout(
             f = function() {
                 if (callInProgress(request.transport)) {
-                    Mojo.Log.info("AJAX Timeout fired dt=%d", REQ.now() - request.before);
+                    Mojo.Log.info("AJAX-ext Timeout fired dt=%d", REQ.now() - request.before);
 
                     request.timeoutDialog =
                         (new RetryAbortDialog('cJATE')).showRetry("cJATE::TO", "timeout",
@@ -65,7 +65,7 @@ Ajax.Responders.register({
                     */
 
                 } else {
-                    Mojo.Log.info("AJAX Timeout fired dt=%d — but no call was in progress", REQ.now() - request.before);
+                    Mojo.Log.info("AJAX-ext Timeout fired dt=%d — but no call was in progress", REQ.now() - request.before);
                 }
             },
 
@@ -74,9 +74,12 @@ Ajax.Responders.register({
     },
 
     onComplete: function(request) {
-        Mojo.Log.info("AJAX Timeout cleared normally dt=%d", REQ.now() - request.before);
+        Mojo.Log.info("AJAX-ext Timeout cleared normally dt=%d", REQ.now() - request.before);
         clearTimeout(request.timeoutId);
-        if( request.timeoutDialog )
+
+        if( request.timeoutDialog ) {
+            Mojo.Log.info("AJAX-ext RetryAbortDialog is open, closing");
             request.timeoutDialog.close();
+        }
     }
 });
