@@ -861,7 +861,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 /* {{{ */ TaskManager.prototype.completeTask = function(task,comment,cb) {
     Mojo.Log.info("TaskManager::completeTask(rl=%s)", task.record_locator);
 
-    var params = { complete: "1" };
+    var params = { complete: task.complete === "0" ? "1" : "0" };
 
     if( comment )
         params.comment = comment;
