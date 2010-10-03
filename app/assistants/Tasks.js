@@ -170,6 +170,22 @@ function TasksAssistant() {
         this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
         this.firstActivation = false;
         this.controller.get("current-search").innerHTML = "... loading ...";
+
+
+        var listWidget = $("hm_task_list")._mojoController;
+        Mojo.Log.info("DEBUG-htlmc: it=%s", listWidget);
+        for(var k in listWidget) {
+            Mojo.Log.info("DEBUG-htlmc: k=%s", k);
+
+            try { for(var l in listWidget[k]) {
+                Mojo.Log.info("DEBUG-htlmc:         l=", l);
+
+            }} catch (e) {}
+        }
+
+        // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+        //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
+        //     listWidget.controller.document);
     }
 
     AMO.registerLoginChange(this.handleLoginChange);
