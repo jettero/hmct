@@ -182,16 +182,14 @@ function TasksAssistant() {
         Mojo.Log.info("Tasks::activate()::swipe-delete: cmd-attr: %s; action=%s", this.kListDeleteCmdAttr, action);
 
         if( action === "complete" ) {
-            Mojo.Log.info("Tasks::activate()::swipe-delete: tap-complete(%s)!!", event.item.record_locator);
+            Event.stop(event); // stop the tap from doing other things
+            this.cleanupSwipeDelete(itemNode); // this puts _mojoListIndex back
 
-            TMO.completeTask(event.item);
-
-            Event.stop(event);
-            this.cleanupSwipeDelete(itemNode);
-
-            // unmark this
             var itemModel = this.listItems[itemNode._mojoListIndex];
             this.markModelDeleted(itemModel, this.kDeletedItemCancelled);
+
+            Mojo.Log.info("Tasks::activate()::swipe-delete: tap-complete(rl=%s)!!", itemModel.record_locator);
+            TMO.completeTask(itemModel);
 
         } else {
             Mojo.Log.info("Tasks::activate()::swipe-delete: boring undo tap");
