@@ -46,7 +46,7 @@ EditTaskAssistant.prototype.setup = function() {
 
     var checkBoxAttributes = { trueValue: '1', falseValue: '0' };
     this.controller.setupWidget('stacks-up',      checkBoxAttributes, this.stacksUpModel      = {value: t.repeat_stacking});
-    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: t.will_complete=="0"?"1":"0"});
+    this.controller.setupWidget('hidden-forever', checkBoxAttributes, this.hiddenForeverModel = {value: t.will_complete=="0"?"1":"0"}); // STFU: I mean ==
     this.controller.setupWidget('complete',       checkBoxAttributes, this.completeModel      = {value: t.complete});
     this.controller.setupWidget('accept',         checkBoxAttributes, this.acceptModel        = {value: t.accepted});
 
@@ -206,7 +206,7 @@ EditTaskAssistant.prototype.go = function() {
     if( f("timeLeftModel"     ) ) params.time_left              = v;
     if( f("commentModel"      ) ) params.comment                = v;
     if( f("completeModel"     ) ) params.complete               = v;
-    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1";
+    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1"; // STFU: I mean ==
 
     if( f("tagsModel") ) {
         var q = qsplit(v);
