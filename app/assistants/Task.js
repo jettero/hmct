@@ -22,9 +22,14 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.menuSetup();
 
-    this.refreshModel     = { label: "Reload", icon: 'refresh', command: 'refresh' };
-    this.editModel        = { label: "Edit",   icon: 'edit',    command: 'edit'    };
-    this.commandMenuModel = { label: 'Task Command Menu', items: [ this.refreshModel, this.editModel ] };
+    this.refreshModel     = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
+    this.editModel        = { label: "Edit",    icon: 'edit',         command: 'edit'    };
+    this.commentModel     = { label: "Comment", icon: 'conversation', command: 'comment' };
+    this.deleteModel      = { label: "Delete",  icon: 'delete',       command: 'delete'  };
+    this.commandMenuModel = {
+        label: 'Task Command Menu',
+        items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
+    };
 
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
