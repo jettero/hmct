@@ -748,7 +748,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.updateTask = function(params,task,cb) {
-    Mojo.Log.info("TaskManager::updateTask()");
+    Mojo.Log.info("TaskManager::updateTask(rl=%s)", task.record_locator);
 
     var me = this;
 
@@ -795,7 +795,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.deleteTask = function(task,cb) {
-    Mojo.Log.info("TaskManager::deleteTask()");
+    Mojo.Log.info("TaskManager::deleteTask(rl=%s)", task.record_locator);
 
     var me = this;
 
@@ -846,6 +846,18 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         }
     });
 };
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.completeTask = function(task,comment,cb) {
+    Mojo.Log.info("TaskManager::completeTask(rl=%s)", task.record_locator);
+
+    var params = { complete: task.complete === "0" ? "1" : "0" };
+
+    if( comment )
+        params.comment = comment;
+
+    this.updateTask(params,task,cb);
+}
 
 /*}}}*/
 
