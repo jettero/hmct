@@ -213,6 +213,7 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
             case 'delete':
                 this.YN("handleCommand", 'delete', "Delete this task?", function(v){
+                    Mojo.Log.info("Task::handleCommand(delete) [rl=%s] v=%s", rl, v);
 
                     if(v !== "yes")
                         return;
@@ -227,7 +228,8 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
                     // then go back, cuz this task is gone
                     Mojo.Controller.stageController.popScene();
-                })
+
+                }.bind(this))
                 break;
 
             case 'comment':
