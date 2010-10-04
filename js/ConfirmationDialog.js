@@ -21,8 +21,8 @@ ConfrimationDialog.prototype.askYN = function(fname,desc,message,cb) {
 		title:    'Really?',
 		message:  message,
 		choices: [
-            {label:'Yes',  value:'yes', type:'affirmative'},
-            {label:'No',   value:'no',  type:'negative'}
+            {label:'Yes', value:'yes', type:'affirmative'},
+            {label:'No',  value:'no',  type:'negative'}
         ]
 	});
 };
