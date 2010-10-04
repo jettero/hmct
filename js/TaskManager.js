@@ -212,7 +212,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::fetchOneTask()',
+          desc: 'TaskManager::fetchOneTask(rl=' + rl + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
         params: {format: 'json', query: search},
 
@@ -398,7 +398,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::getComments(record_locator=' + rl + ')',
+          desc: 'TaskManager::getComments(rl=' + rl + ')',
         method: 'get', url: 'http://hiveminder.com/mobile/task_history/' + rl,
         params: {},
 
@@ -713,6 +713,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
+          desc: 'TaskManager::postNewTask()',
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
         params: params, cacheable: false,
         process:  function(r) {},
@@ -770,6 +771,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
+          desc: 'TaskManager::updateTask(rl=' + task.record_locator + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/UpdateTask.json',
         params: params, cacheable: false,
         process:  function(r) {},
@@ -817,6 +819,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
+          desc: 'TaskManager::deleteTask(rl=' + task.record_locator + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/DeleteTask.json',
         params: {id: task.id}, cacheable: false,
         process: function(r) {},
