@@ -212,7 +212,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::fetchOneTask()',
+          desc: 'TaskManager::fetchOneTask(' + rl + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
         params: {format: 'json', query: search},
 
