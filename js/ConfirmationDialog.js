@@ -5,10 +5,10 @@
 
 function ConfrimationDialog(launcher) {
     this.logTemplate = new Template(launcher + "#{fname}() [#{desc}]: #{message}");
-    this.showRetry = this.showRetry.bind(this);
+    this.askYN = this.askYN.bind(this);
 }
 
-ConfrimationDialog.prototype.showRetry = function(fname,desc,message,cb) {
+ConfrimationDialog.prototype.askYN = function(fname,desc,message,cb) {
     var o = {desc: desc, message: message};
 
     if( fname ) o.fname = "::" + fname;
