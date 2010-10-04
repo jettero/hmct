@@ -219,12 +219,21 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                         return;
 
                     // this marks the cache "stale" automatically
-                    TMO.deleteTask(this.task);
+                    TMO.deleteTask(this.task, function() {
 
-                    // but we should still remove this from the previous list
-                    this.tasksAssistant.tasksListModel.items = 
-                    this.tasksAssistant.tasksListModel.items.reject(function(i) { return i === this.task; });
-                    this.tasksAssistant.controller.modelChanged(tasksAssistant.tasksListModel);
+                        try {
+                            this.tasksAssistant.tasksListModel.items =
+                                $A(this.tasksAssistant.tasksListModel.items).reject(function(i) {
+                                    return i === this.task; });
+
+                            this.tasksAssistant.controller.modelChanged(tasksAssistant.tasksListModel);
+
+                        } catch(e) {
+                            Mojo.Log.info("Task::handleCommand(delete) [delete-cb] [rl=%s] js-ERROR: %s",
+                                this.task.record_locator, e);
+                        }
+
+                    }.bind(this));
 
                     // then go back, cuz this task is gone
                     Mojo.Controller.stageController.popScene();
