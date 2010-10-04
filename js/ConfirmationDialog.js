@@ -22,7 +22,7 @@ ConfrimationDialog.prototype.askYN = function(fname,desc,message,cb) {
 		message:  message,
 		choices: [
             {label:'Yes',  value:'yes', type:'affirmative'},
-            {label:'No',   value:'no',  type:'negative'},
+            {label:'No',   value:'no',  type:'negative'}
         ]
 	});
 };
