@@ -166,7 +166,6 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             me.tasks = r;
             me.tasks.each(function(t){
                 t._req_cacheAge = r._req_cacheAge;
-                if( !t.tags ) t.tags = "<none>";
 
                 if(!me.searchCacheSnoop[t.record_locator] )
                     me.searchCacheSnoop[t.record_locator] = {};
@@ -572,6 +571,9 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         t.accepted_class = t.accepted ? "accepted" : "not-accepted";
 
         t.desc_class = t.description.match(/\S/) ? "" : "generically-hidden";
+
+        if( !t.tags )
+            t.tags = "<none>";
 
         if( t.time_worked   === "~" ) delete t.time_worked;
         if( t.time_left     === "~" ) delete t.time_left;
