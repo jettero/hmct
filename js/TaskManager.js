@@ -752,18 +752,20 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.updateTask = function(params,task,cb) {
-    Mojo.Log.info("TaskManager::updateTask(rl=%s)", task.record_locator);
-
-    params.id = task.id;
 
     // NOTE: there are other "manditory" fields, but only this one seems to
     // actually be manditory — manditory in the sense that  if it's absent, HM
     // thinks it's supposed to change it to false
 
+    var i;
     var mandatories = [ "will_complete" ];
-    for(var _m in mandatories)
-        if( !(_m in params) )
-            params[mandatories[_m]] = task[mandatories[_m]];
+    for(i=0; i<mandatories.length; i++)
+        if( !(mandatories[i] in params) )
+            params[mandatories[i]] = task[mandatories[i]];
+
+    params.id = task.id;
+
+    Mojo.Log.info("TaskManager::updateTask(rl=%s) params: %s", task.record_locator, Object.toJSON(params));
 
     var me = this;
 
