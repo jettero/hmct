@@ -3,13 +3,17 @@
 /*global Mojo $ Template palmGetResource OPT TMO
 */
 
-function TaskAssistant(_i) {
+function TaskAssistant(_i, _ta) {
     Mojo.Log.info("Task(%s)", (this.task = _i).record_locator);
 
     this.SCa = Mojo.Controller.stageController.assistant;
+    this.tasksAssistant = _ta;
 
     this.handleTaskChange = this.handleTaskChange.bind(this);
     this.menuSetup        = this.SCa.menuSetup.bind(this);
+
+    this.yn = new ConfrimationDialog("Task");
+    this.YN = this.yn.askYN;
 }
 
 // Templates and Resources {{{
@@ -22,9 +26,14 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.menuSetup();
 
-    this.refreshModel     = { label: "Reload", icon: 'refresh', command: 'refresh' };
-    this.editModel        = { label: "Edit",   icon: 'edit',    command: 'edit'    };
-    this.commandMenuModel = { label: 'Task Command Menu', items: [ this.refreshModel, this.editModel ] };
+    this.refreshModel     = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
+    this.editModel        = { label: "Edit",    icon: 'edit',         command: 'edit'    };
+    this.commentModel     = { label: "Comment", icon: 'conversation', command: 'comment' };
+    this.deleteModel      = { label: "Delete",  icon: 'delete',       command: 'delete'  };
+    this.commandMenuModel = {
+        label: 'Task Command Menu',
+        items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
+    };
 
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
@@ -200,6 +209,40 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
             case 'edit':
                 Mojo.Log.info("Task::handleCommand(edit) [rl=%s]", rl);
                 this.SCa.showScene("EditTask", this.task);
+                break;
+
+            case 'delete':
+                this.YN("handleCommand", 'delete', "Delete this task?", function(v){
+                    Mojo.Log.info("Task::handleCommand(delete) [rl=%s] v=%s", rl, v);
+
+                    if(v !== "yes")
+                        return;
+
+                    // this marks the cache "stale" automatically
+                    TMO.deleteTask(this.task, function() {
+
+                        try {
+                            this.tasksAssistant.tasksListModel.items =
+                                $A(this.tasksAssistant.tasksListModel.items).reject(function(i) {
+                                    return i === this.task; });
+
+                            this.tasksAssistant.controller.modelChanged(tasksAssistant.tasksListModel);
+
+                        } catch(e) {
+                            Mojo.Log.info("Task::handleCommand(delete) [delete-cb] [rl=%s] js-ERROR: %s",
+                                this.task.record_locator, e);
+                        }
+
+                    }.bind(this));
+
+                    // then go back, cuz this task is gone
+                    Mojo.Controller.stageController.popScene();
+
+                }.bind(this))
+                break;
+
+            case 'comment':
+                Mojo.Log.info("Task::handleCommand(comment) [rl=%s]", rl);
                 break;
 
             default:

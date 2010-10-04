@@ -7,6 +7,7 @@
     { "source": "js/SuccessDialog.js" },
     { "source": "js/RetryDialog.js" },
     { "source": "js/RetryAbortDialog.js" },
+    { "source": "js/ConfirmationDialog.js" },
 
     { "source": "js/BusyBee.js" },
     { "source": "js/RequestEngine.js" },
