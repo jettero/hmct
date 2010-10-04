@@ -770,6 +770,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
     var me = this;
 
     REQ.doRequest({
+          desc: 'TaskManager::updateTask(rl=' + task.record_locator + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/UpdateTask.json',
         params: params, cacheable: false,
         process:  function(r) {},
