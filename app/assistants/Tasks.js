@@ -150,7 +150,7 @@ function TasksAssistant() {
         t.short = this.taskTemplate.evaluate(t);
 
         if( OPT._preTapTask )
-            if( t.record_locator === OPT._preTapTask || t.id === OPT._preTapTask )
+            if( t.record_locator === OPT._preTapTask.toUpperCase() || t.id === OPT._preTapTask )
                 this.SCa.showScene("Task", t);
 
     }.bind(this));
