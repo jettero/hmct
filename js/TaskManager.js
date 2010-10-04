@@ -225,11 +225,13 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         finish: function(r) {
             Mojo.Log.info("TaskManager::fetchOneTask(%s) [finish: |r|:%d, rca:%d]", search, r.length, r._req_cacheAge);
 
+            var i;
             var theTask;
+
             if( r.length ) {
                 theTask = r[0];
 
-                for(var i=0; i<me.tasks.length; i++)
+                for(i=0; i<me.tasks.length; i++)
                     if( me.tasks[i].id === theTask.id )
                         me.tasks[i] = theTask;
 
@@ -240,7 +242,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
                     record_locator: rl
                 };
 
-                for(var i=0; i<me.tasks.length; i++)
+                for(i=0; i<me.tasks.length; i++)
                     if( me.tasks[i].record_locator === rl )
                         me.tasks[i] = theTask;
             }
@@ -867,7 +869,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
         params.comment = comment;
 
     this.updateTask(params,task,cb);
-}
+};
 
 /*}}}*/
 
