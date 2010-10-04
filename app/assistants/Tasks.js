@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo Template palmGetResource setTimeout TMO OPT AMO
+/*global Mojo Template palmGetResource setTimeout TMO OPT AMO $ Event
 */
 
 function TasksAssistant() {
@@ -71,7 +71,6 @@ function TasksAssistant() {
     Mojo.Log.info("Tasks::taskListSwipe(%s)", event.item.record_locator);
 
     TMO.deleteTask(event.item);
-
     // NOTE: I don't think I need to do this stuff... swiping moves them out of
     // the list and the next activate or handleTasksChange will update this for me anyway.
         // this.tasksListModel.items.reject(function(i) { return i===event.item });
@@ -170,6 +169,80 @@ function TasksAssistant() {
         this.tasksListModel.items=[]; this.controller.modelChanged(this.tasksListModel);
         this.firstActivation = false;
         this.controller.get("current-search").innerHTML = "... loading ...";
+
+        var mytemplate = (Mojo.appPath + "app/views/misc/complete-item").replace(/^file:\/\//, "");
+
+        var listWidget = $("hm_task_list")._mojoController.assistant;
+            listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+                Mojo.View.render({ template: mytemplate }),
+                listWidget.controller.document
+            );
+
+        var originalTap = listWidget.handleSwipeDeleteTap;
+
+        // this is what happens when they tap (Confirm)
+        listWidget.handleSwipeDeleteTap = function(event, itemNode) {
+            var buttonNode = Mojo.View.findParentByAttribute(event.target, undefined, this.kListDeleteCmdAttr);
+            var action = buttonNode && buttonNode.getAttribute(this.kListDeleteCmdAttr);
+
+            Mojo.Log.info("Tasks::activate()::swipe-delete: cmd-attr: %s; action=%s", this.kListDeleteCmdAttr, action);
+
+            if( action === "complete" ) {
+                Mojo.Log.info("Tasks::activate()::swipe-delete: tap-complete(%s)!!", event.item.record_locator);
+
+                TMO.completeTask(event.item);
+
+                Event.stop(event);
+                this.cleanupSwipeDelete(itemNode);
+
+                // unmark this 
+                var itemModel = this.listItems[itemNode._mojoListIndex];
+                this.markModelDeleted(itemModel, this.kDeletedItemCancelled);
+
+            } else {
+                Mojo.Log.info("Tasks::activate()::swipe-delete: boring undo tap");
+                originalTap.apply(this, [event, itemNode]);
+            }
+        };
+
+        // This is what happens when they swipe the next one:w
+        listWidget.confirmOtherDeletes = function(justSwiped) {
+            var deleteSpacer = this.findNextListItem();
+
+            while(deleteSpacer) {
+                if(justSwiped !== deleteSpacer && deleteSpacer._mojoDeletedListNode) {
+                    var itemModel = this.listItems[deleteSpacer._mojoListIndex];
+                    var itemNode  = deleteSpacer._mojoDeletedListNode;
+
+                    Mojo.Log.info("Tasks::activate()::swipe-delete: multi-swipe-complete(%d, %s)!!",
+                        deleteSpacer._mojoListIndex, itemModel.record_locator);
+
+                    TMO.completeTask(itemModel);
+
+                    this.markModelDeleted(itemModel, this.kDeletedItemCancelled);
+                    this.cleanupSwipeDelete(itemNode);
+                }
+
+                deleteSpacer = this.findNextListItem(deleteSpacer);
+            }
+        };
+
+        // original deleteTemplateNode setup // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+        // original deleteTemplateNode setup //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
+        // original deleteTemplateNode setup //     listWidget.controller.document);
+
+        // to locate deleteTemplateNode // var listWidget = $("hm_task_list")._mojoController;
+        // to locate deleteTemplateNode // Mojo.Log.info("DEBUG-htlmc: it=%s", listWidget);
+        // to locate deleteTemplateNode // for(var k in listWidget) {
+        // to locate deleteTemplateNode //     Mojo.Log.info("DEBUG-htlmc: k=%s", k);
+        // to locate deleteTemplateNode //     try { for(var l in listWidget[k]) {
+        // to locate deleteTemplateNode //         Mojo.Log.info("DEBUG-htlmc:         l=", l);
+        // to locate deleteTemplateNode //     }} catch (e) {}
+        // to locate deleteTemplateNode // }
+
+        // original deleteTemplateNode setup // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
+        // original deleteTemplateNode setup //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
+        // original deleteTemplateNode setup //     listWidget.controller.document);
     }
 
     AMO.registerLoginChange(this.handleLoginChange);
