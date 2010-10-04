@@ -3,10 +3,11 @@
 /*global Mojo $ Template palmGetResource OPT TMO
 */
 
-function TaskAssistant(_i) {
+function TaskAssistant(_i, _ta) {
     Mojo.Log.info("Task(%s)", (this.task = _i).record_locator);
 
     this.SCa = Mojo.Controller.stageController.assistant;
+    this.tasksAssistant = _ta;
 
     this.handleTaskChange = this.handleTaskChange.bind(this);
     this.menuSetup        = this.SCa.menuSetup.bind(this);
@@ -205,6 +206,27 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
             case 'edit':
                 Mojo.Log.info("Task::handleCommand(edit) [rl=%s]", rl);
                 this.SCa.showScene("EditTask", this.task);
+                break;
+
+            case 'delete':
+                Mojo.Log.info("Task::handleCommand(delete) [rl=%s]", rl);
+                this.YN("Delete this task?", function(){
+
+                    // this marks the cache "stale" automatically
+                    TMO.deleteTask(this.task);
+
+                    // but we should still remove this from the previous list
+                    this.tasksAssistant.tasksListModel.items = 
+                    this.tasksAssistant.tasksListModel.items.reject(function(i) { return i === this.task; });
+                    this.tasksAssistant.controller.modelChanged(tasksAssistant.tasksListModel);
+
+                    // then go back, cuz this task is gone
+                    Mojo.Controller.stageController.popScene();
+                })
+                break;
+
+            case 'comment':
+                Mojo.Log.info("Task::handleCommand(comment) [rl=%s]", rl);
                 break;
 
             default:
