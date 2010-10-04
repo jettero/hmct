@@ -63,8 +63,10 @@ function RequestEngine() {
 /*}}}*/
 
 /* {{{ */ RequestEngine.prototype.doRequest = function(_r) {
-    if( !_r.desc )
-        _r.desc = "";
+    if( !_r.desc ) {
+        this.E("doRequest", "desc-error", "INTERNAL ERROR: _r.desc was not provided");
+        return;
+    }
 
     if( !_r._desc_mutilated ) {
         _r.desc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
