@@ -11,6 +11,9 @@ function TaskAssistant(_i, _ta) {
 
     this.handleTaskChange = this.handleTaskChange.bind(this);
     this.menuSetup        = this.SCa.menuSetup.bind(this);
+
+    this.yn = new ConfrimationDialog("Task");
+    this.YN = this.yn.askYN;
 }
 
 // Templates and Resources {{{
@@ -210,7 +213,10 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
             case 'delete':
                 Mojo.Log.info("Task::handleCommand(delete) [rl=%s]", rl);
-                this.YN("Delete this task?", function(){
+                this.YN("Delete this task?", function(v){
+
+                    if(v !== "yes")
+                        return;
 
                     // this marks the cache "stale" automatically
                     TMO.deleteTask(this.task);
