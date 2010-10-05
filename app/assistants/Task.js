@@ -273,13 +273,13 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 break;
 
             case 'webos-comment':
-                this.controller.showDialog({
-                    template: 'misc/fast-comment',
-                    assistant: new FastCommentAssistant(this, function(){
-                        Mojo.Log.info("Task::handleCommand(webos-comment) [rl=%s]", rl);
+                var FCA = new FastCommentAssistant(this, function(){
+                    Mojo.Log.info("Task::handleCommand(webos-comment) [rl=%s]", rl);
 
-                    }.bind(this))
-                });
+                }.bind(this));
+
+                var dialogObject = this.controller.showDialog({ template: 'misc/fast-comment', assistant: FCA });
+                FCA.mojo = dialogObject.mojo;
                 break;
 
             default:
