@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ OPT TMO AMO encodeURIComponent
+/*global Mojo $ OPT TMO AMO encodeURIComponent ErrorDialog
 */
 
 function SearchAssistant() {
@@ -151,6 +151,8 @@ SearchAssistant.prototype.setup = function() {
 
     this.controller.setupWidget('hiddenfe-cb',     checkBoxAttributes, this.hiddenFEModel    = {value: "off"});
     this.controller.setupWidget('not-hiddenfe-cb', checkBoxAttributes, this.notHiddenFEModel = {value: "off"});
+
+    this.slurpLastSearch();
 };
 
 SearchAssistant.prototype.activate = function() {
@@ -165,7 +167,16 @@ SearchAssistant.prototype.deactivate = function() {
     AMO.unregisterSrchgChange(this.handleGroupListChange);
 };
 
+SearchAssistant.prototype.slurpLastSearch = function() {
+    Mojo.Log.info("Search::slurpLastSearch()");
+
+    var query = TMO.getLastSearchKeyed();
+    Mojo.Log.info("Search::slurpLastSearch() keys: %s", Object.toJSON(query));
+};
+
 SearchAssistant.prototype.buildSearch = function() {
+    Mojo.Log.info("Search::buildSearch()");
+
     var query = [];
     var me = this;
 
@@ -176,7 +187,7 @@ SearchAssistant.prototype.buildSearch = function() {
             if( q ) {
             if( q.match(/\S/) ) {
                 query.push(y);
-                query.push(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ").replace(/\//, "%252F");
+                query.push(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ").replace(/\//, "%252F"));
 
                 // NOTE: I tried hard to sanitize the query input, but these
                 // just don't work with unicode or maybe hiveminder doesn't
