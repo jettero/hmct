@@ -3,12 +3,12 @@
 /*global Mojo Template
 */
 
-function ConfrimationDialog(launcher) {
+function ConfirmationDialog(launcher) {
     this.logTemplate = new Template(launcher + "#{fname}() [#{desc}]: #{message}");
     this.askYN = this.askYN.bind(this);
 }
 
-ConfrimationDialog.prototype.askYN = function(fname,desc,message,cb) {
+ConfirmationDialog.prototype.askYN = function(fname,desc,message,cb) {
     var o = {desc: desc, message: message};
 
     if( fname ) o.fname = "::" + fname;
