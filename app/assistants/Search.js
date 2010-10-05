@@ -176,7 +176,7 @@ SearchAssistant.prototype.buildSearch = function() {
             if( q ) {
             if( q.match(/\S/) ) {
                 query.push(y);
-                query.push(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " "));
+                query.push(q.replace(/^\s+/, "").replace(/\s+$/, "").replace(/\s{2,}/, " ").replace(/\//, "%252F");
 
                 // NOTE: I tried hard to sanitize the query input, but these
                 // just don't work with unicode or maybe hiveminder doesn't
