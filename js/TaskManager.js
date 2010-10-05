@@ -882,5 +882,19 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
+/* {{{ */ TaskManager.prototype.commentTask = function(task,comment,cb) {
+    Mojo.Log.info("TaskManager::commentTask(rl=%s): %s", task.record_locator, comment);
+
+    var params = { comment: comment };
+
+    if( !comment ) {
+        this.E("commentTask", "no comment", "And what would that comment be?");
+        return;
+    }
+
+    this.updateTask(params,task,cb);
+};
+
+/*}}}*/
 
 Mojo.Log.info('loaded(TaskManager.js)');
