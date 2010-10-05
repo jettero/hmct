@@ -143,9 +143,14 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     if( !this.lastSearch[this.currentLogin] )
         return res;
 
-    var i;
     var arz = this.lastSearch[this.currentLogin].split("/");
 
+    if( arz.length % 2 )
+        return res;
+
+    Mojo.Log.info("LOLWUT(%s)", Object.toJSON(arz));
+
+    var i;
     for(i=1; i<arz.length; i+=2)
         if( arz[i].match(/%252f/) )
             arz[i] = arz[i].replace(/%252f/, "/");
