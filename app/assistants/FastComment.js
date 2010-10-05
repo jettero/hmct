@@ -4,7 +4,6 @@
 */
 
 function FastCommentAssistant(_a, _cb) {
-    this.assistant  = _a;
     this.controller = _a.controller;
     this.cb = _cb;
 }
@@ -16,7 +15,11 @@ FastCommentAssistant.prototype.setup = function() {
     this.controller.setupWidget('send',   {}, {buttonClass: "affirmative", label: "Send"} );
     this.controller.setupWidget('cancel', {}, {buttonClass: "negative",    label: "Cancel"} );
 
-    Mojo.Event.listen(this.controller.get("send"),   Mojo.Event.tap, this.cb);
+    Mojo.Event.listen(this.controller.get("send"), Mojo.Event.tap, function() {
+        this.cb( this.commentModel.value );
+
+    }.bind(this));
+
     Mojo.Event.listen(this.controller.get("cancel"), Mojo.Event.tap, function(){
 
         this.mojo.close();
