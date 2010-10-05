@@ -251,6 +251,25 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 break;
 
             case 'email-comment':
+                var subject = "Comment: " + this.task.summary + " (#" + rl + ")";
+                var url     = 'http://task.hm/' + rl;
+                var msg     = "<p> → Go to <a href='" + url + "'>" + this.task.summary + "</a> (#" + rl + ")";
+
+                this.controller.serviceRequest("palm://com.palm.applicationManager", {
+                        method: 'open',
+                        parameters: {
+                            id: "com.palm.app.email",
+                            params: {
+                                summary: subject, text: msg, recipients: [{
+                                    type:  "email",
+                                    role:  1, /* 1-to, 2-cc, 3-bcc */
+                                    value: this.task.comment_address,
+                                    contactDisplay: "Task-" + rl
+                                }]
+                            }
+                        }
+                    }
+                );
                 break;
 
             case 'webos-comment':
