@@ -122,7 +122,7 @@
     return s;
 };
 
-TaskManager.prototype._getLastSearchSpaced = function(s) {
+TaskManager.prototype.getLastSearchSpaced = function() {
     if( !this.lastSearch[this.currentLogin] )
         return "";
 
@@ -132,7 +132,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 /*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
-        var ls = this.lastSearch[this.currentLogin];
+        var ls = this.getLastSearch();
 
         if( !ls || !ls.length ) {
             search = this.getSearchByName(OPT.defaultSearch);
@@ -318,7 +318,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             tasks.push( this.tasks[i] );
          // tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
-    callback(tasks, this._getLastSearchSpaced());
+    callback(tasks, this.getLastSearchSpaced());
 };
 
 /*}}}*/
@@ -467,7 +467,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 /* {{{ */ TaskManager.prototype.getFurtherDetails = function(cma,tokens) {
 
     if( !tokens )
-        tokens = this._getLastSearchSpaced();
+        tokens = this.getLastSearchSpaced();
 
     Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d, tokens: %s)", cma, tokens);
 
