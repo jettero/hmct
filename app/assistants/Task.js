@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ Template palmGetResource OPT TMO ConfirmationDialog $A
+/*global Mojo $ Template palmGetResource OPT TMO ConfirmationDialog $A FastCommentAssistant
 */
 
 function TaskAssistant(_args) {
