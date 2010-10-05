@@ -1,18 +1,20 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ Template palmGetResource OPT TMO
+/*global Mojo $ Template palmGetResource OPT TMO ConfirmationDialog $A
 */
 
-function TaskAssistant(_i, _ta) {
-    Mojo.Log.info("Task(%s)", (this.task = _i).record_locator);
+function TaskAssistant(_args) {
+    this.task = _args[0];
+
+    Mojo.Log.info("Task(%s)", this.task.record_locator);
 
     this.SCa = Mojo.Controller.stageController.assistant;
-    this.tasksAssistant = _ta;
+    this.tasksAssistant = _args[1];
 
     this.handleTaskChange = this.handleTaskChange.bind(this);
     this.menuSetup        = this.SCa.menuSetup.bind(this);
 
-    this.yn = new ConfrimationDialog("Task");
+    this.yn = new ConfirmationDialog("Task");
     this.YN = this.yn.askYN;
 }
 
@@ -220,13 +222,14 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
                     // this marks the cache "stale" automatically
                     TMO.deleteTask(this.task, function() {
+                        Mojo.Log.info("Task::handleCommand(delete) [rl=%s] [delete completed updating list-model]", rl);
 
                         try {
                             this.tasksAssistant.tasksListModel.items =
-                                $A(this.tasksAssistant.tasksListModel.items).reject(function(i) {
-                                    return i === this.task; });
+                                $A(this.tasksAssistant.tasksListModel.items).reject(
+                                    function(i) { return i === this.task; }.bind(this) );
 
-                            this.tasksAssistant.controller.modelChanged(tasksAssistant.tasksListModel);
+                            this.tasksAssistant.controller.modelChanged(this.tasksAssistant.tasksListModel);
 
                         } catch(e) {
                             Mojo.Log.info("Task::handleCommand(delete) [delete-cb] [rl=%s] js-ERROR: %s",
@@ -238,7 +241,7 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                     // then go back, cuz this task is gone
                     Mojo.Controller.stageController.popScene();
 
-                }.bind(this))
+                }.bind(this));
                 break;
 
             case 'comment':
