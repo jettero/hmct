@@ -17,6 +17,7 @@ FastCommentAssistant.prototype.setup = function() {
 
     Mojo.Event.listen(this.controller.get("send"), Mojo.Event.tap, function() {
         this.cb( this.commentModel.value );
+        this.mojo.close();
 
     }.bind(this));
 
