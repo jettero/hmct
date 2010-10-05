@@ -207,14 +207,15 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     if (event.type === Mojo.Event.command) {
         var s_a = event.command.split(/\s*(?:@@)\s*/);
 
+        if( s_a.length > 0 )
+            Mojo.Log.info("Task::handleCommand(%s) [rl=%s]", s_a[0], rl);
+
         switch (s_a[0]) {
             case 'refresh':
-                Mojo.Log.info("Task::handleCommand(refresh) [rl=%s]", rl);
                 TMO.fetchOneTask(rl, true); // force reload
                 break;
 
             case 'edit':
-                Mojo.Log.info("Task::handleCommand(edit) [rl=%s]", rl);
                 this.SCa.showScene("EditTask", this.task);
                 break;
 
@@ -249,8 +250,10 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 }.bind(this));
                 break;
 
-            case 'comment':
-                Mojo.Log.info("Task::handleCommand(comment) [rl=%s]", rl);
+            case 'email-comment':
+                break;
+
+            case 'webos-comment':
                 break;
 
             default:
