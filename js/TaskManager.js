@@ -126,7 +126,34 @@ TaskManager.prototype.getLastSearchSpaced = function() {
     if( !this.lastSearch[this.currentLogin] )
         return "";
 
-    return this.lastSearch[this.currentLogin].replace(/\//g, ' '); // heh
+    // cannonically, actual slashes are encoded as %252F at this point...
+    return this.lastSearch[this.currentLogin].replace(/\//g, ' ').replace(/%252F/, "/");
+};
+
+TaskManager.prototype.getLastSearch = function() {
+    if( !this.lastSearch[this.currentLogin] )
+        return "";
+
+    return this.lastSearch[this.currentLogin];
+};
+
+TaskManager.prototype.getLastSearchKeyed = function() {
+    var res = {};
+
+    if( !this.lastSearch[this.currentLogin] )
+        return res;
+
+    var i;
+    var arz = this.lastSearch[this.currentLogin].split("/");
+
+    for(i=1; i<arz.length; i+=2)
+        if( arz[i].match(/%252f/) )
+            arz[i] = arz[i].replace(/%252f/, "/");
+
+    for(i=0; i<arz.length; i+=2)
+        res[arz[i]] = res[arz[i+1]];
+
+    return res;
 };
 
 /*}}}*/
