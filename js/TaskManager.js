@@ -181,7 +181,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             case "hidden":
                 switch(arz[++i]) {
-                    case "forever": res[ (_not ? "not/" : "") + "hidden/forever" ] = true; break;
+                    case "forever":
+                        res[ (_not ? "not/" : "") + "hidden/forever" ] = true;
+                        break;
                     case "until":
                         switch(arz[++i]) {
                             case "after":  res["hidden/until/after"]  = arz[++i]; break;
