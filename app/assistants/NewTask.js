@@ -220,6 +220,47 @@ NewTaskAssistant.prototype.slurpLastSearch = function() {
     var query = TMO.getLastSearchKeyed();
     var me = this;
     Mojo.Log.info("NewTask::slurpLastSearch() keys: %s", Object.toJSON(query));
+
+    var append_txt = function(x,y) {
+        if( ! (y in query) )
+            return;
+
+        try {
+            me[x + "Model"].value = query[y];
+            me.controller.modelChanged(me[x + "Model"]);
+        }
+
+        catch(e) {
+            Mojo.Log.error("problem setting " + x + "-txt from last-search keys: " + e);
+        }
+    };
+
+    var append_bin = function(x,y) {
+        if( ! (y in query) )
+            return;
+
+        try {
+            me[x + "Model"].value = query[y] ? "on" : "off";
+            me.controller.modelChanged(me[x + "Model"]);
+        }
+
+        catch(e) {
+            Mojo.Log.error("problem setting " + x + "-txt from last-search keys: " + e);
+        }
+    };
+
+    append_txt("group",  "group");
+    append_txt("tags",   "tag");
+    append_txt("owner",  "owner");
+
+    // these have questionable value imo...  group, tag and owner are the main
+    // ones they definitely do this though
+    append_txt("priority",  "priority/above");
+    append_txt("priority",  "priority/below");
+    append_txt("dueDate",   "due/after");
+    append_txt("dueDate",   "due/before");
+    append_txt("hideUntil", "hide/until/after");
+    append_txt("hideUntil", "hide/until/before")
 };
 
 NewTaskAssistant.prototype.handleCommand = function(event) {
