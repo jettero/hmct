@@ -193,6 +193,31 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 }
                 break;
 
+            case "completed":
+            case "due": switch(arz[++i]) {
+                case "before": res[arz[i-1] + "/before"] = arz[++i]; break;
+                case "after":  res[arz[i-1] + "/after"]  = arz[++i]; break;
+                default: Mojo.Log.error("glsk-d/c-error: arz[%d]=%s", i, arz[i]); break;
+            }
+            break;
+
+            case "priority": switch(arz[++i]) {
+                case "above": res["priority/above"] = arz[++i]; break;
+                case "below": res["priority/below"] = arz[++i]; break;
+                default: Mojo.Log.error("glsk-prio-error: arz[%d]=%s", i, arz[i]); break;
+            }
+            break;
+
+            case "but":
+                if( arz[++i] !== "first" ) Mojo.Log.error("glsk-but-error");
+                res["but/first"] = arz[++i];
+                break;
+
+            case "and":
+                if( arz[++i] !== "then" ) Mojo.Log.error("glsk-and-error");
+                res["and/then"] = arz[++i];
+                break;
+
             case "next":
                 if( arz[++i] !== "action" ) Mojo.Log.error("glsk-next-!action-error");
                 if( arz[++i] !== "by"     ) Mojo.Log.error("glsk-next-!by-error");
@@ -200,6 +225,22 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 _not = false;
                 break;
 
+            case "time":
+                switch(arz[++i]) {
+                    case "estimated":
+                    case "worked":
+                    case "left":
+                        switch(arz[++i]) {
+                            case "gt":
+                            case "lt":
+                                arz[ "time/" + arz[i-1] + "/" +  arz[i] ] = arz[++i];
+                                break;
+                            default: Mojo.Log.error("glsk-time2-error: arz[%d]=%s", i, arz[i]); break;
+                        }
+                        break;
+                    default: Mojo.Log.error("glsk-time1-error: arz[%d]=%s", i, arz[i]); break;
+                }
+                break;
 
             default: Mojo.Log.error("glsk-def-error: arz[%d]=%s", i, arz[i]); break;
         }
