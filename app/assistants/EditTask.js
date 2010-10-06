@@ -55,7 +55,11 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
 
-    this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel  = {value: revqsplit(qsplit(t.tags))});
+    var tdef = revqsplit(qsplit(t.tags));
+    if( tdef === "<none>" )
+        tdef = "";
+
+    this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel  = {value: tdef });
     this.controller.setupWidget("owner", this.preSelBAttributes, this.ownerModel = {value: t.owner});
 
     var prios = [
