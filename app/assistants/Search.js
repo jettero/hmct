@@ -252,8 +252,8 @@ SearchAssistant.prototype.buildSearch = function() {
 
     // completed/after/5/completed/before/6/due/after/3/due/before/4/
     // priority/above/2/priority/below/4/hidden/until/after/1/hidden/until/before/2
-    append_txt("hiddenUntilAfter",   "hiddenUntilAfter");
-    append_txt("hiddenUntilBefore",  "hiddenUntilBefore");
+    append_txt("hiddenUntilAfter",   "hidden/until/after");
+    append_txt("hiddenUntilBefore",  "hidden/until/before");
     append_txt("dueAfter",           "due/after");
     append_txt("dueBefore",          "due/before");
     append_txt("completedAfter",     "completed/after");
