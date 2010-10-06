@@ -145,18 +145,64 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
     var arz = this.lastSearch[this.currentLogin].split("/");
 
-    if( arz.length % 2 )
-        return res;
-
-    Mojo.Log.info("LOLWUT(%s)", Object.toJSON(arz));
-
     var i;
-    for(i=1; i<arz.length; i+=2)
+    for(i=0; i<arz.length; i++)
         if( arz[i].match(/%252f/) )
             arz[i] = arz[i].replace(/%252f/, "/");
 
-    for(i=0; i<arz.length; i+=2)
-        res[arz[i]] = res[arz[i+1]];
+    var _not = false;
+    for(i=0; i<arz.length; i++)
+        switch(arz[i]) {
+            case "not":
+                _not = true;
+                break;
+
+            case "sort_by_tags":
+            case "sort_by":
+            case "group":
+                if(_not) Mojo.Log.error("glsk-not-error (1)"); // STFU: this looks fine to me, think jslint fail
+            case "tag":
+            case "query":
+            case "owner":
+            case "summary":
+            case "requestor":
+            case "description":
+                res[ (_not ? "not/" : "") + arz[i] ] = arz[++i];
+                _not = false;
+                break;
+
+            case "unaccepted":
+                if(_not) Mojo.Log.error("glsk-not-error (2)"); // STFU: this looks fine to me, think jslint fail
+            case "accepted":
+            case "complete":
+                res[ (_not ? "not/" : "") + arz[i] ] = true;
+                _not = false;
+                break;
+
+            case "hidden":
+                switch(arz[++i]) {
+                    case "forever": res[ (_not ? "not/" : "") + "hidden/forever" ] = true; break;
+                    case "until":
+                        switch(arz[++i]) {
+                            case "after":  res["hidden/until/after"]  = arz[++i]; break;
+                            case "before": res["hidden/until/before"] = arz[++i]; break;
+                            default: Mojo.Log.error("glsk-hid-error: arz[%d]=%s", i, arz[i]); break;
+                        }
+                        break;
+                    default: Mojo.Log.error("glsk-error not until?"); break;
+                }
+                break;
+
+            case "next":
+                if( arz[++i] !== "action" ) Mojo.Log.error("glsk-next-!action-error");
+                if( arz[++i] !== "by"     ) Mojo.Log.error("glsk-next-!by-error");
+                res[ (_not ? "not/" : "") + "next/action/by" ] = arz[++i];
+                _not = false;
+                break;
+
+
+            default: Mojo.Log.error("glsk-def-error: arz[%d]=%s", i, arz[i]); break;
+        }
 
     return res;
 };
