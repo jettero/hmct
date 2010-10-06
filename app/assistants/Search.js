@@ -106,7 +106,9 @@ SearchAssistant.prototype.setup = function() {
         {label: "prio higher than", choices: prios},
         {label: "prio lower than",  choices: prios});
 
-    Mojo.Event.listen(this.controller.get("priority-higher-than"), Mojo.Event.propertyChange, function() {
+    Mojo.Event.listen(this.controller.get("priority-higher-than"), Mojo.Event.propertyChange,
+        this.priorityHigherThanModel.postSlurp = function() {
+
         var v = this.priorityHigherThanModel.value;
         if(v) {
             for(var i=0; i<prios.length; i++)
@@ -116,7 +118,9 @@ SearchAssistant.prototype.setup = function() {
 
     }.bind(this));
 
-    Mojo.Event.listen(this.controller.get("priority-lower-than"), Mojo.Event.propertyChange, function() {
+    Mojo.Event.listen(this.controller.get("priority-lower-than"), Mojo.Event.propertyChange,
+        this.priorityLowerThanModel.postSlurp = function() {
+
         var v = this.priorityLowerThanModel.value;
         if(v) {
             for(var i=0; i<prios.length; i++)
@@ -179,8 +183,11 @@ SearchAssistant.prototype.slurpLastSearch = function() {
             return;
 
         try {
-            me[x + "Model"].value = query[y];
-            me.controller.modelChanged(me[x + "Model"]);
+            var m = me[x + "Model"];
+            m.value = query[y];
+            me.controller.modelChanged(m);
+            if( m.postSlurp )
+                m.postSlurp();
         }
 
         catch(e) {
@@ -193,8 +200,11 @@ SearchAssistant.prototype.slurpLastSearch = function() {
             return;
 
         try {
-            me[x + "Model"].value = query[y] ? "on" : "off";
-            me.controller.modelChanged(me[x + "Model"]);
+            var m = me[x + "Model"];
+            m.value = query[y] ? "on" : "off";
+            me.controller.modelChanged(m);
+            if( m.postSlurp )
+                m.postSlurp();
         }
 
         catch(e) {
