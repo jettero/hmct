@@ -151,7 +151,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             arz[i] = arz[i].replace(/%252f/, "/");
 
     var _not = false;
-    for(i=0; i<arz.length; i++)
+    for(i=0; i<arz.length; i++) {
+        Mojo.Log.info("glsk-topswitch(arz[%d]=%s)", i, arz[i]);
+
         switch(arz[i]) {
             case "not":
                 _not = true;
@@ -183,6 +185,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 switch(arz[++i]) {
                     case "forever":
                         res[ (_not ? "not/" : "") + "hidden/forever" ] = true;
+                        _not = false;
                         break;
                     case "until":
                         switch(arz[++i]) {
@@ -229,13 +232,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             case "time":
                 switch(arz[++i]) {
-                    case "estimated":
+                    case "estimate":
                     case "worked":
                     case "left":
                         switch(arz[++i]) {
                             case "gt":
                             case "lt":
-                                arz[ "time/" + arz[i-1] + "/" +  arz[i] ] = arz[++i];
+                                res[ "time/" + arz[i-1] + "/" +  arz[i] ] = arz[++i];
                                 break;
                             default: Mojo.Log.error("glsk-time2-error: arz[%d]=%s", i, arz[i]); break;
                         }
@@ -246,6 +249,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             default: Mojo.Log.error("glsk-def-error: arz[%d]=%s", i, arz[i]); break;
         }
+    }
 
     return res;
 };
