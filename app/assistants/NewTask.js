@@ -204,12 +204,22 @@ NewTaskAssistant.prototype.activate = function() {
     Mojo.Log.info("NewTask::activate()");
 
     AMO.registerSrchgChange(this.handleGroupListChange);
+
+    this.slurpLastSearch();
 };
 
 NewTaskAssistant.prototype.deactivate = function() {
     Mojo.Log.info("NewTask::deactivate()");
 
     AMO.unregisterSrchgChange(this.handleGroupListChange);
+};
+
+NewTaskAssistant.prototype.slurpLastSearch = function() {
+    Mojo.Log.info("NewTask::slurpLastSearch()");
+
+    var query = TMO.getLastSearchKeyed();
+    var me = this;
+    Mojo.Log.info("NewTask::slurpLastSearch() keys: %s", Object.toJSON(query));
 };
 
 NewTaskAssistant.prototype.handleCommand = function(event) {
