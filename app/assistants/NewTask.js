@@ -103,7 +103,6 @@ NewTaskAssistant.prototype.setup = function() {
     this.handleGroupListChange([]); // kick it off
 };
 
-
 NewTaskAssistant.prototype.go = function() {
     Mojo.Log.info("NewTask::go()");
 
