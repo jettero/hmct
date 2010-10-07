@@ -3,7 +3,7 @@
 /*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit
 */
 
-function NewTaskAssistant() {
+function NewTaskAssistant(tags) {
     Mojo.Log.info("NewTask()");
 
     this.SCa = Mojo.Controller.stageController.assistant;
@@ -16,6 +16,8 @@ function NewTaskAssistant() {
 
     this.s = new SuccessDialog("NewTask");
     this.S = this.s.showSuccess;
+
+    this.tags = tags;
 }
 
 NewTaskAssistant.prototype.setup = function() {
@@ -37,6 +39,22 @@ NewTaskAssistant.prototype.setup = function() {
     this.preSelBAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, focusMode: Mojo.Widget.focusSelectMode };
     this.numberAttributes  = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
     this.preSelNAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock, focusMode: Mojo.Widget.focusSelectMode };
+
+    if( this.tags.length ) {
+        var tpf = this.controller.get("tag-pre-filler");
+            tpf.removeClassName("generically-hidden");
+
+        var items = [];
+        this.tags.each(function(i){ items.push({label: i, command: i}); });
+
+        Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
+            this.controller.popupSubmenu({
+                onChoose:  function(v) { Mojo.Log.info("hahah(%s)", v); },
+                placeNear: tpf,
+                items:     items
+            });
+        }.bind(this));
+    }
 
     this.controller.setupWidget("tags",       this.boringAttributes,  this.tagsModel      = {});
     this.controller.setupWidget("owner",      this.preSelBAttributes, this.ownerModel     = {});
