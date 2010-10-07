@@ -1,6 +1,6 @@
 {
 	"id":      "org.voltar.hiveminder",
-	"version": "0.7.4",
+	"version": "0.7.9",
 	"vendor":  "voltar.org",
 	"type":    "web",
 	"main":    "index.html",
