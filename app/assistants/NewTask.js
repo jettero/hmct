@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit
+/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit RegExp
 */
 
 function NewTaskAssistant(tags) {
@@ -49,7 +49,20 @@ NewTaskAssistant.prototype.setup = function() {
 
         Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
             this.controller.popupSubmenu({
-                onChoose:  function(v) { Mojo.Log.info("hahah(%s)", v); },
+                onChoose: function(v) {
+                    var re = new RegExp("\\b" + v + "\\b");
+                    if( this.tagsModel.value && this.tagsModel.value.length ) {
+                        if( !this.tagsModel.value.match(re) ) {
+                            this.tagsModel.value += " " + v;
+                            this.controller.modelChanged(this.tagsModel);
+                        }
+
+                    } else {
+                        this.tagsModel.value = v;
+                        this.controller.modelChanged(this.tagsModel);
+                    }
+
+                }.bind(this),
                 placeNear: tpf,
                 items:     items
             });
