@@ -156,7 +156,9 @@ function TasksAssistant() {
     }.bind(this));
 
     this.controller.modelChanged(this.tasksListModel);
-    this.controller.get("current-search").innerHTML = "&quot;" + lastSearch.replace(/\//g, " ") + "&quot;";
+
+    if( lastSearch )
+        this.controller.get("current-search").innerHTML = "&quot;" + lastSearch.replace(/\//g, " ") + "&quot;";
 };
 
 /*}}}*/
@@ -173,6 +175,7 @@ function TasksAssistant() {
         );
 
     var originalTap = listWidget.handleSwipeDeleteTap;
+    var me = this;
 
     // this is what happens when they tap (Confirm)
     listWidget.handleSwipeDeleteTap = function(event, itemNode) {
@@ -189,7 +192,10 @@ function TasksAssistant() {
             this.markModelDeleted(itemModel, this.kDeletedItemCancelled);
 
             Mojo.Log.info("Tasks::activate()::swipe-delete: tap-complete(rl=%s)!!", itemModel.record_locator);
-            TMO.completeTask(itemModel);
+
+            itemModel.complete = 7;
+            me.handleTasksChange(me.tasksListModel.items);
+            // TMO.completeTask(itemModel);
 
         } else {
             Mojo.Log.info("Tasks::activate()::swipe-delete: boring undo tap");
@@ -209,10 +215,12 @@ function TasksAssistant() {
                 Mojo.Log.info("Tasks::activate()::swipe-delete: multi-swipe-complete(%d, %s)!!",
                     deleteSpacer._mojoListIndex, itemModel.record_locator);
 
-                TMO.completeTask(itemModel);
-
                 this.markModelDeleted(itemModel, this.kDeletedItemCancelled);
                 this.cleanupSwipeDelete(itemNode);
+
+                itemModel.complete = 7;
+                me.handleTasksChange(me.tasksListModel.items);
+                // TMO.completeTask(itemModel);
             }
 
             deleteSpacer = this.findNextListItem(deleteSpacer);

@@ -75,6 +75,9 @@
 .task-short .summary            { color: black; }
 .task-short .complete1 .summary { font-weight: normal; color: #777777; }
 
+.task-short .complete7 .summary { text-decoration: line-through; color: green; }
+.task-short .complete6 .summary { text-decoration: line-through; color: green; }
+
 .task-short.accepted     .extra-data .task-waiting { display: none; }
 .task-short.not-accepted .extra-data .task-waiting { font-size: 0.75; color: #ca9563; }
 
