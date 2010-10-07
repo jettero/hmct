@@ -70,7 +70,20 @@ EditTaskAssistant.prototype.setup = function() {
         {label: "Lowest",  value: "1", iconPath: 'img/lowest.png'  }
     ];
 
+    var initPrioIcon;
+
     this.controller.setupWidget("priority", {label: "priority", choices: prios}, this.priorityModel={value:t.priority});
+    Mojo.Event.listen(this.controller.get("priority"), Mojo.Event.propertyChange, initPrioIcon = function() {
+        var v = this.priorityModel.value;
+        if(v) {
+            for(var i=0; i<prios.length; i++)
+                if( prios[i].value == v ) // STFU: sometimes this is 5 and sometimes "5"
+                    this.controller.get("prio-img").src = prios[i].iconPath;
+        }
+
+    }.bind(this));
+
+    initPrioIcon();
 
     this.controller.setupWidget("due-date",   this.preSelBAttributes, this.dueDateModel   = {value: t.due});
     this.controller.setupWidget("hide-until", this.preSelBAttributes, this.hideUntilModel = {value: t.starts});
