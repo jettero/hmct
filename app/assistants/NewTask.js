@@ -3,7 +3,7 @@
 /*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit RegExp
 */
 
-function NewTaskAssistant(tags) {
+function NewTaskAssistant() {
     Mojo.Log.info("NewTask()");
 
     this.SCa = Mojo.Controller.stageController.assistant;
@@ -16,8 +16,6 @@ function NewTaskAssistant(tags) {
 
     this.s = new SuccessDialog("NewTask");
     this.S = this.s.showSuccess;
-
-    this.tags = tags;
 }
 
 NewTaskAssistant.prototype.setup = function() {
@@ -40,12 +38,13 @@ NewTaskAssistant.prototype.setup = function() {
     this.numberAttributes  = {multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock };
     this.preSelNAttributes = {autoFocus: false, multiline: false, textCase: Mojo.Widget.steModeLowerCase, modifierState: Mojo.Widget.numLock, focusMode: Mojo.Widget.focusSelectMode };
 
-    if( this.tags.length ) {
+    var _tags = TMO.knownTags();
+    if( _tags.length ) {
         var tpf = this.controller.get("tag-pre-filler");
             tpf.removeClassName("generically-hidden");
 
         var items = [];
-        this.tags.each(function(i){ items.push({label: i, command: i}); });
+        _tags.each(function(i){ items.push({label: i, command: i}); });
 
         Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
             this.controller.popupSubmenu({

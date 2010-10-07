@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element
+/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit
 */
 
 /* {{{ */ function TaskManager() {
@@ -882,5 +882,17 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
+
+TaskManager.prototype.knownTags = function() {
+    var h = {};
+    this.tasks.each(function(t){
+        $A(nqsplit(t.tags)).each(function(_t){
+            h[_t] = true;
+        });
+    });
+    Mojo.Log.info("TaskManager::knownTags(): %s", Object.toJSON(h));
+
+    return $H(h).keys().sort();
+};
 
 Mojo.Log.info('loaded(TaskManager.js)');
