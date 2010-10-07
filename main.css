@@ -71,8 +71,8 @@
     color: white;
 }
 
-.task-short .complete1          { text-decoration: line-through; color: black; }
-.task-short .summary            { color: black; }
+.task-short .complete1 .summary { text-decoration: line-through; color: black; }
+.task-short            .summary { color: black; }
 .task-short .complete1 .summary { font-weight: normal; color: #777777; }
 
 .task-short .complete7 .summary { font-weight: normal; color: green; }
@@ -100,6 +100,8 @@
 .todo-item .extra-data .inner-overdue { color: red }
 .todo-item .extra-data .not-due       { display: none; }
 .todo-item .extra-data .repeat-once   { display: none; border: 1px solid red; }
+
+.todo-item .extra-data .due.complete1 .inner-overdue { color: #7777bb; }
 
 .todo-item .extra-data .tags {
     font-style: italic;
