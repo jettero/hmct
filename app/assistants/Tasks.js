@@ -194,7 +194,7 @@ function TasksAssistant() {
             Mojo.Log.info("Tasks::activate()::swipe-delete: tap-complete(rl=%s)!!", itemModel.record_locator);
 
             var orig = itemModel.complete;
-            itemModel.complete = 7;
+            itemModel.complete = orig === 0 ? 6 : 7;
             me.handleTasksChange(me.tasksListModel.items);
             itemModel.complete = orig;
             TMO.completeTask(itemModel);
@@ -221,7 +221,7 @@ function TasksAssistant() {
                 this.cleanupSwipeDelete(itemNode);
 
                 var orig = itemModel.complete;
-                itemModel.complete = 7;
+                itemModel.complete = orig === 0 ? 6 : 7;
                 me.handleTasksChange(me.tasksListModel.items);
                 itemModel.complete = orig;
                 TMO.completeTask(itemModel);
