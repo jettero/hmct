@@ -4,9 +4,8 @@
 /*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit
 */
 
-function EditTaskAssistant(_a) {
-    this.task = _a.task;
-    this.tags = _a.tags;
+function EditTaskAssistant(_i) {
+    this.task = _i;
 
     Mojo.Log.info("EditTask(%s)", this.task.record_locator);
 
