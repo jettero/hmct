@@ -3,7 +3,7 @@
 
 // parse:  "tag \"list\" about \"stuff with spaces\""
 // return: ["\"tag\"","\"list\"","\"about\"","\"stuff with spaces\""]
-/* {{{ */ function qsplit(x) {
+/* {{{ */ function qsplit(x,nq) {
     var r = [];
     var i,e;
     var ok;
@@ -40,7 +40,8 @@
                 return false;
 
         } else {
-            r.push( '"' + x[i] + '"' );
+            if( nq ) r.push( x[i] );
+            else     r.push( '"' + x[i] + '"' );
         }
     }
 
@@ -62,3 +63,6 @@
 }
 
 /*}}}*/
+
+// just like qsplit, but without the inner quotes
+function nqsplit(x) { return qsplit(x,true); }

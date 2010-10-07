@@ -5,7 +5,9 @@
 */
 
 function EditTaskAssistant(_i) {
-    Mojo.Log.info("EditTask(%s)", (this.task = _i).record_locator);
+    this.task = _i;
+
+    Mojo.Log.info("EditTask(%s)", this.task.record_locator);
 
     this.SCa = Mojo.Controller.stageController.assistant;
 
@@ -55,11 +57,41 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
 
+    var _tags = TMO.knownTags();
+    if( _tags.length ) {
+        var tpf = this.controller.get("tag-pre-filler");
+            tpf.removeClassName("generically-hidden");
+
+        var items = [];
+        _tags.each(function(i){ items.push({label: i, command: i}); });
+
+        Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
+            this.controller.popupSubmenu({
+                onChoose: function(v) {
+                    var re = new RegExp("\\b" + v + "\\b");
+                    if( this.tagsModel.value && this.tagsModel.value.length ) {
+                        if( !this.tagsModel.value.match(re) ) {
+                            this.tagsModel.value += " " + v;
+                            this.controller.modelChanged(this.tagsModel);
+                        }
+
+                    } else {
+                        this.tagsModel.value = v;
+                        this.controller.modelChanged(this.tagsModel);
+                    }
+
+                }.bind(this),
+                placeNear: tpf,
+                items:     items
+            });
+        }.bind(this));
+    }
+
     var tdef = revqsplit(qsplit(t.tags));
     if( tdef === "<none>" )
         tdef = "";
 
-    this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel  = {value: tdef });
+    this.controller.setupWidget("tags",  this.boringAttributes,  this.tagsModel  = {value: tdef });
     this.controller.setupWidget("owner", this.preSelBAttributes, this.ownerModel = {value: t.owner});
 
     var prios = [
