@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ Template palmGetResource OPT TMO ConfirmationDialog $A
+/*global Mojo $ Template palmGetResource OPT TMO ConfirmationDialog $A FastCommentAssistant
 */
 
 function TaskAssistant(_args) {
@@ -30,12 +30,17 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.refreshModel     = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
     this.editModel        = { label: "Edit",    icon: 'edit',         command: 'edit'    };
-    this.commentModel     = { label: "Comment", icon: 'conversation', command: 'comment' };
+    this.commentModel     = { label: "Comment", icon: 'conversation', submenu: 'ctype'   };
     this.deleteModel      = { label: "Delete",  icon: 'delete',       command: 'delete'  };
     this.commandMenuModel = {
         label: 'Task Command Menu',
         items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
     };
+
+    this.emailCtypeModel = { label: "Email", command: 'email-comment' };
+    this.ajaxCtypeModel  = { label: "WebOS", command: 'webos-comment' };
+    this.ctypeSubmenu = { label: 'Comment Type Submenu', items: [ this.emailCtypeModel, this.ajaxCtypeModel ] };
+	this.controller.setupWidget('ctype', undefined, this.ctypeSubmenu);
 
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
@@ -202,14 +207,15 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     if (event.type === Mojo.Event.command) {
         var s_a = event.command.split(/\s*(?:@@)\s*/);
 
+        if( s_a.length > 0 )
+            Mojo.Log.info("Task::handleCommand(%s) [rl=%s]", s_a[0], rl);
+
         switch (s_a[0]) {
             case 'refresh':
-                Mojo.Log.info("Task::handleCommand(refresh) [rl=%s]", rl);
                 TMO.fetchOneTask(rl, true); // force reload
                 break;
 
             case 'edit':
-                Mojo.Log.info("Task::handleCommand(edit) [rl=%s]", rl);
                 this.SCa.showScene("EditTask", this.task);
                 break;
 
@@ -244,8 +250,37 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 }.bind(this));
                 break;
 
-            case 'comment':
-                Mojo.Log.info("Task::handleCommand(comment) [rl=%s]", rl);
+            case 'email-comment':
+                var subject = "Comment: " + this.task.summary + " (#" + rl + ")";
+                var url     = 'http://task.hm/' + rl;
+                var msg     = "<p> → Go to <a href='" + url + "'>" + this.task.summary + "</a> (#" + rl + ")";
+
+                this.controller.serviceRequest("palm://com.palm.applicationManager", {
+                        method: 'open',
+                        parameters: {
+                            id: "com.palm.app.email",
+                            params: {
+                                summary: subject, text: msg, recipients: [{
+                                    type:  "email",
+                                    role:  1, /* 1-to, 2-cc, 3-bcc */
+                                    value: this.task.comment_address,
+                                    contactDisplay: "Task-" + rl
+                                }]
+                            }
+                        }
+                    }
+                );
+                break;
+
+            case 'webos-comment':
+                var FCA = new FastCommentAssistant(this, function(comment){
+                    Mojo.Log.info("Task::handleCommand(webos-comment) [rl=%s]", rl);
+                    TMO.commentTask(this.task, comment);
+
+                }.bind(this));
+
+                var dialogObject = this.controller.showDialog({ template: 'misc/fast-comment', assistant: FCA });
+                FCA.mojo = dialogObject.mojo;
                 break;
 
             default:

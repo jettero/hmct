@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element
+/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit
 */
 
 /* {{{ */ function TaskManager() {
@@ -122,17 +122,146 @@
     return s;
 };
 
-TaskManager.prototype._getLastSearchSpaced = function(s) {
+TaskManager.prototype.getLastSearchSpaced = function() {
     if( !this.lastSearch[this.currentLogin] )
         return "";
 
-    return this.lastSearch[this.currentLogin].replace(/\//g, ' '); // heh
+    // cannonically, actual slashes are encoded as %252F at this point...
+    return this.lastSearch[this.currentLogin].replace(/\//g, ' ').replace(/%252F/, "/");
+};
+
+TaskManager.prototype.getLastSearch = function() {
+    if( !this.lastSearch[this.currentLogin] )
+        return "";
+
+    return this.lastSearch[this.currentLogin];
+};
+
+TaskManager.prototype.getLastSearchKeyed = function() {
+    var res = {};
+
+    if( !this.lastSearch[this.currentLogin] )
+        return res;
+
+    var arz = this.lastSearch[this.currentLogin].split("/");
+
+    var i;
+    for(i=0; i<arz.length; i++)
+        if( arz[i].match(/%252f/) )
+            arz[i] = arz[i].replace(/%252f/, "/");
+
+    var _not = false;
+    var lk;
+    for(i=0; i<arz.length; i++) {
+        Mojo.Log.info("glsk-topswitch(arz[%d]=%s)", i, arz[i]);
+
+        switch(arz[i]) {
+            case "not":
+                _not = true;
+                break;
+
+            case "sort_by_tags":
+            case "sort_by":
+            case "group":
+                if(_not) Mojo.Log.error("glsk-not-error (1)"); // STFU: this looks fine to me, think jslint fail
+            case "tag":
+            case "query":
+            case "owner":
+            case "summary":
+            case "requestor":
+            case "description":
+                res[lk= (_not ? "not/" : "") + arz[i] ] = arz[++i];
+                _not = false;
+                break;
+
+            case "unaccepted":
+                if(_not) Mojo.Log.error("glsk-not-error (2)"); // STFU: this looks fine to me, think jslint fail
+            case "accepted":
+            case "complete":
+                res[lk= (_not ? "not/" : "") + arz[i] ] = true;
+                _not = false;
+                break;
+
+            case "hidden":
+                switch(arz[++i]) {
+                    case "forever":
+                        res[lk= (_not ? "not/" : "") + "hidden/forever" ] = true;
+                        _not = false;
+                        break;
+                    case "until":
+                        switch(arz[++i]) {
+                            case "after":  res[lk="hidden/until/after"]  = arz[++i]; break;
+                            case "before": res[lk="hidden/until/before"] = arz[++i]; break;
+                            default: Mojo.Log.error("glsk-hid-error: arz[%d]=%s", i, arz[i]); break;
+                        }
+                        break;
+                    default: Mojo.Log.error("glsk-error not until?"); break;
+                }
+                break;
+
+            case "completed":
+            case "due": switch(arz[++i]) {
+                case "before": res[lk=arz[i-1] + "/before"] = arz[++i]; break;
+                case "after":  res[lk=arz[i-1] + "/after"]  = arz[++i]; break;
+                default: Mojo.Log.error("glsk-d/c-error: arz[%d]=%s", i, arz[i]); break;
+            }
+            break;
+
+            case "priority": switch(arz[++i]) {
+                case "above": res[lk="priority/above"] = arz[++i]; break;
+                case "below": res[lk="priority/below"] = arz[++i]; break;
+                default: Mojo.Log.error("glsk-prio-error: arz[%d]=%s", i, arz[i]); break;
+            }
+            break;
+
+            case "but":
+                if( arz[++i] !== "first" ) Mojo.Log.error("glsk-but-error");
+                res[lk="but/first"] = arz[++i];
+                break;
+
+            case "and":
+                if( arz[++i] !== "then" ) Mojo.Log.error("glsk-and-error");
+                res[lk="and/then"] = arz[++i];
+                break;
+
+            case "next":
+                if( arz[++i] !== "action" ) Mojo.Log.error("glsk-next-!action-error");
+                if( arz[++i] !== "by"     ) Mojo.Log.error("glsk-next-!by-error");
+                res[lk= (_not ? "not/" : "") + "next/action/by" ] = arz[++i];
+                _not = false;
+                break;
+
+            case "time":
+                switch(arz[++i]) {
+                    case "estimate":
+                    case "worked":
+                    case "left":
+                        switch(arz[++i]) {
+                            case "gt":
+                            case "lt":
+                                res[lk= "time/" + arz[i-1] + "/" +  arz[i] ] = arz[++i];
+                                break;
+                            default: Mojo.Log.error("glsk-time2-error: arz[%d]=%s", i, arz[i]); break;
+                        }
+                        break;
+                    default: Mojo.Log.error("glsk-time1-error: arz[%d]=%s", i, arz[i]); break;
+                }
+                break;
+
+            default:
+                Mojo.Log.info("glsk-def-action: append %s (%s) with %s", lk, res[lk], arz[i]);
+                res[lk] += " " + arz[i];
+                break;
+        }
+    }
+
+    return res;
 };
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !search ) {
-        var ls = this.lastSearch[this.currentLogin];
+        var ls = this.getLastSearch();
 
         if( !ls || !ls.length ) {
             search = this.getSearchByName(OPT.defaultSearch);
@@ -318,7 +447,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
             tasks.push( this.tasks[i] );
          // tasks.push( Object.clone(this.tasks[i]) ); // shallow copy, but this should be good enough
 
-    callback(tasks, this._getLastSearchSpaced());
+    callback(tasks, this.getLastSearchSpaced());
 };
 
 /*}}}*/
@@ -467,7 +596,7 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 /* {{{ */ TaskManager.prototype.getFurtherDetails = function(cma,tokens) {
 
     if( !tokens )
-        tokens = this._getLastSearchSpaced();
+        tokens = this.getLastSearchSpaced();
 
     Mojo.Log.info("TaskManager::getFurtherDetails(cma: %d, tokens: %s)", cma, tokens);
 
@@ -886,5 +1015,31 @@ TaskManager.prototype._getLastSearchSpaced = function(s) {
 };
 
 /*}}}*/
+/* {{{ */ TaskManager.prototype.commentTask = function(task,comment,cb) {
+    Mojo.Log.info("TaskManager::commentTask(rl=%s): %s", task.record_locator, comment);
+
+    var params = { comment: comment };
+
+    if( !comment ) {
+        this.E("commentTask", "no comment", "And what would that comment be?");
+        return;
+    }
+
+    this.updateTask(params,task,cb);
+};
+
+/*}}}*/
+
+TaskManager.prototype.knownTags = function() {
+    var h = {};
+    this.tasks.each(function(t){
+        $A(nqsplit(t.tags)).each(function(_t){
+            h[_t] = true;
+        });
+    });
+    Mojo.Log.info("TaskManager::knownTags(): %s", Object.toJSON(h));
+
+    return $H(h).keys().sort();
+};
 
 Mojo.Log.info('loaded(TaskManager.js)');

@@ -307,7 +307,6 @@ function TasksAssistant() {
                 break;
 
             case 'new':
-                Mojo.Log.info("Tasks::handleCommand(search: %s)", s_a[1]);
                 this.SCa.showScene('NewTask');
                 break;
 
