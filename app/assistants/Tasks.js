@@ -195,7 +195,7 @@ function TasksAssistant() {
 
             itemModel.complete = 7;
             me.handleTasksChange(me.tasksListModel.items);
-            // TMO.completeTask(itemModel);
+            TMO.completeTask(itemModel);
 
         } else {
             Mojo.Log.info("Tasks::activate()::swipe-delete: boring undo tap");
@@ -220,7 +220,7 @@ function TasksAssistant() {
 
                 itemModel.complete = 7;
                 me.handleTasksChange(me.tasksListModel.items);
-                // TMO.completeTask(itemModel);
+                TMO.completeTask(itemModel);
             }
 
             deleteSpacer = this.findNextListItem(deleteSpacer);
