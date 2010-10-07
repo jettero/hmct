@@ -4,8 +4,11 @@
 /*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit
 */
 
-function EditTaskAssistant(_i) {
-    Mojo.Log.info("EditTask(%s)", (this.task = _i).record_locator);
+function EditTaskAssistant(_a) {
+    this.task = _a.task;
+    this.tags = _a.tags;
+
+    Mojo.Log.info("EditTask(%s)", this.task.record_locator);
 
     this.SCa = Mojo.Controller.stageController.assistant;
 
@@ -54,6 +57,35 @@ EditTaskAssistant.prototype.setup = function() {
         this.controller.get("accept-row").addClassName("generically-hidden");
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
+
+    if( this.tags.length ) {
+        var tpf = this.controller.get("tag-pre-filler");
+            tpf.removeClassName("generically-hidden");
+
+        var items = [];
+        this.tags.each(function(i){ items.push({label: i, command: i}); });
+
+        Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
+            this.controller.popupSubmenu({
+                onChoose: function(v) {
+                    var re = new RegExp("\\b" + v + "\\b");
+                    if( this.tagsModel.value && this.tagsModel.value.length ) {
+                        if( !this.tagsModel.value.match(re) ) {
+                            this.tagsModel.value += " " + v;
+                            this.controller.modelChanged(this.tagsModel);
+                        }
+
+                    } else {
+                        this.tagsModel.value = v;
+                        this.controller.modelChanged(this.tagsModel);
+                    }
+
+                }.bind(this),
+                placeNear: tpf,
+                items:     items
+            });
+        }.bind(this));
+    }
 
     this.controller.setupWidget("tags",  this.boringAttributes, this.tagsModel  = {value: revqsplit(qsplit(t.tags))});
     this.controller.setupWidget("owner", this.preSelBAttributes, this.ownerModel = {value: t.owner});
