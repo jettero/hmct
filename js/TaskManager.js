@@ -151,6 +151,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             arz[i] = arz[i].replace(/%252f/, "/");
 
     var _not = false;
+    var lk;
     for(i=0; i<arz.length; i++) {
         Mojo.Log.info("glsk-topswitch(arz[%d]=%s)", i, arz[i]);
 
@@ -169,7 +170,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             case "summary":
             case "requestor":
             case "description":
-                res[ (_not ? "not/" : "") + arz[i] ] = arz[++i];
+                res[lk= (_not ? "not/" : "") + arz[i] ] = arz[++i];
                 _not = false;
                 break;
 
@@ -177,20 +178,20 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 if(_not) Mojo.Log.error("glsk-not-error (2)"); // STFU: this looks fine to me, think jslint fail
             case "accepted":
             case "complete":
-                res[ (_not ? "not/" : "") + arz[i] ] = true;
+                res[lk= (_not ? "not/" : "") + arz[i] ] = true;
                 _not = false;
                 break;
 
             case "hidden":
                 switch(arz[++i]) {
                     case "forever":
-                        res[ (_not ? "not/" : "") + "hidden/forever" ] = true;
+                        res[lk= (_not ? "not/" : "") + "hidden/forever" ] = true;
                         _not = false;
                         break;
                     case "until":
                         switch(arz[++i]) {
-                            case "after":  res["hidden/until/after"]  = arz[++i]; break;
-                            case "before": res["hidden/until/before"] = arz[++i]; break;
+                            case "after":  res[lk="hidden/until/after"]  = arz[++i]; break;
+                            case "before": res[lk="hidden/until/before"] = arz[++i]; break;
                             default: Mojo.Log.error("glsk-hid-error: arz[%d]=%s", i, arz[i]); break;
                         }
                         break;
@@ -200,33 +201,33 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             case "completed":
             case "due": switch(arz[++i]) {
-                case "before": res[arz[i-1] + "/before"] = arz[++i]; break;
-                case "after":  res[arz[i-1] + "/after"]  = arz[++i]; break;
+                case "before": res[lk=arz[i-1] + "/before"] = arz[++i]; break;
+                case "after":  res[lk=arz[i-1] + "/after"]  = arz[++i]; break;
                 default: Mojo.Log.error("glsk-d/c-error: arz[%d]=%s", i, arz[i]); break;
             }
             break;
 
             case "priority": switch(arz[++i]) {
-                case "above": res["priority/above"] = arz[++i]; break;
-                case "below": res["priority/below"] = arz[++i]; break;
+                case "above": res[lk="priority/above"] = arz[++i]; break;
+                case "below": res[lk="priority/below"] = arz[++i]; break;
                 default: Mojo.Log.error("glsk-prio-error: arz[%d]=%s", i, arz[i]); break;
             }
             break;
 
             case "but":
                 if( arz[++i] !== "first" ) Mojo.Log.error("glsk-but-error");
-                res["but/first"] = arz[++i];
+                res[lk="but/first"] = arz[++i];
                 break;
 
             case "and":
                 if( arz[++i] !== "then" ) Mojo.Log.error("glsk-and-error");
-                res["and/then"] = arz[++i];
+                res[lk="and/then"] = arz[++i];
                 break;
 
             case "next":
                 if( arz[++i] !== "action" ) Mojo.Log.error("glsk-next-!action-error");
                 if( arz[++i] !== "by"     ) Mojo.Log.error("glsk-next-!by-error");
-                res[ (_not ? "not/" : "") + "next/action/by" ] = arz[++i];
+                res[lk= (_not ? "not/" : "") + "next/action/by" ] = arz[++i];
                 _not = false;
                 break;
 
@@ -238,7 +239,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                         switch(arz[++i]) {
                             case "gt":
                             case "lt":
-                                res[ "time/" + arz[i-1] + "/" +  arz[i] ] = arz[++i];
+                                res[lk= "time/" + arz[i-1] + "/" +  arz[i] ] = arz[++i];
                                 break;
                             default: Mojo.Log.error("glsk-time2-error: arz[%d]=%s", i, arz[i]); break;
                         }
@@ -247,7 +248,10 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 }
                 break;
 
-            default: Mojo.Log.error("glsk-def-error: arz[%d]=%s", i, arz[i]); break;
+            default:
+                Mojo.Log.info("glsk-def-action: append %s (%s) with %s", lk, res[lk], arz[i]);
+                res[lk] += " " + arz[i];
+                break;
         }
     }
 
