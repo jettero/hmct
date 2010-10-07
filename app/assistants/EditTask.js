@@ -57,12 +57,13 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
 
-    if( this.tags.length ) {
+    var _tags = TMO.knownTags();
+    if( _tags.length ) {
         var tpf = this.controller.get("tag-pre-filler");
             tpf.removeClassName("generically-hidden");
 
         var items = [];
-        this.tags.each(function(i){ items.push({label: i, command: i}); });
+        _tags.each(function(i){ items.push({label: i, command: i}); });
 
         Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
             this.controller.popupSubmenu({
