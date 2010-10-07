@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo Template palmGetResource setTimeout TMO OPT AMO $ Event
+/*global Mojo Template palmGetResource setTimeout TMO OPT AMO $ Event nqsplit $H $A
 */
 
 function TasksAssistant() {
@@ -295,8 +295,14 @@ function TasksAssistant() {
                 break;
 
             case 'new':
-                Mojo.Log.info("Tasks::handleCommand(search: %s)", s_a[1]);
-                this.SCa.showScene('NewTask');
+                var h = {};
+                this.tasksListModel.items.each(function(t){
+                    $A(nqsplit(t.tags)).each(function(_t){
+                        h[_t] = true;
+                    });
+                });
+                Mojo.Log.info("Tasks::handleCommand(new ... tags=%s)", Object.toJSON(h));
+                this.SCa.showScene('NewTask', $H(h).keys().sort());
                 break;
 
             default:
