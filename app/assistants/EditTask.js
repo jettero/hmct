@@ -68,6 +68,8 @@ EditTaskAssistant.prototype.setup = function() {
         Mojo.Event.listen(tpf, Mojo.Event.tap, function(){
             this.controller.popupSubmenu({
                 onChoose: function(v) {
+                    if( v == undefined ) return; // STFU: I mean ==
+
                     var re = new RegExp("\\b" + v + "\\b");
                     if( this.tagsModel.value && this.tagsModel.value.length ) {
                         if( !this.tagsModel.value.match(re) ) {
