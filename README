@@ -5,14 +5,13 @@
 
    Written by [1]Paul Miller.
 
-   This is version 0.7.10 of HMCT.
-
    This app is pretty much just a caching GUI for the
    [2]http;//hiveminder.com/ website. They encourage building applications
    like this by offering a very nice self-discovering [3]ReSTful API.
 
-   Bugs and problems should be reported in the Github issue tracking system:
-   [4]http://github.com/jettero/hmct/issues
+   Bugs and feature requests should be reported via
+   [4]HMCT-feeedback@voltar.org — this is a spam filtered address that simply
+   feeds the author's hiveminder task queue.
 
    The entire source for this app can be found there as well:
    [5]http://github.com/jettero/hmct
@@ -39,7 +38,7 @@ References
    1. http://jettero.github.com/
    2. http://hiveminder.com/
    3. http://hiveminder.com/help/reference/API.html
-   4. http://github.com/jettero/hmct/issues
+   4. mailto:HMCT-feedback@voltar.org
    5. http://github.com/jettero/hmct
    6. http://www.opensource.org/licenses/gpl-3.0.html
    7. http://hiveminder.com/about/team.html
