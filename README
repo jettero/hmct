@@ -9,9 +9,9 @@
    [2]http;//hiveminder.com/ website. They encourage building applications
    like this by offering a very nice self-discovering [3]ReSTful API.
 
-   Bugs and feature requests should be reported via
-   [4]HMCT-feeedback@voltar.org — this is a spam filtered address that simply
-   feeds the author's hiveminder task queue.
+   Bugs and feature requests should be reported via [4]HMCT-feeedback — this
+   is a spam filtered email address that simply feeds my hiveminder task
+   queue.
 
    The entire source for this app can be found there as well:
    [5]http://github.com/jettero/hmct
