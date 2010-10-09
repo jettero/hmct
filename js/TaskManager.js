@@ -967,6 +967,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             } } }
 
+            me.tasks = $A(me.tasks).reject(function(i) { return i === task; });
+            me.notifyTasksChange();
+
             if( cb ) {
                 try { cb(); } catch(e) {
                     me.E("deleteTask", "post succeeded", "failed to issue callback after successfully deleting task: " + e);
