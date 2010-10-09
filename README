@@ -54,10 +54,9 @@ References
    [1]http://hiveminder.com/splash/signup/.
 
    You won't regret signing up. Hiveminder is probably the coolest way to
-   track your tasks yet invented. You won't regret signing up. Hiveminder is
-   probably the coolest way to track your tasks yet invented. You can
-   interact with your tasks via email, IM, the command line, and IMAP.
-   Basically whatever seems handy.
+   track your tasks yet invented. You can interact with your tasks via email,
+   IM, the command line, and IMAP. Basically whatever seems handy at the
+   time.
 
   Hiveminder Help
 
@@ -80,14 +79,13 @@ References
    Hiveminder staff unless you're quite certain they are Hiveminder bugs and
    not actually a problem with this application.
 
-   Bugs and feature requests for this application should be reported via the
-   github issue tracker only.
+   Bugs and feature requests should be reported via [4]HMCT-feeedback — this
+   is a spam filtered email address that simply feeds my hiveminder task
+   queue.
 
-   [4]http://github.com/jettero/hmct/issues
-
-   If you are unable or unwilling to operate the github issue tracker, if you
-   have a question regarding your issue (e.g. whether it is an issue at all),
-   or if you just have some other concern; just [5]shoot me an email instead.
+   If you have some other question or concern (and don't wish to open a
+   support ticket about it); just email me here: [5]shoot me an email
+   instead.
 
 References
 
@@ -95,5 +93,5 @@ References
    1. http://hiveminder.com/splash/signup/
    2. http://hiveminder.com/help
    3. mailto:jettero@gmail.com
-   4. http://github.com/jettero/hmct/issues
+   4. mailto:HMCT-feedback@voltar.org
    5. mailto:jettero@gmail.com
