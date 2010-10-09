@@ -1030,16 +1030,19 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-TaskManager.prototype.knownTags = function() {
+/* {{{ */ TaskManager.prototype.knownTags = function() {
     var h = {};
     this.tasks.each(function(t){
         $A(nqsplit(t.tags)).each(function(_t){
-            h[_t] = true;
+            if( _t != undefined && _t !== "<none>" ) // STFU: I mean !=
+                h[_t] = true;
         });
     });
     Mojo.Log.info("TaskManager::knownTags(): %s", Object.toJSON(h));
 
     return $H(h).keys().sort();
 };
+
+/*}}}*/
 
 Mojo.Log.info('loaded(TaskManager.js)');
