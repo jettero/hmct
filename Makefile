@@ -2,9 +2,9 @@ name=HiveminderCloudTasks
 ssh=ssh -p 2222 -l root localhost
 mydefser=TODO
 
-default: test README
+default: test
 
-release: clean README
+release: clean
 	env -i make --no-print-directory build
 	git fetch github gh-pages:gh-pages
 	git checkout gh-pages; git add *.ipk; git clean -dfx
@@ -51,9 +51,9 @@ README: app/views/About.html app/views/Help.html Makefile
 	@ echo -----=: app/views/Help.html  >> README
 	@ elinks -dump app/views/Help.html  >> README
 
-build: framework_config.json runtime_options.json
-	@echo checking for version mismatch between appinfo.json and app/views/About.html
-	@VV=`perl -ne 'print "$$1\n" if m/"?version"?:\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html
+build: framework_config.json runtime_options.json README
+	@ # echo checking for version mismatch between appinfo.json and app/views/About.html
+	@ # VV=`perl -ne 'print "$$1\n" if m/"?version"?:\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html
 	@-rm -vf *.ipk $(name) *.tar.gz ipkgtmp*
 	ln -sf ./ $(name) && \
         palm-package --exclude "*.tar.gz" --exclude .git --exclude cgi --exclude "*.ipk" \
