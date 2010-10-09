@@ -3,13 +3,12 @@
 /*global Mojo $ Template palmGetResource OPT TMO ConfirmationDialog $A FastCommentAssistant
 */
 
-function TaskAssistant(_args) {
-    this.task = _args[0];
+function TaskAssistant(_t) {
+    this.task = _t;
 
     Mojo.Log.info("Task(%s)", this.task.record_locator);
 
     this.SCa = Mojo.Controller.stageController.assistant;
-    this.tasksAssistant = _args[1];
 
     this.handleTaskChange = this.handleTaskChange.bind(this);
     this.menuSetup        = this.SCa.menuSetup.bind(this);
@@ -226,23 +225,8 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                     if(v !== "yes")
                         return;
 
-                    // this marks the cache "stale" automatically
-                    TMO.deleteTask(this.task, function() {
-                        Mojo.Log.info("Task::handleCommand(delete) [rl=%s] [delete completed updating list-model]", rl);
-
-                        try {
-                            this.tasksAssistant.tasksListModel.items =
-                                $A(this.tasksAssistant.tasksListModel.items).reject(
-                                    function(i) { return i === this.task; }.bind(this) );
-
-                            this.tasksAssistant.controller.modelChanged(this.tasksAssistant.tasksListModel);
-
-                        } catch(e) {
-                            Mojo.Log.info("Task::handleCommand(delete) [delete-cb] [rl=%s] js-ERROR: %s",
-                                this.task.record_locator, e);
-                        }
-
-                    }.bind(this));
+                    // this marks the cache "stale" and removes it from Tasks.js automatically
+                    TMO.deleteTask(this.task);
 
                     // then go back, cuz this task is gone
                     Mojo.Controller.stageController.popScene();

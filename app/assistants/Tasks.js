@@ -62,7 +62,7 @@ function TasksAssistant() {
 /* {{{ */ TasksAssistant.prototype.taskListTap = function(event) {
     Mojo.Log.info("Tasks::taskListTap(%s)", event.item.record_locator);
 
-    this.SCa.showScene("Task", [event.item, this]);
+    this.SCa.showScene("Task", event.item);
 
 };
 
@@ -151,7 +151,7 @@ function TasksAssistant() {
 
         if( OPT._preTapTask )
             if( t.record_locator === OPT._preTapTask.toUpperCase() || t.id === OPT._preTapTask )
-                this.SCa.showScene("Task", [t, this]);
+                this.SCa.showScene("Task", t);
 
     }.bind(this));
 
