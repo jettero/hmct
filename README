@@ -6,7 +6,7 @@
    Written by [1]Paul Miller.
 
    This app is pretty much just a caching GUI for the
-   [2]http;//hiveminder.com/ website. They encourage building applications
+   [2]http://hiveminder.com/ website. They encourage building applications
    like this by offering a very nice self-discovering [3]ReSTful API.
 
    Bugs and feature requests should be reported via [4]HMCT-feeedback — this
@@ -84,8 +84,7 @@ References
    queue.
 
    If you have some other question or concern (and don't wish to open a
-   support ticket about it); just email me here: [5]shoot me an email
-   instead.
+   support ticket about it); just [5]shoot me an email instead.
 
 References
 
