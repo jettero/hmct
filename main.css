@@ -6,7 +6,7 @@
     border: 1px solid #aaaaaa;
     position: fixed; top: 12px; right: 10px;
     padding: 0; margin: 0;
-    display: block;
+    display: none;
 }
 
 #wait-detail {
@@ -16,7 +16,7 @@
     position: fixed; top: 45px; right: 10px;
     padding: 2px; margin: 0;
     font-size: 9px;
-    display: block;
+    display: none;
 }
 
 .todo-item .extra-data div { display: inline }

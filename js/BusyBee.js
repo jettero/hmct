@@ -5,7 +5,15 @@
 
 function BusyBee() {
     this.tasks = {};
+
+    // Mojo.$("wait").observe('click', this.showDetail.bind(this));
 }
+
+BusyBee.prototype.showDetail = function() {
+    Mojo.Log.info("BusyBee::showDetail()");
+
+    $("wait-detail").setStyle({display: 'block'});
+};
 
 BusyBee.prototype.busy = function(task) {
     Mojo.Log.info("BusyBee::busy(%s)", task);
