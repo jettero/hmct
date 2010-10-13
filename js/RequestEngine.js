@@ -68,10 +68,12 @@ function RequestEngine() {
         return;
     }
 
+    /*
     if( !_r._desc_mutilated ) {
         _r.desc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
         _r._desc_mutilated = true;
     }
+    */
 
     Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
 
