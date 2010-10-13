@@ -68,17 +68,13 @@ function RequestEngine() {
         return;
     }
 
-    /*
-    if( !_r._desc_mutilated ) {
-        _r.desc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
-        _r._desc_mutilated = true;
-    }
-    */
+    if( !_r._logdesc )
+        _r._logdesc = "[" + _r.desc.replace(/::/, "-").replace(/[()]/g, "^").toLowerCase() + "]";
 
-    Mojo.Log.info("RequestEngine::doRequest(%s)", _r.desc);
+    Mojo.Log.info("RequestEngine::doRequest(%s)", _r._logdesc);
 
     if( this.dbBusy() ) {
-        Mojo.Log.info("RequestEngine::doRequest(%s) [busy]", _r.desc);
+        Mojo.Log.info("RequestEngine::doRequest(%s) [busy]", _r._logdesc);
         this.pushBusyCall('db', this.doRequest, [_r]);
         return;
     }
@@ -89,7 +85,7 @@ function RequestEngine() {
 
     for(i=0; i<required.length; i++) {
         if( !_r[required[i]] ) {
-            Mojo.Log.info("RequestEngine::doRequest(%s) [missing _r.[%s] param]", _r.desc, required[i]);
+            Mojo.Log.info("RequestEngine::doRequest(%s) [missing _r.[%s] param]", _r._logdesc, required[i]);
             interr = true;
         }
     }
@@ -98,7 +94,7 @@ function RequestEngine() {
 
     for(i=0; i<forbidden.length; i++) {
         if( _r[forbidden[i]] ) {
-            Mojo.Log.info("RequestEngine::doRequest(%s) [forbidden _r.[%s] param]", _r.desc, forbidden[i]);
+            Mojo.Log.info("RequestEngine::doRequest(%s) [forbidden _r.[%s] param]", _r._logdesc, forbidden[i]);
             interr = true;
         }
     }
@@ -122,7 +118,7 @@ function RequestEngine() {
                         : _r.desc;
 
         Mojo.Log.info("RequestEngine::doRequest(%s) [request is cacheable using key: %s; forced: %s; rcma: %d(%s)]",
-            _r.desc, _r.cacheKey, _r.force ? "yes" : "no",
+            _r._logdesc, _r.cacheKey, _r.force ? "yes" : "no",
             _r.cacheMaxAgeOverride, typeof(_r.cacheMaxAgeOverride)
         );
 
@@ -130,7 +126,7 @@ function RequestEngine() {
             var entry = this.data.cache[_r.cacheKey];
 
             if( entry ) {
-                Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching]", _r.desc, _r.cacheKey);
+                Mojo.Log.info("RequestEngine::doRequest(%s) [cache hit for %s, fetching]", _r._logdesc, _r.cacheKey);
 
                 this.dbBusy(true);
                 this.dbo.get(_r.cacheKey, function(data) {
@@ -154,19 +150,19 @@ function RequestEngine() {
 
                         if( ds >= cma || st ) {
                             Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older(%d>=%d) or stale(%s), issuing new request]",
-                                 _r.desc, ds, cma, st);
+                                 _r._logdesc, ds, cma, st);
 
                             _r.force = true; // is this necessary?
                             this._doRequest(_r);
 
                         } else {
-                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is good enough (%d < %d)]", _r.desc, ds, cma);
+                            Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is good enough (%d < %d)]", _r._logdesc, ds, cma);
                         }
 
                     }.bind(this),
 
                     function() {
-                        Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry load failure, forcing request]", _r.desc);
+                        Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry load failure, forcing request]", _r._logdesc);
                         this.dbBusy(false);
 
                         _r.force = true;
@@ -186,18 +182,18 @@ function RequestEngine() {
 
 /*}}}*/
 /* {{{ */ RequestEngine.prototype._doRequest = function(_r,isRetry) {
-    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request] isRetry=%s", _r.desc, isRetry);
+    Mojo.Log.info("RequestEngine::_doRequest(%s) [actually starting web request] isRetry=%s", _r._logdesc, isRetry);
 
     if( !isRetry ) {
         if( this.reqdb[_r.desc] ) {
-            Mojo.Log.info("RequestEngine::_doRequest(%s) [canceling apparently running request]", _r.desc);
+            Mojo.Log.info("RequestEngine::_doRequest(%s) [canceling apparently running request]", _r._logdesc);
 
             try {
                 this.reqdb[_r.desc].transport.abort();
             }
 
             catch(e) {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) [problem canceling previous request: %s]", _r.desc, e);
+                Mojo.Log.info("RequestEngine::_doRequest(%s) [problem canceling previous request: %s]", _r._logdesc, e);
             }
         }
 
@@ -231,22 +227,22 @@ function RequestEngine() {
             delete me.reqdb[_r.desc];
 
             if( transport.status >= 200 && transport.status < 300 ) {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success", _r.desc);
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax success", _r._logdesc);
 
                 var r;
                 try {
                     if( _r.xml ) {
                         r = transport.responseText;
-                        Mojo.Log.info("RequestEngine::_doRequest(%s) chose responseText from transport", _r.desc);
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) chose responseText from transport", _r._logdesc);
 
                     } else {
                         r = transport.responseJSON;
-                        Mojo.Log.info("RequestEngine::_doRequest(%s) chose responseJSON from transport", _r.desc);
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) chose responseJSON from transport", _r._logdesc);
                     }
                 }
 
                 catch(_errcnt) {
-                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem finding request contents: %s", _r.desc, _errcnt);
+                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem finding request contents: %s", _r._logdesc, _errcnt);
 
                     if( _r.failure() )
                         me.E("_doRequest", "xml missing", "Unexpected js error pulling data during ajax request: " + _errcnt);
@@ -289,7 +285,7 @@ function RequestEngine() {
                 }
 
                 catch(_errcb) {
-                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r.desc, _errcb);
+                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r._logdesc, _errcb);
 
                     if( _r.failure() )
                         me.E("_doRequest", "callback",
@@ -300,17 +296,17 @@ function RequestEngine() {
                 }
 
             } else if( !transport.status ) {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort?", _r.desc);
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort?", _r._logdesc);
 
                 // this seems to be what happens on an abort
 
                 if( request.retryRequested ) {
-                    Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort-retry requested", _r.desc);
+                    Mojo.Log.info("RequestEngine::_doRequest(%s) ajax abort-retry requested", _r._logdesc);
                     me._doRequest(_r); // NOTE: we do not set isRetry here because we've already set reqBusy(false)
                 }
 
             } else {
-                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail", _r.desc);
+                Mojo.Log.info("RequestEngine::_doRequest(%s) ajax mystery fail", _r._logdesc);
 
                 if( _r.failure() )
                     me.E("_doRequest", "mystery", "Unknown error issuing " + _r.desc + " request");
@@ -331,11 +327,11 @@ function RequestEngine() {
             if( _r.failure(_r, transport, t) ) {
                 me.R("_doRequest", "ajax", t.evaluate(transport), function(value) {
                     if( value === "retry" ) {
-                        Mojo.Log.info("RequestEngine::_doRequest(%s) ajax retry requested", _r.desc);
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) ajax retry requested", _r._logdesc);
                         me._doRequest(_r);
 
                     } else {
-                        Mojo.Log.info("RequestEngine::_doRequest(%s) ajax ignore requested", _r.desc);
+                        Mojo.Log.info("RequestEngine::_doRequest(%s) ajax ignore requested", _r._logdesc);
                     }
                 });
             }
