@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false
 */
-/*global $ Mojo
+/*global Mojo $ $H
 */
 
 function BusyBee() {
@@ -27,6 +27,8 @@ BusyBee.prototype.busy = function(task) {
 
     this.tasks[task] = true;
 
+    $("wait-detail").innerHTML = $H(this.tasks).keys().join(", ");
+
     $("wait").setStyle({display: 'block'});
     if( this.showing )
         $("wait-detail").setStyle({display: 'block'});
@@ -36,6 +38,8 @@ BusyBee.prototype.done = function(task) {
     Mojo.Log.info("BusyBee::done(%s)", task);
 
     delete this.tasks[task];
+
+    $("wait-detail").innerHTML = $H(this.tasks).keys().join(", ");
 
     for( var k in this.tasks ) {
         Mojo.Log.info("BusyBee::done() [tasks remaining]");
