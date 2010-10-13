@@ -735,8 +735,10 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         }
 
         if( RE ) {
+            /*
             Mojo.Log.info("TaskManager::processTaskDownloads() using %s against %s/%s/%s to generate css classes",
                 RE, t.owner, t.requestor, t.next_action_by);
+            */
 
             if( t.owner.match(RE) ) {
                 if( OPT.hideOnwerRequestorWhenSelf )
