@@ -423,6 +423,11 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 /* {{{ */ TaskManager.prototype.registerTasksChange = function(callback) {
     Mojo.Log.info("TaskManager::registerTasksChange()");
 
+    if( this.tasksChangeCallback.length < 1 )
+        // this is cached, so it shouldn't hurt to go check the cache times in
+        // any case, we may not have looked for a while...
+        this.searchTasks();
+
     this.tasksChangeCallback.push(callback);
     this.notifyTasksChangeStep(callback);
 };
