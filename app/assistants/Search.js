@@ -26,7 +26,8 @@ SearchAssistant.prototype.setup = function() {
         textCase:      Mojo.Widget.steModeLowerCase,
         multiline:     false,
         autoFocus:     false,
-        enterSubmits:  true
+        enterSubmits:  true,
+        focusMode:     Mojo.Widget.focusSelectMode
     };
 
     // NOTE: secondaryIcon is a cssClassName, sIP is an image path, see widget_submenu.js
