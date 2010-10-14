@@ -754,9 +754,11 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
                 t.waiting_on = "for you";
                 // does this ever get set?  see next_action below
+                t.for_me_to_accept = true;
 
             } else {
                 t.waiting_on = "for other";
+                t.for_me_to_accept = false;
             }
 
             if( t.requestor.match(RE) ) {
