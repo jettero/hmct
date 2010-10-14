@@ -260,6 +260,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
+    if( !this.currentLogin )
+        return; // we are not worthy
+
     if( !search ) {
         var ls = this.getLastSearch();
 
