@@ -38,6 +38,12 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
         items: [ this.refreshModel, { items: [ this.deleteModel this.commentModel, this.editModel ] } ]
     };
 
+    if( !this.task.accepted && this.for_me_to_accept )
+        this.commandMenuModel.items.unshift( this.acceptModel );
+
+    if( this.task.for_me_to_take )
+        this.commandMenuModel.items.unshift( this.takeModel );
+
     // if ( task for nobody )
     //     this.commandMenuModel.items =~ gets take
     // else if ( task for me, but not accepted )
