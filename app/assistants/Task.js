@@ -257,9 +257,9 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 break;
 
             case 'webos-comment':
-                var FCA = new FastCommentAssistant(this, function(comment){
+                var FCA = new FastCommentAssistant(this, function(comment,time_worked){
                     Mojo.Log.info("Task::handleCommand(webos-comment) [rl=%s]", rl);
-                    TMO.commentTask(this.task, comment);
+                    TMO.commentTask(this.task, comment, time_worked);
 
                 }.bind(this));
 

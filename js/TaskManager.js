@@ -1030,10 +1030,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.commentTask = function(task,comment,cb) {
+/* {{{ */ TaskManager.prototype.commentTask = function(task,comment,time_worked,cb) {
     Mojo.Log.info("TaskManager::commentTask(rl=%s): %s", task.record_locator, comment);
 
     var params = { comment: comment };
+
+    if( time_worked && AMO.isCurrentAccountPro() )
+        params.add_time_worked = time_worked;
 
     if( !comment ) {
         this.E("commentTask", "no comment", "And what would that comment be?");
