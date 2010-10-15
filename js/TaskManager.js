@@ -753,7 +753,6 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                     t.owner_class = "generically-hidden";
 
                 t.waiting_on = "for you";
-                // does this ever get set?  see next_action below
                 t.for_me_to_accept = true;
 
             } else {
