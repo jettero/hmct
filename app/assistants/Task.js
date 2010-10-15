@@ -27,14 +27,21 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.menuSetup();
 
-    this.refreshModel     = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
-    this.editModel        = { label: "Edit",    icon: 'edit',         command: 'edit'    };
-    this.commentModel     = { label: "Comment", icon: 'conversation', submenu: 'ctype'   };
-    this.deleteModel      = { label: "Delete",  icon: 'delete',       command: 'delete'  };
+    this.refreshModel = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
+    this.editModel    = { label: "Edit",    icon: 'edit',         command: 'edit'    };
+    this.commentModel = { label: "Comment", icon: 'conversation', submenu: 'ctype'   };
+    this.deleteModel  = { label: "Delete",  icon: 'delete',       command: 'delete'  };
+    this.takeModel    = { label: "Take",    icon: 'make-vip',     command: 'take'    };
+    this.acceptModel  = { label: "Accept",  icon: 'new-contact',  command: 'accept'  };
     this.commandMenuModel = {
         label: 'Task Command Menu',
-        items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
+        items: [ this.refreshModel, { items: [ this.deleteModel this.commentModel, this.editModel ] } ]
     };
+
+    // if ( task for nobody )
+    //     this.commandMenuModel.items =~ gets take
+    // else if ( task for me, but not accepted )
+    //     this.commandMenuModel.items =~ gets accept
 
     this.emailCtypeModel = { label: "Email", command: 'email-comment' };
     this.ajaxCtypeModel  = { label: "WebOS", command: 'webos-comment' };
