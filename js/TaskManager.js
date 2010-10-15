@@ -742,6 +742,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             t.group_class = "generically-hidden";
         }
 
+        t.for_me_to_take = t.for_me_to_accept = false;
+
         if( RE ) {
             /*
             Mojo.Log.info("TaskManager::processTaskDownloads() using %s against %s/%s/%s to generate css classes",
@@ -756,8 +758,10 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 t.for_me_to_accept = true;
 
             } else {
+                if( t.owner === "<>" || t.owner.match(/<nobody>/) )
+                    t.for_me_to_take = false;
+
                 t.waiting_on = "for other";
-                t.for_me_to_accept = false;
             }
 
             if( t.requestor.match(RE) ) {
