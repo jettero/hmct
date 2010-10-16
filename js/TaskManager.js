@@ -982,7 +982,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             } } }
 
-            me.tasks = $A(me.tasks).reject(function(i) { return i === task; });
+            me.tasks = $A(me.tasks).reject(function(i) { return i.record_locator === task.record_locator; });
             me.notifyTasksChange();
 
             if( cb ) {
