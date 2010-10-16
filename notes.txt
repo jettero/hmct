@@ -41,7 +41,6 @@ curl -F task_id=$ID -sb $HM http://hiveminder.com/=/action/SearchTaskEmail.yml
 # comments?
 curl -sb $HM http://hiveminder.com/mobile/task_history/TXNQ
 
-
 # grab results by hand with perl and curl
 curl -F query=complete -F format=json -sb $HM http://hiveminder.com/=/action/DownloadTasks.yml > complete.yml
 use YAML::Syck; $x = Load($y = slurp("complete.yml")); write_file('complete.js'=>"$x->{content}{result}");
@@ -49,3 +48,11 @@ use YAML::Syck; $x = Load($y = slurp("complete.yml")); write_file('complete.js'=
 
 curl -F query=complete -F format=json -sb $HM http://hiveminder.com/=/action/DownloadTasks.json > complete.json
 use JSON; $x = decode_json(slurp("complete.json")); write_file('complete.js'=>"$x->{content}{result}");
+
+# unaccept 36f8c
+function rl2id() {
+    id=$(perl -MNumber::RecordLocator -e 'print Number::RecordLocator->new->decode($ARGV[0])' $1)
+    echo $id
+}
+curl -F will_complete=1 -F id=$(rl2id 36f8c) -F accepted=0 -sb $HM http://hiveminder.org/=/action/updateTask.yml
+
