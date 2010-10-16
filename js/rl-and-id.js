@@ -1,11 +1,11 @@
 
-function decode_locator(rl) {
+function rl2id(rl) {
     var id;
 
     return id;
 }
 
-function encode_locator(il) {
+function id2rl(il) {
     var rl;
 
     return rl;
