@@ -31,8 +31,18 @@ function rl2id(rl) {
     return id;
 }
 
-function id2rl(il) {
-    var rl;
+function id2rl(id) {
+    id = parseInt(id);
+
+    var n = [];
+    while(id != 0) {
+        n.unshift( id % 32 );
+        id = parseInt(id/32);
+    }
+
+    var rl = "";
+    for(var i=0; i<n.length; i++)
+        rl += INT_TO_CHAR[n.length];
 
     return rl;
 }

@@ -50,12 +50,19 @@ curl -F query=complete -F format=json -sb $HM http://hiveminder.com/=/action/Dow
 use JSON; $x = decode_json(slurp("complete.json")); write_file('complete.js'=>"$x->{content}{result}");
 
 # unaccept 36f8c
-function rl2id() {
-    id=$(perl -MNumber::RecordLocator -e 'print Number::RecordLocator->new->decode($ARGV[0])' $1)
-    echo $id
-}
+
 curl -F will_complete=1 -F id=$(rl2id 36f8c) -F accepted=0 -sb $HM http://hiveminder.org/=/action/updateTask.yml
  # ... this sends an explicit decline; which also sets the owner to the
  # requestor and will disappear the task from whatever search you did to
  # see it (if it's not in a group).
  # see also: app/assistants/EditTask.js
+
+function rl2id() {
+    id=$(perl -MNumber::RecordLocator -e 'print Number::RecordLocator->new->decode($ARGV[0])' $1)
+    echo $id
+}
+
+function id2rl() {
+    rl=$(perl -MNumber::RecordLocator -e 'print Number::RecordLocator->new->encode($ARGV[0])' $1)
+    echo $rl
+}
