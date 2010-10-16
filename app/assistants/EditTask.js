@@ -52,7 +52,7 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget('complete',       checkBoxAttributes, this.completeModel      = {value: t.complete});
     this.controller.setupWidget('accept',         checkBoxAttributes, this.acceptModel        = {value: t.accepted});
 
-    if( this.task.accepted === '1' || !this.task.for_me_to_accept )
+    if( this.task.accepted == '1' || !this.task.for_me_to_accept ) // STFU: sometimes it's 1, not '1'
         this.controller.get("accept-row").addClassName("generically-hidden");
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
@@ -244,7 +244,8 @@ EditTaskAssistant.prototype.go = function() {
     if( f("titleModel") ) params.summary = v;
 
     if( f("acceptModel") )
-        if( this.task.accepted !== '1' ) // secondarily, only update if we haven't already accepted
+        // secondarily, only update if we haven't already accepted
+        if( this.task.accepted != '1' ) // STFU: sometimes it's 1, not '1'
             params.accepted = v;
 
     if( f("descriptionModel"  ) ) params.description            = v;
