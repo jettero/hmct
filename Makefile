@@ -7,7 +7,7 @@ default: test
 release: clean
 	env -i make --no-print-directory build
 	git fetch github gh-pages:gh-pages
-	git checkout gh-pages; git add *.ipk; git clean -dfx
+	x=$$(ls -1 *.ipk); mv -v $$x /tmp; git checkout gh-pages; mv -v /tmp/$$x .; git add *.ipk; git clean -dfx
 
 test: clean
 	@+HM_LOGLEVEL=99 make --no-print-directory build
