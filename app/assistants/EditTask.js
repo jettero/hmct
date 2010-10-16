@@ -243,10 +243,13 @@ EditTaskAssistant.prototype.go = function() {
 
     if( f("titleModel") ) params.summary = v;
 
-    if( f("acceptModel") )
-        // secondarily, only update if we haven't already accepted
+    if( f("acceptModel") ) // secondarily, only update if we haven't already accepted
         if( this.task.accepted != '1' ) // STFU: sometimes it's 1, not '1'
             params.accepted = v;
+            // NOTE: sending a '0' actually declines, which has other side effects,
+            // see notes.txt we might have a decline some day, but for now,
+            // setting the owner to the requestor manually should be roughly
+            // the same. see also: notes.txt 
 
     if( f("descriptionModel"  ) ) params.description            = v;
     if( f("ownerModel"        ) ) params.owner_id               = v;
