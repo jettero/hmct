@@ -243,10 +243,9 @@ EditTaskAssistant.prototype.go = function() {
 
     if( f("titleModel") ) params.summary = v;
 
-    if( this.task.accepted !== '1' && this.acceptModel.value === '1' ) {
-        params.accepted = '1';
-        did_stuff = true;
-    }
+    if( f("acceptModel") )
+        if( this.task.accepted !== '1' ) // secondarily, only update if we haven't already accepted
+            params.accepted = v;
 
     if( f("descriptionModel"  ) ) params.description            = v;
     if( f("ownerModel"        ) ) params.owner_id               = v;
@@ -262,7 +261,7 @@ EditTaskAssistant.prototype.go = function() {
     if( f("timeLeftModel"     ) ) params.time_left              = v;
     if( f("commentModel"      ) ) params.comment                = v;
     if( f("completeModel"     ) ) params.complete               = v;
-    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1"; // STFU: I mean ==
+    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1"; // STFU: I mean to use ==
 
     if( f("tagsModel") ) {
         var q = qsplit(v);
