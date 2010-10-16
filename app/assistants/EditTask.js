@@ -243,8 +243,10 @@ EditTaskAssistant.prototype.go = function() {
 
     if( f("titleModel") ) params.summary = v;
 
-    if( this.task.accepted !== '1' && this.acceptModel.value === '1' )
+    if( this.task.accepted !== '1' && this.acceptModel.value === '1' ) {
         params.accepted = '1';
+        did_stuff = true;
+    }
 
     if( f("descriptionModel"  ) ) params.description            = v;
     if( f("ownerModel"        ) ) params.owner_id               = v;
