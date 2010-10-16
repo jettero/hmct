@@ -31,8 +31,8 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     this.editModel    = { label: "Edit",    icon: 'edit',         command: 'edit'    };
     this.commentModel = { label: "Comment", icon: 'conversation', submenu: 'ctype'   };
     this.deleteModel  = { label: "Delete",  icon: 'delete',       command: 'delete'  };
-    this.takeModel    = { label: "Take",    icon: 'make-vip',     command: 'take'    };
-    this.acceptModel  = { label: "Accept",  icon: 'new-contact',  command: 'accept'  };
+    this.takeModel    = { label: "Take",    icon: 'new-contact',  command: 'take'    };
+    this.acceptModel  = { label: "Accept",  icon: 'make-vip',     command: 'accept'  };
     this.commandMenuModel = {
         label: 'Task Command Menu',
         items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
