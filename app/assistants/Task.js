@@ -100,15 +100,19 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
 
-    if( !this.task.accepted && this.task.for_me_to_accept ) {
-        this.commandMenuModel.items[1].items.unshift( this.acceptModel );
-        this.controller.modelChanged(this.commandMenuModel);
-    }
+    var ci1i;
 
-    if( this.task.for_me_to_take ) {
-        this.commandMenuModel.items[1].items.unshift( this.takeModel );
-        this.controller.modelChanged(this.commandMenuModel);
-    }
+    if( !this.task.accepted && this.task.for_me_to_accept )
+        ci1i = [ this.deleteModel, this.acceptModel, this.commentModel, this.editModel ];
+
+    else if( this.task.for_me_to_take )
+        ci1i = [ this.deleteModel, this.takeModel, this.commentModel, this.editModel ];
+
+    else
+        ci1i = [ this.deleteModel, this.commentModel, this.editModel ];
+
+    this.commandMenuModel.items[1].items = ci1i;
+    this.controller.modelChanged(this.commandMenuModel);
 
     if( OPT._preEditTask )
         this.SCa.showScene("EditTask", this.task);
