@@ -257,7 +257,7 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                     if(v !== "yes")
                         return;
 
-                    TMO.updateTask({owner: 'me'}, this.task);
+                    TMO.updateTask({owner_id: 'me'}, this.task);
 
                 }.bind(this));
                 break;
