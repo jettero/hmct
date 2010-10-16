@@ -42,7 +42,7 @@ function id2rl(id) {
 
     var rl = "";
     for(var i=0; i<n.length; i++)
-        rl += INT_TO_CHAR[n.length];
+        rl += INT_TO_CHAR[n[i]];
 
     return rl;
 }
