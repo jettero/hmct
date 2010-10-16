@@ -52,7 +52,7 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget('complete',       checkBoxAttributes, this.completeModel      = {value: t.complete});
     this.controller.setupWidget('accept',         checkBoxAttributes, this.acceptModel        = {value: t.accepted});
 
-    if( this.task.accepted || !this.for_me_to_accept )
+    if( this.task.accepted !== '1' || !this.task.for_me_to_accept )
         this.controller.get("accept-row").addClassName("generically-hidden");
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
