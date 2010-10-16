@@ -742,6 +742,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             t.group_class = "generically-hidden";
         }
 
+        t.for_me_to_take = t.for_me_to_accept = false;
+
         if( RE ) {
             /*
             Mojo.Log.info("TaskManager::processTaskDownloads() using %s against %s/%s/%s to generate css classes",
@@ -753,12 +755,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                     t.owner_class = "generically-hidden";
 
                 t.waiting_on = "for you";
-                // does this ever get set?  see next_action below
                 t.for_me_to_accept = true;
 
             } else {
+                if( t.owner === "<>" || t.owner.match(/<nobody>/) )
+                    t.for_me_to_take = true;
+
                 t.waiting_on = "for other";
-                t.for_me_to_accept = false;
             }
 
             if( t.requestor.match(RE) ) {
@@ -1030,10 +1033,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.commentTask = function(task,comment,cb) {
+/* {{{ */ TaskManager.prototype.commentTask = function(task,comment,time_worked,cb) {
     Mojo.Log.info("TaskManager::commentTask(rl=%s): %s", task.record_locator, comment);
 
     var params = { comment: comment };
+
+    if( time_worked && AMO.isCurrentAccountPro() )
+        params.add_time_worked = time_worked;
 
     if( !comment ) {
         this.E("commentTask", "no comment", "And what would that comment be?");

@@ -52,7 +52,7 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget('complete',       checkBoxAttributes, this.completeModel      = {value: t.complete});
     this.controller.setupWidget('accept',         checkBoxAttributes, this.acceptModel        = {value: t.accepted});
 
-    if( this.task.accepted || !this.for_me_to_accept )
+    if( this.task.accepted == '1' || !this.task.for_me_to_accept ) // STFU: sometimes it's 1, not '1'
         this.controller.get("accept-row").addClassName("generically-hidden");
 
     this.controller.setupWidget("group", {label: "group"}, this.groupModel={choices:[], value:t.group ? t.group : ''});
@@ -243,6 +243,14 @@ EditTaskAssistant.prototype.go = function() {
 
     if( f("titleModel") ) params.summary = v;
 
+    if( f("acceptModel") ) // secondarily, only update if we haven't already accepted
+        if( this.task.accepted != '1' ) // STFU: sometimes it's 1, not '1'
+            params.accepted = v;
+            // NOTE: sending a '0' actually declines, which has other side effects,
+            // see notes.txt we might have a decline some day, but for now,
+            // setting the owner to the requestor manually should be roughly
+            // the same. see also: notes.txt 
+
     if( f("descriptionModel"  ) ) params.description            = v;
     if( f("ownerModel"        ) ) params.owner_id               = v;
     if( f("groupModel"        ) ) params.group_id               = v;
@@ -257,7 +265,7 @@ EditTaskAssistant.prototype.go = function() {
     if( f("timeLeftModel"     ) ) params.time_left              = v;
     if( f("commentModel"      ) ) params.comment                = v;
     if( f("completeModel"     ) ) params.complete               = v;
-    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1"; // STFU: I mean ==
+    if( f("hiddenForeverModel") ) params.will_complete          = v=="1"?"0":"1"; // STFU: I mean to use ==
 
     if( f("tagsModel") ) {
         var q = qsplit(v);

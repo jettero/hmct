@@ -27,10 +27,12 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.menuSetup();
 
-    this.refreshModel     = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
-    this.editModel        = { label: "Edit",    icon: 'edit',         command: 'edit'    };
-    this.commentModel     = { label: "Comment", icon: 'conversation', submenu: 'ctype'   };
-    this.deleteModel      = { label: "Delete",  icon: 'delete',       command: 'delete'  };
+    this.refreshModel = { label: "Reload",  icon: 'refresh',      command: 'refresh' };
+    this.editModel    = { label: "Edit",    icon: 'edit',         command: 'edit'    };
+    this.commentModel = { label: "Comment", icon: 'conversation', submenu: 'ctype'   };
+    this.deleteModel  = { label: "Delete",  icon: 'delete',       command: 'delete'  };
+    this.takeModel    = { label: "Take",    icon: 'new-contact',  command: 'take'    };
+    this.acceptModel  = { label: "Accept",  icon: 'make-vip',     command: 'accept'  };
     this.commandMenuModel = {
         label: 'Task Command Menu',
         items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
@@ -97,6 +99,20 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
+
+    var ci1i;
+
+    if( !this.task.accepted && this.task.for_me_to_accept )
+        ci1i = [ this.deleteModel, this.acceptModel, this.commentModel, this.editModel ];
+
+    else if( this.task.for_me_to_take )
+        ci1i = [ this.deleteModel, this.takeModel, this.commentModel, this.editModel ];
+
+    else
+        ci1i = [ this.deleteModel, this.commentModel, this.editModel ];
+
+    this.commandMenuModel.items[1].items = ci1i;
+    this.controller.modelChanged(this.commandMenuModel);
 
     if( OPT._preEditTask )
         this.SCa.showScene("EditTask", this.task);
@@ -234,6 +250,30 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 }.bind(this));
                 break;
 
+            case 'take':
+                this.YN("handleCommand", 'take', "Take this task?", function(v){
+                    Mojo.Log.info("Task::handleCommand(take) [rl=%s] v=%s", rl, v);
+
+                    if(v !== "yes")
+                        return;
+
+                    TMO.updateTask({owner_id: 'me'}, this.task);
+
+                }.bind(this));
+                break;
+
+            case 'accept':
+                this.YN("handleCommand", 'accept', "Accept this task?", function(v){
+                    Mojo.Log.info("Task::handleCommand(accept) [rl=%s] v=%s", rl, v);
+
+                    if(v !== "yes")
+                        return;
+
+                    TMO.updateTask({accepted: '1'}, this.task);
+
+                }.bind(this));
+                break;
+
             case 'email-comment':
                 var subject = "Comment: " + this.task.summary + " (#" + rl + ")";
                 var url     = 'http://task.hm/' + rl;
@@ -257,9 +297,9 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 break;
 
             case 'webos-comment':
-                var FCA = new FastCommentAssistant(this, function(comment){
+                var FCA = new FastCommentAssistant(this, function(comment,time_worked){
                     Mojo.Log.info("Task::handleCommand(webos-comment) [rl=%s]", rl);
-                    TMO.commentTask(this.task, comment);
+                    TMO.commentTask(this.task, comment, time_worked);
 
                 }.bind(this));
 
