@@ -26,7 +26,19 @@ function init_rl_maps() {
 }
 
 function rl2id(rl) {
-    var id;
+    rl = rl.toUpperCase().split("");
+
+    var id = 0;
+    var c;
+
+    for(var i=0; i<rl.length; i++) {
+        c = CHAR_TO_INT[rl[i]];
+
+        if( c == null ) // STFU: I mean null or undef here
+            return "";
+
+        id = (id * 32) + c;
+    }
 
     return id;
 }
