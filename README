@@ -9,12 +9,22 @@
    [2]http://hiveminder.com/ website. They encourage building applications
    like this by offering a very nice self-discovering [3]ReSTful API.
 
-   Bugs and feature requests should be reported via [4]HMCT-feeedback — this
+   Bugs and feature requests can be reported via [4]HMCT-feeedback *** this
    is a spam filtered email address that simply feeds my hiveminder task
    queue.
 
+   You may also report bugs and request features by using the github issue
+   tracker:
+
+   [5]http://github.com/jettero/hmct/issues
+
    The entire source for this app can be found on github:
-   [5]http://github.com/jettero/hmct
+
+   [6]http://github.com/jettero/hmct
+
+   Some unreleased, release candidate and historical builds can be found on
+   the gh-pages:
+   [7]http://jettero.github.com/hmct
 
   Copyright
 
@@ -23,13 +33,13 @@
   License
 
    This app is licensed under the GNU GPLv3.
-   [6]http://www.opensource.org/licenses/gpl-3.0.html
+   [8]http://www.opensource.org/licenses/gpl-3.0.html
 
   Thanks
 
    There were additional contributions made by the following people:
 
-     * [7]The entire Best Practical (LLC) Hiveminder Team — they built a
+     * [9]The entire Best Practical (LLC) Hiveminder Team *** they built a
        great product and encourage 3rd party apps like this.
 
 References
@@ -39,9 +49,11 @@ References
    2. http://hiveminder.com/
    3. http://hiveminder.com/help/reference/API.html
    4. mailto:HMCT-feedback@voltar.org
-   5. http://github.com/jettero/hmct
-   6. http://www.opensource.org/licenses/gpl-3.0.html
-   7. http://hiveminder.com/about/team.html
+   5. http://github.com/jettero/hmct/issues
+   6. http://github.com/jettero/hmct
+   7. http://jettero.github.com/hmct
+   8. http://www.opensource.org/licenses/gpl-3.0.html
+   9. http://hiveminder.com/about/team.html
 
 -----=: app/views/Help.html
    Hiveminder Cloud Tasks Help
@@ -79,12 +91,15 @@ References
    Hiveminder staff unless you're quite certain they are Hiveminder bugs and
    not actually a problem with this application.
 
-   Bugs and feature requests should be reported via [4]HMCT-feeedback — this
+   Bugs and feature requests can be reported via [4]HMCT-feeedback *** this
    is a spam filtered email address that simply feeds my hiveminder task
    queue.
 
+   You may also report bugs and request features by using the github issue
+   tracker: [5]http://github.com/jettero/hmct/issues
+
    If you have some other question or concern (and don't wish to open a
-   support ticket about it); just [5]shoot me an email instead.
+   support ticket about it); just [6]shoot me an email instead.
 
 References
 
@@ -93,4 +108,5 @@ References
    2. http://hiveminder.com/help
    3. mailto:jettero@gmail.com
    4. mailto:HMCT-feedback@voltar.org
-   5. mailto:jettero@gmail.com
+   5. http://github.com/jettero/hmct/issues
+   6. mailto:jettero@gmail.com
