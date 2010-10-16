@@ -1,18 +1,19 @@
+/*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
+*/
+
 /* /usr/local/share/perl/5.10.1/Number/RecordLocator.pm */
 
 var CHAR_TO_INT = {};
 var INT_TO_CHAR = {};
 
-init_rl_maps();
-
-function init_rl_maps() {
+/* {{{ */ function init_rl_maps() {
     var ca = ("23456789"+"A"+"CDEFGHIJKLMNOPQR"+"TUVwXYZ").split("");
     var counter = 0;
     var CHAR_REMAP  = {
         '0':'O',
         '1':'I',
         'S':'F',
-        'B':'P',
+        'B':'P'
     };
 
     for(var i=0; i<ca.length; i++) {
@@ -25,7 +26,11 @@ function init_rl_maps() {
         CHAR_TO_INT[k] = CHAR_TO_INT[ CHAR_REMAP[k] ];
 }
 
-function rl2id(rl) {
+/*}}}*/
+
+init_rl_maps();
+
+/* {{{ */ function rl2id(rl) {
     rl = rl.toUpperCase().split("");
 
     var id = 0;
@@ -43,13 +48,14 @@ function rl2id(rl) {
     return id;
 }
 
-function id2rl(id) {
-    id = parseInt(id);
+/*}}}*/
+/* {{{ */ function id2rl(id) {
+    id = parseInt(id, 10);
 
     var n = [];
     while(id != 0) {
         n.unshift( id % 32 );
-        id = parseInt(id/32);
+        id = parseInt(id/32, 10);
     }
 
     var rl = "";
@@ -58,3 +64,5 @@ function id2rl(id) {
 
     return rl;
 }
+
+/*}}}*/
