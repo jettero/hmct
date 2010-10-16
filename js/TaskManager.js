@@ -759,7 +759,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             } else {
                 if( t.owner === "<>" || t.owner.match(/<nobody>/) )
-                    t.for_me_to_take = false;
+                    t.for_me_to_take = true;
 
                 t.waiting_on = "for other";
             }
