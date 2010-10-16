@@ -18,7 +18,6 @@ ConfirmationDialog.prototype.askYN = function(fname,desc,message,cb) {
 
     return Mojo.Controller.stageController.topScene().showAlertDialog({
 		onChoose: function(value) {try{cb(value);}catch(e){}},
-		//title:    message,
 		message:  message,
 		choices: [
             {label:'Yes', value:'yes', type:'affirmative'},
