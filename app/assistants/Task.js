@@ -250,6 +250,30 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
                 }.bind(this));
                 break;
 
+            case 'take':
+                this.YN("handleCommand", 'take', "Take this task?", function(v){
+                    Mojo.Log.info("Task::handleCommand(take) [rl=%s] v=%s", rl, v);
+
+                    if(v !== "yes")
+                        return;
+
+                    TMO.updateTask({owner: 'me'}, this.task);
+
+                }.bind(this));
+                break;
+
+            case 'accept':
+                this.YN("handleCommand", 'accept', "Accept this task?", function(v){
+                    Mojo.Log.info("Task::handleCommand(accept) [rl=%s] v=%s", rl, v);
+
+                    if(v !== "yes")
+                        return;
+
+                    TMO.updateTask({accepted: '1'}, this.task);
+
+                }.bind(this));
+                break;
+
             case 'email-comment':
                 var subject = "Comment: " + this.task.summary + " (#" + rl + ")";
                 var url     = 'http://task.hm/' + rl;
