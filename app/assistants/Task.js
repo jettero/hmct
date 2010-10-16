@@ -35,19 +35,8 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
     this.acceptModel  = { label: "Accept",  icon: 'new-contact',  command: 'accept'  };
     this.commandMenuModel = {
         label: 'Task Command Menu',
-        items: [ this.refreshModel, { items: [ this.deleteModel this.commentModel, this.editModel ] } ]
+        items: [ this.refreshModel, { items: [ this.deleteModel, this.commentModel, this.editModel ] } ]
     };
-
-    if( !this.task.accepted && this.for_me_to_accept )
-        this.commandMenuModel.items.unshift( this.acceptModel );
-
-    if( this.task.for_me_to_take )
-        this.commandMenuModel.items.unshift( this.takeModel );
-
-    // if ( task for nobody )
-    //     this.commandMenuModel.items =~ gets take
-    // else if ( task for me, but not accepted )
-    //     this.commandMenuModel.items =~ gets accept
 
     this.emailCtypeModel = { label: "Email", command: 'email-comment' };
     this.ajaxCtypeModel  = { label: "WebOS", command: 'webos-comment' };
@@ -110,6 +99,16 @@ TaskAssistant.prototype.longTemplate  = new Mojo.View.Template(palmGetResource(M
 
     this.historyListModel.items = task.comments ? task.comments : [];
     this.controller.modelChanged(this.historyListModel);
+
+    if( !this.task.accepted && this.task.for_me_to_accept ) {
+        this.commandMenuModel.items[1].items.unshift( this.acceptModel );
+        this.controller.modelChanged(this.commandMenuModel);
+    }
+
+    if( this.task.for_me_to_take ) {
+        this.commandMenuModel.items[1].items.unshift( this.takeModel );
+        this.controller.modelChanged(this.commandMenuModel);
+    }
 
     if( OPT._preEditTask )
         this.SCa.showScene("EditTask", this.task);
