@@ -1100,9 +1100,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::addButFirst('+join(",", parentTaskID,targetTaskID)+')',
+          desc: 'TaskManager::addButFirst(' + [parentTaskID,targetTaskID].join(",") + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
-        params: {task_id: parentTaskID, targetTaskID},
+        params: {task_id: parentTaskID, depends_on: targetTaskID},
 
         cacheable: false,
 
@@ -1115,7 +1115,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             if( r.success )
                 return true;
 
-            Mojo.Log.info("TaskManager::addButFirst("+join(",", parentTaskID,targetTaskID)+") r.fail");
+            Mojo.Log.info("TaskManager::addButFirst(" + [parentTaskID,targetTaskID].join(",") + ") r.fail");
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
