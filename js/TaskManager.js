@@ -1094,8 +1094,48 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-TaskManager.prototype.addDep = function(task,type,targetTaskID) {
-};
+TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
+    Mojo.Log.info("TaskManager::addButFirst(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::addButFirst('+join(",", parentTaskID,targetTaskID)+')',
+        method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
+        params: {task_id: parentTaskID, targetTaskID},
+
+        cacheable: false,
+
+        finish: function(r) {
+            me.fetchOneTask(id2rl(parentTaskID),true);
+            me.fetchOneTask(id2rl(targetTaskID),true);
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::addButFirst("+join(",", parentTaskID,targetTaskID)+") r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            me.E("searchTasks", "search fail", e.join("; "));
+
+            return false;
+        }
+    });
 
 };
 
