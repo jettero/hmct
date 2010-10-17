@@ -152,8 +152,6 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
-    Mojo.Log.info("LOLWUT: %s", Object.toJSON({ bf: t.but_first, at: t.and_then }));
-
     var bfv = $A(t.but_first).map(function(i){ return "#" + id2rl(i) }).join(", ");
     var atv = $A(t.and_then ).map(function(i){ return "#" + id2rl(i) }).join(", ");
 
@@ -285,6 +283,11 @@ EditTaskAssistant.prototype.go = function() {
     }
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
+
+    var bf_compr = TMO.compareTextFieldDeps(this.butFirstModel._oVal, this.butFirstModel.value);
+    var at_compr = TMO.compareTextFieldDeps( this.andThenModel._oVal,  this.andThenModel.value);
+
+    Mojo.Log.info("LOLWUT: %s", Object.toJSON({ bf_compr: bf_compr, at_compr: at_compr }));
 
     if( !did_stuff ) {
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
