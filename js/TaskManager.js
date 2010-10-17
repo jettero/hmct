@@ -1097,7 +1097,6 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 TaskManager.prototype.addDep = function(task,type,targetTaskID) {
 };
 
-TaskManager.prototype.rmDep = function(task,type,targetTaskID) {
 };
 
 Mojo.Log.info('loaded(TaskManager.js)');
