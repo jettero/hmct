@@ -628,6 +628,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 t = T[i];
                 ret.push({
 
+                    but_first: t.depends_on.split(/\s+/),
+                    and_then:  t.depends_on_by.split(/\s+/),
+
                     but_first_count: t.depends_on_count,
                     but_first_html:  "<ul><li>" + t.depends_on_summaries.escapeHTML().replace(/\t/g, "</li><li>") + "</li></ul>",
 
