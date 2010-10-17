@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit
+/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit rl2id id2rl
 */
 
 /* {{{ */ function TaskManager() {
@@ -1069,17 +1069,11 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.compareDeps = function(type, task1, task2) {
+/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(type, text1, text2) {
     var h1={};
 
-    if( !task1[type] || !task2[type] )
-        return undefined; // ... what does this mean?
-
-    if( task1[type].length !== task2[type].length )
-        return false; // clearly not the same
-
-    $A(task1[type]).each(function(d){ h1[d] =1; });
-    $A(task2[type]).each(function(d){ h1[d] --; });
+    $A(text1.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
+    $A(text2.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
 
     for(var id in h1)
         if( h1[id] !== 0 ) // 1 without -- is 1, undefined-- is NaN, either way, not 0
