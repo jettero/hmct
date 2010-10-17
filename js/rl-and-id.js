@@ -7,7 +7,7 @@ var CHAR_TO_INT = {};
 var INT_TO_CHAR = {};
 
 /* {{{ */ function init_rl_maps() {
-    var ca = ("23456789"+"A"+"CDEFGHIJKLMNOPQR"+"TUVwXYZ").split("");
+    var ca = ("23456789"+"A"+"CDEFGHIJKLMNOPQR"+"TUVWXYZ").split("");
     var counter = 0;
     var CHAR_REMAP  = {
         '0':'O',
@@ -31,7 +31,7 @@ var INT_TO_CHAR = {};
 init_rl_maps();
 
 /* {{{ */ function rl2id(rl) {
-    rl = rl.toUpperCase().split("");
+    rl = rl.toUpperCase().replace(/^\s*#\s*/, "").replace(/\s+$/, "").split("");
 
     var id = 0;
     var c;

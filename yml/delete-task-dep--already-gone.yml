@@ -1,0 +1,9 @@
+---
+action_class: BTDT::Action::DeleteTaskDependency
+content: {}
+error: Permission denied
+failure: 1
+field_errors: {}
+field_warnings: {}
+message: ~
+success: 0

@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit
+/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit rl2id id2rl
 */
 
 /* {{{ */ function TaskManager() {
@@ -1065,6 +1065,199 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     Mojo.Log.info("TaskManager::knownTags(): %s", Object.toJSON(h));
 
     return $H(h).keys().sort();
+};
+
+/*}}}*/
+
+// dep stuff
+/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(orig, modi) {
+    var h1={};
+
+    $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
+    $A(modi.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
+
+    var ret = {
+        toRemove: [],
+        toAdd:    []
+    };
+
+    for(var id in h1) {
+        switch(h1[id]) {
+            case 1:   ret.toRemove.push(id); break;
+            case NaN: ret.toAdd.push(id);    break;
+        }
+    }
+
+    Mojo.Log.info("TaskManager::compareTextFieldDeps(%s,%s): %s", orig, modi, Object.toJSON(ret));
+
+    return ret;
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
+    Mojo.Log.info("TaskManager::addButFirst(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::addButFirst(' + [parentTaskID,targetTaskID].join(",") + ')',
+        method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
+        params: {task_id: parentTaskID, depends_on: targetTaskID},
+
+        cacheable: false,
+
+        finish: function(r) {
+            me.fetchOneTask(id2rl(parentTaskID),true);
+            me.fetchOneTask(id2rl(targetTaskID),true);
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::addButFirst(" + [parentTaskID,targetTaskID].join(",") + ") r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            me.E("addButFirst", "add fail", e.join("; "));
+
+            return false;
+        }
+    });
+
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.rmButFirst = function(parentTaskID,targetTaskID) {
+    Mojo.Log.info("TaskManager::rmButFirst(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    this.getButFirstID(parentTaskID,targetTaskID,
+        function(dID) {
+            Mojo.Log.info("TaskManager::rmButFirst(%s,%s) did=%s", parentTaskID, targetTaskID, dID);
+
+            REQ.doRequest({
+                  desc: 'TaskManager::rmButFirst() dID=' + dID,
+                method: 'post', url: 'http://hiveminder.com/=/action/DeleteTaskDependency.json',
+                params: {id: dID},
+
+                cacheable: false,
+
+                finish: function(r) {
+                    me.fetchOneTask(id2rl(parentTaskID),true);
+                    me.fetchOneTask(id2rl(targetTaskID),true);
+                },
+
+                success: function(r) {
+                    if( r.success )
+                        return true;
+
+                    Mojo.Log.info("TaskManager::rmButFirst() r.fail");
+
+                    // warning: it may be tempting to try to DRY this, when comparing with the AMO
+                    // think first.  DRY failed twice already.
+
+                    var e = [];
+
+                    if( r.error )
+                        e.push(r.error);
+
+                    for(var k in r.field_errors )
+                        e.push(k + "-error: " + r.field_errors[k]);
+
+                    if( !e.length )
+                        e.push("Something went wrong with the task search ...");
+
+                    me.E("rmButFirst", "rm fail", e.join("; "));
+
+                    return false;
+                }
+            });
+        },
+
+        function() {
+            // NOTE: if a user sees this, it will seem rather esoteric, but it
+            // shouldn't come up very often.  Meh.  Users can adapt.  They'll
+            // see what it relates to regardless.
+
+            me.E("rmButFirst", "search fail",
+                "did not locate a dependancy as described by the two tasks given: s "
+                    + parentTaskID + " depends on " + targetTaskID);
+        }
+    );
+
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.getButFirstID = function(parentTaskID,targetTaskID,cb,ecb) {
+    Mojo.Log.info("TaskManager::getButFirstID(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::getButFirstID(' + [parentTaskID,targetTaskID].join(",") + ')',
+        method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
+        params: {task_id: parentTaskID, depends_on: targetTaskID},
+
+        cacheable: false,
+
+        process: function(r) {
+            if( r.search )
+                if( r.search.id )
+                    return r.search.id;
+
+            return false;
+        },
+
+        finish: function(r) {
+            if( r ) {
+                if( cb )
+                    cb(r);
+
+            } else {
+                if( ecb )
+                    ecb(r);
+            }
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::getButFirstID(" + [parentTaskID,targetTaskID].join(",") + ") r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            me.E("getButFirstID", "get fail", e.join("; "));
+
+            return false;
+        }
+    });
 };
 
 /*}}}*/
