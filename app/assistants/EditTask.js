@@ -152,6 +152,9 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
+    this.controller.setupWidget("and-then",  this.preSelBAttributes, this.andThenModel  = {value: ''});
+    this.controller.setupWidget("but-first", this.preSelBAttributes, this.butFirstModel = {value: ''});
+
     this.controller.setupWidget("time-worked", this.preSelBAttributes, this.timeWorkedModel = {value: t.time_worked});
     this.controller.setupWidget("time-left",   this.preSelBAttributes, this.timeLeftModel   = {value: t.time_left});
 
