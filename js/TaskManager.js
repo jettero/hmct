@@ -1069,7 +1069,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(type, orig, modi) {
+/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(orig, modi) {
     var h1={};
 
     $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
@@ -1087,9 +1087,17 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         }
     }
 
+    Mojo.Log.info("TaskManager::compareTextFieldDeps(%s,%s): %s", orig, modi, Object.toJSON(ret));
+
     return ret;
 };
 
 /*}}}*/
+
+TaskManager.prototype.addDep = function(task,type,targetTaskID) {
+};
+
+TaskManager.prototype.rmDep = function(task,type,targetTaskID) {
+};
 
 Mojo.Log.info('loaded(TaskManager.js)');
