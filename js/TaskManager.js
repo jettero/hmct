@@ -621,15 +621,18 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
         process: function(r) {
             var ret = [];
-            var T = r.content.tasks;
-            var i,t,k;
 
-            for(i=0; i<T.length; i++) {
-                t = T[i];
+            $A(r.content.tasks).each(function(t){
+                var bf = [];
+                var at = [];
+
+                if( t.depends_on_ids )     bf = t.depends_on_ids.split(/\s+/);
+                if( t.depended_on_by_ids ) at = t.depended_on_by_ids.split(/\s+/);
+
                 ret.push({
 
-                    but_first: (t.depends_on || "").split(/\s+/),
-                    and_then:  (t.depends_on_by || "").split(/\s+/),
+                    but_first: bf,
+                    and_then:  at,
 
                     but_first_count: t.depends_on_count,
                     but_first_html:  "<ul><li>" + t.depends_on_summaries.escapeHTML().replace(/\t/g, "</li><li>") + "</li></ul>",
@@ -639,7 +642,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
                     id: t.id
                 });
-            }
+            });
 
             return ret;
         },
