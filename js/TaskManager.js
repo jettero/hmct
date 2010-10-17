@@ -864,7 +864,6 @@ TaskManager.prototype.getLastSearchKeyed = function() {
           desc: 'TaskManager::postNewTask()',
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
         params: params, cacheable: false,
-        process:  function(r) {},
         finish:   function(r) {
             if( cb ) {
                 try { cb(); } catch(e) {
@@ -922,7 +921,6 @@ TaskManager.prototype.getLastSearchKeyed = function() {
           desc: 'TaskManager::updateTask(rl=' + task.record_locator + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/UpdateTask.json',
         params: params, cacheable: false,
-        process:  function(r) {},
         finish:   function(r) {
             me.fetchOneTask(task.record_locator,true);
             // fetchOneTask does a cache snoop for us, don't do it here
@@ -970,7 +968,6 @@ TaskManager.prototype.getLastSearchKeyed = function() {
           desc: 'TaskManager::deleteTask(rl=' + task.record_locator + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/DeleteTask.json',
         params: {id: task.id}, cacheable: false,
-        process: function(r) {},
         finish: function(r) {
             // snoop cache to stale out searchlists with this task
 
