@@ -210,3 +210,9 @@ body.hiveminder {
 .voltar-swipe-complete-button.selected {
   -webkit-border-image: url(img/swipe-complete-button-down.png) 0 14 0 14 repeat repeat;
 }
+
+
+.complete1 .voltar-swipe-complete-button .complete-text,
+.complete0 .voltar-swipe-complete-button .incomplete-text { display: none; }
+
+

@@ -231,6 +231,19 @@ function TasksAssistant() {
         }
     };
 
+    var origCopyClasses = listWidget.copyListClasses;
+    // This happens after the deleteTemplate is cloned.  It's intended to copy
+    // first, last, and single, but we can use it to choose sections of the
+    // template.
+    listWidget.copyListClasses = function(dst,src) {
+
+        // add complete0 or complete1 — easy as pie
+        dst.addClassName('complete' + src._mojoListItemModel.complete);
+
+        // Then do what we would have done before.
+        origCopyClasses.apply(this, [src,dst]);
+    };
+
     // original deleteTemplateNode setup // listWidget.deleteTemplateNode = Mojo.View.convertToNode(
     // original deleteTemplateNode setup //     Mojo.View.render({template: Mojo.Widget.getSystemTemplatePath(deleteTemplateName)}),
     // original deleteTemplateNode setup //     listWidget.controller.document);
