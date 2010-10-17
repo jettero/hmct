@@ -1069,4 +1069,25 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
+/* {{{ */ TaskManager.prototype.compareDeps = function(type, task1, task2) {
+    var h1={};
+
+    if( !task1[type] || !task2[type] )
+        return undefined; // ... what does this mean?
+
+    if( task1[type].length !== task2[type].length )
+        return false; // clearly not the same
+
+    $A(task1[type]).each(function(d){ h1[d] =1; });
+    $A(task2[type]).each(function(d){ h1[d] --; });
+
+    for(var id in h1)
+        if( h1[id] !== 0 ) // 1 without -- is 1, undefined-- is NaN, either way, not 0
+            return false;
+
+    return true;
+};
+
+/*}}}*/
+
 Mojo.Log.info('loaded(TaskManager.js)');
