@@ -1,7 +1,7 @@
 
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit
+/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit id2rl rl2id
 */
 
 function EditTaskAssistant(_i) {
@@ -152,8 +152,11 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
-    this.controller.setupWidget("and-then",  this.preSelBAttributes, this.andThenModel  = {value: ''});
-    this.controller.setupWidget("but-first", this.preSelBAttributes, this.butFirstModel = {value: ''});
+    var bfv = $A(t.but_first).map(function(i){ return "#" + id2rl(i) }).join(", ");
+    var atv = $A(t.and_then ).map(function(i){ return "#" + id2rl(i) }).join(", ");
+
+    this.controller.setupWidget("but-first", this.preSelBAttributes, this.butFirstModel = {value: bfv});
+    this.controller.setupWidget("and-then",  this.preSelBAttributes, this.andThenModel  = {value: atv});
 
     this.controller.setupWidget("time-worked", this.preSelBAttributes, this.timeWorkedModel = {value: t.time_worked});
     this.controller.setupWidget("time-left",   this.preSelBAttributes, this.timeLeftModel   = {value: t.time_left});
