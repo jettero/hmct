@@ -31,7 +31,7 @@ var INT_TO_CHAR = {};
 init_rl_maps();
 
 /* {{{ */ function rl2id(rl) {
-    rl = rl.toUpperCase().split("");
+    rl = rl.toUpperCase().replace(/^\s*#\s*/, "").replace(/\s+$/, "").split("");
 
     var id = 0;
     var c;
