@@ -1,0 +1,9 @@
+---
+action_class: BTDT::Action::DeleteTaskDependency
+content: {}
+error: ~
+failure: 0
+field_errors: {}
+field_warnings: {}
+message: Deleted
+success: 1
