@@ -1214,7 +1214,23 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
         cacheable: false,
 
+        process: function(r) {
+            if( r.search )
+                if( r.search.id )
+                    return r.search.id;
+
+            return false;
+        },
+
         finish: function(r) {
+            if( r ) {
+                if( cb )
+                    cb(r);
+
+            } else {
+                if( ecb )
+                    ecb(r);
+            }
         },
 
         success: function(r) {
