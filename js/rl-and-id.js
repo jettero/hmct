@@ -40,7 +40,7 @@ init_rl_maps();
         c = CHAR_TO_INT[rl[i]];
 
         if( c == null ) // STFU: I mean null or undef here
-            return "";
+            return false;
 
         id = (id * 32) + c;
     }
