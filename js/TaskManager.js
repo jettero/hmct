@@ -1145,7 +1145,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
     var me = this;
 
-    this._getDepID(parentTaskID,targetTaskID,
+    this.getButFirstID(parentTaskID,targetTaskID,
         function(dID) {
             Mojo.Log.info("TaskManager::rmButFirst(%s,%s) did=%s", parentTaskID, targetTaskID, dID);
 
@@ -1199,6 +1199,49 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         }
     );
 
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.getButFirstID = function(parentTaskID,targetTaskID,cb,ecb) {
+    Mojo.Log.info("TaskManager::getButFirstID(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::getButFirstID(' + [parentTaskID,targetTaskID].join(",") + ')',
+        method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
+        params: {task_id: parentTaskID, depends_on: targetTaskID},
+
+        cacheable: false,
+
+        finish: function(r) {
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::getButFirstID(" + [parentTaskID,targetTaskID].join(",") + ") r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task search ...");
+
+            me.E("getButFirstID", "get fail", e.join("; "));
+
+            return false;
+        }
+    });
 };
 
 /*}}}*/
