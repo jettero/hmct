@@ -1079,17 +1079,17 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
     $A(modi.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
 
-    var ret = {
-        toRemove: [],
-        toAdd:    []
-    };
+    var a = [];
+    var d = [];
 
     for(var id in h1) {
         switch(h1[id]) {
-            case 1:   ret.toRemove.push(id); break;
-            case NaN: ret.toAdd.push(id);    break;
+            case 1:   d.push(id); break;
+            case NaN: a.push(id); break;
         }
     }
+
+    var ret = { toAdd: $A(a), toDel: $A(d) };
 
     Mojo.Log.info("TaskManager::compareTextFieldDeps(%s,%s): %s", orig, modi, Object.toJSON(ret));
 
