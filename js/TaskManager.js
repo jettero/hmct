@@ -1069,6 +1069,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
+// dep stuff
 /* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(orig, modi) {
     var h1={};
 
@@ -1093,8 +1094,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
-
-TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
+/* {{{ */ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
     Mojo.Log.info("TaskManager::addButFirst(%s,%s)", parentTaskID, targetTaskID);
 
     var me = this;
@@ -1131,12 +1131,76 @@ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
             if( !e.length )
                 e.push("Something went wrong with the task search ...");
 
-            me.E("searchTasks", "search fail", e.join("; "));
+            me.E("addButFirst", "add fail", e.join("; "));
 
             return false;
         }
     });
 
 };
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.rmButFirst = function(parentTaskID,targetTaskID) {
+    Mojo.Log.info("TaskManager::rmButFirst(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    this._getDepID(parentTaskID,targetTaskID,
+        function(dID) {
+            Mojo.Log.info("TaskManager::rmButFirst(%s,%s) did=%s", parentTaskID, targetTaskID, dID);
+
+            REQ.doRequest({
+                  desc: 'TaskManager::rmButFirst() dID=' + dID,
+                method: 'post', url: 'http://hiveminder.com/=/action/DeleteTaskDependency.json',
+                params: {id: dID},
+
+                cacheable: false,
+
+                finish: function(r) {
+                    me.fetchOneTask(id2rl(parentTaskID),true);
+                    me.fetchOneTask(id2rl(targetTaskID),true);
+                },
+
+                success: function(r) {
+                    if( r.success )
+                        return true;
+
+                    Mojo.Log.info("TaskManager::rmButFirst() r.fail");
+
+                    // warning: it may be tempting to try to DRY this, when comparing with the AMO
+                    // think first.  DRY failed twice already.
+
+                    var e = [];
+
+                    if( r.error )
+                        e.push(r.error);
+
+                    for(var k in r.field_errors )
+                        e.push(k + "-error: " + r.field_errors[k]);
+
+                    if( !e.length )
+                        e.push("Something went wrong with the task search ...");
+
+                    me.E("rmButFirst", "rm fail", e.join("; "));
+
+                    return false;
+                }
+            });
+        },
+
+        function() {
+            // NOTE: if a user sees this, it will seem rather esoteric, but it
+            // shouldn't come up very often.  Meh.  Users can adapt.  They'll
+            // see what it relates to regardless.
+
+            me.E("rmButFirst", "search fail",
+                "did not locate a dependancy as described by the two tasks given: s "
+                    + parentTaskID + " depends on " + targetTaskID);
+        }
+    );
+
+};
+
+/*}}}*/
 
 Mojo.Log.info('loaded(TaskManager.js)');
