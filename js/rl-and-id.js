@@ -52,6 +52,9 @@ init_rl_maps();
 /* {{{ */ function id2rl(id) {
     id = parseInt(id, 10);
 
+    if( isNaN(id) )
+        return false;
+
     var n = [];
     while(id != 0) {
         n.unshift( id % 32 );
