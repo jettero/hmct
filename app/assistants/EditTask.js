@@ -1,7 +1,7 @@
 
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit id2rl rl2id
+/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit id2rl rl2id $A
 */
 
 function EditTaskAssistant(_i) {
@@ -152,8 +152,8 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
-    var bfv = $A(t.but_first).map(function(i){ return "#" + id2rl(i) }).join(", ");
-    var atv = $A(t.and_then ).map(function(i){ return "#" + id2rl(i) }).join(", ");
+    var bfv = $A(t.but_first).map(function(i){ return "#" + id2rl(i); }).join(", ");
+    var atv = $A(t.and_then ).map(function(i){ return "#" + id2rl(i); }).join(", ");
 
     this.controller.setupWidget("but-first", this.boringAttributes, this.butFirstModel = {value: bfv});
     this.controller.setupWidget("and-then",  this.boringAttributes, this.andThenModel  = {value: atv});
@@ -287,13 +287,24 @@ EditTaskAssistant.prototype.go = function() {
     var bf_compr = TMO.compareTextFieldDeps(this.butFirstModel._oVal, this.butFirstModel.value);
     var at_compr = TMO.compareTextFieldDeps( this.andThenModel._oVal,  this.andThenModel.value);
 
+    var dep_did_stuff = bf_compr.toAdd.length + bf_compr.toDel.length
+                      + at_compr.toAdd.length + at_compr.toDel.length;
+
     Mojo.Log.info("LOLWUT: %s", Object.toJSON({ bf_compr: bf_compr, at_compr: at_compr }));
 
-    if( !did_stuff ) {
+    if( !(did_stuff && dep_did_stuff === 0) ) {
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
     } else {
-        TMO.updateTask(params,this.task);
+        if( did_stuff )
+            TMO.updateTask(params,this.task);
+
+        bf_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", this.task.id, id); });
+        bf_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", this.task.id, id); });
+
+        at_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", id, this.task.id); });
+        at_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", id, this.task.id); });
+
         Mojo.Controller.stageController.popScene();
     }
 };
