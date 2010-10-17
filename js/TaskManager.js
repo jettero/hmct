@@ -1069,17 +1069,25 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(type, text1, text2) {
+/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(type, orig, modi) {
     var h1={};
 
-    $A(text1.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
-    $A(text2.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
+    $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
+    $A(modi.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
 
-    for(var id in h1)
-        if( h1[id] !== 0 ) // 1 without -- is 1, undefined-- is NaN, either way, not 0
-            return false;
+    var ret = {
+        toRemove: [],
+        toAdd:    []
+    };
 
-    return true;
+    for(var id in h1) {
+        switch(h1[id]) {
+            case 1:   ret.toRemove.push(id); break;
+            case NaN: ret.toAdd.push(id);    break;
+        }
+    }
+
+    return ret;
 };
 
 /*}}}*/
