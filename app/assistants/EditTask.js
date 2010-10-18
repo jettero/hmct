@@ -290,20 +290,22 @@ EditTaskAssistant.prototype.go = function() {
     var dep_did_stuff = bf_compr.toAdd.length + bf_compr.toDel.length
                       + at_compr.toAdd.length + at_compr.toDel.length;
 
-    Mojo.Log.info("LOLWUT: %s", Object.toJSON({ bf_compr: bf_compr, at_compr: at_compr }));
+    Mojo.Log.info("LOLWUT: %s", Object.toJSON({dds: dep_did_stuff, bf_compr: bf_compr, at_compr: at_compr }));
 
-    if( !(did_stuff && dep_did_stuff === 0) ) {
+    if( !did_stuff && dep_did_stuff === 0 ) {
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
     } else {
         if( did_stuff )
             TMO.updateTask(params,this.task);
 
-        bf_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", this.task.id, id); });
-        bf_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", this.task.id, id); });
+        var me = this;
 
-        at_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", id, this.task.id); });
-        at_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", id, this.task.id); });
+        bf_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", me.task.id, id); });
+        bf_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", me.task.id, id); });
+
+        at_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", id, me.task.id); });
+        at_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", id, me.task.id); });
 
         Mojo.Controller.stageController.popScene();
     }

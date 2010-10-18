@@ -1083,10 +1083,11 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     var d = [];
 
     for(var id in h1) {
-        switch(h1[id]) {
-            case 1:   d.push(id); break;
-            case NaN: a.push(id); break;
-        }
+        if( h1[id] === 1 )
+            d.push(id);
+
+        else if( isNaN(h1[id]) )
+            a.push(id);
     }
 
     var ret = { toAdd: $A(a), toDel: $A(d) };
