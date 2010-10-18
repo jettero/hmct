@@ -1144,17 +1144,17 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.rmButFirst = function(parentTaskID,targetTaskID) {
-    Mojo.Log.info("TaskManager::rmButFirst(%s,%s)", parentTaskID, targetTaskID);
+/* {{{ */ TaskManager.prototype.delButFirst = function(parentTaskID,targetTaskID) {
+    Mojo.Log.info("TaskManager::delButFirst(%s,%s)", parentTaskID, targetTaskID);
 
     var me = this;
 
     this.getButFirstID(parentTaskID,targetTaskID,
         function(dID) {
-            Mojo.Log.info("TaskManager::rmButFirst(%s,%s) did=%s", parentTaskID, targetTaskID, dID);
+            Mojo.Log.info("TaskManager::delButFirst(%s,%s) did=%s", parentTaskID, targetTaskID, dID);
 
             REQ.doRequest({
-                  desc: 'TaskManager::rmButFirst() dID=' + dID,
+                  desc: 'TaskManager::delButFirst() dID=' + dID,
                 method: 'post', url: 'http://hiveminder.com/=/action/DeleteTaskDependency.json',
                 params: {id: dID},
 
@@ -1169,7 +1169,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                     if( r.success )
                         return true;
 
-                    Mojo.Log.info("TaskManager::rmButFirst() r.fail");
+                    Mojo.Log.info("TaskManager::delButFirst() r.fail");
 
                     // warning: it may be tempting to try to DRY this, when comparing with the AMO
                     // think first.  DRY failed twice already.
@@ -1185,7 +1185,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                     if( !e.length )
                         e.push("Something went wrong with the task search ...");
 
-                    me.E("rmButFirst", "rm fail", e.join("; "));
+                    me.E("delButFirst", "rm fail", e.join("; "));
 
                     return false;
                 }
@@ -1197,7 +1197,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             // shouldn't come up very often.  Meh.  Users can adapt.  They'll
             // see what it relates to regardless.
 
-            me.E("rmButFirst", "search fail",
+            me.E("delButFirst", "search fail",
                 "did not locate a dependancy as described by the two tasks given: s "
                     + parentTaskID + " depends on " + targetTaskID);
         }
