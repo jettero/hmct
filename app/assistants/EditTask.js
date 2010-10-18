@@ -301,11 +301,11 @@ EditTaskAssistant.prototype.go = function() {
 
         var me = this;
 
-        bf_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", me.task.id, id); });
-        bf_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", me.task.id, id); });
+        bf_compr.toAdd.each(function(id){ TMO.addButFirst(me.task.id, id); });
+        bf_compr.toDel.each(function(id){ TMO.delButFirst(me.task.id, id); });
 
-        at_compr.toAdd.each(function(id){ Mojo.Log.info("EditTask::go()::bf-toadd-each(%s,%s)", id, me.task.id); });
-        at_compr.toDel.each(function(id){ Mojo.Log.info("EditTask::go()::bf-todel-each(%s,%s)", id, me.task.id); });
+        at_compr.toAdd.each(function(id){ TMO.addButFirst(id, me.task.id); });
+        at_compr.toDel.each(function(id){ TMO.delButFirst(id, me.task.id); });
 
         Mojo.Controller.stageController.popScene();
     }
