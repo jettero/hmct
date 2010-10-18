@@ -1073,6 +1073,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 /*}}}*/
 
 // dep stuff
+
 /* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(orig, modi) {
     var h1={};
 
@@ -1098,6 +1099,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
+
 /* {{{ */ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
     Mojo.Log.info("TaskManager::addButFirst(%s,%s)", parentTaskID, targetTaskID);
 
@@ -1116,10 +1118,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         },
 
         success: function(r) {
+            Mojo.Log.info("LOLWUT(%s)", Object.toJSON(r));
+
             if( r.success )
                 return true;
 
-            Mojo.Log.info("TaskManager::addButFirst(" + [parentTaskID,targetTaskID].join(",") + ") r.fail");
+            Mojo.Log.info("TaskManager::addButFirst(" + [parentTaskID,targetTaskID].join(",") + ") r.fail — %s",
+                Object.toJSON(r));
 
             // warning: it may be tempting to try to DRY this, when comparing with the AMO
             // think first.  DRY failed twice already.
@@ -1213,6 +1218,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
+
 /* {{{ */ TaskManager.prototype.getButFirstID = function(parentTaskID,targetTaskID,cb,ecb) {
     Mojo.Log.info("TaskManager::getButFirstID(%s,%s)", parentTaskID, targetTaskID);
 
