@@ -1166,6 +1166,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 },
 
                 success: function(r) {
+                    try {
+                        if( r.content.search.length === 0 ) {
+                            r.success = 0;
+                            r.error   = "dependancy not found";
+                        }
+                    } catch(e) {}
+
                     if( r.success )
                         return true;
 
@@ -1227,6 +1234,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         },
 
         finish: function(r) {
+            Mojo.Log.info("TaskManager::getButFirstID(%s,%s)::finish() dID: %s", parentTaskID, targetTaskID, r);
             if( r ) {
                 if( cb )
                     cb(r);
