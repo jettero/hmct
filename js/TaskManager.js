@@ -1228,20 +1228,21 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         process: function(r) {
             if( r.search )
                 if( r.search.id )
-                    return r.search.id;
+                    return { id: r.search.id };
 
             return false;
         },
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::getButFirstID(%s,%s)::finish() dID: %s", parentTaskID, targetTaskID, r);
+            Mojo.Log.info("TaskManager::getButFirstID(%s,%s)::finish() dID: %s", parentTaskID, targetTaskID, r.id);
+
             if( r ) {
                 if( cb )
-                    cb(r);
+                    cb(r.id);
 
             } else {
                 if( ecb )
-                    ecb(r);
+                    ecb();
             }
         },
 
