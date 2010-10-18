@@ -409,7 +409,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search ...");
+                e.push("Something went wrong with the task fetch ...");
 
             me.E("findOneTask", "find fail", e.join("; "));
 
@@ -681,7 +681,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search sequel ...");
+                e.push("Something went wrong with the extended task fetch ...");
 
             me.E("getFurtherDetails", "get fail", e.join("; "));
 
@@ -1133,7 +1133,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search ...");
+                e.push("Something went wrong with the task dependency post ...");
 
             me.E("addButFirst", "add fail", e.join("; "));
 
@@ -1190,7 +1190,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                         e.push(k + "-error: " + r.field_errors[k]);
 
                     if( !e.length )
-                        e.push("Something went wrong with the task search ...");
+                        e.push("Something went wrong with the dependancy removal ...");
 
                     me.E("delButFirst", "rm fail", e.join("; "));
 
@@ -1263,7 +1263,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search ...");
+                e.push("Something went wrong with the dependency search ...");
 
             me.E("getButFirstID", "get fail", e.join("; "));
 
