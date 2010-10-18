@@ -1226,17 +1226,24 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         cacheable: false,
 
         process: function(r) {
-            if( r.search )
-                if( r.search.id )
-                    return { id: r.search.id };
+            var ret = {id: false};
 
-            return false;
+            try {
+                // There should be exactly one — crossing my fingers about it
+                // we can always revisit this to make it more robust later if
+                // necessary.
+
+                ret.id = r.content.search[0].id;
+
+            } catch(e) {}
+
+            return ret;
         },
 
         finish: function(r) {
             Mojo.Log.info("TaskManager::getButFirstID(%s,%s)::finish() dID: %s", parentTaskID, targetTaskID, r.id);
 
-            if( r ) {
+            if( r.id ) {
                 if( cb )
                     cb(r.id);
 
