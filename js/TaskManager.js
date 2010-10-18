@@ -1213,7 +1213,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
     REQ.doRequest({
           desc: 'TaskManager::getButFirstID(' + [parentTaskID,targetTaskID].join(",") + ')',
-        method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
+        method: 'post', url: 'http://hiveminder.com/=/action/SearchTaskDependency.json',
         params: {task_id: parentTaskID, depends_on: targetTaskID},
 
         cacheable: false,
