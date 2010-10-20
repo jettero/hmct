@@ -1118,7 +1118,9 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         },
 
         success: function(r) {
-            Mojo.Log.info("LOLWUT(%s)", Object.toJSON(r));
+            if( "task_id" in r )
+                if( r.task_id == parentTaskID ) // STFU: is it a number or a string? can't say
+                    return true; // this is a work around for the 302 redirect in CreateTaskDependency
 
             if( r.success )
                 return true;
