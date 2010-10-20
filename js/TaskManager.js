@@ -1178,7 +1178,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                             r.success = 0;
                             r.error   = "dependancy not found";
                         }
-                    } catch(e) {}
+                    } catch(_ignored_e) {}
 
                     if( r.success )
                         return true;
