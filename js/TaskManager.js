@@ -1077,8 +1077,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 /* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(orig, modi) {
     var h1={};
 
-    $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
-    $A(modi.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
+    if( orig.match(/\S/) ) $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
+    if( modi.match(/\S/) ) $A(modi.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
 
     var a = [];
     var d = [];
