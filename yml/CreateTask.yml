@@ -1,0 +1,252 @@
+---
+accepted:
+  documentation: Whether the owner has decided to do the task
+  label: Accepted?
+complete:
+  default_value: false
+  documentation: Is this task marked as complete?
+  label: Done?
+  mandatory: 1
+depended_on_by: {}
+depends_on: {}
+description:
+  documentation: An expanded description of the task
+  label: Notes
+due:
+  documentation: The date by which the task must be completed
+  label: Date due
+email_content: {}
+group_id:
+  documentation: The group the task is in
+  label: Group
+  valid_values:
+    - display: Personal
+      value: ''
+    - collection: !!perl/hash:BTDT::Model::GroupCollection
+        _current_user: &1 !!perl/hash:BTDT::CurrentUser
+          user_object: !!perl/hash:BTDT::Model::User
+            __triggers: {}
+            _class_trigger_results: []
+            _current_user: *1
+            _jifty_cache_pkey: hmprod-users:id=xxxxx
+            _resurrect_current_user: 1
+            decoded:
+              accepted_eula_version: 1
+              access_level: 1
+              email: 1
+              id: 1
+              pro_account: 1
+            fetched:
+              accepted_eula_version: 1
+              access_level: 1
+              auth_token: 1
+              beta_features: 1
+              calendar_starts_monday: 1
+              created_on: 1
+              email: 1
+              email_confirmed: 1
+              email_secret: 1
+              email_service_updates: 1
+              id: 1
+              invited_by: 1
+              last_visit: 1
+              likes_ticky_boxes: 1
+              name: 1
+              never_email: 1
+              notification_email_frequency: 1
+              number_of_invites_sent: 1
+              paid_until: 1
+              password: 1
+              per_page: 1
+              primary_account: 1
+              pro_account: 1
+              taskbar_on_bottom: 1
+              time_zone: 1
+              was_pro_account: 1
+            input_filters:
+              - Jifty::DBI::Filter::Truncate
+            loaded_by_cols: hmprod-users:id=xxxxx
+            raw_values:
+              accepted_eula_version: 1
+              access_level: guest
+              auth_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              beta_features: 1
+              calendar_starts_monday: 0
+              created_on: 2009-06-22
+              email: jettero@gmail.com
+              email_confirmed: 1
+              email_secret: xxxxxxxx
+              email_service_updates: 1
+              id: xxxxx
+              invited_by: ~
+              last_visit: 2010-07-12 16:00:08
+              likes_ticky_boxes: 1
+              name: Paul Miller
+              never_email: 0
+              notification_email_frequency: never
+              number_of_invites_sent: 0
+              paid_until: 2011-07-17
+              password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              per_page: 0
+              primary_account: xxxxx
+              pro_account: 1
+              taskbar_on_bottom: 1
+              time_zone: America/New_York
+              was_pro_account: 1
+            values:
+              accepted_eula_version: 1
+              access_level: guest
+              auth_token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              beta_features: 1
+              calendar_starts_monday: 0
+              created_on: 2009-06-22
+              email: jettero@gmail.com
+              email_confirmed: 1
+              email_secret: xxxxxxxx
+              email_service_updates: 1
+              id: xxxxx
+              invited_by: ~
+              last_visit: 2010-07-12 16:00:08
+              likes_ticky_boxes: 1
+              name: Paul Miller
+              never_email: 0
+              notification_email_frequency: never
+              number_of_invites_sent: 0
+              paid_until: 2011-07-17
+              password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              per_page: 0
+              primary_account: xxxxx
+              pro_account: 1
+              taskbar_on_bottom: 1
+              time_zone: America/New_York
+              was_pro_account: 1
+        _is_limited: 1
+        _open_parens: {}
+        alias_count: 1
+        auxillary_tables: ''
+        first_row: 0
+        itemscount: 0
+        joins:
+          group_members_1:
+            alias: group_members_1
+            alias_string: ' JOIN group_members group_members_1 '
+            criteria:
+              base_criterion:
+                - column: main.id
+                  operator: =
+                  value: group_members_1.group_id
+            depends_on: main
+            is_distinct: 1
+            type: NORMAL
+        limit_clause: ''
+        must_redo_search: 1
+        order: ''
+        order_by:
+          - column: name
+        pager: !!perl/hash:Data::Page
+          current_page: 1
+          entries_per_page: 10
+          total_entries: 0
+        record_class: BTDT::Model::Group
+        restrictions:
+          group_members_1.actor_id:
+            - column: group_members_1.actor_id
+              escape: ~
+              operator: =
+              value: "'xxxxx'"
+        results_are_readable: 1
+        rows_per_page: 0
+        table: groups
+        tables: ''
+        where_clause: ''
+      display_from: name
+      value_from: id
+milestone:
+  ajax_validates: 1
+  label: Milestone
+owner_id:
+  ajax_validates: 1
+  default_value: jettero@gmail.com
+  documentation: The person responsible for completing the task
+  label: Owner
+priority:
+  default_value: 3
+  documentation: How important the task is
+  label: Priority
+  valid_values:
+    - display: highest
+      value: 5
+    - display: high
+      value: 4
+    - display: normal
+      value: 3
+    - display: low
+      value: 2
+    - display: lowest
+      value: 1
+project:
+  ajax_validates: 1
+  label: Project
+repeat_days_before_due:
+  default_value: 1
+  documentation: How soon before the due date does this task show up?
+  hints: How many days notice do you want?
+  label: Heads up
+repeat_every:
+  default_value: 1
+  documentation: 'How many days, weeks, months, or years between repeats (see also repeat_period)'
+  label: Every how many?
+repeat_period:
+  default_value: once
+  documentation: 'Does this task repeat once, daily, weekly, monthly, or yearly?'
+  label: Schedule
+  valid_values:
+    - display: once
+      value: once
+    - display: daily
+      value: days
+    - display: weekly
+      value: weeks
+    - display: monthly
+      value: months
+    - display: annually
+      value: years
+repeat_stacking:
+  default_value: false
+  documentation: Do this task's repeats stack up?
+  hints: Paying the rent stacks up if you skip it. Watering the plants doesn't.
+  label: Stack up repeats?
+  mandatory: 1
+requestor_id:
+  documentation: The person who wants this task to be completed
+  label: Requestor
+starts:
+  documentation: When the task will appear in your todo list
+  label: Hide until
+summary:
+  documentation: The one-line description of the task
+  hints: '(Example: <i>Pick up milk at the store</i>)'
+  label: Task
+  mandatory: 1
+tags:
+  documentation: Labels that help you find tasks
+  label: Tags
+time_left:
+  ajax_validates: 1
+  label: Time left
+time_worked:
+  ajax_validates: 1
+  label: Time worked
+type:
+  default_value: task
+  documentation: 'What type of task is this?  Is it a normal task, a project, or a milestone?'
+  mandatory: 1
+  valid_values:
+    - task
+    - project
+    - milestone
+will_complete:
+  default_value: t
+  documentation: Whether the owner intends to complete this task
+  label: Will complete?
+  mandatory: 1
