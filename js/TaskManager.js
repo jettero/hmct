@@ -1100,7 +1100,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-/* {{{ */ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID) {
+/* {{{ */ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID,cb) {
     Mojo.Log.info("TaskManager::addButFirst(%s,%s)", parentTaskID, targetTaskID);
 
     var me = this;
@@ -1113,8 +1113,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         cacheable: false,
 
         finish: function(r) {
-            me.fetchOneTask(id2rl(parentTaskID),true);
-            me.fetchOneTask(id2rl(targetTaskID),true);
+            if( cb ) {
+                cb(parentTaskID,targetTaskID);
+
+            } else {
+                me.fetchOneTask(id2rl(parentTaskID),true);
+                me.fetchOneTask(id2rl(targetTaskID),true);
+            }
         },
 
         success: function(r) {
@@ -1151,7 +1156,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
-/* {{{ */ TaskManager.prototype.delButFirst = function(parentTaskID,targetTaskID) {
+/* {{{ */ TaskManager.prototype.delButFirst = function(parentTaskID,targetTaskID,cb) {
     Mojo.Log.info("TaskManager::delButFirst(%s,%s)", parentTaskID, targetTaskID);
 
     var me = this;
@@ -1168,8 +1173,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 cacheable: false,
 
                 finish: function(r) {
-                    me.fetchOneTask(id2rl(parentTaskID),true);
-                    me.fetchOneTask(id2rl(targetTaskID),true);
+                    if( cb ) {
+                        cb(parentTaskID,targetTaskID);
+
+                    } else {
+                        me.fetchOneTask(id2rl(parentTaskID),true);
+                        me.fetchOneTask(id2rl(targetTaskID),true);
+                    }
                 },
 
                 success: function(r) {
@@ -1217,6 +1227,51 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         }
     );
 
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.modifyDeps = function(pid, bf_compr, at_compr) {
+    var tallies = { /* count of changes to ids, pid being the parent id of all changes */ };
+
+    Mojo.Log.info("TaskManager::modifyDeps(%s,%s)", Object.toJSON(bf_compr), Object.toJSON(at_compr) );
+
+    var pinc = function(x) {
+        if( x in tallies )
+            tallies[x] ++;
+
+        else
+            tallies[x] = 1;
+    };
+
+    var count = function(id) {
+        pinc(pid); pinc(id);
+    };
+
+    bf_compr.toAdd.each(count);
+    bf_compr.toDel.each(count);
+
+    at_compr.toAdd.each(count);
+    at_compr.toDel.each(count);
+
+    Mojo.Log.info("TaskManager::modifyDeps() tallies: %s", Object.toJSON(tallies));
+
+    var me = this;
+    var pu = function(id1,id2) {
+        tallies[id1]--;
+        tallies[id2]--;
+
+        Mojo.Log.info("TaskManager::modifyDeps()::pu() tallies: %s", Object.toJSON(tallies));
+
+        if( tallies[id1] === 0 ) me.fetchOneTask(id2rl(id1),true);
+        if( tallies[id2] === 0 ) me.fetchOneTask(id2rl(id2),true);
+    };
+
+    bf_compr.toAdd.each(function(id){ me.addButFirst(pid, id, pu); });
+    bf_compr.toDel.each(function(id){ me.delButFirst(pid, id, pu); });
+
+    at_compr.toAdd.each(function(id){ me.addButFirst(id, pid, pu); });
+    at_compr.toDel.each(function(id){ me.delButFirst(id, pid, pu); });
 };
 
 /*}}}*/

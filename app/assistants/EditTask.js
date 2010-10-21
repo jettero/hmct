@@ -255,7 +255,7 @@ EditTaskAssistant.prototype.go = function() {
             // NOTE: sending a '0' actually declines, which has other side effects,
             // see notes.txt we might have a decline some day, but for now,
             // setting the owner to the requestor manually should be roughly
-            // the same. see also: notes.txt 
+            // the same. see also: notes.txt
 
     if( f("descriptionModel"  ) ) params.description            = v;
     if( f("ownerModel"        ) ) params.owner_id               = v;
@@ -290,8 +290,6 @@ EditTaskAssistant.prototype.go = function() {
     var dep_did_stuff = bf_compr.toAdd.length + bf_compr.toDel.length
                       + at_compr.toAdd.length + at_compr.toDel.length;
 
-    Mojo.Log.info("LOLWUT: %s", Object.toJSON({dds: dep_did_stuff, bf_compr: bf_compr, at_compr: at_compr }));
-
     if( !did_stuff && dep_did_stuff === 0 ) {
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
@@ -299,13 +297,8 @@ EditTaskAssistant.prototype.go = function() {
         if( did_stuff )
             TMO.updateTask(params,this.task);
 
-        var me = this;
-
-        bf_compr.toAdd.each(function(id){ TMO.addButFirst(me.task.id, id); });
-        bf_compr.toDel.each(function(id){ TMO.delButFirst(me.task.id, id); });
-
-        at_compr.toAdd.each(function(id){ TMO.addButFirst(id, me.task.id); });
-        at_compr.toDel.each(function(id){ TMO.delButFirst(id, me.task.id); });
+        // tries hard to only update affected tasks once
+        TMO.modifyDeps(this.task.id, bf_compr, at_compr);
 
         Mojo.Controller.stageController.popScene();
     }
