@@ -1,0 +1,10 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Date: Wed, 20 Oct 2010 14:58:55 GMT
+Content-Type: application/json; charset=UTF-8
+Set-Cookie: JIFTY_SID_HIVEMINDER=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; path=/; expires=Fri, 08 Jul 2011 01:44:21 GMT
+X-Cache: MISS from hiveminder.com
+Transfer-Encoding: chunked
+
+{"success":0,"content":{},"action_class":"BTDT::Action::CreateTaskDependency","field_errors":{},"message":null,"failure":1,"error":"That link already exists!","field_warnings":{}}

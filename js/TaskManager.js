@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit
+/*global Mojo ErrorDialog AMO REQ Template OPT setTimeout $ Element $H $A nqsplit rl2id id2rl
 */
 
 /* {{{ */ function TaskManager() {
@@ -409,7 +409,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search ...");
+                e.push("Something went wrong with the task fetch ...");
 
             me.E("findOneTask", "find fail", e.join("; "));
 
@@ -621,12 +621,18 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
         process: function(r) {
             var ret = [];
-            var T = r.content.tasks;
-            var i,t,k;
 
-            for(i=0; i<T.length; i++) {
-                t = T[i];
+            $A(r.content.tasks).each(function(t){
+                var bf = [];
+                var at = [];
+
+                if( t.depends_on_ids )     bf = t.depends_on_ids.split(/\s+/);
+                if( t.depended_on_by_ids ) at = t.depended_on_by_ids.split(/\s+/);
+
                 ret.push({
+
+                    but_first: bf,
+                    and_then:  at,
 
                     but_first_count: t.depends_on_count,
                     but_first_html:  "<ul><li>" + t.depends_on_summaries.escapeHTML().replace(/\t/g, "</li><li>") + "</li></ul>",
@@ -636,7 +642,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
                     id: t.id
                 });
-            }
+            });
 
             return ret;
         },
@@ -675,7 +681,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
                 e.push(k + "-error: " + r.field_errors[k]);
 
             if( !e.length )
-                e.push("Something went wrong with the task search sequel ...");
+                e.push("Something went wrong with the extended task fetch ...");
 
             me.E("getFurtherDetails", "get fail", e.join("; "));
 
@@ -1059,6 +1065,279 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     Mojo.Log.info("TaskManager::knownTags(): %s", Object.toJSON(h));
 
     return $H(h).keys().sort();
+};
+
+/*}}}*/
+
+// dep stuff
+
+/* {{{ */ TaskManager.prototype.compareTextFieldDeps = function(orig, modi) {
+    var h1={};
+
+    if( orig.match(/\S/) ) $A(orig.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] =1; });
+    if( modi.match(/\S/) ) $A(modi.split(/[,\s]+/)).each(function(d){ h1[rl2id(d)] --; });
+
+    var a = [];
+    var d = [];
+
+    for(var id in h1) {
+        if( h1[id] === 1 )
+            d.push(id);
+
+        else if( isNaN(h1[id]) )
+            a.push(id);
+    }
+
+    var ret = { toAdd: $A(a), toDel: $A(d) };
+
+    Mojo.Log.info("TaskManager::compareTextFieldDeps(%s,%s): %s", orig, modi, Object.toJSON(ret));
+
+    return ret;
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.addButFirst = function(parentTaskID,targetTaskID,cb) {
+    Mojo.Log.info("TaskManager::addButFirst(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::addButFirst(' + [parentTaskID,targetTaskID].join(",") + ')',
+        method: 'post', url: 'http://hiveminder.com/=/action/CreateTaskDependency.json',
+        params: {task_id: parentTaskID, depends_on: targetTaskID},
+
+        cacheable: false,
+
+        finish: function(r) {
+            if( cb ) {
+                cb(parentTaskID,targetTaskID);
+
+            } else {
+                me.fetchOneTask(id2rl(parentTaskID),true);
+                me.fetchOneTask(id2rl(targetTaskID),true);
+            }
+        },
+
+        success: function(r) {
+            if( "task_id" in r )
+                if( r.task_id == parentTaskID ) // STFU: is it a number or a string? can't say
+                    return true; // this is a work around for the 302 redirect in CreateTaskDependency
+
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::addButFirst(" + [parentTaskID,targetTaskID].join(",") + ") r.fail — %s",
+                Object.toJSON(r));
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the task dependency post ...");
+
+            me.E("addButFirst", "add fail", e.join("; "));
+
+            return false;
+        }
+    });
+
+};
+
+/*}}}*/
+/* {{{ */ TaskManager.prototype.delButFirst = function(parentTaskID,targetTaskID,cb) {
+    Mojo.Log.info("TaskManager::delButFirst(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    this.getButFirstID(parentTaskID,targetTaskID,
+        function(dID) {
+            Mojo.Log.info("TaskManager::delButFirst(%s,%s) did=%s", parentTaskID, targetTaskID, dID);
+
+            REQ.doRequest({
+                  desc: 'TaskManager::delButFirst() dID=' + dID,
+                method: 'post', url: 'http://hiveminder.com/=/action/DeleteTaskDependency.json',
+                params: {id: dID},
+
+                cacheable: false,
+
+                finish: function(r) {
+                    if( cb ) {
+                        cb(parentTaskID,targetTaskID);
+
+                    } else {
+                        me.fetchOneTask(id2rl(parentTaskID),true);
+                        me.fetchOneTask(id2rl(targetTaskID),true);
+                    }
+                },
+
+                success: function(r) {
+                    try {
+                        if( r.content.search.length === 0 ) {
+                            r.success = 0;
+                            r.error   = "dependancy not found";
+                        }
+                    } catch(_ignored_e) {}
+
+                    if( r.success )
+                        return true;
+
+                    Mojo.Log.info("TaskManager::delButFirst() r.fail");
+
+                    // warning: it may be tempting to try to DRY this, when comparing with the AMO
+                    // think first.  DRY failed twice already.
+
+                    var e = [];
+
+                    if( r.error )
+                        e.push(r.error);
+
+                    for(var k in r.field_errors )
+                        e.push(k + "-error: " + r.field_errors[k]);
+
+                    if( !e.length )
+                        e.push("Something went wrong with the dependancy removal ...");
+
+                    me.E("delButFirst", "rm fail", e.join("; "));
+
+                    return false;
+                }
+            });
+        },
+
+        function() {
+            // NOTE: if a user sees this, it will seem rather esoteric, but it
+            // shouldn't come up very often.  Meh.  Users can adapt.  They'll
+            // see what it relates to regardless.
+
+            me.E("delButFirst", "search fail",
+                "did not locate a dependancy as described by the two tasks given: s "
+                    + parentTaskID + " depends on " + targetTaskID);
+        }
+    );
+
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.modifyDeps = function(pid, bf_compr, at_compr) {
+    var tallies = { /* count of changes to ids, pid being the parent id of all changes */ };
+
+    Mojo.Log.info("TaskManager::modifyDeps(%s,%s)", Object.toJSON(bf_compr), Object.toJSON(at_compr) );
+
+    var pinc = function(x) {
+        if( x in tallies )
+            tallies[x] ++;
+
+        else
+            tallies[x] = 1;
+    };
+
+    var count = function(id) {
+        pinc(pid); pinc(id);
+    };
+
+    bf_compr.toAdd.each(count);
+    bf_compr.toDel.each(count);
+
+    at_compr.toAdd.each(count);
+    at_compr.toDel.each(count);
+
+    Mojo.Log.info("TaskManager::modifyDeps() tallies: %s", Object.toJSON(tallies));
+
+    var me = this;
+    var pu = function(id1,id2) {
+        tallies[id1]--;
+        tallies[id2]--;
+
+        Mojo.Log.info("TaskManager::modifyDeps()::pu() tallies: %s", Object.toJSON(tallies));
+
+        if( tallies[id1] === 0 ) me.fetchOneTask(id2rl(id1),true);
+        if( tallies[id2] === 0 ) me.fetchOneTask(id2rl(id2),true);
+    };
+
+    bf_compr.toAdd.each(function(id){ me.addButFirst(pid, id, pu); });
+    bf_compr.toDel.each(function(id){ me.delButFirst(pid, id, pu); });
+
+    at_compr.toAdd.each(function(id){ me.addButFirst(id, pid, pu); });
+    at_compr.toDel.each(function(id){ me.delButFirst(id, pid, pu); });
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.getButFirstID = function(parentTaskID,targetTaskID,cb,ecb) {
+    Mojo.Log.info("TaskManager::getButFirstID(%s,%s)", parentTaskID, targetTaskID);
+
+    var me = this;
+
+    REQ.doRequest({
+          desc: 'TaskManager::getButFirstID(' + [parentTaskID,targetTaskID].join(",") + ')',
+        method: 'post', url: 'http://hiveminder.com/=/action/SearchTaskDependency.json',
+        params: {task_id: parentTaskID, depends_on: targetTaskID},
+
+        cacheable: false,
+
+        process: function(r) {
+            var ret = {id: false};
+
+            try {
+                // There should be exactly one — crossing my fingers about it
+                // we can always revisit this to make it more robust later if
+                // necessary.
+
+                ret.id = r.content.search[0].id;
+
+            } catch(e) {}
+
+            return ret;
+        },
+
+        finish: function(r) {
+            Mojo.Log.info("TaskManager::getButFirstID(%s,%s)::finish() dID: %s", parentTaskID, targetTaskID, r.id);
+
+            if( r.id ) {
+                if( cb )
+                    cb(r.id);
+
+            } else {
+                if( ecb )
+                    ecb();
+            }
+        },
+
+        success: function(r) {
+            if( r.success )
+                return true;
+
+            Mojo.Log.info("TaskManager::getButFirstID(" + [parentTaskID,targetTaskID].join(",") + ") r.fail");
+
+            // warning: it may be tempting to try to DRY this, when comparing with the AMO
+            // think first.  DRY failed twice already.
+
+            var e = [];
+
+            if( r.error )
+                e.push(r.error);
+
+            for(var k in r.field_errors )
+                e.push(k + "-error: " + r.field_errors[k]);
+
+            if( !e.length )
+                e.push("Something went wrong with the dependency search ...");
+
+            me.E("getButFirstID", "get fail", e.join("; "));
+
+            return false;
+        }
+    });
 };
 
 /*}}}*/

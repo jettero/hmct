@@ -1,7 +1,7 @@
 
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit
+/*global Mojo AMO ErrorDialog SuccessDialog TMO qsplit revqsplit id2rl rl2id $A
 */
 
 function EditTaskAssistant(_i) {
@@ -152,6 +152,12 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
+    var bfv = $A(t.but_first).map(function(i){ return "#" + id2rl(i); }).join(", ");
+    var atv = $A(t.and_then ).map(function(i){ return "#" + id2rl(i); }).join(", ");
+
+    this.controller.setupWidget("but-first", this.boringAttributes, this.butFirstModel = {value: bfv});
+    this.controller.setupWidget("and-then",  this.boringAttributes, this.andThenModel  = {value: atv});
+
     this.controller.setupWidget("time-worked", this.preSelBAttributes, this.timeWorkedModel = {value: t.time_worked});
     this.controller.setupWidget("time-left",   this.preSelBAttributes, this.timeLeftModel   = {value: t.time_left});
 
@@ -249,7 +255,7 @@ EditTaskAssistant.prototype.go = function() {
             // NOTE: sending a '0' actually declines, which has other side effects,
             // see notes.txt we might have a decline some day, but for now,
             // setting the owner to the requestor manually should be roughly
-            // the same. see also: notes.txt 
+            // the same. see also: notes.txt
 
     if( f("descriptionModel"  ) ) params.description            = v;
     if( f("ownerModel"        ) ) params.owner_id               = v;
@@ -278,11 +284,22 @@ EditTaskAssistant.prototype.go = function() {
 
     Mojo.Log.info("EditTask::go() params: %s", Object.toJSON(params));
 
-    if( !did_stuff ) {
+    var bf_compr = TMO.compareTextFieldDeps(this.butFirstModel._oVal, this.butFirstModel.value);
+    var at_compr = TMO.compareTextFieldDeps( this.andThenModel._oVal,  this.andThenModel.value);
+
+    var dep_did_stuff = bf_compr.toAdd.length + bf_compr.toDel.length
+                      + at_compr.toAdd.length + at_compr.toDel.length;
+
+    if( !did_stuff && dep_did_stuff === 0 ) {
         this.E("EditTask::go()", "post error", "nothing changed, update not posted");
 
     } else {
-        TMO.updateTask(params,this.task);
+        if( did_stuff )
+            TMO.updateTask(params,this.task);
+
+        // tries hard to only update affected tasks once
+        TMO.modifyDeps(this.task.id, bf_compr, at_compr);
+
         Mojo.Controller.stageController.popScene();
     }
 };

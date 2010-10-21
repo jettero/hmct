@@ -1,0 +1,11 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 302 Found
+Date: Wed, 20 Oct 2010 11:15:26 GMT
+Location: http://hiveminder.com/=/model/BTDT%3A%3AModel%3A%3ATaskDependency/id/64755.json
+Content-Type: application/json; charset=UTF-8
+Set-Cookie: JIFTY_SID_HIVEMINDER=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; path=/; expires=Fri, 08 Jul 2011 01:44:21 GMT
+X-Cache: MISS from hiveminder.com
+Transfer-Encoding: chunked
+
+{"success":1,"content":{"id":64755},"action_class":"BTDT::Action::CreateTaskDependency","field_errors":{},"message":"Created","failure":0,"error":null,"field_warnings":{}}
