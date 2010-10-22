@@ -973,6 +973,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         params: {id: task.id}, cacheable: false,
         finish: function(r) {
             // snoop cache to stale out searchlists with this task
+            Mojo.Log.info("TaskManager::deleteTask(rl=%s) finishing up", task.record_locator);
 
             me.markCacheStale(task,true); // mark this task and all its deps stale
 
@@ -980,6 +981,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.notifyTasksChange();
 
             if( cb ) {
+                Mojo.Log.info("TaskManager::deleteTask(rl=%s) issuing callback", task.record_locator);
+
                 try { cb(); } catch(e) {
                     me.E("deleteTask", "post succeeded", "failed to issue callback after successfully deleting task: " + e);
                 }
@@ -1058,14 +1061,14 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     $A(rl).each(function(r){
 
         // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-        var cs = me.searchCacheSnoop[r];
+        var cs = this.searchCacheSnoop[r];
         if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
             REQ.markCacheStale(csi);
             cs[csi] = false;
 
         } } }
 
-    });
+    }.bind(this));
 };
 
 /*}}}*/
