@@ -152,8 +152,8 @@ EditTaskAssistant.prototype.setup = function() {
     Mojo.Event.listen(this.controller.get("schedule"), Mojo.Event.propertyChange, sch);
     sch();
 
-    var bfv = $A(t.but_first).map(function(i){ return "#" + id2rl(i); }).join(", ");
-    var atv = $A(t.and_then ).map(function(i){ return "#" + id2rl(i); }).join(", ");
+    var bfv = $A(t.but_first).map(id2rl).join(", ");
+    var atv = $A(t.and_then ).map(id2rl).join(", ");
 
     this.controller.setupWidget("but-first", this.boringAttributes, this.butFirstModel = {value: bfv});
     this.controller.setupWidget("and-then",  this.boringAttributes, this.andThenModel  = {value: atv});
