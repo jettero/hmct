@@ -141,29 +141,6 @@ NewTaskAssistant.prototype.setup = function() {
 NewTaskAssistant.prototype.go = function() {
     Mojo.Log.info("NewTask::go()");
 
-    // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/NewTask.js 
-    // - won't impliment; t - tested; x - added;
-
-    // [t] this.titleModel
-    // [t] this.descriptionModel
-    // [t] this.tagsModel
-    // [t] this.groupModel
-    // [t] this.ownerModel
-    // [t] this.priorityModel
-    // [t] this.dueDateModel
-    // [t] this.hideUntilModel
-
-    // [t] this.scheduleModel
-    // [x] this.stacksUpModel
-    // [t] this.everyModel
-    // [t] this.headsUpModel
-
-    // [t] this.timeWorkedModel
-    // [t] this.timeLeftModel
-
-    // [-] this.hiddenForeverModel
-    // [-] this.commentModel
-
     var params = {};
     var v; var f = function(x) { if(typeof x === "string" && x.length>0) return true; return false; };
 
@@ -202,10 +179,14 @@ NewTaskAssistant.prototype.go = function() {
 
     TMO.postNewTask(params, function(){
 
+        // There should be some OPTs for this, just reload the current search?
+        // Shut up? reminder?
+
         this.S("NewTask::go()",
             "posted task successfully",
             "New task posted.  Manually refresh any lists where it should be listed.", function(value){
             });
+
 
     }.bind(this));
 };
