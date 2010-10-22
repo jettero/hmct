@@ -154,7 +154,7 @@ function RequestEngine() {
                             Mojo.Log.info("RequestEngine::doRequest(%s) [cache entry is older(%d>=%d) or stale(%s), issuing new request]",
                                  _r._logdesc, ds, cma, st);
 
-                            _r.force = true; // is this necessary?
+                            _r.force = true;
                             this._doRequest(_r);
 
                         } else {
