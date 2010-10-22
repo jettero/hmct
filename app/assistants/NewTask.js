@@ -177,7 +177,7 @@ NewTaskAssistant.prototype.go = function() {
 
     Mojo.Controller.stageController.popScene();
 
-    TMO.postNewTask(params, function(){
+    TMO.postNewTask(params, function(r){
 
         // There should be some OPTs for this, just reload the current search?
         // Shut up? reminder?

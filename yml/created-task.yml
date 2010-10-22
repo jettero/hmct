@@ -1,8 +1,8 @@
 HTTP/1.1 100 Continue
 
 HTTP/1.1 302 Found
-Date: Thu, 21 Oct 2010 19:10:08 GMT
-Location: http://hiveminder.com/=/model/BTDT%3A%3AModel%3A%3ATask/id/1196584.yml
+Date: Thu, 21 Oct 2010 19:11:21 GMT
+Location: http://hiveminder.com/=/model/BTDT%3A%3AModel%3A%3ATask/id/1196585.yml
 Content-Type: text/x-yaml; charset=UTF-8
 Set-Cookie: JIFTY_SID_HIVEMINDER=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; path=/; expires=Fri, 08 Jul 2011 01:44:21 GMT
 X-Cache: MISS from hiveminder.com
@@ -11,8 +11,8 @@ Transfer-Encoding: chunked
 ---
 action_class: BTDT::Action::CreateTask
 content:
-  id: 1196584
-  record_locator: 36JKA
+  id: 1196585
+  record_locator: 36JKC
 error: ~
 failure: 0
 field_errors: {}

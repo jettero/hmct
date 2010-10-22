@@ -872,7 +872,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         params: params, cacheable: false,
         finish:   function(r) {
             if( cb ) {
-                try { cb(); } catch(e) {
+                try { cb(r); } catch(e) {
                     me.E("postNewTask", "post succeeded", "failed to issue callback after successfully posting task: " + e);
                 }
             }
