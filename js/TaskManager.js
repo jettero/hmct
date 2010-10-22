@@ -294,8 +294,15 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
         finish: function(r) {
             if( r._req_cacheStaleOrOld && me.tasks && same_search ) {
+                // NOTE: if the cache entry is stale, and we already have
+                // something in the right ballpark (same_search) then what we
+                // have is probably better than the stale cache otherwise we
+                // want the even the stale cache until the fresh result gets
+                // here.
+
                 Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d, soo=%s] — [stale, skip it]",
                     search, r.length, r._req_cacheAge, r._req_cacheStaleOrOld );
+
                 return;
             }
 
