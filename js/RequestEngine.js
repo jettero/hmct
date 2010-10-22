@@ -287,7 +287,8 @@ function RequestEngine() {
                 }
 
                 catch(_errcb) {
-                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks: %s", _r._logdesc, _errcb);
+                    Mojo.Log.error("RequestEngine::_doRequest(%s) Problem executing ajax callbacks [%s]: %s",
+                        _r._logdesc, part, _errcb);
 
                     if( _r.failure() )
                         me.E("_doRequest", "callback",
