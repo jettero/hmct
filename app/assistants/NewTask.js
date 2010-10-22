@@ -296,6 +296,9 @@ NewTaskAssistant.prototype.slurpLastSearch = function() {
     append_txt("dueDate",   "due/before");
     append_txt("hideUntil", "hide/until/after");
     append_txt("hideUntil", "hide/until/before")
+
+    append_txt("butFirst",  "but/first");
+    append_txt("andThen",   "and/then");
 };
 
 NewTaskAssistant.prototype.handleCommand = function(event) {
