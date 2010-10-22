@@ -209,30 +209,6 @@ EditTaskAssistant.prototype.no = function() {
 EditTaskAssistant.prototype.go = function() {
     Mojo.Log.info("EditTask::go()");
 
-    // perl -ne 'print "    // $1\n" if m/(this[a-zA-Z.]+Model)/ and not $u{$1}++' app/assistants/EditTask.js
-    // - won't impliment; t - tested; x - added;
-
-    // [x] this.titleModel
-    // [x] this.descriptionModel
-    // [x] this.tagsModel
-    // [x] this.groupModel
-    // [x] this.ownerModel
-    // [x] this.priorityModel
-    // [x] this.dueDateModel
-    // [x] this.hideUntilModel
-
-    // [x] this.scheduleModel
-    // [x] this.stacksUpModel
-    // [x] this.everyModel
-    // [x] this.headsUpModel
-
-    // [x] this.timeWorkedModel
-    // [x] this.timeLeftModel
-
-    // [x] this.commentModel
-    // [x] this.completeModel
-    // [x] this.hiddenForeverModel
-
     var params = {};
 
     var did_stuff = false;
