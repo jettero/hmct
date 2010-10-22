@@ -977,13 +977,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         finish: function(r) {
             // snoop cache to stale out searchlists with this task
 
-            // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-            var cs = me.searchCacheSnoop[task.record_locator];
-            if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
-                REQ.markCacheStale(csi);
-                cs[csi] = false;
-
-            } } }
+            me.markCacheStale(task,true); // mark this task and all its deps stale
 
             me.tasks = $A(me.tasks).reject(function(i) { return i.record_locator === task.record_locator; });
             me.notifyTasksChange();
@@ -1053,6 +1047,29 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
+
+TaskManager.prototype.markCacheStale = function(task,depsToo) {
+    Mojo.Log.info("TaskManager::markCacheStale(rl=%s)", task.record_locator);
+
+    var rl = [ task.record_locator ];
+
+    if( depsToo ) {
+        $A(task.but_first).each(function(t){ rl.push(t.record_locator) });
+        $A(task.and_then ).each(function(t){ rl.push(t.record_locator) });
+    }
+
+    $A(rl).each(function(r){
+
+        // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
+        var cs = me.searchCacheSnoop[r];
+        if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
+            REQ.markCacheStale(csi);
+            cs[csi] = false;
+
+        } } }
+
+    });
+};
 
 /* {{{ */ TaskManager.prototype.knownTags = function() {
     var h = {};
