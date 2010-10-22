@@ -381,14 +381,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             me.notifyTaskChange(theTask,true);
             me.getFurtherDetails(r._req_cacheAge, "id " + rl);
-
-            // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-            var cs = me.searchCacheSnoop[theTask.record_locator];
-            if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
-                REQ.markCacheStale(csi);
-                cs[csi] = false;
-
-            } } }
+            me.markCacheStale(theTask); // taskSearch is behind what we have now
         },
 
         success: function(r) {
