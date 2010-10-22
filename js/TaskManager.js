@@ -275,6 +275,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     }
 
     search = this.setLastSearch(search);
+    var same_search = search === this.getLastSearch();
 
     Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
@@ -292,11 +293,14 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         process: this.processTaskDownloads,
 
         finish: function(r) {
+            if( r._req_cacheStaleOrOld && me.tasks && same_search ) {
+                Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d, soo=%s] — [stale, skip it]",
+                    search, r.length, r._req_cacheAge, r._req_cacheStaleOrOld );
+                return;
+            }
+
             Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d, soo=%s]",
                 search, r.length, r._req_cacheAge, r._req_cacheStaleOrOld );
-
-            if( r._req_cacheStaleOrOld && me.tasks )
-                return;
 
             // can be either a fresh request or a cache result
             me.tasks = r;
