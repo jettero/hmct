@@ -292,7 +292,11 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         process: this.processTaskDownloads,
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d]", search, r.length, r._req_cacheAge);
+            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d, soo=%s]",
+                search, r.length, r._req_cacheAge, r._req_cacheStaleOrOld );
+
+            if( r._req_cacheStaleOrOld && me.tasks )
+                return;
 
             // can be either a fresh request or a cache result
             me.tasks = r;
@@ -1041,7 +1045,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
 /*}}}*/
 
-TaskManager.prototype.markCacheStale = function(task,depsToo) {
+/* {{{ */ TaskManager.prototype.markCacheStale = function(task,depsToo) {
     Mojo.Log.info("TaskManager::markCacheStale(rl=%s)", task.record_locator);
 
     var rl = [ task.record_locator ];
@@ -1063,6 +1067,8 @@ TaskManager.prototype.markCacheStale = function(task,depsToo) {
 
     });
 };
+
+/*}}}*/
 
 /* {{{ */ TaskManager.prototype.knownTags = function() {
     var h = {};
