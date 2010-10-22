@@ -77,8 +77,8 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("every",      this.preSelNAttributes, this.everyModel     = {});
     this.controller.setupWidget("heads-up",   this.preSelNAttributes, this.headsUpModel   = {});
 
-    this.controller.setupWidget("but-first", this.boringAttributes, this.butFirstModel = {});
-    this.controller.setupWidget("and-then",  this.boringAttributes, this.andThenModel  = {});
+    this.controller.setupWidget("but-first", this.boringAttributes, this.butFirstModel = {value: ""});
+    this.controller.setupWidget("and-then",  this.boringAttributes, this.andThenModel  = {value: ""});
 
     this.controller.setupWidget("time-worked", this.preSelBAttributes, this.timeWorkedModel = {});
     this.controller.setupWidget("time-left",   this.preSelBAttributes, this.timeLeftModel   = {});
