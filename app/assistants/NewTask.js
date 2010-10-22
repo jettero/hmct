@@ -164,6 +164,15 @@ NewTaskAssistant.prototype.go = function() {
     if( f(v = this.timeWorkedModel .value) ) params.time_worked            = v;
     if( f(v = this.timeLeftModel   .value) ) params.time_left              = v;
 
+    var bf_compr = TMO.compareTextFieldDeps("", this.butFirstModel.value);
+    var at_compr = TMO.compareTextFieldDeps("",  this.andThenModel.value);
+
+    if( bf_compr.toAdd.length === 1 )
+        params.depends_on = bf_compr.toAdd.shift;
+
+    if( at_compr.toAdd.length === 1 )
+        params.depends_on_by = at_compr.toAdd.shift;
+
     if( f(v = this.tagsModel.value) ) {
         var q = qsplit(v);
         if( q ) params.tags = q.join(" ");
@@ -187,6 +196,8 @@ NewTaskAssistant.prototype.go = function() {
             "New task posted.  Manually refresh any lists where it should be listed.", function(value){
             });
 
+        if( bf_compr.toAdd.length >= 0 || at_compr.toAdd.length >= 0 )
+            TMO.modifyDeps(r.id, bf_compr, at_compr);
 
     }.bind(this));
 };
