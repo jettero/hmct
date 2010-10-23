@@ -6,6 +6,9 @@
 function BusyBee() {
     this.tasks = {};
 
+    this.bdo = new Mojo.Model.Cookie("busy detail");
+    this.showing = this.bdo.get();
+
     Mojo.Event.listen($("wait"), Mojo.Event.tap, this.showDetail.bind(this));
 }
 
@@ -20,6 +23,8 @@ BusyBee.prototype.showDetail = function() {
         $("wait-detail").setStyle({display: 'block'});
         this.showing = true;
     }
+
+    this.bdo.put(this.showing);
 };
 
 BusyBee.prototype.busy = function(task) {
