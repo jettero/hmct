@@ -18,6 +18,10 @@ test: clean
 lc logcontinue cl continuelog:
 	$(ssh) tail -n 0 -f /var/log/messages | ./log-parse.pl -ca
 
+flc freshlogcontinue:
+	cat /dev/null > last_run.log
+	@+ make --no-print-directory lc
+
 myinstall: clean
 	@+HM_LOGLEVEL=0 HM_DEFSER='$(mydefser)' env -u HM_UNFOLD -u HM_PRETAP -u HM_MAXAGE make --no-print-directory build
 	scp *.ipk $${INSTHOST:-castle.vhb}:

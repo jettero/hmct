@@ -275,6 +275,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     }
 
     search = this.setLastSearch(search);
+    var same_search = search === this.getLastSearch();
 
     Mojo.Log.info("TaskManager::searchTasks(%s,[%s])", search, force ? "force" : "cache ok");
 
@@ -292,7 +293,21 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         process: this.processTaskDownloads,
 
         finish: function(r) {
-            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d]", search, r.length, r._req_cacheAge);
+            if( r._req_cacheStaleOrOld && me.tasks && same_search ) {
+                // NOTE: if the cache entry is stale, and we already have
+                // something in the right ballpark (same_search) then what we
+                // have is probably better than the stale cache otherwise we
+                // want the even the stale cache until the fresh result gets
+                // here.
+
+                Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d, soo=%s] — [stale, skip it]",
+                    search, r.length, r._req_cacheAge, r._req_cacheStaleOrOld );
+
+                return;
+            }
+
+            Mojo.Log.info("TaskManager::searchTasks(%s) [finish: |r|:%d, rca=%d, soo=%s]",
+                search, r.length, r._req_cacheAge, r._req_cacheStaleOrOld );
 
             // can be either a fresh request or a cache result
             me.tasks = r;
@@ -381,14 +396,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
             me.notifyTaskChange(theTask,true);
             me.getFurtherDetails(r._req_cacheAge, "id " + rl);
-
-            // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-            var cs = me.searchCacheSnoop[theTask.record_locator];
-            if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
-                REQ.markCacheStale(csi);
-                cs[csi] = false;
-
-            } } }
+            me.markCacheStale(theTask); // taskSearch is behind what we have now
         },
 
         success: function(r) {
@@ -976,19 +984,16 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         params: {id: task.id}, cacheable: false,
         finish: function(r) {
             // snoop cache to stale out searchlists with this task
+            Mojo.Log.info("TaskManager::deleteTask(rl=%s) finishing up", task.record_locator);
 
-            // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-            var cs = me.searchCacheSnoop[task.record_locator];
-            if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
-                REQ.markCacheStale(csi);
-                cs[csi] = false;
-
-            } } }
+            me.markCacheStale(task,true); // mark this task and all its deps stale
 
             me.tasks = $A(me.tasks).reject(function(i) { return i.record_locator === task.record_locator; });
             me.notifyTasksChange();
 
             if( cb ) {
+                Mojo.Log.info("TaskManager::deleteTask(rl=%s) issuing callback", task.record_locator);
+
                 try { cb(); } catch(e) {
                     me.E("deleteTask", "post succeeded", "failed to issue callback after successfully deleting task: " + e);
                 }
@@ -1050,6 +1055,31 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     }
 
     this.updateTask(params,task,cb);
+};
+
+/*}}}*/
+
+/* {{{ */ TaskManager.prototype.markCacheStale = function(task,depsToo) {
+    Mojo.Log.info("TaskManager::markCacheStale(rl=%s)", task.record_locator);
+
+    var rl = [ task.record_locator ];
+
+    if( depsToo ) {
+        $A(task.but_first).each(function(t){ rl.push(t.record_locator) });
+        $A(task.and_then ).each(function(t){ rl.push(t.record_locator) });
+    }
+
+    $A(rl).each(function(r){
+
+        // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
+        var cs = this.searchCacheSnoop[r];
+        if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
+            REQ.markCacheStale(csi);
+            cs[csi] = false;
+
+        } } }
+
+    }.bind(this));
 };
 
 /*}}}*/
