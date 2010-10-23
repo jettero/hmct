@@ -20,7 +20,7 @@ lc logcontinue cl continuelog:
 
 flc freshlogcontinue:
 	cat /dev/null > last_run.log
-	@ make --no-print-directory lc
+	@+ make --no-print-directory lc
 
 myinstall: clean
 	@+HM_LOGLEVEL=0 HM_DEFSER='$(mydefser)' env -u HM_UNFOLD -u HM_PRETAP -u HM_MAXAGE make --no-print-directory build
