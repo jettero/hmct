@@ -282,7 +282,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::searchTasks()',
+          desc: 'TaskManager::searchTasks(' + search + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/DownloadTasks.json',
         params: {format: 'json', query: search},
 
@@ -543,7 +543,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::getComments(rl=' + rl + ')',
+          desc: 'TaskManager::getComments(' + rl + ')',
         method: 'get', url: 'http://hiveminder.com/mobile/task_history/' + rl,
         params: {},
 
@@ -619,7 +619,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::getFurtherDetails()',
+          desc: 'TaskManager::getFurtherDetails(' + tokens + ')',
         method: 'post', url: 'http://hiveminder.com/=/action/TaskSearch.json',
         params: {tokens: tokens},
 
@@ -872,10 +872,13 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 /* {{{ */ TaskManager.prototype.postNewTask = function(params,cb) {
     Mojo.Log.info("TaskManager::postNewTask()");
 
+    this._newTaskNumber = typeof this._newTaskNumber === 'number' ? this._newTaskNumber + 1 : 1;
+    // a kindof transaction number for the busyBee and things
+
     var me = this;
 
     REQ.doRequest({
-          desc: 'TaskManager::postNewTask()',
+          desc: 'TaskManager::postNewTask(tid:' + this._newTaskNumber+ ')',
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
         params: params, cacheable: false,
         finish:   function(r) {
@@ -1065,8 +1068,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     var rl = [ task.record_locator ];
 
     if( depsToo ) {
-        $A(task.but_first).each(function(t){ rl.push(t.record_locator) });
-        $A(task.and_then ).each(function(t){ rl.push(t.record_locator) });
+        $A(task.but_first).each(function(t){ rl.push(t.record_locator); });
+        $A(task.and_then ).each(function(t){ rl.push(t.record_locator); });
     }
 
     $A(rl).each(function(r){

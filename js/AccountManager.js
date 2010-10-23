@@ -123,7 +123,7 @@
     var me = this;
 
     REQ.doRequest({
-        desc:    'AccountManager::login()',
+        desc:    'AccountManager::login(' + email + ')',
         url:     'https://hiveminder.com/=/action/Login.json',
         method:  'post',
         params:  { address: email, password: pass },
