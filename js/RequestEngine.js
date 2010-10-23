@@ -142,7 +142,7 @@ function RequestEngine() {
                         var ds  = now - entry.entered;
                         var st  = entry.stale;
                         var cma = typeof(_r.cacheMaxAgeOverride) === 'number' ? _r.cacheMaxAgeOverride :  OPT.cacheMaxAge;
-                        var soo = ds >= cma || st;
+                        var soo = ds > cma || st;
 
                         data._req_cacheAge = ds;
                         data._req_cacheKey = _r.cacheKey;
