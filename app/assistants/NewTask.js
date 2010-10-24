@@ -248,8 +248,11 @@ NewTaskAssistant.prototype.slurpLastSearch = function() {
     var me = this;
     Mojo.Log.info("NewTask::slurpLastSearch() keys: %s", Object.toJSON(query));
 
-    var append_txt = function(x,y) {
+    var append_txt = function(x,y,u) {
         if( ! (y in query) )
+            return;
+
+        if( u && query[y].match(u) ) // unless
             return;
 
         try {
@@ -289,14 +292,8 @@ NewTaskAssistant.prototype.slurpLastSearch = function() {
     append_txt("hideUntil", "hide/until/after");
     append_txt("hideUntil", "hide/until/before")
 
-    append_txt("butFirst",  "but/first");
-    append_txt("andThen",   "and/then");
-
-    if( this.butFirstModel.value === "nothing" )
-        this.butFirstModel.value = "";
-
-    if( this.andThenModel.value === "nothing" )
-        this.andThenModel.value = "";
+    append_txt("butFirst",  "but/first", /nothing/);
+    append_txt("andThen",   "and/then",  /nothing/);
 };
 
 NewTaskAssistant.prototype.handleCommand = function(event) {
