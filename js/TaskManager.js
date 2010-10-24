@@ -1040,7 +1040,15 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     if( comment )
         params.comment = comment;
 
-    this.updateTask(params,task,cb);
+    var me = this;
+    this.updateTask(params,task,function(){
+        me.markCacheStale(task,true); // mark this task and all its deps stale
+        try {
+            if( cb )
+                cb();
+
+        } catch(_ignore) {}
+    });
 };
 
 /*}}}*/
