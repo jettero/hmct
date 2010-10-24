@@ -291,6 +291,12 @@ NewTaskAssistant.prototype.slurpLastSearch = function() {
 
     append_txt("butFirst",  "but/first");
     append_txt("andThen",   "and/then");
+
+    if( this.butFirstModel.value === "nothing" )
+        this.butFirstModel.value = "";
+
+    if( this.andThenModel.value === "nothing" )
+        this.andThenModel.value = "";
 };
 
 NewTaskAssistant.prototype.handleCommand = function(event) {
