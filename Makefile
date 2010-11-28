@@ -56,7 +56,10 @@ README: app/views/About.html app/views/Help.html Makefile
 	@ elinks -dump app/views/Help.html  >> README
 	@ (git add README && git commit -m "updated README" README; exit 0)
 
-build: framework_config.json runtime_options.json README
+build_date:
+	@ echo "\"$$(date)\"" > build_date.json
+
+build: framework_config.json runtime_options.json README build_date
 	@ # echo checking for version mismatch between appinfo.json and app/views/About.html
 	@ # VV=`perl -ne 'print "$$1\n" if m/"?version"?:\s+"(.+?)",/' appinfo.json`; grep -q "\\<$$VV\\>" app/views/About.html
 	@-rm -vf *.ipk $(name) *.tar.gz ipkgtmp*
