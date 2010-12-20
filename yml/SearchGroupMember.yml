@@ -1,0 +1,28 @@
+---
+action_class: BTDT::Action::SearchGroupMember
+content:
+  search:
+    - actor: 4xxxx
+      actor_id: 4xxxx
+      group: 6xxxx
+      group_id: 6xxxx
+      id: 1xxxx
+      role: organizer
+    - actor: 4xxxx
+      actor_id: 4xxxx
+      group: 8xxxx
+      group_id: 8xxxx
+      id: 1xxxx
+      role: organizer
+    - actor: 4xxxx
+      actor_id: 4xxxx
+      group: 8xxxx
+      group_id: 8xxxx
+      id: 1xxxx
+      role: organizer
+error: ~
+failure: 0
+field_errors: {}
+field_warnings: {}
+message: ~
+success: 1

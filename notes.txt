@@ -24,6 +24,12 @@ curl -F tokens="`echo $Q | sed 's,/, ,g'`" -sb $HM http://hiveminder.com/=/actio
 export E=jettero@gmail.com
 curl -sb $HM http://hiveminder.com/=/model/user/email/$E.yml
 
+# get $id from model/user/email above
+curl -sb $HM -d actor_id=$id http://hiveminder.com/=/action/SearchGroupMember.yml > yml/SearchGroupMember.yml
+
+# get $gid=8448 from group_id in SGM above
+curl -sb $HM http://hiveminder.com/=/model/Group/id/$gid.yml
+
 # get lists for Pro users:
 curl -F all=true -sb $HM http://hiveminder.com/=/action/SearchList.yml
 
