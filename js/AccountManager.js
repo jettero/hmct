@@ -114,7 +114,7 @@
     Mojo.Log.info("AccountManager::login(email=%s)", email);
 
     if( !success ) success = function() {};
-    if( !fail    ) fail    = function() {};
+    if( !fail    ) fail    = function() {return true;};
 
     this.clearAccountDetails();
     this.clearSearchLists();
