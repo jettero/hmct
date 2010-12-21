@@ -98,6 +98,14 @@ SearchAssistant.prototype.setup = function() {
     this.setupToggleRow("due-after",          "due-before");
     this.setupToggleRow("completed-after",    "completed-before");
 
+    Mojo.Event.listen(this.controller.get('due-after-dp'), Mojo.Event.tap,  function(){
+        DatePicker.pickDate(function(dateText){
+            this.dueAfterModel.value = dateText;
+            this.controller.modelChanged(this.dueAfterModel);
+
+        }.bind(this));
+    }.bind(this));
+
     var prios = [
         {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
         {label: "High",    value: "high",    iconPath: 'img/high.png'    },
