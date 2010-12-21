@@ -23,10 +23,11 @@
 }
 
 #date-picker-container {
-    background: white;
-    width: 200px; height: 150px; z-index: 75;
-    border: 1px solid black;
+    background: transparent;
+    border: none;
+    width: 250px; height: 190px; z-index: 75;
     position: fixed; bottom: 55px; right: 10px;
+    font-size: 0.65em;
 }
 
 #date-picker-container, #date-picker { margin: 0; padding: 0; }
