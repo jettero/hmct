@@ -27,7 +27,9 @@
     width: 250px; height: 190px; z-index: 75;
     position: fixed; bottom: 55px; right: 10px;
     font-size: 0.65em;
+    display: none;
 }
+
 #date-picker-container, #date-picker { margin: 0; padding: 0; }
 
 .ui-widget-content { border: 1px solid black; }
