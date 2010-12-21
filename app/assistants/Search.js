@@ -18,8 +18,10 @@ function SearchAssistant() {
 SearchAssistant.prototype.setup = function() {
     Mojo.Log.info("Search::setup()");
 
-    this.searchModel = { label: "Search", icon: 'search', command: 'search' };
-    this.commandMenuModel = { label: 'Search Command Menu', items: [ {}, {}, this.searchModel ]};
+    this.searchModel = { label: "search", icon: 'search', command: 'search' };
+    this.resetModel  = { label: "reset", command: 'reset' };
+    this.clearModel  = { label: "clear", command: 'clear' };
+    this.commandMenuModel = { label: 'Search Command Menu', items: [ {items: [this.resetModel,this.clearModel]}, {}, this.searchModel ]};
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     var textFieldAttributes = {
@@ -179,7 +181,7 @@ SearchAssistant.prototype.saveDefaults = function() {
 
     for(var key in this)
         if( key.match(/Model$/) )
-            this[key]._oVal = this[key].value;
+            this[key]._cVal = this[key].value; // clear value
 }
 
 SearchAssistant.prototype.saveSlurp = function() {
@@ -187,7 +189,7 @@ SearchAssistant.prototype.saveSlurp = function() {
 
     for(var key in this)
         if( key.match(/Model$/) )
-            this[key]._sVal = this[key].value;
+            this[key]._rVal = this[key].value; // reset value
 }
 
 SearchAssistant.prototype.slurpLastSearch = function() {
@@ -403,6 +405,26 @@ SearchAssistant.prototype.handleCommand = function(event) {
                 Mojo.Log.info("Search::handleCommand(search)");
                 TMO.searchTasks(this.buildSearch());
                 Mojo.Controller.stageController.popScene();
+                break;
+
+            case 'reset':
+                Mojo.Log.info("Search::handleCommand(reset)");
+                for(var key in this)
+                    if( key.match(/Model$/) )
+                        if( this[key]._rVal !== this[key].value ) {
+                            this[key].value = this[key]._rVal;
+                            this.controller.modelChanged(this[key]);
+                        }
+                break;
+
+            case 'clear':
+                Mojo.Log.info("Search::handleCommand(clear)");
+                for(var key in this)
+                    if( key.match(/Model$/) )
+                        if( this[key]._cVal !== this[key].value ) {
+                            this[key].value = this[key]._cVal;
+                            this.controller.modelChanged(this[key]);
+                        }
                 break;
 
             default:
