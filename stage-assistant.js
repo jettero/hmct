@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Mojo BusyBee RequestEngine AccountManager TaskManager jQuery
+/*global Mojo BusyBee RequestEngine AccountManager TaskManager jQuery setTimeout
 */
 
 var AMO, TMO, BBO, OPT, REQ, DatePicker;
@@ -14,7 +14,7 @@ function StageAssistant() {
             if( DatePicker._cb )
                 DatePicker._cb(dateText);
 
-            jQuery('#date-picker-container').hide();
+            setTimeout(function(){ jQuery('#date-picker-container').hide(); }, 500);
         }
     });
 
