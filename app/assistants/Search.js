@@ -156,6 +156,8 @@ SearchAssistant.prototype.setup = function() {
 
     this.controller.setupWidget('hiddenfe-cb',     checkBoxAttributes, this.hiddenFEModel    = {value: "off"});
     this.controller.setupWidget('not-hiddenfe-cb', checkBoxAttributes, this.notHiddenFEModel = {value: "off"});
+
+    this.saveDefaults();
 };
 
 SearchAssistant.prototype.activate = function() {
@@ -171,6 +173,22 @@ SearchAssistant.prototype.deactivate = function() {
 
     AMO.unregisterSrchgChange(this.handleGroupListChange);
 };
+
+SearchAssistant.prototype.saveDefaults = function() {
+    Mojo.Log.info("Search::saveDefaults()");
+
+    for(var key in this)
+        if( key.match(/Model$/) )
+            this[key]._oVal = this[key].value;
+}
+
+SearchAssistant.prototype.saveSlurp = function() {
+    Mojo.Log.info("Search::saveSlurp()");
+
+    for(var key in this)
+        if( key.match(/Model$/) )
+            this[key]._sVal = this[key].value;
+}
 
 SearchAssistant.prototype.slurpLastSearch = function() {
     Mojo.Log.info("Search::slurpLastSearch()");
@@ -266,6 +284,8 @@ SearchAssistant.prototype.slurpLastSearch = function() {
     append_txt("workedGreaterThan",   "time/worked/gt");
     append_txt("leftLessThan",        "time/left/lt");
     append_txt("leftGreaterThan",     "time/left/gt");
+
+    this.saveSlurp();
 };
 
 SearchAssistant.prototype.buildSearch = function() {
