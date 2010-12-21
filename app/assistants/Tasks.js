@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo Template palmGetResource setTimeout TMO OPT AMO $ Event
+/*global Mojo Template palmGetResource setTimeout TMO OPT AMO $ Event jQuery
 */
 
 function TasksAssistant() {
@@ -279,13 +279,6 @@ function TasksAssistant() {
     AMO.registerLoginChange(this.handleLoginChange);
     AMO.registerSrchlChange(this.handleSrchlChange);
     TMO.registerTasksChange(this.handleTasksChange);
-
-    try {
-        jQuery('#date-picker').datepicker({inline: true});
-
-    } catch(e) {
-        Mojo.Log.error("pfft: %s", e);
-    }
 };
 
 /*}}}*/
