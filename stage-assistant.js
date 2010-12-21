@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Mojo BusyBee RequestEngine AccountManager TaskManager
+/*global Mojo BusyBee RequestEngine AccountManager TaskManager jQuery
 */
 
 var AMO, TMO, BBO, OPT, REQ, DatePicker;
