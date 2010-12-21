@@ -22,6 +22,15 @@
     display: none;
 }
 
+#date-picker-container {
+    background: white;
+    width: 200px; height: 150px; z-index: 75;
+    border: 1px solid black;
+    position: fixed; bottom: 55px; right: 10px;
+}
+
+#date-picker-container, #date-picker { margin: 0; padding: 0; }
+
 .todo-item .extra-data div { display: inline }
 .generically-hidden        { display: none !important; }
 

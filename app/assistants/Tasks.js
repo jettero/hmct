@@ -279,6 +279,13 @@ function TasksAssistant() {
     AMO.registerLoginChange(this.handleLoginChange);
     AMO.registerSrchlChange(this.handleSrchlChange);
     TMO.registerTasksChange(this.handleTasksChange);
+
+    try {
+        jQuery('#date-picker').datepicker({inline: true});
+
+    } catch(e) {
+        Mojo.Log.error("pfft: %s", e);
+    }
 };
 
 /*}}}*/
