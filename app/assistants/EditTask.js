@@ -27,8 +27,9 @@ EditTaskAssistant.prototype.setup = function() {
 
     this.menuSetup();
 
-    this.sendModel        = { label: "Send", icon: 'send', command: 'go' };
-    this.commandMenuModel = { label: 'EditTask Command Menu', items: [ {}, this.sendModel ] };
+    this.sendModel        = { label: "send", icon: 'send', command: 'go' };
+    this.resetModel       = { label: "reset", command: 'reset' };
+    this.commandMenuModel = { label: 'EditTask Command Menu', items: [ this.resetModel, this.sendModel ] };
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     this.controller.get("id").update(t.record_locator);
@@ -290,6 +291,16 @@ EditTaskAssistant.prototype.handleCommand = function(event) {
             case 'go':
                 Mojo.Log.info("EditTask::handleCommand(go)");
                 this.go();
+                break;
+
+            case 'reset':
+                Mojo.Log.info("Search::handleCommand(reset)");
+                for(var key in this)
+                    if( key.match(/Model$/) )
+                        if( this[key]._oVal !== this[key].value ) {
+                            this[key].value = this[key]._oVal;
+                            this.controller.modelChanged(this[key]);
+                        }
                 break;
 
             default:
