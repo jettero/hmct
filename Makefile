@@ -4,8 +4,10 @@ mydefser=TODO
 
 default: test
 
-release: clean
-	env -i make --no-print-directory build
+buildrelease releasebuild:
+	+ env -i make --no-print-directory build
+
+release: clean releasebuild
 	git fetch github gh-pages:gh-pages
 	x=$$(ls -1 *.ipk); mv -v $$x /tmp; git checkout gh-pages; mv -v /tmp/$$x .; git add *.ipk; git clean -dfx
 
