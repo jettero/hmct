@@ -1,3 +1,7 @@
+/*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
+*/
+/*global Mojo AMO
+*/
 
 /* {{{ */ function PreferencesAssistant() {
     Mojo.Log.info("Preferences()");
@@ -38,8 +42,7 @@
 }
 
 /*}}}*/
-
-/* {{{ /**/ PreferencesAssistant.prototype.setup = function() {
+/* {{{ */ PreferencesAssistant.prototype.setup = function() {
     Mojo.Log.info("Preferences::setup()");
 
     this.menuSetup();
@@ -51,6 +54,13 @@
         swipeToDelete: true,
         addItemLabel:  "Add..."
     };
+
+    this.backModel = { label: "back",  icon: 'back', command: 'back' };
+    this.commandMenuModel = {
+        label: 'Task Command Menu',
+        items: [ this.backModel ]
+    };
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     this.loginListModel = {listTitle: 'Hiveminder Logins', items: [] };
     this.controller.setupWidget('hm_login_list', loginListAttrs, this.loginListModel);
@@ -81,15 +91,36 @@
 
 /*}}}*/
 
-/* {{{ /**/ PreferencesAssistant.prototype.activate = function() {
+/* {{{ */ PreferencesAssistant.prototype.activate = function() {
     Mojo.Log.info("Preferences::activate()");
     AMO.registerLoginChange(this.handleLoginListChange);
 };
 
 /*}}}*/
-/* {{{ /**/ PreferencesAssistant.prototype.deactivate = function() {
+/* {{{ */ PreferencesAssistant.prototype.deactivate = function() {
     Mojo.Log.info("Preferences::deactivate()");
     AMO.unregisterLoginChange(this.handleLoginListChange);
+};
+
+/*}}}*/
+
+/* {{{ */ PreferencesAssistant.prototype.handleCommand = function(event) {
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
+
+        if( s_a.length > 0 )
+            Mojo.Log.info("Prefs::handleCommand(%s)", s_a[0]);
+
+        switch (s_a[0]) {
+            case 'back':
+                Mojo.Controller.stageController.popScene();
+                break;
+
+            default:
+                Mojo.Log.info("Prefs::handleCommand(unknown command: %s)", Object.toJSON(s_a));
+                break;
+        }
+    }
 };
 
 /*}}}*/
