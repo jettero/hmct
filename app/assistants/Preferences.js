@@ -52,6 +52,13 @@
         addItemLabel:  "Add..."
     };
 
+    this.backModel = { label: "back",  icon: 'back', command: 'back' };
+    this.commandMenuModel = {
+        label: 'Task Command Menu',
+        items: [ this.backModel ]
+    };
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
+
     this.loginListModel = {listTitle: 'Hiveminder Logins', items: [] };
     this.controller.setupWidget('hm_login_list', loginListAttrs, this.loginListModel);
 
@@ -93,5 +100,24 @@
 };
 
 /*}}}*/
+
+/* {{{ */ PreferencesAssistant.prototype.handleCommand = function(event) {
+    if (event.type === Mojo.Event.command) {
+        var s_a = event.command.split(/\s*(?:@@)\s*/);
+
+        if( s_a.length > 0 )
+            Mojo.Log.info("Prefs::handleCommand(%s) [rl=%s]", s_a[0], rl);
+
+        switch (s_a[0]) {
+            case 'back';
+                Mojo.Controller.stageController.popScene()
+                break;
+
+            default:
+                Mojo.Log.info("Prefs::handleCommand(unknown command: %s) [rl=%s]", Object.toJSON(s_a), rl);
+                break;
+        }
+    }
+};
 
 Mojo.Log.info('loaded(Preferences.js)');
