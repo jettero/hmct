@@ -260,7 +260,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
-/* {{{ */ TaskManger.prototype._standardFailure = function(request,transport,errorTemplate) {
+/* {{{ */ TaskManager.prototype._standardFailure = function(request,transport,errorTemplate) {
 
     if( transport.status === 403 ) {
         // This is typically going to happen when our auth cookie is
