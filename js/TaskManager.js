@@ -341,6 +341,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.getFurtherDetails(r._req_cacheAge);
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.success )
                 return true;
@@ -417,6 +418,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.markCacheStale(theTask); // taskSearch is behind what we have now
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.success )
                 return true;
@@ -598,6 +600,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.notifyTaskChange(task);
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.match(/^<\?xml/) )
                 return true;
@@ -689,6 +692,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.notifyTasksChange();
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.success )
                 return true;
