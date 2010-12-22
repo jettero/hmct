@@ -66,10 +66,12 @@ SearchAssistant.prototype.setup = function() {
         if( !na_attr ) na_attr = textFieldAttributes;
         if( !nn_attr ) nn_attr = textFieldAttributes;
 
+        var na_dp, nn_dp, na_m, nn_m;
+
         try {
 
-            this.controller.setupWidget(name, na_attr, this[modelize(name)] = {value: ""});
-            this.controller.setupWidget(nnme, nn_attr, this[modelize(nnme)] = {value: ""});
+            this.controller.setupWidget(name, na_attr, this[na_m = modelize(name)] = {value: ""});
+            this.controller.setupWidget(nnme, nn_attr, this[nn_m = modelize(nnme)] = {value: ""});
 
             Mojo.Event.listen(this.controller.get(name + "-t"), Mojo.Event.tap, function(){
                 this.controller.get(name + "-c").addClassName("generically-hidden");
@@ -80,6 +82,22 @@ SearchAssistant.prototype.setup = function() {
                 this.controller.get(nnme + "-c").addClassName("generically-hidden");
                 this.controller.get(name + "-c").removeClassName("generically-hidden");
             }.bind(this));
+
+            if( na_dp = this.controller.get(name + "-dp") )
+                Mojo.Event.listen(na_dp, Mojo.Event.tap,  function(){
+                    DatePicker.pickDate(function(dateText){
+                        this[na_m].value = dateText;
+                        this.controller.modelChanged(this[na_m]);
+                    }.bind(this));
+                }.bind(this));
+
+            if( nn_dp = this.controller.get(nnme + "-dp") )
+                Mojo.Event.listen(nn_dp, Mojo.Event.tap,  function(){
+                    DatePicker.pickDate(function(dateText){
+                        this[nn_m].value = dateText;
+                        this.controller.modelChanged(this[nn_m]);
+                    }.bind(this));
+                }.bind(this));
 
         } catch(e) {
             Mojo.Log.error("problem with setupToggleRow(%s,%s): %s", name, nnme, e);
@@ -97,14 +115,6 @@ SearchAssistant.prototype.setup = function() {
     this.setupToggleRow("hidden-until-after", "hidden-until-before");
     this.setupToggleRow("due-after",          "due-before");
     this.setupToggleRow("completed-after",    "completed-before");
-
-    Mojo.Event.listen(this.controller.get('due-after-dp'), Mojo.Event.tap,  function(){
-        DatePicker.pickDate(function(dateText){
-            this.dueAfterModel.value = dateText;
-            this.controller.modelChanged(this.dueAfterModel);
-
-        }.bind(this));
-    }.bind(this));
 
     var prios = [
         {label: "Highest", value: "highest", iconPath: 'img/highest.png' },
