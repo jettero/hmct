@@ -882,6 +882,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
         params: params, cacheable: false,
         finish:   function(r) {
+            me.markCacheStale('all'); // mark this task and all its deps stale
+
             if( cb ) {
                 try { cb(r); } catch(e) {
                     me.E("postNewTask", "post succeeded", "failed to issue callback after successfully posting task: " + e);
