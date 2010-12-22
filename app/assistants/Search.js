@@ -87,7 +87,7 @@ SearchAssistant.prototype.setup = function() {
                 Mojo.Event.listen(na_dp, Mojo.Event.tap, function(){
                     this.controller.showDialog({
                         template: 'DatePickerDialog',
-                        assistant: new DatePickerDialogAssistant(this, na_m)
+                        assistant: new DatePickerDialogAssistant(this, this[na_m])
                     });
                 }.bind(this));
 
@@ -95,7 +95,7 @@ SearchAssistant.prototype.setup = function() {
                 Mojo.Event.listen(nn_dp, Mojo.Event.tap, function(){
                     this.controller.showDialog({
                         template: 'DatePickerDialog',
-                        assistant: new DatePickerDialogAssistant(this, nn_m)
+                        assistant: new DatePickerDialogAssistant(this, this[nn_m])
                     });
                 }.bind(this));
 
