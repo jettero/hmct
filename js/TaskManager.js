@@ -9,6 +9,7 @@
     this.handleLoginChange    = this.handleLoginChange.bind(this);
     this.handleSrchlChange    = this.handleSrchlChange.bind(this);
     this.processTaskDownloads = this.processTaskDownloads.bind(this);
+    this._standardFailure     = this._standardFailure.bind(this);
 
     this.lso = new Mojo.Model.Cookie("last search");
     this.lastSearch = this.lso.get();
@@ -259,6 +260,23 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 };
 
 /*}}}*/
+/* {{{ */ TaskManager.prototype._standardFailure = function(request,transport,errorTemplate) {
+
+    if( transport.status === 403 ) {
+        // This is typically going to happen when our auth cookie is
+        // stale and/or our credentials changed at hiveminder
+
+        this.E("searchTasks", "search 403", "403 Permission denied during TaskManger Request. "
+            + "Did your credentials expire?  Refreshing ... ",
+                function(){ AMO.refreshCurrentLogin(); });
+
+        return false; // we're kinda doing our own thing now
+    }
+
+    return true; // do what we woulda did
+};
+
+/*}}}*/
 /* {{{ */ TaskManager.prototype.searchTasks = function(search,force) {
     if( !this.currentLogin )
         return; // we are not worthy
@@ -323,6 +341,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.getFurtherDetails(r._req_cacheAge);
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.success )
                 return true;
@@ -399,6 +418,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.markCacheStale(theTask); // taskSearch is behind what we have now
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.success )
                 return true;
@@ -580,6 +600,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.notifyTaskChange(task);
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.match(/^<\?xml/) )
                 return true;
@@ -671,6 +692,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
             me.notifyTasksChange();
         },
 
+        failure: this._standardFailure,
         success: function(r) {
             if( r.success )
                 return true;
@@ -882,6 +904,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
         method: 'post', url: 'http://hiveminder.com/=/action/CreateTask.json',
         params: params, cacheable: false,
         finish:   function(r) {
+            me.markCacheStale('all'); // mark this task and all its deps stale
+
             if( cb ) {
                 try { cb(r); } catch(e) {
                     me.E("postNewTask", "post succeeded", "failed to issue callback after successfully posting task: " + e);
@@ -1073,7 +1097,21 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 /* {{{ */ TaskManager.prototype.markCacheStale = function(task,depsToo) {
     Mojo.Log.info("TaskManager::markCacheStale(rl=%s)", task.record_locator);
 
-    var rl = [ task.record_locator ];
+    var cs,rl,csi;
+
+    if( task === 'all' ) {
+        for( rl in this.searchCacheSnoop ) {
+            cs = this.searchCacheSnoop[rl];
+            for( csi in cs ) {
+                REQ.markCacheStale(csi);
+                cs[csi] = false;
+            }
+        }
+
+        return;
+    }
+
+    rl = [ task.record_locator ];
 
     if( depsToo ) {
         $A(task.but_first).each(function(t){ rl.push(t.record_locator); });
@@ -1083,8 +1121,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     $A(rl).each(function(r){
 
         // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-        var cs = this.searchCacheSnoop[r];
-        if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
+        cs = this.searchCacheSnoop[r];
+        if( cs ) { for( csi in cs ) { if( cs[csi] ) {
             REQ.markCacheStale(csi);
             cs[csi] = false;
 

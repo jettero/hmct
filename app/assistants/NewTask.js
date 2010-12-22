@@ -200,20 +200,7 @@ NewTaskAssistant.prototype.go = function() {
 
     Mojo.Controller.stageController.popScene();
 
-    TMO.postNewTask(params, function(r){
-
-        // There should be some OPTs for this, just reload the current search?
-        // Shut up? reminder?
-
-        this.S("NewTask::go()",
-            "posted task successfully",
-            "New task posted.  Manually refresh any lists where it should be listed.", function(value){
-            });
-
-        if( bf_compr.toAdd.length >= 0 || at_compr.toAdd.length >= 0 )
-            TMO.modifyDeps(r.id, bf_compr, at_compr);
-
-    }.bind(this));
+    TMO.postNewTask(params, function(r){ TMO.searchTasks(); });
 };
 
 NewTaskAssistant.prototype.no = function() {

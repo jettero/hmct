@@ -120,6 +120,8 @@
     this.clearSearchLists();
     this.clearSearchGroups();
 
+    REQ.bankrupt(); // cancel all running and queued requests
+
     var me = this;
 
     REQ.doRequest({
@@ -141,8 +143,16 @@
             if( fail() ) {
                 var e = [];
 
-                if( r.error )
+                if( r.error ) {
+                    if( r.error.match(/password/i) ) {
+                        me.E("login", "login", r.error, function(){
+                            Mojo.Controller.stageController.assistant.showScene("Preferences");
+                        });
+                        return false;
+                    }
+
                     e.push(r.error);
+                }
 
                 for(var k in r.field_errors )
                     e.push(k + "-error: " + r.field_errors[k]);
