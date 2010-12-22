@@ -120,7 +120,7 @@
     this.clearSearchLists();
     this.clearSearchGroups();
 
-    REQ.bankrupt();
+    REQ.bankrupt(); // cancel all running and queued requests
 
     var me = this;
 
