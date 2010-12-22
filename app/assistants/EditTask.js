@@ -123,6 +123,20 @@ EditTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("due-date",   this.preSelBAttributes, this.dueDateModel   = {value: t.due});
     this.controller.setupWidget("hide-until", this.preSelBAttributes, this.hideUntilModel = {value: t.starts});
 
+    Mojo.Event.listen(this.controller.get('due-date-dp'), Mojo.Event.tap, function(){
+        this.controller.showDialog({
+            template: 'DatePickerDialog',
+            assistant: new DatePickerDialogAssistant(this, this.dueDateModel)
+        });
+    }.bind(this));
+
+    Mojo.Event.listen(this.controller.get('hide-until-dp'), Mojo.Event.tap, function(){
+        this.controller.showDialog({
+            template: 'DatePickerDialog',
+            assistant: new DatePickerDialogAssistant(this, this.hideUntilModel)
+        });
+    }.bind(this));
+
     this.controller.setupWidget("every",      this.preSelNAttributes, this.everyModel     = {value: t.repeat_every});
     this.controller.setupWidget("heads-up",   this.preSelNAttributes, this.headsUpModel   = {value: t.repeat_days_before_due});
 
