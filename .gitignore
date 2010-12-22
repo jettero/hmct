@@ -1,4 +1,5 @@
 *.ipk
+*.tar.gz
 Hiveminder
 cookies.txt
 framework_config.json
