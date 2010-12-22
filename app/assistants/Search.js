@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
-/*global Mojo $ OPT TMO AMO encodeURIComponent ErrorDialog
+/*global Mojo $ OPT TMO AMO encodeURIComponent ErrorDialog DatePicker
 */
 
 function SearchAssistant() {
@@ -190,7 +190,7 @@ SearchAssistant.prototype.saveDefaults = function() {
     for(var key in this)
         if( key.match(/Model$/) )
             this[key]._cVal = this[key].value; // clear value
-}
+};
 
 SearchAssistant.prototype.saveSlurp = function() {
     Mojo.Log.info("Search::saveSlurp()");
@@ -198,7 +198,7 @@ SearchAssistant.prototype.saveSlurp = function() {
     for(var key in this)
         if( key.match(/Model$/) )
             this[key]._rVal = this[key].value; // reset value
-}
+};
 
 SearchAssistant.prototype.slurpLastSearch = function() {
     Mojo.Log.info("Search::slurpLastSearch()");
@@ -407,6 +407,7 @@ SearchAssistant.prototype.handleCommand = function(event) {
 
     if (event.type === Mojo.Event.command) {
         var s_a = event.command.split(/\s*(?:@@)\s*/);
+        var key;
 
         switch (s_a[0]) {
             case 'search':
@@ -417,7 +418,7 @@ SearchAssistant.prototype.handleCommand = function(event) {
 
             case 'reset':
                 Mojo.Log.info("Search::handleCommand(reset)");
-                for(var key in this)
+                for(key in this)
                     if( key.match(/Model$/) )
                         if( this[key]._rVal !== this[key].value ) {
                             this[key].value = this[key]._rVal;
@@ -427,7 +428,7 @@ SearchAssistant.prototype.handleCommand = function(event) {
 
             case 'clear':
                 Mojo.Log.info("Search::handleCommand(clear)");
-                for(var key in this)
+                for(key in this)
                     if( key.match(/Model$/) )
                         if( this[key]._cVal !== this[key].value ) {
                             this[key].value = this[key]._cVal;
