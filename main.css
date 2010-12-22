@@ -40,11 +40,13 @@
 .tiny-button {
     display: inline;
     border: 1px solid #999999;
-    margin: 0;
+    margin-left: 1px;
     padding: 2px 10px;
     background: #cccccc;
+    position: relative;
     -webkit-border-radius: 5px;
 }
+.tiny-button img { position: absolute; left: 2px; top: 3px; }
 
 #priority-lower-than  .label, #priority-higher-than .label {
     /* the text of the label, .title styles the selection */
@@ -230,4 +232,4 @@ body.hiveminder {
 .complete1 .voltar-swipe-complete-button .complete-text,
 .complete0 .voltar-swipe-complete-button .incomplete-text { display: none; }
 
-
+div.title div.label.smaller-font { font-size: 0.7em !important; }
