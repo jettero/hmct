@@ -120,6 +120,8 @@
     this.clearSearchLists();
     this.clearSearchGroups();
 
+    REQ.bankrupt();
+
     var me = this;
 
     REQ.doRequest({
