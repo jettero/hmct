@@ -77,6 +77,20 @@ NewTaskAssistant.prototype.setup = function() {
     this.controller.setupWidget("every",      this.preSelNAttributes, this.everyModel     = {});
     this.controller.setupWidget("heads-up",   this.preSelNAttributes, this.headsUpModel   = {});
 
+    Mojo.Event.listen(this.controller.get('due-date-dp'), Mojo.Event.tap, function(){
+        this.controller.showDialog({
+            template: 'DatePickerDialog',
+            assistant: new DatePickerDialogAssistant(this, this.dueDateModel)
+        });
+    }.bind(this));
+
+    Mojo.Event.listen(this.controller.get('hide-until-dp'), Mojo.Event.tap, function(){
+        this.controller.showDialog({
+            template: 'DatePickerDialog',
+            assistant: new DatePickerDialogAssistant(this, this.hideUntilModel)
+        });
+    }.bind(this));
+
     this.controller.setupWidget("but-first", this.boringAttributes, this.butFirstModel = {value: ""});
     this.controller.setupWidget("and-then",  this.boringAttributes, this.andThenModel  = {value: ""});
 
