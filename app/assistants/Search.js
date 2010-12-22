@@ -85,18 +85,24 @@ SearchAssistant.prototype.setup = function() {
 
             if( na_dp = this.controller.get(name + "-dp") )
                 Mojo.Event.listen(na_dp, Mojo.Event.tap,  function(){
-                    DatePicker.pickDate(function(dateText){
-                        this[na_m].value = dateText;
-                        this.controller.modelChanged(this[na_m]);
-                    }.bind(this));
+                    this.controller.showDialog({
+                        template: 'DatePickerDialog',
+                        assistant: new DatePickerDialogAssistant(this, function(dateText){
+                            this[na_m].value = dateText;
+                            this.controller.modelChanged(this[na_m]);
+                        }.bind(this))
+                    });
                 }.bind(this));
 
             if( nn_dp = this.controller.get(nnme + "-dp") )
                 Mojo.Event.listen(nn_dp, Mojo.Event.tap,  function(){
-                    DatePicker.pickDate(function(dateText){
-                        this[nn_m].value = dateText;
-                        this.controller.modelChanged(this[nn_m]);
-                    }.bind(this));
+                    this.controller.showDialog({
+                        template: 'DatePickerDialog',
+                        assistant: new DatePickerDialogAssistant(this, function(dateText){
+                            this[nn_m].value = dateText;
+                            this.controller.modelChanged(this[nn_m]);
+                        }.bind(this))
+                    });
                 }.bind(this));
 
         } catch(e) {

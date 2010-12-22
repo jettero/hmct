@@ -3,25 +3,10 @@
 /*global Mojo BusyBee RequestEngine AccountManager TaskManager jQuery setTimeout
 */
 
-var AMO, TMO, BBO, OPT, REQ, DatePicker;
+var AMO, TMO, BBO, OPT, REQ;
 
 function StageAssistant() {
 	Mojo.Log.info("StageAssistant()");
-
-    DatePicker = jQuery('#date-picker').datepicker({
-        inline: true,
-        onSelect: function(dateText) {
-            if( DatePicker._cb )
-                DatePicker._cb(dateText);
-
-            setTimeout(function(){ jQuery('#date-picker-container').hide(); }, 500);
-        }
-    });
-
-    DatePicker.pickDate = function(callback) {
-        DatePicker._cb = callback;
-        jQuery('#date-picker-container').show();
-    };
 
     OPT = Mojo.loadJSONFile(Mojo.appPath + "runtime_options.json");
 

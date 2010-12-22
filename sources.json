@@ -4,6 +4,7 @@
     { "source": "js/rl-and-id.js" },
     { "source": "js/codeJanitorAjaxTimeoutExtension.js" },
 
+    { "source": "js/DatePickerDialog.js" },
     { "source": "js/ErrorDialog.js" },
     { "source": "js/SuccessDialog.js" },
     { "source": "js/RetryDialog.js" },
