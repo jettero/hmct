@@ -1073,7 +1073,21 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 /* {{{ */ TaskManager.prototype.markCacheStale = function(task,depsToo) {
     Mojo.Log.info("TaskManager::markCacheStale(rl=%s)", task.record_locator);
 
-    var rl = [ task.record_locator ];
+    var cs,rl,csi;
+
+    if( task === 'all' ) {
+        for( rl in this.searchCacheSnoop ) {
+            cs = this.searchCacheSnoop[rl];
+            for( csi in cs ) {
+                REQ.markCacheStale(csi);
+                cs[csi] = false;
+            }
+        }
+
+        return;
+    }
+
+    rl = [ task.record_locator ];
 
     if( depsToo ) {
         $A(task.but_first).each(function(t){ rl.push(t.record_locator); });
@@ -1083,8 +1097,8 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     $A(rl).each(function(r){
 
         // me.searchCacheSnoop[t.record_locator][r._req_cacheKey] = true;
-        var cs = this.searchCacheSnoop[r];
-        if( cs ) { for( var csi in cs ) { if( cs[csi] ) {
+        cs = this.searchCacheSnoop[r];
+        if( cs ) { for( csi in cs ) { if( cs[csi] ) {
             REQ.markCacheStale(csi);
             cs[csi] = false;
 
