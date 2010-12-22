@@ -9,6 +9,7 @@
     this.handleLoginChange    = this.handleLoginChange.bind(this);
     this.handleSrchlChange    = this.handleSrchlChange.bind(this);
     this.processTaskDownloads = this.processTaskDownloads.bind(this);
+    this._standardFailure     = this._standardFailure.bind(this);
 
     this.lso = new Mojo.Model.Cookie("last search");
     this.lastSearch = this.lso.get();
@@ -256,6 +257,23 @@ TaskManager.prototype.getLastSearchKeyed = function() {
     }
 
     return res;
+};
+
+/*}}}*/
+/* {{{ */ TaskManger.prototype._standardFailure = function(request,transport,errorTemplate) {
+
+    if( transport.status === 403 ) {
+        // This is typically going to happen when our auth cookie is
+        // stale and/or our credentials changed at hiveminder
+
+        this.E("searchTasks", "search 403", "403 Permission denied during TaskManger Request. "
+            + "Did your credentials expire?  Refreshing ... ",
+                function(){ AMO.refreshCurrentLogin(); });
+
+        return false; // we're kinda doing our own thing now
+    }
+
+    return true; // do what we woulda did
 };
 
 /*}}}*/
