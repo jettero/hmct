@@ -38,6 +38,10 @@
         this.loginListModel.items = e;
         this.controller.modelChanged(this.loginListModel);
 
+        if( e.length )
+             this.controller.get("account-required-note").addClassName("generically-hidden");
+        else this.controller.get("account-required-note").removeClassName("generically-hidden");
+
     }.bind(this);
 }
 
