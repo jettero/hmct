@@ -1,11 +1,11 @@
 /*jslint white: false, onevar: false, maxerr: 500000, regexp: false
 */
 
-function DatePickerDialogAssistant(_sa,_mn) {
+function DatePickerDialogAssistant(_sa,_m) {
     Mojo.Log.info("DatePicker()");
 
     this.scene = _sa;
-    this.model = _sa[_mn];
+    this.model = _m;
 
     this.pickedDate = this.pickedDate.bind(this);
 }
