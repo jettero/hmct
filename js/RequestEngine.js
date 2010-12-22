@@ -473,6 +473,18 @@ function RequestEngine() {
 };
 
 /*}}}*/
+/* {{{ */ RequestEngine.prototype.bankrupt = function() {
+    Mojo.Log.info("RequestEngine::bankrupt()");
+    for(var k in this.reqdb) {
+        try { this.reqdb[k].transport.abort(); }
+        catch(e) {}
+        delete this.reqdb[k];
+    }
+    this._busyCalls = { db: [], req: [] };
+    this.reqBusy(false);
+};
+
+/*}}}*/
 
 /* {{{ */ RequestEngine.prototype.dbNewk = function() {
     Mojo.Log.info("RequestEngine::dbNewk()");
