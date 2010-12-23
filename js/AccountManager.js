@@ -442,6 +442,8 @@
     var id    = this.data.meta.acdet.id;
     var email = this.data.meta.currentLogin;
 
+    Mojo.Log.info("AccountManager::getSearchGroups(email=%s, id=%s, force=%s)", email, id, force);
+
     if( !email || !id )
         return;
 
@@ -500,6 +502,8 @@
 
 /*}}}*/
 /* {{{ */ AccountManager.prototype._getSearchGroup = function(force, group_id) {
+
+    Mojo.Log.info("AccountManager::_getSearchGroup(force=%s, group_id=%s)", force, group_id);
 
     var me = this;
 
