@@ -467,7 +467,6 @@
             Mojo.Log.info("AccountManager::getSearchGroups() [success]");
             me.clearSearchGroups();
             $A(r).each(function(i){
-                Mojo.Log.info("WUT(%s)", Object.toJSON({r:r, i:i, force:force}));
                 me._getSearchGroup(force, i);
             });
         },
