@@ -534,7 +534,23 @@
                 if( !me.data.meta.srchg )
                     me.data.meta.srchg = [];
 
-                me.data.meta.srchg.push(r);
+                var sg = me.data.meta.srchg;
+                var done = false;
+                for(var i=0; i<sg.length && !done; i++) {
+                    if( sg[i].id === r.id ) {
+                        // NOTE: I'm not sure why this is needed, but I surmise
+                        // that it comes up when a getSearchGroups() is
+                        // executed while another is _getSearchGroup()ing
+                        // still.  Maybe?  Whatever, this likely fixes it.
+
+                        sg[i] = r;
+                        done = true;
+                    }
+                }
+
+                if( !done )
+                    sg.push(r);
+
                 me.dbChanged("search groups updated");
                 me.notifySrchgChange();
 
