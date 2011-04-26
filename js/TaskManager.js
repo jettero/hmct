@@ -602,7 +602,7 @@ TaskManager.prototype.getLastSearchKeyed = function() {
 
         failure: this._standardFailure,
         success: function(r) {
-            if( r.match(/^<\?xml/) )
+            if( r.match(/<html>/) )
                 return true;
 
             Mojo.Log.info("TaskManager::getComments() r.fail");
