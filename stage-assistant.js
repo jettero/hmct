@@ -6,7 +6,7 @@
 var AMO, TMO, BBO, OPT, REQ;
 
 function StageAssistant() {
-	Mojo.Log.info("StageAssistant()");
+	Mojo.Log.info("StageAssistant() version=%s", Mojo.appInfo.version);
 
     OPT = Mojo.loadJSONFile(Mojo.appPath + "runtime_options.json");
 
