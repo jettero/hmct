@@ -43,10 +43,13 @@ function StageAssistant() {
 StageAssistant.prototype.setup = function() {
 	Mojo.Log.info("StageAssistant()::setup()");
 
+    this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
+
     var clc = new Mojo.Model.Cookie("ChangeLog");
     var clv = clc.get("clv");
 
-    this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
+    if( clv !== Mojo.appInfo.version )
+        this.controller.assistant.showScene("ChangeLog");
 
     this.controller.lockOrientation = function() {
         this.setWindowOrientation(this.getWindowOrientation());
