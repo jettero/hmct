@@ -43,6 +43,9 @@ function StageAssistant() {
 StageAssistant.prototype.setup = function() {
 	Mojo.Log.info("StageAssistant()::setup()");
 
+    var clc = new Mojo.Model.Cookie("ChangeLog");
+    var clv = clc.get("clv");
+
     this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
 
     this.controller.lockOrientation = function() {
@@ -101,6 +104,7 @@ StageAssistant.prototype.menuSetup = function() {
         items: [
             { label: "Help",                   command: 'myshow-Help'        },
             { label: "About",                  command: 'myshow-About'       },
+            { label: "ChangeLog",              command: 'myshow-ChangeLog'   },
             { label: "Preferences & Accounts", command: 'myshow-Preferences' },
             { label: "Refresh Current Login",  command: 'refresh-login'      },
             { label: "Clear Cache",            command: 'clear-cache'        }

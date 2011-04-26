@@ -27,6 +27,7 @@
     { "source": "app/assistants/NewTask.js" },
     { "source": "app/assistants/EditTask.js" },
     { "source": "app/assistants/FastComment.js" },
+    { "source": "app/assistants/ChangeLog.js" },
 
     { "source": "stage-assistant.js" }
 ]
