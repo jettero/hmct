@@ -4,8 +4,12 @@
 */
 
 var CHANGELOG = [
+    [ '2011-04-26', '0.9.2', "Fixed the getComment bug, finally." ],
     [ '2011-04-26', '0.9.2', "Added this changelog" ]
 ];
+
+var CHANGELOG_KEY    = "K:" + hex_md5(CHANGELOG.each(function(c){ return c.join("-"); }).join("|"));
+var CHANGELOG_COOKIE = new Mojo.Model.Cookie("ChangeLog");
 
 function ChangeLogAssistant() {
     Mojo.Log.info("ChangeLog()");
@@ -15,19 +19,14 @@ function ChangeLogAssistant() {
 ChangeLogAssistant.prototype.setup = function() {
     Mojo.Log.info("ChangeLog::setup()");
 
-    var clc = this.clc = new Mojo.Model.Cookie("ChangeLog");
-    var clv = clc.get("clv");
+    var clv = CHANGELOG_COOKIE.get();
 
-    var m = this.m = "K:" + hex_md5(CHANGELOG.each(function(c){ return c.join("-"); }).join("|"));
-
-    this.OKModel          = { label: "OK, I read this.", command: m };
-    this.DoneModel        = { label: "Done",             command: m };
+    this.OKModel          = { label: "OK, I read this.", command: CHANGELOG_KEY };
+    this.DoneModel        = { label: "Done",             command: CHANGELOG_KEY };
     this.commandMenuModel = { label: 'ChangeLog Commands', items: [ ] };
 
-	this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
-
-    if( clv === m ) {
-        this.commandMenuModel.items = [ {}, this.Done, {} ];
+    if( clv === CHANGELOG_KEY ) {
+        this.commandMenuModel.items = [ {}, this.DoneModel, {} ];
 
     } else {
         setTimeout(function(){
@@ -36,6 +35,13 @@ ChangeLogAssistant.prototype.setup = function() {
 
         }.bind(this), 4e3);
     }
+
+    this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
+
+    this.changelogModel = {listTitle: 'ChangeLog', items: CHANGELOG.map(function(i){ return {
+        'date': i[0], version: i[1], text: i[2]
+    }; })};
+    this.controller.setupWidget('changelog', {}, this.changelogModel);
 };
 
 ChangeLogAssistant.prototype.handleCommand = function(event) {
@@ -46,10 +52,8 @@ ChangeLogAssistant.prototype.handleCommand = function(event) {
 
         if( s_a[0].match(/^K:[a-f0-9]{32}$/) ) {
             Mojo.Log.info("ChangeLog::handleCommand() K, read this");
-            this.clc.put("clv", s_a[0]);
-            Mojo.Log.info("ChangeLog::handleCommand() K, read this(2)");
-            this.SC.popScene();
-            Mojo.Log.info("ChangeLog::handleCommand() K, read this(3)");
+            CHANGELOG_COOKIE.put(s_a[0]);
+            Mojo.Controller.stageController.popScene();
             return;
 
         } else {

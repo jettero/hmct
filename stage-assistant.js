@@ -1,6 +1,6 @@
 /*jslint white: false, onevar: false, laxbreak: true, maxerr: 500000
 */
-/*global Mojo BusyBee RequestEngine AccountManager TaskManager jQuery setTimeout
+/*global Mojo BusyBee RequestEngine AccountManager TaskManager jQuery setTimeout CHANGELOG_COOKIE CHANGELOG_KEY
 */
 
 var AMO, TMO, BBO, OPT, REQ;
@@ -45,10 +45,7 @@ StageAssistant.prototype.setup = function() {
 
     this.controller.assistant.showScene(OPT.altStartPage ? OPT.altStartPage : 'Tasks');
 
-    var clc = new Mojo.Model.Cookie("ChangeLog");
-    var clv = clc.get("clv");
-
-    if( clv !== Mojo.appInfo.version )
+    if( CHANGELOG_COOKIE.get() !== CHANGELOG_KEY )
         this.controller.assistant.showScene("ChangeLog");
 
     this.controller.lockOrientation = function() {
