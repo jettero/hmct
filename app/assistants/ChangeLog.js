@@ -39,9 +39,15 @@ ChangeLogAssistant.prototype.setup = function() {
     this.controller.setupWidget(Mojo.Menu.commandMenu, {menuClass: 'no-fade'}, this.commandMenuModel);
 
     this.changelogModel = {listTitle: 'ChangeLog', items: CHANGELOG.map(function(i){ return {
-        'date': i[0], version: i[1], text: i[2]
-    }; })};
-    this.controller.setupWidget('changelog', {}, this.changelogModel);
+        'date': i[0], version: i[1], text: i[2] };})};
+
+    this.changelogAttrs = {
+        listTemplate:  'misc/naked-list-container',
+        emptyTemplate: 'misc/empty-list',
+        itemTemplate:  'misc/li-changelog',
+    };
+
+    this.controller.setupWidget('changelog', this.changelogAttrs, this.changelogModel);
 };
 
 ChangeLogAssistant.prototype.handleCommand = function(event) {
