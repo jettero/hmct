@@ -224,3 +224,5 @@ body.hiveminder {
 .complete0 .voltar-swipe-complete-button .incomplete-text { display: none; }
 
 div.title div.label.smaller-font { font-size: 0.7em !important; }
+
+div.changelog-line { text-indent: -2em; margin-left: 2em; }
